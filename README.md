@@ -9,10 +9,10 @@ Base for all FCOO maps-applications
 ### bower
 `bower install https://github.com/FCOO/fcoo-maps.git --save`
 
-<!--
 ## Demo
 http://FCOO.github.io/fcoo-maps/demo/ 
 
+<!--
 
 ## Usage
 ```var myFcooMaps = new FcooMaps( options );```
