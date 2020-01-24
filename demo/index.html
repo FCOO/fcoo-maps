@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="da" style="font-size: 100%">
+<head>
+	<title>fcoo.dk - fcoo-maps - Demo</title>
+	<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv='x-dns-prefetch-control' content='on'>
+
+	<meta name='copyright' content='FCOO'>
+	<meta name='owner' content='FCOO'>
+
+  <link  href="bower_components.css" rel="stylesheet">
+  <link  href="../src/fcoo-maps.css" rel="stylesheet">
+</head>
+
+<body>
+	<!-- <div id="map" style="width: 800px; height: 600px"></div> -->
+
+	<script src="bower_components.js"></script>
+	<script src="../src/fcoo-maps-leaflet.js"></script>
+	<script src="../src/fcoo-maps-search.js"></script>
+	<script src="../src/fcoo-maps-setup-file.js"></script>
+	<script src="../src/fcoo-maps.js"></script>
+
+    <script>
+        window.fcoo.LOCAL_DATA = true;
+
+		$(function() {
+            window.fcoo.map.readSetupFile({subDir:'setup', fileName:'ifm_test.json'} );
+
+
+//HER            var map = L.map('map').setView([56.2, 11.5], 6);
+//HER			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//HER				maxZoom: 18,
+//HER                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors</a>'
+//HER            }).addTo(map);
+        });
+
+	</script>
+ </body>
+</html>

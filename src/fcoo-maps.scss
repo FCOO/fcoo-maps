@@ -1,0 +1,44 @@
+/***********************************************
+	fcoo-maps.scss,
+
+	(c) 2020, FCOO
+
+	https://github.com/FCOO/fcoo-maps
+	https://github.com/FCOO
+
+
+************************************************/
+//BOURBON - http://bourbon.io/
+@import "../bower_components/bourbon/core/bourbon";
+
+//MODERNIZR-MIXIN - https://github.com/danielguillan/modernizr-mixin
+@import "../bower_components/modernizr-mixin/stylesheets/modernizr";
+
+//MATHSASS - https://github.com/terkel/mathsass
+@import "../bower_components/mathsass/dist/math";
+
+
+//multi-maps-current = div with icon showing the current selected structure
+.multi-maps-current {
+    $factor: .275;
+    $dim: 500 * $factor;
+    $dimPx: #{$dim}px;
+    $margin-top-landscape: 90 * $factor;
+    $margin-top-portrait: 40 * $factor;
+
+    display     : flex;
+    align-items : flex-start;
+    overflow    : hidden;
+    text-align  : center;
+    padding     : 0;
+    font-size   : $dimPx;
+    height      : 1px * ($dim - 2*$margin-top-portrait);
+
+    i {
+        position: relative;
+        width   : 100%;
+        top     : -1px * $margin-top-portrait
+    }
+}
+
+
