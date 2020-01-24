@@ -1,7 +1,0 @@
-{
-    "applicationName": {"da":"NY Dansk titel", "en":"NEW English title"},
-    "topMenu": {
-        "search" : true,
-        "warning": {"subDir": "warnings", "fileName": "geometoc_ifm_warning.json"}
-    }
-}
