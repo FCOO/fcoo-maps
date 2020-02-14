@@ -1,3 +1,268 @@
+/***********************************************
+    fcoo-modernizr-mediaquery-device.scss,
+
+    (c) 2016, FCOO
+
+    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
+    https://github.com/FCOO
+
+
+************************************************/
+/***********************************************
+    _fcoo-modernizr-mediaquery-variables.scss,
+
+    (c) 2016, FCOO
+
+    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
+    https://github.com/FCOO
+
+************************************************/
+/***********************************************
+    modernizr-mediaquery.scss, 
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-mediaquery
+    https://github.com/FCOO
+
+************************************************/
+/***********************************************
+    modernizr-mediaquery-variables.scss, 
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-mediaquery
+    https://github.com/FCOO
+
+    Variables and functions to create modernizr-mediaquery.css
+
+************************************************/
+/***********************************************
+    _modernizr-mediaquery-orientation_print.scss, 
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-mediaquery
+    https://github.com/FCOO
+
+    Media-query for orientation and print
+
+************************************************/
+.show-for-landscape {
+  display: block !important; }
+
+.hide-for-landscape {
+  display: none !important; }
+
+.hide-for-portrait {
+  display: block !important; }
+
+.show-for-portrait {
+  display: none !important; }
+
+@media screen and (orientation: landscape) {
+  .show-for-landscape {
+    display: block !important; }
+  .hide-for-landscape {
+    display: none !important; }
+  .hide-for-portrait {
+    display: block !important; }
+  .show-for-portrait {
+    display: none !important; } }
+
+@media screen and (orientation: portrait) {
+  .hide-for-landscape {
+    display: block !important; }
+  .show-for-landscape {
+    display: none !important; }
+  .show-for-portrait {
+    display: block !important; }
+  .hide-for-portrait {
+    display: none !important; } }
+
+.show-for-print {
+  display: none !important; }
+
+@media print {
+  .show-for-print {
+    display: block !important; }
+  .hide-for-print {
+    display: none !important; } }
+
+@media only screen {
+  html.mini .hide-for-mini {
+    display: none !important; }
+  html.no-mini .show-for-mini {
+    display: none !important; } }
+
+@media only screen {
+  html.mini-down .hide-for-mini-down {
+    display: none !important; }
+  html.no-mini-down .show-for-mini-down {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-port .hide-for-xsmall-port {
+    display: none !important; }
+  html.no-xsmall-port .show-for-xsmall-port {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-port-down .hide-for-xsmall-port-down {
+    display: none !important; }
+  html.no-xsmall-port-down .show-for-xsmall-port-down {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-port-up .hide-for-xsmall-port-up {
+    display: none !important; }
+  html.no-xsmall-port-up .show-for-xsmall-port-up {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-land .hide-for-xsmall-land {
+    display: none !important; }
+  html.no-xsmall-land .show-for-xsmall-land {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-land-down .hide-for-xsmall-land-down {
+    display: none !important; }
+  html.no-xsmall-land-down .show-for-xsmall-land-down {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-land-up .hide-for-xsmall-land-up {
+    display: none !important; }
+  html.no-xsmall-land-up .show-for-xsmall-land-up {
+    display: none !important; } }
+
+@media only screen {
+  html.small .hide-for-small {
+    display: none !important; }
+  html.no-small .show-for-small {
+    display: none !important; } }
+
+@media only screen {
+  html.small-down .hide-for-small-down {
+    display: none !important; }
+  html.no-small-down .show-for-small-down {
+    display: none !important; } }
+
+@media only screen {
+  html.small-up .hide-for-small-up {
+    display: none !important; }
+  html.no-small-up .show-for-small-up {
+    display: none !important; } }
+
+@media only screen {
+  html.medium .hide-for-medium {
+    display: none !important; }
+  html.no-medium .show-for-medium {
+    display: none !important; } }
+
+@media only screen {
+  html.medium-down .hide-for-medium-down {
+    display: none !important; }
+  html.no-medium-down .show-for-medium-down {
+    display: none !important; } }
+
+@media only screen {
+  html.medium-up .hide-for-medium-up {
+    display: none !important; }
+  html.no-medium-up .show-for-medium-up {
+    display: none !important; } }
+
+@media only screen {
+  html.large .hide-for-large {
+    display: none !important; }
+  html.no-large .show-for-large {
+    display: none !important; } }
+
+@media only screen {
+  html.large-down .hide-for-large-down {
+    display: none !important; }
+  html.no-large-down .show-for-large-down {
+    display: none !important; } }
+
+@media only screen {
+  html.large-up .hide-for-large-up {
+    display: none !important; }
+  html.no-large-up .show-for-large-up {
+    display: none !important; } }
+
+@media only screen {
+  html.xlarge .hide-for-xlarge {
+    display: none !important; }
+  html.no-xlarge .show-for-xlarge {
+    display: none !important; } }
+
+@media only screen {
+  html.xlarge-up .hide-for-xlarge-up {
+    display: none !important; }
+  html.no-xlarge-up .show-for-xlarge-up {
+    display: none !important; } }
+
+.modernizr-mediaquery-media-query {
+  font-family: "mini=screen and (max-width: 19.9375em)&mini-down=screen and (max-width: 19.9375em)&xsmall-port=screen and (min-width: 20em) and (max-width: 29.9375em)&xsmall-port-down=screen and (max-width: 29.9375em)&xsmall-port-up=screen and (min-width: 20em)&xsmall-land=screen and (min-width: 30em) and (max-width: 35.9375em)&xsmall-land-down=screen and (max-width: 35.9375em)&xsmall-land-up=screen and (min-width: 30em)&small=screen and (min-width: 36em) and (max-width: 47.9375em)&small-down=screen and (max-width: 47.9375em)&small-up=screen and (min-width: 36em)&medium=screen and (min-width: 48em) and (max-width: 61.9375em)&medium-down=screen and (max-width: 61.9375em)&medium-up=screen and (min-width: 48em)&large=screen and (min-width: 62em) and (max-width: 74.9375em)&large-down=screen and (max-width: 74.9375em)&large-up=screen and (min-width: 62em)&xlarge=screen and (min-width: 75em)&xlarge-up=screen and (min-width: 75em)&landscape=screen and (orientation: landscape)&portrait=screen and (orientation: portrait)"; }
+
+.modernizr-mediaquery-min-max {
+  font-family: "mini=0px_319px&mini-down=0_319px&xsmall-port=320px_479px&xsmall-port-down=0_479px&xsmall-port-up=320px_0&xsmall-land=480px_575px&xsmall-land-down=0_575px&xsmall-land-up=480px_0&small=576px_767px&small-down=0_767px&small-up=576px_0&medium=768px_991px&medium-down=0_991px&medium-up=768px_0&large=992px_1199px&large-down=0_1199px&large-up=992px_0&xlarge=1200px_0px&xlarge-up=1200px_0&landscape=0_1_1&portrait=0_1_0_1"; }
+
+html.fullscreen .hide-for-fullscreen {
+  display: none !important; }
+
+html.no-fullscreen .show-for-fullscreen {
+  display: none !important; }
+
+html.https .hide-for-https {
+  display: none !important; }
+
+html.no-https .show-for-https {
+  display: none !important; }
+
+/***********************************************
+	modernizr-mouse-events.scss,
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/modernizr-mouse-events
+	https://github.com/FCOO
+
+
+************************************************/
+html.mouse .hide-for-mouse {
+  display: none !important; }
+
+html.mouse .show-for-no-mouse {
+  display: none !important; }
+
+html.no-mouse .show-for-mouse {
+  display: none !important; }
+
+html.no-mouse .hide-for-no-mouse {
+  display: none !important; }
+
+html.mouse-hover .hide-for-mouse-hover {
+  display: none !important; }
+
+html.mouse-hover .show-for-no-mouse-hover {
+  display: none !important; }
+
+html.no-mouse-hover .show-for-mouse-hover {
+  display: none !important; }
+
+html.no-mouse-hover .hide-for-no-mouse-hover {
+  display: none !important; }
+
+._test-for-hover_ {
+  display: none;
+  font-family: "__NO_HOVER_SUPPORT__"; }
+
+@media (hover: hover) {
+  ._test-for-hover_ {
+    font-family: "__HOVER_SUPPORT__"; } }
+
 /* required styles */
 
 .leaflet-pane,
@@ -10538,48 +10803,6 @@ Ex.
 }
 
 /***********************************************
-	modernizr-mouse-events.scss,
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/modernizr-mouse-events
-	https://github.com/FCOO
-
-
-************************************************/
-html.mouse .hide-for-mouse {
-  display: none !important; }
-
-html.mouse .show-for-no-mouse {
-  display: none !important; }
-
-html.no-mouse .show-for-mouse {
-  display: none !important; }
-
-html.no-mouse .hide-for-no-mouse {
-  display: none !important; }
-
-html.mouse-hover .hide-for-mouse-hover {
-  display: none !important; }
-
-html.mouse-hover .show-for-no-mouse-hover {
-  display: none !important; }
-
-html.no-mouse-hover .show-for-mouse-hover {
-  display: none !important; }
-
-html.no-mouse-hover .hide-for-no-mouse-hover {
-  display: none !important; }
-
-._test-for-hover_ {
-  display: none;
-  font-family: "__NO_HOVER_SUPPORT__"; }
-
-@media (hover: hover) {
-  ._test-for-hover_ {
-    font-family: "__HOVER_SUPPORT__"; } }
-
-/***********************************************
 jquery-base-slider.scss, Description from README.md
 
     (c) 2015, FCOO
@@ -19461,6 +19684,21 @@ div.btn, div.list-group-item {
       z-index: 4; }
     .mouse-hover .btn.btn-standard.transparent:hover:not(:focus):not(:disabled):not(.disabled) {
       border-color: rgba(0, 0, 0, 0.15); }
+    .btn.btn-standard.transparent.active {
+      color: #fff;
+      background: #007bff linear-gradient(180deg, #268fff, #007bff) repeat-x; }
+      .mouse-hover .hover .btn.btn-standard.transparent.active:not(:active):not(:disabled):not(.disabled),
+      .mouse-hover .btn.btn-standard.transparent.active.hover:not(:active):not(:disabled):not(.disabled),
+      .mouse-hover .btn.btn-standard.transparent.active:hover:not(:active):not(:disabled):not(.disabled) {
+        color: #f2f2f2;
+        background: #006fe6 linear-gradient(180deg, #2684e9, #006fe6) repeat-x; }
+      .btn.btn-standard.transparent.active:active {
+        color: #ececec;
+        background: #0069d9 linear-gradient(180deg, #267fde, #0069d9) repeat-x; }
+      .btn.btn-standard.transparent.active.disabled, .btn.btn-standard.transparent.active:disabled {
+        opacity: 1 !important;
+        color: rgba(255, 255, 255, 0.65);
+        background: #007bff linear-gradient(180deg, #268fff, #007bff) repeat-x; }
     .btn.btn-standard.transparent.disabled, .btn.btn-standard.transparent:disabled {
       opacity: 1 !important;
       color: rgba(212, 212, 212, 0.65);
@@ -19477,6 +19715,21 @@ div.btn, div.list-group-item {
     .btn.btn-standard.semi-transparent:active {
       color: #40464c;
       background: rgba(226, 230, 234, 0.75); }
+    .btn.btn-standard.semi-transparent.active {
+      color: #fff;
+      background: #007bff linear-gradient(180deg, #268fff, #007bff) repeat-x; }
+      .mouse-hover .hover .btn.btn-standard.semi-transparent.active:not(:active):not(:disabled):not(.disabled),
+      .mouse-hover .btn.btn-standard.semi-transparent.active.hover:not(:active):not(:disabled):not(.disabled),
+      .mouse-hover .btn.btn-standard.semi-transparent.active:hover:not(:active):not(:disabled):not(.disabled) {
+        color: #f2f2f2;
+        background: #006fe6 linear-gradient(180deg, #2684e9, #006fe6) repeat-x; }
+      .btn.btn-standard.semi-transparent.active:active {
+        color: #ececec;
+        background: #0069d9 linear-gradient(180deg, #267fde, #0069d9) repeat-x; }
+      .btn.btn-standard.semi-transparent.active.disabled, .btn.btn-standard.semi-transparent.active:disabled {
+        opacity: 1 !important;
+        color: rgba(255, 255, 255, 0.65);
+        background: #007bff linear-gradient(180deg, #268fff, #007bff) repeat-x; }
     .btn.btn-standard.semi-transparent.disabled, .btn.btn-standard.semi-transparent:disabled {
       opacity: 1 !important;
       color: rgba(81, 89, 97, 0.65);
@@ -20761,14 +21014,24 @@ The default bootstrap structure used for elements in a form is
   margin-bottom: 0;
   padding-top: 0.3125rem;
   padding-bottom: 0.625rem; }
+  .form-group hr {
+    margin-top: 0;
+    margin-bottom: 0.3125rem;
+    border-color: #afb4ba; }
+    .form-group hr.above-label {
+      margin-bottom: 0.9375rem; }
 
 .form-group.form-group-sm {
   padding-top: 0.25rem;
   padding-bottom: 0.5rem; }
+  .form-group.form-group-sm hr.above-label {
+    margin-bottom: 0.75rem; }
 
 .form-group.form-group-xs {
   padding-top: 0.125rem;
   padding-bottom: 0.25rem; }
+  .form-group.form-group-xs hr.above-label {
+    margin-bottom: 0.375rem; }
 
 /************************************************************
 Style for formValidation (via fcoo-form-validation)
@@ -21954,229 +22217,6 @@ html.lang2-en .hide-for-lang2-en {
   display: none !important; }
 
 html.no-lang2-en .show-for-lang2-en {
-  display: none !important; }
-
-/***********************************************
-    fcoo-modernizr-mediaquery-device.scss,
-
-    (c) 2016, FCOO
-
-    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
-    https://github.com/FCOO
-
-
-************************************************/
-/***********************************************
-    _fcoo-modernizr-mediaquery-variables.scss,
-
-    (c) 2016, FCOO
-
-    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
-    https://github.com/FCOO
-
-************************************************/
-/***********************************************
-    modernizr-mediaquery.scss, 
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-mediaquery
-    https://github.com/FCOO
-
-************************************************/
-/***********************************************
-    modernizr-mediaquery-variables.scss, 
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-mediaquery
-    https://github.com/FCOO
-
-    Variables and functions to create modernizr-mediaquery.css
-
-************************************************/
-/***********************************************
-    _modernizr-mediaquery-orientation_print.scss, 
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-mediaquery
-    https://github.com/FCOO
-
-    Media-query for orientation and print
-
-************************************************/
-.show-for-landscape {
-  display: block !important; }
-
-.hide-for-landscape {
-  display: none !important; }
-
-.hide-for-portrait {
-  display: block !important; }
-
-.show-for-portrait {
-  display: none !important; }
-
-@media screen and (orientation: landscape) {
-  .show-for-landscape {
-    display: block !important; }
-  .hide-for-landscape {
-    display: none !important; }
-  .hide-for-portrait {
-    display: block !important; }
-  .show-for-portrait {
-    display: none !important; } }
-
-@media screen and (orientation: portrait) {
-  .hide-for-landscape {
-    display: block !important; }
-  .show-for-landscape {
-    display: none !important; }
-  .show-for-portrait {
-    display: block !important; }
-  .hide-for-portrait {
-    display: none !important; } }
-
-.show-for-print {
-  display: none !important; }
-
-@media print {
-  .show-for-print {
-    display: block !important; }
-  .hide-for-print {
-    display: none !important; } }
-
-@media only screen {
-  html.mini .hide-for-mini {
-    display: none !important; }
-  html.no-mini .show-for-mini {
-    display: none !important; } }
-
-@media only screen {
-  html.mini-down .hide-for-mini-down {
-    display: none !important; }
-  html.no-mini-down .show-for-mini-down {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-port .hide-for-xsmall-port {
-    display: none !important; }
-  html.no-xsmall-port .show-for-xsmall-port {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-port-down .hide-for-xsmall-port-down {
-    display: none !important; }
-  html.no-xsmall-port-down .show-for-xsmall-port-down {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-port-up .hide-for-xsmall-port-up {
-    display: none !important; }
-  html.no-xsmall-port-up .show-for-xsmall-port-up {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-land .hide-for-xsmall-land {
-    display: none !important; }
-  html.no-xsmall-land .show-for-xsmall-land {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-land-down .hide-for-xsmall-land-down {
-    display: none !important; }
-  html.no-xsmall-land-down .show-for-xsmall-land-down {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-land-up .hide-for-xsmall-land-up {
-    display: none !important; }
-  html.no-xsmall-land-up .show-for-xsmall-land-up {
-    display: none !important; } }
-
-@media only screen {
-  html.small .hide-for-small {
-    display: none !important; }
-  html.no-small .show-for-small {
-    display: none !important; } }
-
-@media only screen {
-  html.small-down .hide-for-small-down {
-    display: none !important; }
-  html.no-small-down .show-for-small-down {
-    display: none !important; } }
-
-@media only screen {
-  html.small-up .hide-for-small-up {
-    display: none !important; }
-  html.no-small-up .show-for-small-up {
-    display: none !important; } }
-
-@media only screen {
-  html.medium .hide-for-medium {
-    display: none !important; }
-  html.no-medium .show-for-medium {
-    display: none !important; } }
-
-@media only screen {
-  html.medium-down .hide-for-medium-down {
-    display: none !important; }
-  html.no-medium-down .show-for-medium-down {
-    display: none !important; } }
-
-@media only screen {
-  html.medium-up .hide-for-medium-up {
-    display: none !important; }
-  html.no-medium-up .show-for-medium-up {
-    display: none !important; } }
-
-@media only screen {
-  html.large .hide-for-large {
-    display: none !important; }
-  html.no-large .show-for-large {
-    display: none !important; } }
-
-@media only screen {
-  html.large-down .hide-for-large-down {
-    display: none !important; }
-  html.no-large-down .show-for-large-down {
-    display: none !important; } }
-
-@media only screen {
-  html.large-up .hide-for-large-up {
-    display: none !important; }
-  html.no-large-up .show-for-large-up {
-    display: none !important; } }
-
-@media only screen {
-  html.xlarge .hide-for-xlarge {
-    display: none !important; }
-  html.no-xlarge .show-for-xlarge {
-    display: none !important; } }
-
-@media only screen {
-  html.xlarge-up .hide-for-xlarge-up {
-    display: none !important; }
-  html.no-xlarge-up .show-for-xlarge-up {
-    display: none !important; } }
-
-.modernizr-mediaquery-media-query {
-  font-family: "mini=screen and (max-width: 19.9375em)&mini-down=screen and (max-width: 19.9375em)&xsmall-port=screen and (min-width: 20em) and (max-width: 29.9375em)&xsmall-port-down=screen and (max-width: 29.9375em)&xsmall-port-up=screen and (min-width: 20em)&xsmall-land=screen and (min-width: 30em) and (max-width: 35.9375em)&xsmall-land-down=screen and (max-width: 35.9375em)&xsmall-land-up=screen and (min-width: 30em)&small=screen and (min-width: 36em) and (max-width: 47.9375em)&small-down=screen and (max-width: 47.9375em)&small-up=screen and (min-width: 36em)&medium=screen and (min-width: 48em) and (max-width: 61.9375em)&medium-down=screen and (max-width: 61.9375em)&medium-up=screen and (min-width: 48em)&large=screen and (min-width: 62em) and (max-width: 74.9375em)&large-down=screen and (max-width: 74.9375em)&large-up=screen and (min-width: 62em)&xlarge=screen and (min-width: 75em)&xlarge-up=screen and (min-width: 75em)&landscape=screen and (orientation: landscape)&portrait=screen and (orientation: portrait)"; }
-
-.modernizr-mediaquery-min-max {
-  font-family: "mini=0px_319px&mini-down=0_319px&xsmall-port=320px_479px&xsmall-port-down=0_479px&xsmall-port-up=320px_0&xsmall-land=480px_575px&xsmall-land-down=0_575px&xsmall-land-up=480px_0&small=576px_767px&small-down=0_767px&small-up=576px_0&medium=768px_991px&medium-down=0_991px&medium-up=768px_0&large=992px_1199px&large-down=0_1199px&large-up=992px_0&xlarge=1200px_0px&xlarge-up=1200px_0&landscape=0_1_1&portrait=0_1_0_1"; }
-
-html.fullscreen .hide-for-fullscreen {
-  display: none !important; }
-
-html.no-fullscreen .show-for-fullscreen {
-  display: none !important; }
-
-html.https .hide-for-https {
-  display: none !important; }
-
-html.no-https .show-for-https {
   display: none !important; }
 
 /***********************************************
@@ -24991,8 +25031,10 @@ leaflet-bootstrap-control-position.scss
 .leaflet-position-marker {
   background: url(images/leaflet-position-marker.svg) 50% 50% no-repeat;
   content: ''; }
-  .leaflet-zoom-anim .leaflet-position-marker {
-    display: none; }
+  .leaflet-position-marker.inside-other-map {
+    opacity: .5; }
+  .leaflet-zoom-anim .leaflet-position-marker, .hide-control-position-map-center .leaflet-position-marker {
+    display: none !important; }
 
 .leaflet-control-container .input-group {
   width: initial;
@@ -25673,12 +25715,6 @@ leaflet-map-sync-cursor
 .no-leaflet-map-sync-cursor .show-for-leaflet-map-sync-cursor {
   display: none !important; }
 
-.map-sync-cursor-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2000; }
-
 .map-sync-cursor-icon {
   width: 22px;
   height: 26px;
@@ -25686,95 +25722,94 @@ leaflet-map-sync-cursor
   z-index: 10000;
   position: absolute;
   display: none;
-  cursor: inherit !important; }
-  .map-sync-passive.map-sync-enabled .map-sync-cursor-icon {
+  cursor: inherit !important;
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-image: none;
+  font-family: "leaflet-map-sync";
+  font-size: 18px;
+  color: black;
+  text-align: center;
+  text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 red, 1px 1px 0 red;
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  text-decoration: none;
+  text-align: center;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 19px;
+  /* .icon-move          */
+  /* .icon-plus          */
+  /* .icon-plus3         */
+  /* .icon-spinner2      */
+  /* .icon-zoom-in3      */
+  /* .icon-zoom-out3     */
+  /* .icon-cursor22       */
+  /* .icon-blocked       */
+  /* .icon-arrow-resize8 */
+  /* .icon-arrow-resize6 */
+  /* .icon-arrow-resize7 */
+  /* icon-arrow-resize5  */
+  /*                     */ }
+  .map-sync-passive .map-sync-cursor-icon {
     background-color: transparent !important;
-    display: block;
-    background-size: 16px 16px;
-    background-repeat: no-repeat;
-    background-position: left top;
-    background-image: none;
-    font-family: "leaflet-map-sync";
-    font-size: 18px;
-    color: black;
-    text-align: center;
-    text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 red, 1px 1px 0 red;
-    font-style: normal;
-    font-weight: normal;
-    speak: none;
-    display: inline-block;
-    text-decoration: none;
-    text-align: center;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 19px;
-    /* .icon-move          */
-    /* .icon-plus          */
-    /* .icon-plus3         */
-    /* .icon-spinner2      */
-    /* .icon-zoom-in3      */
-    /* .icon-zoom-out3     */
-    /* .icon-cursor22       */
-    /* .icon-blocked       */
-    /* .icon-arrow-resize8 */
-    /* .icon-arrow-resize6 */
-    /* .icon-arrow-resize7 */
-    /* icon-arrow-resize5  */
-    /*                     */ }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-grab {
-      Background-image: url("images/hand-gray-16x16.png"); }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-grabbing {
-      Background-image: url("images/grab-gray-16x16.png"); }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-pointer {
-      background-size: 21px 26px;
-      Background-image: url("images/pointer-gray-21x26.png"); }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-col-resize {
-      background-size: 23px 17px;
-      background-image: url("images/col-resize.png"); }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-row-resize {
-      background-size: 17px 23px;
-      background-image: url("images/row-resize.png"); }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-text {
-      background-size: 9px 18px;
-      background-image: url("images/text.png"); }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-vertical-text {
-      background-size: 18px 9px;
-      background-image: url("images/vertical-text.png"); }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon:before {
-      color: #C3C3C3;
-      text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-move:before {
-      content: '\e804'; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-cell:before {
-      content: '\e805';
-      font-size: 0.70em; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-crosshair:before {
-      content: '\e806'; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-wait:before {
-      content: '\e808'; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-zoom-in:before {
-      content: '\e809';
-      font-size: 0.75em; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-zoom-out:before {
-      content: '\e80a';
-      font-size: 0.75em; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-cursor:before {
-      content: '\e80b'; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-not-allowed:before {
-      content: '\e80e';
-      font-size: 0.80em; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-ns-resize:before {
-      content: '\e807'; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-nw-resize:before {
-      content: '\e80f';
-      font-size: 0.88em; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-ew-resize:before {
-      content: '\e810'; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-ne-resize:before {
-      content: '\e811';
-      font-size: 0.88em; }
-    .map-sync-passive.map-sync-enabled .map-sync-cursor-icon.icon-none:before {
-      content: ''; }
+    display: inline-block; }
+  .map-sync-cursor-icon.icon-grab {
+    Background-image: url("images/hand-gray-16x16.png"); }
+  .map-sync-cursor-icon.icon-grabbing {
+    Background-image: url("images/grab-gray-16x16.png"); }
+  .map-sync-cursor-icon.icon-pointer {
+    background-size: 21px 26px;
+    Background-image: url("images/pointer-gray-21x26.png"); }
+  .map-sync-cursor-icon.icon-col-resize {
+    background-size: 23px 17px;
+    background-image: url("images/col-resize.png"); }
+  .map-sync-cursor-icon.icon-row-resize {
+    background-size: 17px 23px;
+    background-image: url("images/row-resize.png"); }
+  .map-sync-cursor-icon.icon-text {
+    background-size: 9px 18px;
+    background-image: url("images/text.png"); }
+  .map-sync-cursor-icon.icon-vertical-text {
+    background-size: 18px 9px;
+    background-image: url("images/vertical-text.png"); }
+  .map-sync-cursor-icon:before {
+    color: #C3C3C3;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; }
+  .map-sync-cursor-icon.icon-move:before {
+    content: '\e804'; }
+  .map-sync-cursor-icon.icon-cell:before {
+    content: '\e805';
+    font-size: 0.70em; }
+  .map-sync-cursor-icon.icon-crosshair:before {
+    content: '\e806'; }
+  .map-sync-cursor-icon.icon-wait:before {
+    content: '\e808'; }
+  .map-sync-cursor-icon.icon-zoom-in:before {
+    content: '\e809';
+    font-size: 0.75em; }
+  .map-sync-cursor-icon.icon-zoom-out:before {
+    content: '\e80a';
+    font-size: 0.75em; }
+  .map-sync-cursor-icon.icon-cursor:before {
+    content: '\e80b'; }
+  .map-sync-cursor-icon.icon-not-allowed:before {
+    content: '\e80e';
+    font-size: 0.80em; }
+  .map-sync-cursor-icon.icon-ns-resize:before {
+    content: '\e807'; }
+  .map-sync-cursor-icon.icon-nw-resize:before {
+    content: '\e80f';
+    font-size: 0.88em; }
+  .map-sync-cursor-icon.icon-ew-resize:before {
+    content: '\e810'; }
+  .map-sync-cursor-icon.icon-ne-resize:before {
+    content: '\e811';
+    font-size: 0.88em; }
+  .map-sync-cursor-icon.icon-none:before {
+    content: ''; }
 
 /***********************************************
 leaflet-map-sync-outline-color
@@ -25789,49 +25824,91 @@ leaflet-map-sync-outline
 .no-leaflet-map-sync-outline .show-for-leaflet-map-sync-outline {
   display: none !important; }
 
+/*
+A map will have one of four state
+1: Main    = The first map added to MapSync. Can not be disabled. Its outline color is $main-map-outline ("blue")
+2: Normal  = The not-first map added to MapSync and enabled. Its outline color is $map-outline ("yellow")
+3: Visible = Disabled when MapSync.options.inclDisabled = true => Not sync but it outline are show in other maps and visa versa. Its outline is color $visible-map-outline ("gray")
+4: Hidden  = Disabled when MapSync.options.inclDisabled = false => No outline is displayed
+
+When a map is being dragged all maps with start 1-3 get a border in the same color as the outline
+The map being dragged is the 'active' map and the map and it outlines get a full border
+All other maps and there outlins get a dotted border
+
+html.[no-]leaflet-map-sync-outline.[no-]leaflet-map-sync-dragging
+    .map-container.map-sync-container(.map-sync-main | .map-sync-normal | .map-sync-visible | .map-sync-hidden)[map-sync-dragging][map-sync-outline]
+        div.map-sync-outline(.map-sync-main | .map-sync-normal | .map-sync-visible)[.map-sync-outline-show]
+*/
 .map-sync-container {
-  border: 2px solid transparent; }
-  .leaflet-map-sync-outline .map-sync-container.map-sync-active-dragging {
-    border-color: #ff7800; }
-  .leaflet-map-sync-outline .map-sync-container.map-sync-main-dragging {
-    border-color: #3216B0;
-    border-style: dotted; }
-  .leaflet-map-sync-outline .map-sync-container.map-sync-second-dragging {
-    border-color: #ff7800;
-    border-style: dotted; }
-  .map-sync-container .map-sync-outline {
+  /****************************************************
+    MAP-CONTAINER
+    *****************************************************/
+  border: 2px solid #909090;
+  /****************************************************
+    OUTLINE
+    *****************************************************/ }
+  .leaflet-map-sync-outline.leaflet-map-sync-dragging .map-sync-container.map-sync-outline.map-sync-main {
+    border: 2px dotted #3216B0; }
+  .leaflet-map-sync-outline.leaflet-map-sync-dragging .map-sync-container.map-sync-outline.map-sync-normal {
+    border: 2px dotted #ff7800; }
+  .leaflet-map-sync-outline.leaflet-map-sync-dragging .map-sync-container.map-sync-outline.map-sync-visible {
+    border: 2px dotted #808080; }
+  .leaflet-map-sync-outline.leaflet-map-sync-dragging .map-sync-container.map-sync-outline.map-sync-hidden {
+    border: 2px dotted #909090; }
+  .leaflet-map-sync-outline.leaflet-map-sync-dragging .map-sync-container.map-sync-outline.map-sync-dragging {
+    border-style: solid; }
+  .map-sync-container div.map-sync-outline {
     position: absolute;
     left: 0px;
     top: 0px;
     right: 0px;
     bottom: 0px;
-    z-index: 30002;
-    border: 2px solid #ff7800;
     box-sizing: border-box;
-    display: none; }
-    .map-sync-container .map-sync-outline > div {
+    display: none;
+    border: 2px dotted #ff7800; }
+    .map-sync-container div.map-sync-outline > div {
       width: 100%;
       height: 100%;
       background-color: #ff7800;
       opacity: 0.2; }
-    .map-sync-container .map-sync-outline.map-sync-outline-show {
-      display: block;
-      transition-duration: 100ms;
-      transition-timing-function: ease-out; }
-    .map-sync-container .map-sync-outline.map-sync-outline-main {
-      z-index: 30001;
-      border-color: #3216B0;
-      border-style: dotted; }
-      .map-sync-container .map-sync-outline.map-sync-outline-main > div {
-        background-color: #3216B0;
-        opacity: 0.1; }
-    .map-sync-container .map-sync-outline.map-sync-outline-second {
-      z-index: 30000;
-      border-color: #ff7800;
-      border-style: dotted; }
-      .map-sync-container .map-sync-outline.map-sync-outline-second > div {
-        background-color: #ff7800;
-        opacity: 0.1; }
+  .map-sync-container path.map-sync-outline {
+    display: none;
+    stroke-width: 2px;
+    stroke: #ff7800;
+    fill: #ff7800;
+    stroke-dasharray: 0 4;
+    fill-opacity: 0.2; }
+  .map-sync-container div.map-sync-outline.map-sync-outline-show {
+    display: block;
+    transition-duration: 100ms;
+    transition-timing-function: ease-out; }
+  .map-sync-container path.map-sync-outline.map-sync-outline-show {
+    display: block; }
+  .map-sync-container div.map-sync-outline.map-sync-outline-dragging {
+    border-style: solid; }
+  .map-sync-container path.map-sync-outline.map-sync-outline-dragging {
+    stroke-dasharray: none; }
+  .map-sync-container div.map-sync-outline.map-sync-main {
+    border-color: #3216B0; }
+    .map-sync-container div.map-sync-outline.map-sync-main > div {
+      background-color: #3216B0; }
+  .map-sync-container path.map-sync-outline.map-sync-main {
+    stroke: #3216B0;
+    fill: #3216B0; }
+  .map-sync-container div.map-sync-outline.map-sync-normal {
+    border-color: #ff7800; }
+    .map-sync-container div.map-sync-outline.map-sync-normal > div {
+      background-color: #ff7800; }
+  .map-sync-container path.map-sync-outline.map-sync-normal {
+    stroke: #ff7800;
+    fill: #ff7800; }
+  .map-sync-container div.map-sync-outline.map-sync-visible {
+    border-color: #808080; }
+    .map-sync-container div.map-sync-outline.map-sync-visible > div {
+      background-color: #808080; }
+  .map-sync-container path.map-sync-outline.map-sync-visible {
+    stroke: #808080;
+    fill: #808080; }
 
 /***********************************************
     leaflet-multi-maps.scss,
@@ -25927,7 +26004,6 @@ The selected setup is set by adding the class "multi-map-[NAME]" to html. E.g. <
     display: block; }
 
 .multi-map-outer-container .multi-map-container, .multi-map-outer-container .multi-map-sub-container {
-  text-align: center;
   box-sizing: border-box;
   flex: 0 0 auto; }
 
@@ -26076,8 +26152,7 @@ The selected setup is set by adding the class "multi-map-[NAME]" to html. E.g. <
   display: flex; }
 
 .multi-map-outer-container .leaflet-container {
-  box-sizing: border-box;
-  border: none; }
+  box-sizing: border-box; }
 
 .multi-map-outer-container:not(.no-border) {
   border: 1px solid black; }

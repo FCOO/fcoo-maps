@@ -10,6 +10,56 @@
 ************************************************/
 /* stylelint-disable order/properties-alphabetical-order */
 /* stylelint-enable */
+/***********************************************
+leaflet-map-sync-outline-color
+Variable with the color and style of outline
+************************************************/
+/************************************************************
+BOOTSTRAP-VARIABLES
+************************************************************/
+/***********************************************
+ADJUST BOOTSTRAP DEFAULT VALUES
+************************************************/
+/*Not used. No lg-buttons
+$input-btn-padding-y-lg: .75rem;
+$input-btn-padding-x-lg: $input-btn-padding-y-lg;
+*/
+/************************************************************
+Including "size" xs as in Bootstrap 3
+************************************************************/
+/************************************************************
+Border-colors
+************************************************************/
+/************************************************************
+Make all font-size and margin for header (<h1>, <h2>,...<h6>)
+releative to container (rem -> em)
+************************************************************/
+/* Defalut not changed:
+$font-size-base         : 1rem !default;
+$spacer                 : 1rem !default;
+*/
+/************************************************************
+Adjust dropdown-menu
+************************************************************/
+/************************************************************
+Adjust modal
+************************************************************/
+/************************************************************
+COLOR
+
+background-color and text-color for
+headers modal, popover, tables, buttons, list-items etc.
+
+"$header-" is used for header to modal-windows and popover
+"$title-" is used for headers on content - table, accordion etc.
+"$control-" is used for buttons, list-items etc.
+************************************************************/
+/**********************************************************
+LEAFLET MAPS
+**********************************************************/
+/**********************************************************
+EDIT MULTI MAPS SETTINGS
+**********************************************************/
 .multi-maps-current {
   display: flex;
   align-items: flex-start;
@@ -22,3 +72,81 @@
     position: relative;
     width: 100%;
     top: -11px; }
+
+/**********************************************************
+EDIT SYNC MAPS SETTINGS
+**********************************************************/
+.text-multi-maps-current {
+  color: #ff7800; }
+
+.bg-multi-maps-current {
+  background-color: #ff7800; }
+
+.text-multi-maps-main {
+  color: #3216B0; }
+
+.bg-multi-maps-main {
+  background-color: #3216B0; }
+
+.map-sync-zoom-offset {
+  margin: auto; }
+  .map-sync-zoom-offset .multi-map-container .outline {
+    display: none; }
+  .map-sync-zoom-offset .multi-map-container.current-map {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background-color: #ff7800; }
+    .map-sync-zoom-offset .multi-map-container.current-map .outline {
+      display: block;
+      border: 2px dotted #3216B0;
+      width: 50%;
+      height: 50%; }
+  .map-sync-zoom-offset .multi-map-container.main-map {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #3216B0 !important; }
+    .map-sync-zoom-offset .multi-map-container.main-map .outline {
+      display: block;
+      border: 2px dotted #ff7800;
+      width: 50%;
+      height: 50%; }
+
+/**********************************************************
+STYLE FOR ICONS IN BUTTONS
+**********************************************************/
+/*
+sub-icons = a big icon with a small - normally round - icon in the right-bottom corner
+Each of the sub-icons may need a individual class to adjust size and position
+
+The structure is (BIG = the big icon, SUB = the small icon)
+<div class="container-stacked-icons">
+    <i class="fal fa-BIG fa-lg stacked-icon"></i>
+    <i class="fas fa-circle fa-circle-small-right-bottom stacked-icon"></i>
+    <i class="far fa-BIG fa-BIG-small-right-bottom stacked-icon"></i>
+</div>
+
+Different versions of sub-icons can be created using different methods in namespace fcoo.map.icon (see src/fcoo-maps-icon.js)
+
+*/
+.fa-circle-small-right-bottom {
+  position: relative;
+  right: calc(-6em / 16);
+  bottom: calc(-7em / 16);
+  font-size: 1.2em;
+  color: #f8f9fa !important; }
+  .active .fa-circle-small-right-bottom {
+    color: #007bff !important; }
+
+.fa-cog-small-right-bottom {
+  position: relative;
+  right: calc(-6em / 16);
+  bottom: calc(-7em / 16);
+  font-size: 1.1em; }
+
+.fa-sync-small-right-bottom {
+  position: relative;
+  right: calc(-5em / 16);
+  bottom: calc(-7em / 16);
+  font-size: .9em; }

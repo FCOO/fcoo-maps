@@ -10599,6 +10599,2386 @@ return jQuery;
 
 ;
 /*!
+ * modernizr v3.3.1
+ * Build http://modernizr.com/download?-csschunit-csspointerevents-cssremunit-flexbox-flexboxlegacy-flexboxtweener-flexwrap-fullscreen-touchevents-addtest-atrule-hasevent-mq-prefixed-setclasses-dontmin
+ *
+ * Copyright (c)
+ *  Faruk Ates
+ *  Paul Irish
+ *  Alex Sexton
+ *  Ryan Seddon
+ *  Patrick Kettner
+ *  Stu Cox
+ *  Richard Herrera
+
+ * MIT License
+ */
+
+/*
+ * Modernizr tests which native CSS3 and HTML5 features are available in the
+ * current UA and makes the results available to you in two ways: as properties on
+ * a global `Modernizr` object, and as classes on the `<html>` element. This
+ * information allows you to progressively enhance your pages with a granular level
+ * of control over the experience.
+*/
+
+;(function(window, document, undefined){
+  var tests = [];
+  
+
+  /**
+   *
+   * ModernizrProto is the constructor for Modernizr
+   *
+   * @class
+   * @access public
+   */
+
+  var ModernizrProto = {
+    // The current version, dummy
+    _version: '3.3.1',
+
+    // Any settings that don't work as separate modules
+    // can go in here as configuration.
+    _config: {
+      'classPrefix': '',
+      'enableClasses': true,
+      'enableJSClass': true,
+      'usePrefixes': true
+    },
+
+    // Queue of tests
+    _q: [],
+
+    // Stub these for people who are listening
+    on: function(test, cb) {
+      // I don't really think people should do this, but we can
+      // safe guard it a bit.
+      // -- NOTE:: this gets WAY overridden in src/addTest for actual async tests.
+      // This is in case people listen to synchronous tests. I would leave it out,
+      // but the code to *disallow* sync tests in the real version of this
+      // function is actually larger than this.
+      var self = this;
+      setTimeout(function() {
+        cb(self[test]);
+      }, 0);
+    },
+
+    addTest: function(name, fn, options) {
+      tests.push({name: name, fn: fn, options: options});
+    },
+
+    addAsyncTest: function(fn) {
+      tests.push({name: null, fn: fn});
+    }
+  };
+
+  
+
+  // Fake some of Object.create so we can force non test results to be non "own" properties.
+  var Modernizr = function() {};
+  Modernizr.prototype = ModernizrProto;
+
+  // Leak modernizr globally when you `require` it rather than force it here.
+  // Overwrite name so constructor name is nicer :D
+  Modernizr = new Modernizr();
+
+  
+
+  var classes = [];
+  
+
+  /**
+   * is returns a boolean if the typeof an obj is exactly type.
+   *
+   * @access private
+   * @function is
+   * @param {*} obj - A thing we want to check the type of
+   * @param {string} type - A string to compare the typeof against
+   * @returns {boolean}
+   */
+
+  function is(obj, type) {
+    return typeof obj === type;
+  }
+  ;
+
+  /**
+   * Run through all tests and detect their support in the current UA.
+   *
+   * @access private
+   */
+
+  function testRunner() {
+    var featureNames;
+    var feature;
+    var aliasIdx;
+    var result;
+    var nameIdx;
+    var featureName;
+    var featureNameSplit;
+
+    for (var featureIdx in tests) {
+      if (tests.hasOwnProperty(featureIdx)) {
+        featureNames = [];
+        feature = tests[featureIdx];
+        // run the test, throw the return value into the Modernizr,
+        // then based on that boolean, define an appropriate className
+        // and push it into an array of classes we'll join later.
+        //
+        // If there is no name, it's an 'async' test that is run,
+        // but not directly added to the object. That should
+        // be done with a post-run addTest call.
+        if (feature.name) {
+          featureNames.push(feature.name.toLowerCase());
+
+          if (feature.options && feature.options.aliases && feature.options.aliases.length) {
+            // Add all the aliases into the names list
+            for (aliasIdx = 0; aliasIdx < feature.options.aliases.length; aliasIdx++) {
+              featureNames.push(feature.options.aliases[aliasIdx].toLowerCase());
+            }
+          }
+        }
+
+        // Run the test, or use the raw value if it's not a function
+        result = is(feature.fn, 'function') ? feature.fn() : feature.fn;
+
+
+        // Set each of the names on the Modernizr object
+        for (nameIdx = 0; nameIdx < featureNames.length; nameIdx++) {
+          featureName = featureNames[nameIdx];
+          // Support dot properties as sub tests. We don't do checking to make sure
+          // that the implied parent tests have been added. You must call them in
+          // order (either in the test, or make the parent test a dependency).
+          //
+          // Cap it to TWO to make the logic simple and because who needs that kind of subtesting
+          // hashtag famous last words
+          featureNameSplit = featureName.split('.');
+
+          if (featureNameSplit.length === 1) {
+            Modernizr[featureNameSplit[0]] = result;
+          } else {
+            // cast to a Boolean, if not one already
+            /* jshint -W053 */
+            if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
+              Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
+            }
+
+            Modernizr[featureNameSplit[0]][featureNameSplit[1]] = result;
+          }
+
+          classes.push((result ? '' : 'no-') + featureNameSplit.join('-'));
+        }
+      }
+    }
+  }
+  ;
+
+  /**
+   * docElement is a convenience wrapper to grab the root element of the document
+   *
+   * @access private
+   * @returns {HTMLElement|SVGElement} The root element of the document
+   */
+
+  var docElement = document.documentElement;
+  
+
+  /**
+   * A convenience helper to check if the document we are running in is an SVG document
+   *
+   * @access private
+   * @returns {boolean}
+   */
+
+  var isSVG = docElement.nodeName.toLowerCase() === 'svg';
+  
+
+  /**
+   * setClasses takes an array of class names and adds them to the root element
+   *
+   * @access private
+   * @function setClasses
+   * @param {string[]} classes - Array of class names
+   */
+
+  // Pass in an and array of class names, e.g.:
+  //  ['no-webp', 'borderradius', ...]
+  function setClasses(classes) {
+    var className = docElement.className;
+    var classPrefix = Modernizr._config.classPrefix || '';
+
+    if (isSVG) {
+      className = className.baseVal;
+    }
+
+    // Change `no-js` to `js` (independently of the `enableClasses` option)
+    // Handle classPrefix on this too
+    if (Modernizr._config.enableJSClass) {
+      var reJS = new RegExp('(^|\\s)' + classPrefix + 'no-js(\\s|$)');
+      className = className.replace(reJS, '$1' + classPrefix + 'js$2');
+    }
+
+    if (Modernizr._config.enableClasses) {
+      // Add the new classes
+      className += ' ' + classPrefix + classes.join(' ' + classPrefix);
+      isSVG ? docElement.className.baseVal = className : docElement.className = className;
+    }
+
+  }
+
+  ;
+
+  /**
+   * hasOwnProp is a shim for hasOwnProperty that is needed for Safari 2.0 support
+   *
+   * @author kangax
+   * @access private
+   * @function hasOwnProp
+   * @param {object} object - The object to check for a property
+   * @param {string} property - The property to check for
+   * @returns {boolean}
+   */
+
+  // hasOwnProperty shim by kangax needed for Safari 2.0 support
+  var hasOwnProp;
+
+  (function() {
+    var _hasOwnProperty = ({}).hasOwnProperty;
+    /* istanbul ignore else */
+    /* we have no way of testing IE 5.5 or safari 2,
+     * so just assume the else gets hit */
+    if (!is(_hasOwnProperty, 'undefined') && !is(_hasOwnProperty.call, 'undefined')) {
+      hasOwnProp = function(object, property) {
+        return _hasOwnProperty.call(object, property);
+      };
+    }
+    else {
+      hasOwnProp = function(object, property) { /* yes, this can give false positives/negatives, but most of the time we don't care about those */
+        return ((property in object) && is(object.constructor.prototype[property], 'undefined'));
+      };
+    }
+  })();
+
+  
+
+
+   // _l tracks listeners for async tests, as well as tests that execute after the initial run
+  ModernizrProto._l = {};
+
+  /**
+   * Modernizr.on is a way to listen for the completion of async tests. Being
+   * asynchronous, they may not finish before your scripts run. As a result you
+   * will get a possibly false negative `undefined` value.
+   *
+   * @memberof Modernizr
+   * @name Modernizr.on
+   * @access public
+   * @function on
+   * @param {string} feature - String name of the feature detect
+   * @param {function} cb - Callback function returning a Boolean - true if feature is supported, false if not
+   * @example
+   *
+   * ```js
+   * Modernizr.on('flash', function( result ) {
+   *   if (result) {
+   *    // the browser has flash
+   *   } else {
+   *     // the browser does not have flash
+   *   }
+   * });
+   * ```
+   */
+
+  ModernizrProto.on = function(feature, cb) {
+    // Create the list of listeners if it doesn't exist
+    if (!this._l[feature]) {
+      this._l[feature] = [];
+    }
+
+    // Push this test on to the listener list
+    this._l[feature].push(cb);
+
+    // If it's already been resolved, trigger it on next tick
+    if (Modernizr.hasOwnProperty(feature)) {
+      // Next Tick
+      setTimeout(function() {
+        Modernizr._trigger(feature, Modernizr[feature]);
+      }, 0);
+    }
+  };
+
+  /**
+   * _trigger is the private function used to signal test completion and run any
+   * callbacks registered through [Modernizr.on](#modernizr-on)
+   *
+   * @memberof Modernizr
+   * @name Modernizr._trigger
+   * @access private
+   * @function _trigger
+   * @param {string} feature - string name of the feature detect
+   * @param {function|boolean} [res] - A feature detection function, or the boolean =
+   * result of a feature detection function
+   */
+
+  ModernizrProto._trigger = function(feature, res) {
+    if (!this._l[feature]) {
+      return;
+    }
+
+    var cbs = this._l[feature];
+
+    // Force async
+    setTimeout(function() {
+      var i, cb;
+      for (i = 0; i < cbs.length; i++) {
+        cb = cbs[i];
+        cb(res);
+      }
+    }, 0);
+
+    // Don't trigger these again
+    delete this._l[feature];
+  };
+
+  /**
+   * addTest allows you to define your own feature detects that are not currently
+   * included in Modernizr (under the covers it's the exact same code Modernizr
+   * uses for its own [feature detections](https://github.com/Modernizr/Modernizr/tree/master/feature-detects)). Just like the offical detects, the result
+   * will be added onto the Modernizr object, as well as an appropriate className set on
+   * the html element when configured to do so
+   *
+   * @memberof Modernizr
+   * @name Modernizr.addTest
+   * @optionName Modernizr.addTest()
+   * @optionProp addTest
+   * @access public
+   * @function addTest
+   * @param {string|object} feature - The string name of the feature detect, or an
+   * object of feature detect names and test
+   * @param {function|boolean} test - Function returning true if feature is supported,
+   * false if not. Otherwise a boolean representing the results of a feature detection
+   * @example
+   *
+   * The most common way of creating your own feature detects is by calling
+   * `Modernizr.addTest` with a string (preferably just lowercase, without any
+   * punctuation), and a function you want executed that will return a boolean result
+   *
+   * ```js
+   * Modernizr.addTest('itsTuesday', function() {
+   *  var d = new Date();
+   *  return d.getDay() === 2;
+   * });
+   * ```
+   *
+   * When the above is run, it will set Modernizr.itstuesday to `true` when it is tuesday,
+   * and to `false` every other day of the week. One thing to notice is that the names of
+   * feature detect functions are always lowercased when added to the Modernizr object. That
+   * means that `Modernizr.itsTuesday` will not exist, but `Modernizr.itstuesday` will.
+   *
+   *
+   *  Since we only look at the returned value from any feature detection function,
+   *  you do not need to actually use a function. For simple detections, just passing
+   *  in a statement that will return a boolean value works just fine.
+   *
+   * ```js
+   * Modernizr.addTest('hasJquery', 'jQuery' in window);
+   * ```
+   *
+   * Just like before, when the above runs `Modernizr.hasjquery` will be true if
+   * jQuery has been included on the page. Not using a function saves a small amount
+   * of overhead for the browser, as well as making your code much more readable.
+   *
+   * Finally, you also have the ability to pass in an object of feature names and
+   * their tests. This is handy if you want to add multiple detections in one go.
+   * The keys should always be a string, and the value can be either a boolean or
+   * function that returns a boolean.
+   *
+   * ```js
+   * var detects = {
+   *  'hasjquery': 'jQuery' in window,
+   *  'itstuesday': function() {
+   *    var d = new Date();
+   *    return d.getDay() === 2;
+   *  }
+   * }
+   *
+   * Modernizr.addTest(detects);
+   * ```
+   *
+   * There is really no difference between the first methods and this one, it is
+   * just a convenience to let you write more readable code.
+   */
+
+  function addTest(feature, test) {
+
+    if (typeof feature == 'object') {
+      for (var key in feature) {
+        if (hasOwnProp(feature, key)) {
+          addTest(key, feature[ key ]);
+        }
+      }
+    } else {
+
+      feature = feature.toLowerCase();
+      var featureNameSplit = feature.split('.');
+      var last = Modernizr[featureNameSplit[0]];
+
+      // Again, we don't check for parent test existence. Get that right, though.
+      if (featureNameSplit.length == 2) {
+        last = last[featureNameSplit[1]];
+      }
+
+      if (typeof last != 'undefined') {
+        // we're going to quit if you're trying to overwrite an existing test
+        // if we were to allow it, we'd do this:
+        //   var re = new RegExp("\\b(no-)?" + feature + "\\b");
+        //   docElement.className = docElement.className.replace( re, '' );
+        // but, no rly, stuff 'em.
+        return Modernizr;
+      }
+
+      test = typeof test == 'function' ? test() : test;
+
+      // Set the value (this is the magic, right here).
+      if (featureNameSplit.length == 1) {
+        Modernizr[featureNameSplit[0]] = test;
+      } else {
+        // cast to a Boolean, if not one already
+        /* jshint -W053 */
+        if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
+          Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
+        }
+
+        Modernizr[featureNameSplit[0]][featureNameSplit[1]] = test;
+      }
+
+      // Set a single class (either `feature` or `no-feature`)
+      /* jshint -W041 */
+      setClasses([(!!test && test != false ? '' : 'no-') + featureNameSplit.join('-')]);
+      /* jshint +W041 */
+
+      // Trigger the event
+      Modernizr._trigger(feature, test);
+    }
+
+    return Modernizr; // allow chaining.
+  }
+
+  // After all the tests are run, add self to the Modernizr prototype
+  Modernizr._q.push(function() {
+    ModernizrProto.addTest = addTest;
+  });
+
+  
+
+
+  /**
+   * If the browsers follow the spec, then they would expose vendor-specific style as:
+   *   elem.style.WebkitBorderRadius
+   * instead of something like the following, which would be technically incorrect:
+   *   elem.style.webkitBorderRadius
+
+   * Webkit ghosts their properties in lowercase but Opera & Moz do not.
+   * Microsoft uses a lowercase `ms` instead of the correct `Ms` in IE8+
+   *   erik.eae.net/archives/2008/03/10/21.48.10/
+
+   * More here: github.com/Modernizr/Modernizr/issues/issue/21
+   *
+   * @access private
+   * @returns {string} The string representing the vendor-specific style properties
+   */
+
+  var omPrefixes = 'Moz O ms Webkit';
+  
+
+  var cssomPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.split(' ') : []);
+  ModernizrProto._cssomPrefixes = cssomPrefixes;
+  
+
+  /**
+   * atRule returns a given CSS property at-rule (eg @keyframes), possibly in
+   * some prefixed form, or false, in the case of an unsupported rule
+   *
+   * @memberof Modernizr
+   * @name Modernizr.atRule
+   * @optionName Modernizr.atRule()
+   * @optionProp atRule
+   * @access public
+   * @function atRule
+   * @param {string} prop - String name of the @-rule to test for
+   * @returns {string|boolean} The string representing the (possibly prefixed)
+   * valid version of the @-rule, or `false` when it is unsupported.
+   * @example
+   * ```js
+   *  var keyframes = Modernizr.atRule('@keyframes');
+   *
+   *  if (keyframes) {
+   *    // keyframes are supported
+   *    // could be `@-webkit-keyframes` or `@keyframes`
+   *  } else {
+   *    // keyframes === `false`
+   *  }
+   * ```
+   *
+   */
+
+  var atRule = function(prop) {
+    var length = prefixes.length;
+    var cssrule = window.CSSRule;
+    var rule;
+
+    if (typeof cssrule === 'undefined') {
+      return undefined;
+    }
+
+    if (!prop) {
+      return false;
+    }
+
+    // remove literal @ from beginning of provided property
+    prop = prop.replace(/^@/, '');
+
+    // CSSRules use underscores instead of dashes
+    rule = prop.replace(/-/g, '_').toUpperCase() + '_RULE';
+
+    if (rule in cssrule) {
+      return '@' + prop;
+    }
+
+    for (var i = 0; i < length; i++) {
+      // prefixes gives us something like -o-, and we want O_
+      var prefix = prefixes[i];
+      var thisRule = prefix.toUpperCase() + '_' + rule;
+
+      if (thisRule in cssrule) {
+        return '@-' + prefix.toLowerCase() + '-' + prop;
+      }
+    }
+
+    return false;
+  };
+
+  ModernizrProto.atRule = atRule;
+
+  
+
+  /**
+   * createElement is a convenience wrapper around document.createElement. Since we
+   * use createElement all over the place, this allows for (slightly) smaller code
+   * as well as abstracting away issues with creating elements in contexts other than
+   * HTML documents (e.g. SVG documents).
+   *
+   * @access private
+   * @function createElement
+   * @returns {HTMLElement|SVGElement} An HTML or SVG element
+   */
+
+  function createElement() {
+    if (typeof document.createElement !== 'function') {
+      // This is the case in IE7, where the type of createElement is "object".
+      // For this reason, we cannot call apply() as Object is not a Function.
+      return document.createElement(arguments[0]);
+    } else if (isSVG) {
+      return document.createElementNS.call(document, 'http://www.w3.org/2000/svg', arguments[0]);
+    } else {
+      return document.createElement.apply(document, arguments);
+    }
+  }
+
+  ;
+
+  /**
+   * Modernizr.hasEvent() detects support for a given event
+   *
+   * @memberof Modernizr
+   * @name Modernizr.hasEvent
+   * @optionName Modernizr.hasEvent()
+   * @optionProp hasEvent
+   * @access public
+   * @function hasEvent
+   * @param  {string|*} eventName - the name of an event to test for (e.g. "resize")
+   * @param  {Element|string} [element=HTMLDivElement] - is the element|document|window|tagName to test on
+   * @returns {boolean}
+   * @example
+   *  `Modernizr.hasEvent` lets you determine if the browser supports a supplied event.
+   *  By default, it does this detection on a div element
+   *
+   * ```js
+   *  hasEvent('blur') // true;
+   * ```
+   *
+   * However, you are able to give an object as a second argument to hasEvent to
+   * detect an event on something other than a div.
+   *
+   * ```js
+   *  hasEvent('devicelight', window) // true;
+   * ```
+   *
+   */
+
+  var hasEvent = (function() {
+
+    // Detect whether event support can be detected via `in`. Test on a DOM element
+    // using the "blur" event b/c it should always exist. bit.ly/event-detection
+    var needsFallback = !('onblur' in document.documentElement);
+
+    function inner(eventName, element) {
+
+      var isSupported;
+      if (!eventName) { return false; }
+      if (!element || typeof element === 'string') {
+        element = createElement(element || 'div');
+      }
+
+      // Testing via the `in` operator is sufficient for modern browsers and IE.
+      // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and
+      // "resize", whereas `in` "catches" those.
+      eventName = 'on' + eventName;
+      isSupported = eventName in element;
+
+      // Fallback technique for old Firefox - bit.ly/event-detection
+      if (!isSupported && needsFallback) {
+        if (!element.setAttribute) {
+          // Switch to generic element if it lacks `setAttribute`.
+          // It could be the `document`, `window`, or something else.
+          element = createElement('div');
+        }
+
+        element.setAttribute(eventName, '');
+        isSupported = typeof element[eventName] === 'function';
+
+        if (element[eventName] !== undefined) {
+          // If property was created, "remove it" by setting value to `undefined`.
+          element[eventName] = undefined;
+        }
+        element.removeAttribute(eventName);
+      }
+
+      return isSupported;
+    }
+    return inner;
+  })();
+
+
+  ModernizrProto.hasEvent = hasEvent;
+  
+
+  /**
+   * getBody returns the body of a document, or an element that can stand in for
+   * the body if a real body does not exist
+   *
+   * @access private
+   * @function getBody
+   * @returns {HTMLElement|SVGElement} Returns the real body of a document, or an
+   * artificially created element that stands in for the body
+   */
+
+  function getBody() {
+    // After page load injecting a fake body doesn't work so check if body exists
+    var body = document.body;
+
+    if (!body) {
+      // Can't use the real body create a fake one.
+      body = createElement(isSVG ? 'svg' : 'body');
+      body.fake = true;
+    }
+
+    return body;
+  }
+
+  ;
+
+  /**
+   * injectElementWithStyles injects an element with style element and some CSS rules
+   *
+   * @access private
+   * @function injectElementWithStyles
+   * @param {string} rule - String representing a css rule
+   * @param {function} callback - A function that is used to test the injected element
+   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
+   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
+   * @returns {boolean}
+   */
+
+  function injectElementWithStyles(rule, callback, nodes, testnames) {
+    var mod = 'modernizr';
+    var style;
+    var ret;
+    var node;
+    var docOverflow;
+    var div = createElement('div');
+    var body = getBody();
+
+    if (parseInt(nodes, 10)) {
+      // In order not to give false positives we create a node for each test
+      // This also allows the method to scale for unspecified uses
+      while (nodes--) {
+        node = createElement('div');
+        node.id = testnames ? testnames[nodes] : mod + (nodes + 1);
+        div.appendChild(node);
+      }
+    }
+
+    style = createElement('style');
+    style.type = 'text/css';
+    style.id = 's' + mod;
+
+    // IE6 will false positive on some tests due to the style element inside the test div somehow interfering offsetHeight, so insert it into body or fakebody.
+    // Opera will act all quirky when injecting elements in documentElement when page is served as xml, needs fakebody too. #270
+    (!body.fake ? div : body).appendChild(style);
+    body.appendChild(div);
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = rule;
+    } else {
+      style.appendChild(document.createTextNode(rule));
+    }
+    div.id = mod;
+
+    if (body.fake) {
+      //avoid crashing IE8, if background image is used
+      body.style.background = '';
+      //Safari 5.13/5.1.4 OSX stops loading if ::-webkit-scrollbar is used and scrollbars are visible
+      body.style.overflow = 'hidden';
+      docOverflow = docElement.style.overflow;
+      docElement.style.overflow = 'hidden';
+      docElement.appendChild(body);
+    }
+
+    ret = callback(div, rule);
+    // If this is done after page load we don't want to remove the body so check if body exists
+    if (body.fake) {
+      body.parentNode.removeChild(body);
+      docElement.style.overflow = docOverflow;
+      // Trigger layout so kinetic scrolling isn't disabled in iOS6+
+      docElement.offsetHeight;
+    } else {
+      div.parentNode.removeChild(div);
+    }
+
+    return !!ret;
+
+  }
+
+  ;
+
+  /**
+   * Modernizr.mq tests a given media query, live against the current state of the window
+   * adapted from matchMedia polyfill by Scott Jehl and Paul Irish
+   * gist.github.com/786768
+   *
+   * @memberof Modernizr
+   * @name Modernizr.mq
+   * @optionName Modernizr.mq()
+   * @optionProp mq
+   * @access public
+   * @function mq
+   * @param {string} mq - String of the media query we want to test
+   * @returns {boolean}
+   * @example
+   * Modernizr.mq allows for you to programmatically check if the current browser
+   * window state matches a media query.
+   *
+   * ```js
+   *  var query = Modernizr.mq('(min-width: 900px)');
+   *
+   *  if (query) {
+   *    // the browser window is larger than 900px
+   *  }
+   * ```
+   *
+   * Only valid media queries are supported, therefore you must always include values
+   * with your media query
+   *
+   * ```js
+   * // good
+   *  Modernizr.mq('(min-width: 900px)');
+   *
+   * // bad
+   *  Modernizr.mq('min-width');
+   * ```
+   *
+   * If you would just like to test that media queries are supported in general, use
+   *
+   * ```js
+   *  Modernizr.mq('only all'); // true if MQ are supported, false if not
+   * ```
+   *
+   *
+   * Note that if the browser does not support media queries (e.g. old IE) mq will
+   * always return false.
+   */
+
+  var mq = (function() {
+    var matchMedia = window.matchMedia || window.msMatchMedia;
+    if (matchMedia) {
+      return function(mq) {
+        var mql = matchMedia(mq);
+        return mql && mql.matches || false;
+      };
+    }
+
+    return function(mq) {
+      var bool = false;
+
+      injectElementWithStyles('@media ' + mq + ' { #modernizr { position: absolute; } }', function(node) {
+        bool = (window.getComputedStyle ?
+                window.getComputedStyle(node, null) :
+                node.currentStyle).position == 'absolute';
+      });
+
+      return bool;
+    };
+  })();
+
+
+  ModernizrProto.mq = mq;
+
+  
+
+
+  /**
+   * contains checks to see if a string contains another string
+   *
+   * @access private
+   * @function contains
+   * @param {string} str - The string we want to check for substrings
+   * @param {string} substr - The substring we want to search the first string for
+   * @returns {boolean}
+   */
+
+  function contains(str, substr) {
+    return !!~('' + str).indexOf(substr);
+  }
+
+  ;
+
+  /**
+   * Create our "modernizr" element that we do most feature tests on.
+   *
+   * @access private
+   */
+
+  var modElem = {
+    elem: createElement('modernizr')
+  };
+
+  // Clean up this element
+  Modernizr._q.push(function() {
+    delete modElem.elem;
+  });
+
+  
+
+  var mStyle = {
+    style: modElem.elem.style
+  };
+
+  // kill ref for gc, must happen before mod.elem is removed, so we unshift on to
+  // the front of the queue.
+  Modernizr._q.unshift(function() {
+    delete mStyle.style;
+  });
+
+  
+
+  /**
+   * domToCSS takes a camelCase string and converts it to kebab-case
+   * e.g. boxSizing -> box-sizing
+   *
+   * @access private
+   * @function domToCSS
+   * @param {string} name - String name of camelCase prop we want to convert
+   * @returns {string} The kebab-case version of the supplied name
+   */
+
+  function domToCSS(name) {
+    return name.replace(/([A-Z])/g, function(str, m1) {
+      return '-' + m1.toLowerCase();
+    }).replace(/^ms-/, '-ms-');
+  }
+  ;
+
+  /**
+   * nativeTestProps allows for us to use native feature detection functionality if available.
+   * some prefixed form, or false, in the case of an unsupported rule
+   *
+   * @access private
+   * @function nativeTestProps
+   * @param {array} props - An array of property names
+   * @param {string} value - A string representing the value we want to check via @supports
+   * @returns {boolean|undefined} A boolean when @supports exists, undefined otherwise
+   */
+
+  // Accepts a list of property names and a single value
+  // Returns `undefined` if native detection not available
+  function nativeTestProps(props, value) {
+    var i = props.length;
+    // Start with the JS API: http://www.w3.org/TR/css3-conditional/#the-css-interface
+    if ('CSS' in window && 'supports' in window.CSS) {
+      // Try every prefixed variant of the property
+      while (i--) {
+        if (window.CSS.supports(domToCSS(props[i]), value)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    // Otherwise fall back to at-rule (for Opera 12.x)
+    else if ('CSSSupportsRule' in window) {
+      // Build a condition string for every prefixed variant
+      var conditionText = [];
+      while (i--) {
+        conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
+      }
+      conditionText = conditionText.join(' or ');
+      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
+        return getComputedStyle(node, null).position == 'absolute';
+      });
+    }
+    return undefined;
+  }
+  ;
+
+  /**
+   * cssToDOM takes a kebab-case string and converts it to camelCase
+   * e.g. box-sizing -> boxSizing
+   *
+   * @access private
+   * @function cssToDOM
+   * @param {string} name - String name of kebab-case prop we want to convert
+   * @returns {string} The camelCase version of the supplied name
+   */
+
+  function cssToDOM(name) {
+    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
+      return m1 + m2.toUpperCase();
+    }).replace(/^-/, '');
+  }
+  ;
+
+  // testProps is a generic CSS / DOM property test.
+
+  // In testing support for a given CSS property, it's legit to test:
+  //    `elem.style[styleName] !== undefined`
+  // If the property is supported it will return an empty string,
+  // if unsupported it will return undefined.
+
+  // We'll take advantage of this quick test and skip setting a style
+  // on our modernizr element, but instead just testing undefined vs
+  // empty string.
+
+  // Property names can be provided in either camelCase or kebab-case.
+
+  function testProps(props, prefixed, value, skipValueTest) {
+    skipValueTest = is(skipValueTest, 'undefined') ? false : skipValueTest;
+
+    // Try native detect first
+    if (!is(value, 'undefined')) {
+      var result = nativeTestProps(props, value);
+      if (!is(result, 'undefined')) {
+        return result;
+      }
+    }
+
+    // Otherwise do it properly
+    var afterInit, i, propsLength, prop, before;
+
+    // If we don't have a style element, that means we're running async or after
+    // the core tests, so we'll need to create our own elements to use
+
+    // inside of an SVG element, in certain browsers, the `style` element is only
+    // defined for valid tags. Therefore, if `modernizr` does not have one, we
+    // fall back to a less used element and hope for the best.
+    var elems = ['modernizr', 'tspan'];
+    while (!mStyle.style) {
+      afterInit = true;
+      mStyle.modElem = createElement(elems.shift());
+      mStyle.style = mStyle.modElem.style;
+    }
+
+    // Delete the objects if we created them.
+    function cleanElems() {
+      if (afterInit) {
+        delete mStyle.style;
+        delete mStyle.modElem;
+      }
+    }
+
+    propsLength = props.length;
+    for (i = 0; i < propsLength; i++) {
+      prop = props[i];
+      before = mStyle.style[prop];
+
+      if (contains(prop, '-')) {
+        prop = cssToDOM(prop);
+      }
+
+      if (mStyle.style[prop] !== undefined) {
+
+        // If value to test has been passed in, do a set-and-check test.
+        // 0 (integer) is a valid property value, so check that `value` isn't
+        // undefined, rather than just checking it's truthy.
+        if (!skipValueTest && !is(value, 'undefined')) {
+
+          // Needs a try catch block because of old IE. This is slow, but will
+          // be avoided in most cases because `skipValueTest` will be used.
+          try {
+            mStyle.style[prop] = value;
+          } catch (e) {}
+
+          // If the property value has changed, we assume the value used is
+          // supported. If `value` is empty string, it'll fail here (because
+          // it hasn't changed), which matches how browsers have implemented
+          // CSS.supports()
+          if (mStyle.style[prop] != before) {
+            cleanElems();
+            return prefixed == 'pfx' ? prop : true;
+          }
+        }
+        // Otherwise just return true, or the property name if this is a
+        // `prefixed()` call
+        else {
+          cleanElems();
+          return prefixed == 'pfx' ? prop : true;
+        }
+      }
+    }
+    cleanElems();
+    return false;
+  }
+
+  ;
+
+  /**
+   * List of JavaScript DOM values used for tests
+   *
+   * @memberof Modernizr
+   * @name Modernizr._domPrefixes
+   * @optionName Modernizr._domPrefixes
+   * @optionProp domPrefixes
+   * @access public
+   * @example
+   *
+   * Modernizr._domPrefixes is exactly the same as [_prefixes](#modernizr-_prefixes), but rather
+   * than kebab-case properties, all properties are their Capitalized variant
+   *
+   * ```js
+   * Modernizr._domPrefixes === [ "Moz", "O", "ms", "Webkit" ];
+   * ```
+   */
+
+  var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
+  ModernizrProto._domPrefixes = domPrefixes;
+  
+
+  /**
+   * fnBind is a super small [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) polyfill.
+   *
+   * @access private
+   * @function fnBind
+   * @param {function} fn - a function you want to change `this` reference to
+   * @param {object} that - the `this` you want to call the function with
+   * @returns {function} The wrapped version of the supplied function
+   */
+
+  function fnBind(fn, that) {
+    return function() {
+      return fn.apply(that, arguments);
+    };
+  }
+
+  ;
+
+  /**
+   * testDOMProps is a generic DOM property test; if a browser supports
+   *   a certain property, it won't return undefined for it.
+   *
+   * @access private
+   * @function testDOMProps
+   * @param {array.<string>} props - An array of properties to test for
+   * @param {object} obj - An object or Element you want to use to test the parameters again
+   * @param {boolean|object} elem - An Element to bind the property lookup again. Use `false` to prevent the check
+   */
+  function testDOMProps(props, obj, elem) {
+    var item;
+
+    for (var i in props) {
+      if (props[i] in obj) {
+
+        // return the property name as a string
+        if (elem === false) {
+          return props[i];
+        }
+
+        item = obj[props[i]];
+
+        // let's bind a function
+        if (is(item, 'function')) {
+          // bind to obj unless overriden
+          return fnBind(item, elem || obj);
+        }
+
+        // return the unbound function or obj or value
+        return item;
+      }
+    }
+    return false;
+  }
+
+  ;
+
+  /**
+   * testPropsAll tests a list of DOM properties we want to check against.
+   * We specify literally ALL possible (known and/or likely) properties on
+   * the element including the non-vendor prefixed one, for forward-
+   * compatibility.
+   *
+   * @access private
+   * @function testPropsAll
+   * @param {string} prop - A string of the property to test for
+   * @param {string|object} [prefixed] - An object to check the prefixed properties on. Use a string to skip
+   * @param {HTMLElement|SVGElement} [elem] - An element used to test the property and value against
+   * @param {string} [value] - A string of a css value
+   * @param {boolean} [skipValueTest] - An boolean representing if you want to test if value sticks when set
+   */
+  function testPropsAll(prop, prefixed, elem, value, skipValueTest) {
+
+    var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
+    props = (prop + ' ' + cssomPrefixes.join(ucProp + ' ') + ucProp).split(' ');
+
+    // did they call .prefixed('boxSizing') or are we just testing a prop?
+    if (is(prefixed, 'string') || is(prefixed, 'undefined')) {
+      return testProps(props, prefixed, value, skipValueTest);
+
+      // otherwise, they called .prefixed('requestAnimationFrame', window[, elem])
+    } else {
+      props = (prop + ' ' + (domPrefixes).join(ucProp + ' ') + ucProp).split(' ');
+      return testDOMProps(props, prefixed, elem);
+    }
+  }
+
+  // Modernizr.testAllProps() investigates whether a given style property,
+  // or any of its vendor-prefixed variants, is recognized
+  //
+  // Note that the property names must be provided in the camelCase variant.
+  // Modernizr.testAllProps('boxSizing')
+  ModernizrProto.testAllProps = testPropsAll;
+
+  
+
+  /**
+   * prefixed returns the prefixed or nonprefixed property name variant of your input
+   *
+   * @memberof Modernizr
+   * @name Modernizr.prefixed
+   * @optionName Modernizr.prefixed()
+   * @optionProp prefixed
+   * @access public
+   * @function prefixed
+   * @param {string} prop - String name of the property to test for
+   * @param {object} [obj] - An object to test for the prefixed properties on
+   * @param {HTMLElement} [elem] - An element used to test specific properties against
+   * @returns {string|false} The string representing the (possibly prefixed) valid
+   * version of the property, or `false` when it is unsupported.
+   * @example
+   *
+   * Modernizr.prefixed takes a string css value in the DOM style camelCase (as
+   * opposed to the css style kebab-case) form and returns the (possibly prefixed)
+   * version of that property that the browser actually supports.
+   *
+   * For example, in older Firefox...
+   * ```js
+   * prefixed('boxSizing')
+   * ```
+   * returns 'MozBoxSizing'
+   *
+   * In newer Firefox, as well as any other browser that support the unprefixed
+   * version would simply return `boxSizing`. Any browser that does not support
+   * the property at all, it will return `false`.
+   *
+   * By default, prefixed is checked against a DOM element. If you want to check
+   * for a property on another object, just pass it as a second argument
+   *
+   * ```js
+   * var rAF = prefixed('requestAnimationFrame', window);
+   *
+   * raf(function() {
+   *  renderFunction();
+   * })
+   * ```
+   *
+   * Note that this will return _the actual function_ - not the name of the function.
+   * If you need the actual name of the property, pass in `false` as a third argument
+   *
+   * ```js
+   * var rAFProp = prefixed('requestAnimationFrame', window, false);
+   *
+   * rafProp === 'WebkitRequestAnimationFrame' // in older webkit
+   * ```
+   *
+   * One common use case for prefixed is if you're trying to determine which transition
+   * end event to bind to, you might do something like...
+   * ```js
+   * var transEndEventNames = {
+   *     'WebkitTransition' : 'webkitTransitionEnd', * Saf 6, Android Browser
+   *     'MozTransition'    : 'transitionend',       * only for FF < 15
+   *     'transition'       : 'transitionend'        * IE10, Opera, Chrome, FF 15+, Saf 7+
+   * };
+   *
+   * var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
+   * ```
+   *
+   * If you want a similar lookup, but in kebab-case, you can use [prefixedCSS](#modernizr-prefixedcss).
+   */
+
+  var prefixed = ModernizrProto.prefixed = function(prop, obj, elem) {
+    if (prop.indexOf('@') === 0) {
+      return atRule(prop);
+    }
+
+    if (prop.indexOf('-') != -1) {
+      // Convert kebab-case to camelCase
+      prop = cssToDOM(prop);
+    }
+    if (!obj) {
+      return testPropsAll(prop, 'pfx');
+    } else {
+      // Testing DOM property e.g. Modernizr.prefixed('requestAnimationFrame', window) // 'mozRequestAnimationFrame'
+      return testPropsAll(prop, obj, elem);
+    }
+  };
+
+  
+/*!
+{
+  "name": "Fullscreen API",
+  "property": "fullscreen",
+  "caniuse": "fullscreen",
+  "notes": [{
+    "name": "MDN documentation",
+    "href": "https://developer.mozilla.org/en/API/Fullscreen"
+  }],
+  "polyfills": ["screenfulljs"],
+  "builderAliases": ["fullscreen_api"]
+}
+!*/
+/* DOC
+Detects support for the ability to make the current website take over the user's entire screen
+*/
+
+  // github.com/Modernizr/Modernizr/issues/739
+  Modernizr.addTest('fullscreen', !!(prefixed('exitFullscreen', document, false) || prefixed('cancelFullScreen', document, false)));
+
+
+  /**
+   * List of property values to set for css tests. See ticket #21
+   * http://git.io/vUGl4
+   *
+   * @memberof Modernizr
+   * @name Modernizr._prefixes
+   * @optionName Modernizr._prefixes
+   * @optionProp prefixes
+   * @access public
+   * @example
+   *
+   * Modernizr._prefixes is the internal list of prefixes that we test against
+   * inside of things like [prefixed](#modernizr-prefixed) and [prefixedCSS](#-code-modernizr-prefixedcss). It is simply
+   * an array of kebab-case vendor prefixes you can use within your code.
+   *
+   * Some common use cases include
+   *
+   * Generating all possible prefixed version of a CSS property
+   * ```js
+   * var rule = Modernizr._prefixes.join('transform: rotate(20deg); ');
+   *
+   * rule === 'transform: rotate(20deg); webkit-transform: rotate(20deg); moz-transform: rotate(20deg); o-transform: rotate(20deg); ms-transform: rotate(20deg);'
+   * ```
+   *
+   * Generating all possible prefixed version of a CSS value
+   * ```js
+   * rule = 'display:' +  Modernizr._prefixes.join('flex; display:') + 'flex';
+   *
+   * rule === 'display:flex; display:-webkit-flex; display:-moz-flex; display:-o-flex; display:-ms-flex; display:flex'
+   * ```
+   */
+
+  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : []);
+
+  // expose these for the plugin API. Look in the source for how to join() them against your input
+  ModernizrProto._prefixes = prefixes;
+
+  
+
+  /**
+   * testStyles injects an element with style element and some CSS rules
+   *
+   * @memberof Modernizr
+   * @name Modernizr.testStyles
+   * @optionName Modernizr.testStyles()
+   * @optionProp testStyles
+   * @access public
+   * @function testStyles
+   * @param {string} rule - String representing a css rule
+   * @param {function} callback - A function that is used to test the injected element
+   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
+   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
+   * @returns {boolean}
+   * @example
+   *
+   * `Modernizr.testStyles` takes a CSS rule and injects it onto the current page
+   * along with (possibly multiple) DOM elements. This lets you check for features
+   * that can not be detected by simply checking the [IDL](https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Interface_development_guide/IDL_interface_rules).
+   *
+   * ```js
+   * Modernizr.testStyles('#modernizr { width: 9px; color: papayawhip; }', function(elem, rule) {
+   *   // elem is the first DOM node in the page (by default #modernizr)
+   *   // rule is the first argument you supplied - the CSS rule in string form
+   *
+   *   addTest('widthworks', elem.style.width === '9px')
+   * });
+   * ```
+   *
+   * If your test requires multiple nodes, you can include a third argument
+   * indicating how many additional div elements to include on the page. The
+   * additional nodes are injected as children of the `elem` that is returned as
+   * the first argument to the callback.
+   *
+   * ```js
+   * Modernizr.testStyles('#modernizr {width: 1px}; #modernizr2 {width: 2px}', function(elem) {
+   *   document.getElementById('modernizr').style.width === '1px'; // true
+   *   document.getElementById('modernizr2').style.width === '2px'; // true
+   *   elem.firstChild === document.getElementById('modernizr2'); // true
+   * }, 1);
+   * ```
+   *
+   * By default, all of the additional elements have an ID of `modernizr[n]`, where
+   * `n` is its index (e.g. the first additional, second overall is `#modernizr2`,
+   * the second additional is `#modernizr3`, etc.).
+   * If you want to have more meaningful IDs for your function, you can provide
+   * them as the fourth argument, as an array of strings
+   *
+   * ```js
+   * Modernizr.testStyles('#foo {width: 10px}; #bar {height: 20px}', function(elem) {
+   *   elem.firstChild === document.getElementById('foo'); // true
+   *   elem.lastChild === document.getElementById('bar'); // true
+   * }, 2, ['foo', 'bar']);
+   * ```
+   *
+   */
+
+  var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
+  
+/*!
+{
+  "name": "Touch Events",
+  "property": "touchevents",
+  "caniuse" : "touch",
+  "tags": ["media", "attribute"],
+  "notes": [{
+    "name": "Touch Events spec",
+    "href": "https://www.w3.org/TR/2013/WD-touch-events-20130124/"
+  }],
+  "warnings": [
+    "Indicates if the browser supports the Touch Events spec, and does not necessarily reflect a touchscreen device"
+  ],
+  "knownBugs": [
+    "False-positive on some configurations of Nokia N900",
+    "False-positive on some BlackBerry 6.0 builds – https://github.com/Modernizr/Modernizr/issues/372#issuecomment-3112695"
+  ]
+}
+!*/
+/* DOC
+Indicates if the browser supports the W3C Touch Events API.
+
+This *does not* necessarily reflect a touchscreen device:
+
+* Older touchscreen devices only emulate mouse events
+* Modern IE touch devices implement the Pointer Events API instead: use `Modernizr.pointerevents` to detect support for that
+* Some browsers & OS setups may enable touch APIs when no touchscreen is connected
+* Future browsers may implement other event models for touch interactions
+
+See this article: [You Can't Detect A Touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/).
+
+It's recommended to bind both mouse and touch/pointer events simultaneously – see [this HTML5 Rocks tutorial](http://www.html5rocks.com/en/mobile/touchandmouse/).
+
+This test will also return `true` for Firefox 4 Multitouch support.
+*/
+
+  // Chrome (desktop) used to lie about its support on this, but that has since been rectified: http://crbug.com/36415
+  Modernizr.addTest('touchevents', function() {
+    var bool;
+    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+      bool = true;
+    } else {
+      // include the 'heartz' as a way to have a non matching MQ to help terminate the join
+      // https://git.io/vznFH
+      var query = ['@media (', prefixes.join('touch-enabled),('), 'heartz', ')', '{#modernizr{top:9px;position:absolute}}'].join('');
+      testStyles(query, function(node) {
+        bool = node.offsetTop === 9;
+      });
+    }
+    return bool;
+  });
+
+/*!
+{
+  "name": "CSS Font ch Units",
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "property": "csschunit",
+  "tags": ["css"],
+  "notes": [{
+    "name": "W3C Spec",
+    "href": "https://www.w3.org/TR/css3-values/#font-relative-lengths"
+  }]
+}
+!*/
+
+  Modernizr.addTest('csschunit', function() {
+    var elemStyle = modElem.elem.style;
+    var supports;
+    try {
+      elemStyle.fontSize = '3ch';
+      supports = elemStyle.fontSize.indexOf('ch') !== -1;
+    } catch (e) {
+      supports = false;
+    }
+    return supports;
+  });
+
+
+  /**
+   * testAllProps determines whether a given CSS property is supported in the browser
+   *
+   * @memberof Modernizr
+   * @name Modernizr.testAllProps
+   * @optionName Modernizr.testAllProps()
+   * @optionProp testAllProps
+   * @access public
+   * @function testAllProps
+   * @param {string} prop - String naming the property to test (either camelCase or kebab-case)
+   * @param {string} [value] - String of the value to test
+   * @param {boolean} [skipValueTest=false] - Whether to skip testing that the value is supported when using non-native detection
+   * @example
+   *
+   * testAllProps determines whether a given CSS property, in some prefixed form,
+   * is supported by the browser.
+   *
+   * ```js
+   * testAllProps('boxSizing')  // true
+   * ```
+   *
+   * It can optionally be given a CSS value in string form to test if a property
+   * value is valid
+   *
+   * ```js
+   * testAllProps('display', 'block') // true
+   * testAllProps('display', 'penguin') // false
+   * ```
+   *
+   * A boolean can be passed as a third parameter to skip the value check when
+   * native detection (@supports) isn't available.
+   *
+   * ```js
+   * testAllProps('shapeOutside', 'content-box', true);
+   * ```
+   */
+
+  function testAllProps(prop, value, skipValueTest) {
+    return testPropsAll(prop, undefined, undefined, value, skipValueTest);
+  }
+  ModernizrProto.testAllProps = testAllProps;
+  
+/*!
+{
+  "name": "Flexbox",
+  "property": "flexbox",
+  "caniuse": "flexbox",
+  "tags": ["css"],
+  "notes": [{
+    "name": "The _new_ flexbox",
+    "href": "http://dev.w3.org/csswg/css3-flexbox"
+  }],
+  "warnings": [
+    "A `true` result for this detect does not imply that the `flex-wrap` property is supported; see the `flexwrap` detect."
+  ]
+}
+!*/
+/* DOC
+Detects support for the Flexible Box Layout model, a.k.a. Flexbox, which allows easy manipulation of layout order and sizing within a container.
+*/
+
+  Modernizr.addTest('flexbox', testAllProps('flexBasis', '1px', true));
+
+/*!
+{
+  "name": "Flexbox (legacy)",
+  "property": "flexboxlegacy",
+  "tags": ["css"],
+  "polyfills": ["flexie"],
+  "notes": [{
+    "name": "The _old_ flexbox",
+    "href": "https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/"
+  }]
+}
+!*/
+
+  Modernizr.addTest('flexboxlegacy', testAllProps('boxDirection', 'reverse', true));
+
+/*!
+{
+  "name": "Flexbox (tweener)",
+  "property": "flexboxtweener",
+  "tags": ["css"],
+  "polyfills": ["flexie"],
+  "notes": [{
+    "name": "The _inbetween_ flexbox",
+    "href": "https://www.w3.org/TR/2011/WD-css3-flexbox-20111129/"
+  }],
+  "warnings": ["This represents an old syntax, not the latest standard syntax."]
+}
+!*/
+
+  Modernizr.addTest('flexboxtweener', testAllProps('flexAlign', 'end', true));
+
+/*!
+{
+  "name": "Flex Line Wrapping",
+  "property": "flexwrap",
+  "tags": ["css", "flexbox"],
+  "notes": [{
+    "name": "W3C Flexible Box Layout spec",
+    "href": "http://dev.w3.org/csswg/css3-flexbox"
+  }],
+  "warnings": [
+    "Does not imply a modern implementation – see documentation."
+  ]
+}
+!*/
+/* DOC
+Detects support for the `flex-wrap` CSS property, part of Flexbox, which isn’t present in all Flexbox implementations (notably Firefox).
+
+This featured in both the 'tweener' syntax (implemented by IE10) and the 'modern' syntax (implemented by others). This detect will return `true` for either of these implementations, as long as the `flex-wrap` property is supported. So to ensure the modern syntax is supported, use together with `Modernizr.flexbox`:
+
+```javascript
+if (Modernizr.flexbox && Modernizr.flexwrap) {
+  // Modern Flexbox with `flex-wrap` supported
+}
+else {
+  // Either old Flexbox syntax, or `flex-wrap` not supported
+}
+```
+*/
+
+  Modernizr.addTest('flexwrap', testAllProps('flexWrap', 'wrap', true));
+
+/*!
+{
+  "name": "CSS Pointer Events",
+  "caniuse": "pointer-events",
+  "property": "csspointerevents",
+  "authors": ["ausi"],
+  "tags": ["css"],
+  "builderAliases": ["css_pointerevents"],
+  "notes": [
+    {
+      "name": "MDN Docs",
+      "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events"
+    },{
+      "name": "Test Project Page",
+      "href": "https://ausi.github.com/Feature-detection-technique-for-pointer-events/"
+    },{
+      "name": "Test Project Wiki",
+      "href": "https://github.com/ausi/Feature-detection-technique-for-pointer-events/wiki"
+    },
+    {
+      "name": "Related Github Issue",
+      "href": "https://github.com/Modernizr/Modernizr/issues/80"
+    }
+  ]
+}
+!*/
+
+  Modernizr.addTest('csspointerevents', function() {
+    var style = createElement('a').style;
+    style.cssText = 'pointer-events:auto';
+    return style.pointerEvents === 'auto';
+  });
+
+/*!
+{
+  "name": "CSS Font rem Units",
+  "caniuse": "rem",
+  "authors": ["nsfmc"],
+  "property": "cssremunit",
+  "tags": ["css"],
+  "builderAliases": ["css_remunit"],
+  "notes": [{
+    "name": "W3C Spec",
+    "href": "https://www.w3.org/TR/css3-values/#relative0"
+  },{
+    "name": "Font Size with rem by Jonathan Snook",
+    "href": "http://snook.ca/archives/html_and_css/font-size-with-rem"
+  }]
+}
+!*/
+
+  // "The 'rem' unit ('root em') is relative to the computed
+  // value of the 'font-size' value of the root element."
+  // you can test by checking if the prop was ditched
+
+  Modernizr.addTest('cssremunit', function() {
+    var style = createElement('a').style;
+    try {
+      style.fontSize = '3rem';
+    }
+    catch (e) {}
+    return (/rem/).test(style.fontSize);
+  });
+
+
+  // Run each test
+  testRunner();
+
+  // Remove the "no-js" class if it exists
+  setClasses(classes);
+
+  delete ModernizrProto.addTest;
+  delete ModernizrProto.addAsyncTest;
+
+  // Run the things that are supposed to run after the tests
+  for (var i = 0; i < Modernizr._q.length; i++) {
+    Modernizr._q[i]();
+  }
+
+  // Leak Modernizr namespace
+  window.Modernizr = Modernizr;
+
+
+;
+
+})(window, document);
+;
+/***************************************************************************
+    modernizr-device.js,
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-device
+    https://github.com/FCOO
+
+****************************************************************************/
+
+(function (Modernizr, $, window, document/*, undefined*/) {
+    "use strict";
+
+    var ns = window;
+
+    function ModernizrDevice( options ) {
+        this.VERSION = "4.0.0";
+
+        this.modernizr = Modernizr;
+
+        this.options = $.extend({
+            scale          : false, //When true: Calculate 'best' scaling of font-size
+            referenceScreen: {
+                width       : 1366,
+                height      : 768,
+                diagonal_inc: 20
+            },
+            modernizr: {
+                device: false,  //When true: Add Modernizr-tests desktop mobile phone tablet
+                os    : true,   //When true: Add Modernizr-tests windows ios android
+                ie    : false   //When true: Add Modernizr-tests ie7 ie8 ie9 ie10
+            }
+        }, options || {} );
+
+        //Extend ModernizrDevice with some of the methods from Device.js (c) 2014 Matthew Hudson http://matthewhudson.me/projects/device.js/
+
+        // The client user agent string.
+        // Lowercase, so we can use the more efficient indexOf(), instead of Regex
+        this.userAgent = window.navigator.userAgent.toLowerCase();
+
+        this.find = function(needle) { return this.userAgent.indexOf(needle) !== -1; };
+
+        // Main functions
+        this.ios                = function () { return this.iphone() || this.ipod() || this.ipad(); };
+        this.iphone             = function () { return !this.windows() && this.find('iphone'); };
+        this.ipod               = function () { return this.find('ipod'); };
+        this.ipad               = function () { return this.find('ipad'); };
+        this.android            = function () { return !this.windows() && this.find('android'); };
+        this.androidPhone       = function () { return this.android() && this.find('mobile'); };
+        this.androidTablet      = function () { return this.android() && !this.find('mobile'); };
+        this.blackberry         = function () { return this.find('blackberry') || this.find('bb10') || this.find('rim'); };
+        this.blackberryPhone    = function () { return this.blackberry() && !this.find('tablet'); };
+        this.blackberryTablet   = function () { return this.blackberry() && this.find('tablet'); };
+        this.windows            = function () { return this.find('windows'); };
+        this.windowsPhone       = function () { return this.windows() && this.find('phone'); };
+        this.windowsTablet      = function () { return this.windows() && (this.find('touch') && !this.windowsPhone()); };
+        this.fxos               = function () { return (this.find('(mobile;') || this.find('(tablet;')) && this.find('; rv:'); };
+        this.fxosPhone          = function () { return this.fxos() && this.find('mobile'); };
+        this.fxosTablet         = function () { return this.fxos() && this.find('tablet'); };
+        this.meego              = function () { return this.find('meego'); };
+        this.cordova            = function () { return window.cordova && location.protocol === 'file:'; };
+        this.nodeWebkit         = function () { return typeof window.process === 'object';  };
+        this.mobile             = function () { return this.androidPhone() || this.iphone() || this.ipod() || this.windowsPhone() || this.blackberryPhone() || this.fxosPhone() || this.meego(); };
+        this.tablet             = function () { return this.ipad() || this.androidTablet() || this.blackberryTablet() || this.windowsTablet() || this.fxosTablet(); };
+        this.desktop            = function () { return !this.tablet() && !this.mobile(); };
+
+
+        if (this.options.scale){
+            var docEl = document.documentElement;
+            //this.devicePixelRatio = ('devicePixelRatio' in window) ? window.devicePixelRatio : 'unsupported';
+            this.screen_width  = screen.width;
+            this.screen_height = screen.height;
+
+            this.client_width = docEl.clientWidth;
+            this.client_width = docEl.clientHeight;
+
+            this.screen_width_em  = this.screen_width/16;
+            this.screen_height_em = this.screen_height/16;
+
+            this.dpi = 96;
+            for (var dpi=1; dpi<400; dpi++ )
+                if ( window.Modernizr.mq('(resolution: '+dpi+'dpi)') ){
+                    this.dpi = dpi;
+                    break;
+                }
+
+            this.dpr = window.devicePixelRatio;
+            if (!this.dpr){
+                this.dpr = 1;
+                for (var dpr=1; dpr<4; dpr=dpr+0.1 )
+                    if (
+                        Modernizr.mq('(-webkit-device-pixel-ratio: '+dpr+')') ||
+                        Modernizr.mq('(min--moz-device-pixel-ratio: '+dpr+')') ||
+                        Modernizr.mq('(-o-min-device-pixel-ratio: '+dpr+'/1)')
+                    ){
+                        this.dpr = dpr;
+                        break;
+                    }
+            }
+
+            this.dpr = Math.round(100*this.dpr)/100;
+
+            this.screen_diagonal = Math.sqrt( Math.pow(this.screen_width, 2) + Math.pow(this.screen_height,2) );
+            this.screen_diagonal_inc = this.screen_diagonal/this.dpi; //Best guest !
+
+            //Calculate the diagonal and dpi for the reference screen
+            var ref_screen_diagonal = Math.sqrt( Math.pow(this.options.referenceScreen.width, 2) + Math.pow(this.options.referenceScreen.height, 2) );
+            this.ref_dpi = ref_screen_diagonal/this.options.referenceScreen.diagonal_inc;
+
+            //The scale is best guest for a scale (eq. html.style.font-size=this.scale) of the screen to have elements the same size as on the reference screen
+            this.scale = 100;
+            if ((this.dpr != 1) || (this.dpi != 96))
+                this.scale = Math.sqrt(this.dpi / this.ref_dpi)*100;
+
+        } //if (this.options.scale){...
+
+        //Get a string with browser and version
+        this.browser_version = function() {
+            if(typeof navigator === 'undefined'){
+                return 'unknown';
+            }
+            var ua = navigator.userAgent, tem,
+            M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+            if(/trident/i.test(M[1])){
+                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                return 'IE '+(tem[1] || '');
+            }
+            if(M[1]=== 'Chrome'){
+                tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+                if(tem!== null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+            }
+            M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+            if((tem= ua.match(/version\/(\d+)/i))!= null)
+                M.splice(1, 1, tem[1]);
+            return M.join(' ');
+        }();
+
+        //Set properties
+        this.isDesktop   = this.desktop();
+        this.isMobile    = this.mobile() || this.tablet();
+        this.isPhone     = this.mobile();
+        this.isTablet    = this.tablet();
+
+        this.isWindows   = this.windows();
+        this.isIos       = this.ios();
+        this.isAndroid   = this.android();
+
+        //Add tests to Modernizr
+        if (this.options.modernizr.device)
+            Modernizr.addTest({
+                desktop: this.isDesktop,
+                mobile : this.isMobile,
+                phone  : this.isPhone,
+                tablet : this.isTablet
+            });
+
+        if (this.options.modernizr.os)
+            Modernizr.addTest({
+                windows: this.isWindows,
+                ios    : this.isIos,
+                android: this.isAndroid
+            });
+
+        if (this.options.modernizr.ie){
+            //Adding test for Internet Explore versions 10
+            Modernizr.addTest('ie10', this.browser_version == 'MSIE 10' );
+
+            //Adding test for Internet Explore versions 11
+            Modernizr.addTest('ie11', this.browser_version == 'IE 11');
+        }
+    }
+
+    // expose access to the constructor
+    ns.ModernizrDevice = ModernizrDevice;
+
+
+}(window.Modernizr, jQuery, this, document));
+
+
+;
+/****************************************************************************
+	modernizr-javascript.js, 
+
+	(c) 2016, FCOO
+
+	https://github.com/FCOO/modernizr-javascript
+	https://github.com/FCOO
+
+****************************************************************************/
+
+(function ($, window, document, undefined) {
+	"use strict";
+	
+	var ns = window;
+
+    //Extend the jQuery prototype
+    $.fn.extend({
+        modernizrOn : function( test ){ 
+            return this.modernizrToggle( test, true ); 
+        },
+
+        modernizrOff: function( test ){ 
+            return this.modernizrToggle( test, false ); 
+        },
+        
+        modernizrToggle: function( test, on ){ 
+		if ( on === undefined )
+            return this.modernizrToggle( test, !this.hasClass( test ) );
+
+            on = !!on; //on => Boolean
+            return this.toggleClass( test, on ).toggleClass( 'no-' + test, !on );
+        }
+    });
+
+
+    //Add methods to window = works on <html>
+    ns.modernizrOn  = function( test ){ ns.modernizrToggle( test, true ); };
+
+    ns.modernizrOff = function( test ){ ns.modernizrToggle( test, false ); };
+
+    ns.modernizrToggle = function( test, on ){ $('html').modernizrToggle( test, on ); };
+
+}(jQuery, this, document));
+;
+/****************************************************************************
+    global-events, a plugin to administrate any events
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/global-events
+    https://github.com/FCOO
+
+****************************************************************************/
+
+(function ($, window/*, document, undefined*/) {
+    "use strict";
+
+    function GlobalEvents( ) {
+        this.events = {};
+
+        this._loop = function( eventNames, func, reverse ){
+			var eventName, j;
+			eventNames = ( eventNames || "" ).match( (/\S+/g) ) || [ "" ];
+            for (j=0; j<eventNames.length; j++ ){
+                eventName = eventNames[j];
+                if (eventName){
+                    this.events[eventName] = this.events[eventName] || [];         
+                    var i, lgd = this.events[eventName].length;
+                    if (reverse){
+                        for (i=lgd-1; i>=0; i-- )
+                            if (func( this.events[eventName][i], i, this.events[eventName] ))
+                                break;
+                    } 
+                    else {
+                        for (i=0; i<lgd; i++ )
+                            if (func( this.events[eventName][i], i, this.events[eventName] ))
+                                break;
+                    }
+                }
+            }
+        };
+
+        this.on = function(eventNames, callback, context, options){
+			var eventName, i;
+			eventNames = ( eventNames || "" ).match( (/\S+/g) ) || [ "" ];
+            for (i=0; i<eventNames.length; i++ ){
+                eventName = eventNames[i];
+                if (eventName){
+                    this.events[eventName] = this.events[eventName] || [];         
+                    this.events[eventName].push( {
+                        callback: callback,
+                        context : context || null,
+                        options : $.extend( {once:false, first:false, last:false}, options ) 
+                    });
+                }
+            }
+        };
+
+        this.once      = function( eventName, callback, context ) { this.on( eventName, callback, context, { once:true             } ); };
+        this.onFirst   = function( eventName, callback, context ) { this.on( eventName, callback, context, {            first:true } ); };
+        this.onLast    = function( eventName, callback, context ) { this.on( eventName, callback, context, {            last:true  } ); };
+        this.onceFirst = function( eventName, callback, context ) { this.on( eventName, callback, context, { once:true, first:true } ); };
+        this.onceLast  = function( eventName, callback, context ) { this.on( eventName, callback, context, { once:true, last:true  } ); };
+
+        this.off = function(eventNames, callback, context){
+            var eventName, i, _loop_func;
+            eventNames = ( eventNames || "" ).match( (/\S+/g) ) || [ "" ];
+            _loop_func = function( eventObj, index, list ){
+                if ( (callback == eventObj.callback) &&
+                    (!context || (context == eventObj.context)) ){ 
+                    list.splice(index, 1);
+                    return true;
+                }
+            };
+
+            for (i=0; i<eventNames.length; i++ ){
+                eventName = eventNames[i];
+                if (eventName){
+                    this._loop( eventName, _loop_func );
+                }
+            }
+        };
+
+
+        this.fire = function( eventName /*, arg1, arg2, .., argN */ ){ 
+            var newArguments = [];
+            for (var i=1; i < arguments.length; i++) {
+                newArguments.push(arguments[i]);
+            }
+
+            //Fire the functions marked 'first'
+            this._loop( eventName, function( eventObj ){ 
+                if (eventObj.options.first)
+                    eventObj.callback.apply( eventObj.context, newArguments );      
+            });
+
+            //Fire the functions not marked 'first' or 'last'
+            this._loop( eventName, function( eventObj ){ 
+                if (!eventObj.options.first && !eventObj.options.last)
+                    eventObj.callback.apply( eventObj.context, newArguments );      
+            });
+
+            //Fire the functions marked 'last'
+            this._loop( eventName, function( eventObj ){ 
+                if (eventObj.options.last)
+                    eventObj.callback.apply( eventObj.context, newArguments );      
+            });
+            
+            //Remove all functions marked 'once'
+            this._loop( eventName, function( eventObj, index, list ){ 
+                if (eventObj.options.once)
+                    list.splice(index, 1);
+            }, true);
+        };
+
+        this.trigger  = function(){ this.fire( arguments );      };
+        this.one      = function(){ this.once( arguments );      };
+        this.oneFirst = function(){ this.onceFirst( arguments ); };
+        this.oneLast  = function(){ this.onceLast( arguments  ); };
+    }
+  
+    // expose access to the constructor
+    window.GlobalEvents = GlobalEvents;
+
+}(jQuery, this, document));
+;
+/***************************************************************************
+    modernizr-mediaquery.js,
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-mediaquery
+    https://github.com/FCOO
+
+****************************************************************************/
+
+(function (Modernizr, $, window, document, undefined) {
+    "use strict";
+
+    //***********************************************
+    // Thank you: https://github.com/sindresorhus/query-string
+    function parseStyleToObject(str) {
+        var styleObject = {};
+        if (typeof str !== 'string')
+            return styleObject;
+
+        str = str.trim().slice(1, -1); // browsers re-quote string style values
+        if (!str)
+            return styleObject;
+
+        styleObject = str.split('&').reduce(function(ret, param) {
+            var parts = param.replace(/\+/g, ' ').split('='),
+                key = parts[0],
+                val = parts[1];
+            key = decodeURIComponent(key);
+
+            // missing `=` should be `null`:
+            // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+            val = val === undefined ? null : decodeURIComponent(val);
+
+            if (!ret.hasOwnProperty(key)) {
+                ret[key] = val;
+            } else
+                if (Array.isArray(ret[key])) {
+                    ret[key].push(val);
+                } else {
+                    ret[key] = [ret[key], val];
+                }
+            return ret;
+        }, {});
+
+        return styleObject;
+    }
+    //***********************************************
+
+    var ns = window;
+    var plugin_count = 1;
+
+    function ModernizrMediaquery( options ) {
+        this.plugin_count = plugin_count++;
+        this.modernizr           = Modernizr;
+        this.globalEvents        = new window.GlobalEvents();
+        this.defaultHtmlFontSize = this._getHtmlFontSize();
+
+        this.options = $.extend({
+            //Default options
+            VERSION             : "1.3.1",
+            htmlFontSize        : 16,
+            createFIRSTup       : false, //When true the media query FIRST-up (allway display) and no-FIRST-up (allways hidden) are created. MUST MATCH $create-FIRST-up
+            createLASTdown      : false, //When true the media query LAST-down (allway display) and no-LAST-down (allways hidden) are created. MUST MATCH $create-LAST-down
+            useWindowClientDim: true,
+        }, options || {} );
+
+        var _this = this,
+            meta,
+            mediaJSON  = {},
+            minMaxJSON = {};
+
+        if (this.options.breakpoints){
+            //Create mediaJSON and minMaxJSON from options.breakpoints
+            var breakpointList = [];
+            $.each( this.options.breakpoints, function( id, minPx ){
+                breakpointList.push( {id: id, minPx: minPx} );
+            });
+            breakpointList.sort( function( bp1, bp2 ){return bp1 > bp2; });
+
+            $.each( breakpointList, function( index, bp ){
+                //Set max eq next min - 1
+                var id = bp.id,
+                    minPx = bp.minPx,
+                    maxPx = (index == breakpointList.length-1) ? 0 : breakpointList[index+1].minPx-1,
+                    min = minPx / _this.options.htmlFontSize,
+                    minEm = min+'em',
+                    max = maxPx / _this.options.htmlFontSize,
+                    maxEm = max+'em',
+                    mq     = '',
+                    mqUp   = '',
+                    mqDown = '';
+
+                if (min > 0) {
+                    mq   = mq   + ' and (min-width: '+ minEm+')';
+                    mqUp = mqUp + ' and (min-width: '+ minEm+')';
+                }
+                if (max > 0) {
+                    mq     = mq     + ' and (max-width: '+ maxEm+')';
+                    mqDown = mqDown + ' and (max-width: '+ maxEm+')';
+                }
+
+                //Add mediaquery and minMax for id
+                mediaJSON[id]  = 'screen' + mq;
+                minMaxJSON[id] = minPx + 'px_' + maxPx+'px';
+
+                //Add mediaquery for id-down
+                if ((index < breakpointList.length-1) || options.createLASTdown){
+                    mediaJSON[id+'-down']  = 'screen' + mqDown;
+                    minMaxJSON[id+'-down'] = '0_' + maxPx+'px';
+                }
+
+                //Add mediaquery for id-up
+                if (index || options.createFIRSTup){
+                    mediaJSON[id+'-up']  = 'screen' + mqUp;
+                    minMaxJSON[id+'-up'] = minPx + 'px_0';
+                }
+            });
+
+            //Add special values for portrait and landscape
+            mediaJSON['landscape'] = 'screen and (orientation: landscape)';
+            minMaxJSON['landscape'] = '0_1_1';
+            mediaJSON['portrait'] = 'screen and (orientation: portrait)';
+            minMaxJSON['portrait'] = '0_1_0_1';
+        }
+        else {
+            //Reads the different media queries from the css-file using the 'dummy' class "modernizr-mediaquery-media-query"
+            meta      = $('<meta class="modernizr-mediaquery-media-query">').appendTo(document.head);
+            mediaJSON = parseStyleToObject(meta.css('font-family'));
+            meta.remove();
+
+            //Reads the different min-max-intervalls from the css-file using the 'dummy' class "modernizr-mediaquery-min-max"
+            meta      = $('<meta class="modernizr-mediaquery-min-max">').appendTo(document.head);
+            minMaxJSON = parseStyleToObject(meta.css('font-family'));
+            meta.remove();
+        }
+
+        //Convert mediaJSON
+        this.mediaQueryList = [];
+        $.each( mediaJSON, function( id, mq ){
+            _this.mediaQueryList.push({id: id, mq: mq, on: false });
+        });
+
+        //Convert minMaxJSON
+        this.minMaxRatioList = [];
+        $.each( minMaxJSON, function( id, value ){
+            var minMaxRatio = value.split('_');
+            _this.minMaxRatioList.push({
+                id      : id,
+                min     : parseFloat(minMaxRatio[0]),
+                max     : parseFloat(minMaxRatio[1]) || 100000,
+                minRatio: minMaxRatio.length > 2 ? parseFloat(minMaxRatio[2]) : 100000,
+                maxRatio: minMaxRatio.length > 3 ? parseFloat(minMaxRatio[3]) : 100000,
+                on      : false
+            });
+        });
+
+
+        //Set the 'change media-query event'
+        $(window).on('resize.mmq', $.proxy( this._onMediaQuery, this ));
+
+        this._onMediaQuery();
+    }
+
+    // expose access to the constructor
+    ns.ModernizrMediaquery = ModernizrMediaquery;
+
+    //Extend the prototype
+    ns.ModernizrMediaquery.prototype = {
+
+        //Methods to add media-query-events
+        on  : function( mediaQueries, callback, context ){ this.globalEvents.on(   mediaQueries, callback, context ); },
+        off : function( mediaQueries, callback, context ){ this.globalEvents.off(  mediaQueries, callback, context ); },
+        once: function( mediaQueries, callback, context ){ this.globalEvents.once( mediaQueries, callback, context ); },
+        one : function( mediaQueries, callback, context ){ this.globalEvents.one(  mediaQueries, callback, context ); },
+
+
+        setHtmlFontSizePx: function( fontSizePx ){
+            $('html').css('font-size', fontSizePx);
+            $(window).trigger('resize.mmq');
+            return fontSizePx;
+        },
+
+        setHtmlFontSizePercent: function( fontSizePercent ){
+            return this.setHtmlFontSizePx( fontSizePercent/100*this.defaultHtmlFontSize );
+        },
+
+        _getHtmlFontSize: function(){ return parseFloat( $('html').css('font-size') ); },
+
+        _isOn_mediaQueryMode: function( mediaQuery ){
+            return !!this.modernizr.mq(mediaQuery.mq);
+        },
+        _isOn_minMaxRatioMode: function( minMaxRatio ){
+            return ( (this.window_width_em >= (minMaxRatio.min / this.defaultHtmlFontSize)) &&
+                     (this.window_width_em <= (minMaxRatio.max / this.defaultHtmlFontSize)) ) ||
+                   ( (this.window_ratio >= minMaxRatio.minRatio) &&
+                     ( this.window_ratio <= minMaxRatio.maxRatio ) );
+        },
+
+        _onMediaQuery: function( /*event*/ ){
+            var i, list, listElem, isOn, isOnFunc;
+            this.screen_width  = screen.width;
+            this.screen_height = screen.height;
+            this.window_width  = window.innerWidth;
+            this.window_height = window.innerHeight;
+            this.htmlFontSize  = this._getHtmlFontSize();
+
+            this.window_width_em  = this.window_width / this.htmlFontSize;
+            this.window_height_em = this.window_height / this.htmlFontSize;
+
+            this.window_ratio = this.window_width / this.window_height;
+
+            if (this.options.useWindowClientDim){
+                list = this.minMaxRatioList;
+                isOnFunc = $.proxy(this._isOn_minMaxRatioMode, this);
+            }
+            else {
+                list = this.mediaQueryList;
+                isOnFunc = $.proxy(this._isOn_mediaQueryMode, this);
+            }
+
+            for (i=0; i<list.length; i++ ){
+                listElem = list[i];
+                isOn = isOnFunc(listElem);
+                window.modernizrToggle( listElem.id,  isOn );
+
+                if (isOn && !listElem.on)
+                    //Fire event
+                    this.globalEvents.fire(listElem.id, listElem.id, this);
+
+                listElem.on = isOn;
+            }
+        }
+
+
+    };
+
+}(window.Modernizr, jQuery, this, document));
+
+
+;
+/****************************************************************************
+    fcoo-modernizr-mediaquery-device.js,
+
+    (c) 2016, FCOO
+
+    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
+    https://github.com/FCOO
+
+****************************************************************************/
+
+(function (Modernizr, $, window/*, document, undefined*/) {
+    "use strict";
+
+    //Create fcoo-namespace
+    window.fcoo = window.fcoo || {};
+    var ns = window.fcoo;
+
+    //modernizrMediaqueryOptions *MUST* match $html-font-size, $create-FIRST-up, $create-LAST-down and $breakpoints in src/_fcoo-modernizr-mediaquery-variables.scss
+    var modernizrMediaqueryOptions = {
+            useWindowClientDim: true,
+            htmlFontSize      : 16,     // = $html-font-size
+            createFIRSTup     : false,  // = $create-FIRST-up
+            createLASTdown    : false,  // = $create-LAST-down
+            breakpoints       : {       // = $breakpoints
+                "mini"       :    0, //Smaller than small phone portrait (< 320)
+                "xsmall-port":  320, //Small phone portrait (320-479)
+                "xsmall-land":  480, //Small phone landscape (480-576)
+                "small"      :  576, //Small devices
+                "medium"     :  768, //Tablets portrait
+                "large"      :  992, //Table landscape + desttop
+                "xlarge"     : 1200  //Large desttop
+            }
+        };
+
+
+    //Create fcoo.modernizrDevice
+    ns.modernizrDevice = new window.ModernizrDevice({
+        scale: false,
+        modernizr: {
+            device: false,
+            os    : true,
+            ie    : true
+        }
+    });
+
+    //Create fcoo.modernizrMediaquery
+    ns.modernizrMediaquery = new window.ModernizrMediaquery( modernizrMediaqueryOptions );
+
+    //For consistency: 'create' modernizr in window.fcoo
+    ns.modernizr = Modernizr;
+
+    //Add https-test
+    ns.modernizr.addTest('https', window.location.protocol == 'https:');
+
+}(window.Modernizr, jQuery, this, document));
+;
+/****************************************************************************
+	modernizr-mouse-events.js,
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/modernizr-mouse-events
+	https://github.com/FCOO
+*****************************************************************************/
+(function ($, window/*, document, undefined*/) {
+	"use strict";
+
+    /*
+    Create a Modernizr-test named 'mouse' to detect if there are a mouse-device
+    Solution by http://stackoverflow.com/users/1701813/hacktisch
+    Mouse devices (also touch screen laptops) first fire mousemove before they can fire touchstart and mouse is set to TRUE.
+    Touch devices (also for instance iOS which fires mousemove) FIRST fire touchstart upon click, and then mousemove.
+    That is why mouse will be set to FALSE.
+
+    Create a Modernizr-test named 'mouse-hover' to mark if hover "events" is fired. Can be use to prevent :hover {...} css to fail on touch devices
+    */
+
+    var mouseTest         = 'mouse',
+        mouseHoverTest    = 'mouse-hover',
+        mouseEventPostfix = '.modernizr.mouse.events',
+        hasModernizr = !!window.Modernizr,
+        hasTouchEventsTest = hasModernizr && (jQuery.type( window.Modernizr['touchevents'] ) === "boolean"),
+        hasTouchEvents = hasTouchEventsTest ? window.Modernizr['touchevents'] : true;
+
+    if (hasModernizr)
+        window.Modernizr.addTest(mouseTest, false);
+    window.modernizrOff(mouseTest);
+
+    //If Modernizr-test "touchevents" is included => use if to set "mouse-hover" else set "mouse-hover" = "mouse"
+    if (hasModernizr)
+        window.Modernizr.addTest( mouseHoverTest, !hasTouchEvents );
+    window.modernizrToggle( mouseHoverTest, !hasTouchEvents );
+
+    $(window)
+        //Check for mouse
+        .bind('mousemove'+mouseEventPostfix,function(){
+            $(window).unbind(mouseEventPostfix);
+            if (hasModernizr)
+                window.Modernizr[mouseTest] = true;
+            window.modernizrOn(mouseTest);
+/* REMOVED IN VERSION 2.0.0
+            if (!hasTouchEventsTest){
+                if (hasModernizr)
+                    window.Modernizr.addTest( mouseHoverTest, true );
+                window.modernizrOn(mouseHoverTest);
+            }
+*/
+        })
+        .bind('touchstart'+mouseEventPostfix,function(){
+            $(window).unbind(mouseEventPostfix);
+            if (hasModernizr)
+                window.Modernizr[mouseTest] = false;
+            window.modernizrOff(mouseTest);
+        })
+
+        //Create hidden dummy element to test for true hover support
+        .on( "load", function() {
+            var $elem = $('<i/>')
+                            .appendTo($('body'))
+                            .addClass('_test-for-hover_');
+
+            if ($elem.css('font-family') == "__HOVER_SUPPORT__"){
+                if (hasModernizr)
+                    window.Modernizr.addTest( mouseHoverTest, true );
+                window.modernizrOn(mouseHoverTest);
+            }
+        });
+
+
+}(jQuery, this, document));
+;
+/*!
   * Bootstrap v4.4.1 (https://getbootstrap.com/)
   * Copyright 2011-2019 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -17735,7 +20115,7 @@ return jQuery;
 
 ;
 /****************************************************************************
-	fcoo-global-switches.js,
+	fcoo-global-switches.js, 
 
 	(c) 2017, FCOO
 
@@ -17749,7 +20129,7 @@ return jQuery;
 
 (function (window/*, document, undefined*/) {
 	"use strict";
-
+	
     //Detect Operation System. Possible values = "windows_phone", "android", "ios", null
     var os = function() {
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -17775,9 +20155,9 @@ return jQuery;
     is_ios = (os == "ios");
 
 
+            
 
-
-
+    
 
     /**************************************************
     Global Switches for Leaflet
@@ -17786,14 +20166,14 @@ return jQuery;
     L_NO_TOUCH	    Forces Leaflet to not use touch events even if it detects them.
     L_DISABLE_3D	Forces Leaflet to not use hardware-accelerated CSS 3D transforms for positioning (which may cause glitches in some rare environments) even if they're supported.
     **************************************************/
-
+    
     //Turn off 3D transform for ios
     window.L_DISABLE_3D = is_ios;
-
-
-    //Initialize/ready
+    
+    
+    //Initialize/ready 
 //	$(function() {
-//	});
+//	}); 
 
 }(this/*, document*/));
 ;
@@ -32232,7 +34612,7 @@ L.GeometryUtil = L.extend(L.GeometryUtil || {}, {
 			cumulativeDistanceToA = cumulativeDistanceToB;
 			cumulativeDistanceToB += pointA.distanceTo(pointB);
 		}
-
+		
 		if (pointA == undefined && pointB == undefined) { // Happens when line has no length
 			var pointA = pts[0], pointB = pts[1], i = 1;
 		}
@@ -32271,7 +34651,7 @@ L.GeometryUtil = L.extend(L.GeometryUtil || {}, {
             var l1 = latlngs[i],
                 l2 = latlngs[i+1];
             portion = lengths[i];
-            if (L.GeometryUtil.belongsSegment(point, l1, l2, 0.0001)) {
+            if (L.GeometryUtil.belongsSegment(point, l1, l2, 0.001)) {
                 portion += l1.distanceTo(point);
                 found = true;
                 break;
@@ -33052,128 +35432,6 @@ L.geodesic = function(latlngs, options) {
   return new L.Geodesic(latlngs, options);
 };
 
-;
-/****************************************************************************
-    global-events, a plugin to administrate any events
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/global-events
-    https://github.com/FCOO
-
-****************************************************************************/
-
-(function ($, window/*, document, undefined*/) {
-    "use strict";
-
-    function GlobalEvents( ) {
-        this.events = {};
-
-        this._loop = function( eventNames, func, reverse ){
-			var eventName, j;
-			eventNames = ( eventNames || "" ).match( (/\S+/g) ) || [ "" ];
-            for (j=0; j<eventNames.length; j++ ){
-                eventName = eventNames[j];
-                if (eventName){
-                    this.events[eventName] = this.events[eventName] || [];
-                    var i, lgd = this.events[eventName].length;
-                    if (reverse){
-                        for (i=lgd-1; i>=0; i-- )
-                            if (func( this.events[eventName][i], i, this.events[eventName] ))
-                                break;
-                    }
-                    else {
-                        for (i=0; i<lgd; i++ )
-                            if (func( this.events[eventName][i], i, this.events[eventName] ))
-                                break;
-                    }
-                }
-            }
-        };
-
-        this.on = function(eventNames, callback, context, options){
-			var eventName, i;
-			eventNames = ( eventNames || "" ).match( (/\S+/g) ) || [ "" ];
-            for (i=0; i<eventNames.length; i++ ){
-                eventName = eventNames[i];
-                if (eventName){
-                    this.events[eventName] = this.events[eventName] || [];
-                    this.events[eventName].push( {
-                        callback: callback,
-                        context : context || null,
-                        options : $.extend( {once:false, first:false, last:false}, options )
-                    });
-                }
-            }
-        };
-
-        this.once      = function( eventName, callback, context ) { this.on( eventName, callback, context, { once:true             } ); };
-        this.onFirst   = function( eventName, callback, context ) { this.on( eventName, callback, context, {            first:true } ); };
-        this.onLast    = function( eventName, callback, context ) { this.on( eventName, callback, context, {            last:true  } ); };
-        this.onceFirst = function( eventName, callback, context ) { this.on( eventName, callback, context, { once:true, first:true } ); };
-        this.onceLast  = function( eventName, callback, context ) { this.on( eventName, callback, context, { once:true, last:true  } ); };
-
-        this.off = function(eventNames, callback, context){
-            var eventName, i, _loop_func;
-            eventNames = ( eventNames || "" ).match( (/\S+/g) ) || [ "" ];
-            _loop_func = function( eventObj, index, list ){
-                if ( (callback == eventObj.callback) &&
-                    (!context || (context == eventObj.context)) ){
-                    list.splice(index, 1);
-                    return true;
-                }
-            };
-
-            for (i=0; i<eventNames.length; i++ ){
-                eventName = eventNames[i];
-                if (eventName){
-                    this._loop( eventName, _loop_func );
-                }
-            }
-        };
-
-
-        this.fire = function( eventName /*, arg1, arg2, .., argN */ ){
-            var newArguments = [];
-            for (var i=1; i < arguments.length; i++) {
-                newArguments.push(arguments[i]);
-            }
-
-            //Fire the functions marked 'first'
-            this._loop( eventName, function( eventObj ){
-                if (eventObj.options.first)
-                    eventObj.callback.apply( eventObj.context, newArguments );
-            });
-
-            //Fire the functions not marked 'first' or 'last'
-            this._loop( eventName, function( eventObj ){
-                if (!eventObj.options.first && !eventObj.options.last)
-                    eventObj.callback.apply( eventObj.context, newArguments );
-            });
-
-            //Fire the functions marked 'last'
-            this._loop( eventName, function( eventObj ){
-                if (eventObj.options.last)
-                    eventObj.callback.apply( eventObj.context, newArguments );
-            });
-
-            //Remove all functions marked 'once'
-            this._loop( eventName, function( eventObj, index, list ){
-                if (eventObj.options.once)
-                    list.splice(index, 1);
-            }, true);
-        };
-
-        this.trigger  = function(){ this.fire( arguments );      };
-        this.one      = function(){ this.once( arguments );      };
-        this.oneFirst = function(){ this.onceFirst( arguments ); };
-        this.oneLast  = function(){ this.onceLast( arguments  ); };
-    }
-
-    // expose access to the constructor
-    window.GlobalEvents = GlobalEvents;
-
-}(jQuery, this, document));
 ;
 /****************************************************************************
 	fcoo-global-events.js,
@@ -34635,7 +36893,8 @@ L.geodesic = function(latlngs, options) {
         this.unescapeSuffix = this.unescapePrefix ? '' : iOpts.unescapeSuffix || '';
         this.nestingPrefix = iOpts.nestingPrefix ? regexEscape(iOpts.nestingPrefix) : iOpts.nestingPrefixEscaped || regexEscape('$t(');
         this.nestingSuffix = iOpts.nestingSuffix ? regexEscape(iOpts.nestingSuffix) : iOpts.nestingSuffixEscaped || regexEscape(')');
-        this.maxReplaces = iOpts.maxReplaces ? iOpts.maxReplaces : 1000; // the regexp
+        this.maxReplaces = iOpts.maxReplaces ? iOpts.maxReplaces : 1000;
+        this.alwaysFormat = iOpts.alwaysFormat !== undefined ? iOpts.alwaysFormat : false; // the regexp
 
         this.resetRegExp();
       }
@@ -34671,13 +36930,14 @@ L.geodesic = function(latlngs, options) {
 
         var handleFormat = function handleFormat(key) {
           if (key.indexOf(_this.formatSeparator) < 0) {
-            return getPathWithDefaults(data, defaultData, key);
+            var path = getPathWithDefaults(data, defaultData, key);
+            return _this.alwaysFormat ? _this.format(path, undefined, lng) : path;
           }
 
           var p = key.split(_this.formatSeparator);
           var k = p.shift().trim();
           var f = p.join(_this.formatSeparator).trim();
-          return _this.format(getPathWithDefaults(data, defaultData, k), f, lng);
+          return _this.format(getPathWithDefaults(data, defaultData, k), f, lng, options);
         };
 
         this.resetRegExp();
@@ -35160,7 +37420,7 @@ L.geodesic = function(latlngs, options) {
       },
       interpolation: {
         escapeValue: true,
-        format: function format(value, _format, lng) {
+        format: function format(value, _format, lng, options) {
           return value;
         },
         prefix: '{{',
@@ -35314,6 +37574,10 @@ L.geodesic = function(latlngs, options) {
           this.modules.external.forEach(function (m) {
             if (m.init) m.init(_this2);
           });
+        }
+
+        if (!this.modules.languageDetector && !this.options.lng) {
+          this.logger.warn('init: no languageDetector is used and no lng is defined');
         } // append api
 
 
@@ -35691,19 +37955,19 @@ L.geodesic = function(latlngs, options) {
 ;
 /* @preserve
  * The MIT License (MIT)
- *
+ * 
  * Copyright (c) 2013-2018 Petka Antonov
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -35711,7 +37975,7 @@ L.geodesic = function(latlngs, options) {
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *
+ * 
  */
 /**
  * bluebird build version 3.7.2
@@ -39303,28 +41567,28 @@ _dereq_('./using.js')(Promise, apiRejection, tryConvertToPromise, createContext,
 _dereq_('./any.js')(Promise);
 _dereq_('./each.js')(Promise, INTERNAL);
 _dereq_('./filter.js')(Promise, INTERNAL);
-
-    util.toFastProperties(Promise);
-    util.toFastProperties(Promise.prototype);
-    function fillTypes(value) {
-        var p = new Promise(INTERNAL);
-        p._fulfillmentHandler0 = value;
-        p._rejectionHandler0 = value;
-        p._promise0 = value;
-        p._receiver0 = value;
-    }
-    // Complete slack tracking, opt out of field-type tracking and
-    // stabilize map
-    fillTypes({a: 1});
-    fillTypes({b: 2});
-    fillTypes({c: 3});
-    fillTypes(1);
-    fillTypes(function(){});
-    fillTypes(undefined);
-    fillTypes(false);
-    fillTypes(new Promise(INTERNAL));
-    debug.setBounds(Async.firstLineError, util.lastLineError);
-    return Promise;
+                                                         
+    util.toFastProperties(Promise);                                          
+    util.toFastProperties(Promise.prototype);                                
+    function fillTypes(value) {                                              
+        var p = new Promise(INTERNAL);                                       
+        p._fulfillmentHandler0 = value;                                      
+        p._rejectionHandler0 = value;                                        
+        p._promise0 = value;                                                 
+        p._receiver0 = value;                                                
+    }                                                                        
+    // Complete slack tracking, opt out of field-type tracking and           
+    // stabilize map                                                         
+    fillTypes({a: 1});                                                       
+    fillTypes({b: 2});                                                       
+    fillTypes({c: 3});                                                       
+    fillTypes(1);                                                            
+    fillTypes(function(){});                                                 
+    fillTypes(undefined);                                                    
+    fillTypes(false);                                                        
+    fillTypes(new Promise(INTERNAL));                                        
+    debug.setBounds(Async.firstLineError, util.lastLineError);               
+    return Promise;                                                          
 
 };
 
@@ -42890,7 +45154,7 @@ return index;
 }(this.i18next, this.Promise, this, document));
 ;
 /****************************************************************************
-	jQuery.i18nLink.js,
+	jQuery.i18nLink.js, 
 
 	(c) 2017, FCOO
 
@@ -42911,18 +45175,18 @@ return index;
         return  $('<a/>')
                     .i18n('link:'+key, 'href', {defaultValue: null})
                     .i18n('name:'+key, 'title')
-                    .append(
+                    .append( 
                         $('<span/>')
-                            .i18n('abbr:'+key, {defaultValue: key.toUpperCase()} )
+                            .i18n('abbr:'+key, {defaultValue: key.toUpperCase()} ) 
                     );
-
+                     
     };
 
 
 }(this, document));
 ;
 /****************************************************************************
-	fake-localstorage.js,
+	fake-localstorage.js, 
 
 	(c) 2017, FCOO
 
@@ -42933,54 +45197,54 @@ return index;
 
 (function (window/*, document, undefined*/) {
 	"use strict";
-
+	
     /*********************************************************************
     Determinate if localStorage is supported and available
     If the browser is in 'Private' mode not all browser supports localStorage
     In localStorage isn't supported a fake version is installed
     At the moment no warning is given when localStorage isn't supported since
-    some browser in private-mode allows the use of window.localStorage but
+    some browser in private-mode allows the use of window.localStorage but 
     don't save it when the session ends
     *********************************************************************/
     window.fake_localstorage_installed = false;
 
     // Test taken from https://gist.github.com/engelfrost/fd707819658f72b42f55
     if (typeof window.localStorage === 'object') {
-        // Safari will throw a fit if we try to use localStorage.setItem in private browsing mode.
+        // Safari will throw a fit if we try to use localStorage.setItem in private browsing mode. 
         try {
             localStorage.setItem('localStorageTest', 1);
             localStorage.removeItem('localStorageTest');
             window.fake_localstorage_installed = false;
-        }
+        } 
         catch (e) {
             window.fake_localstorage_installed = true;
         }
-    }
-    else
-        window.fake_localstorage_installed = true;
+    } 
+    else 
+        window.fake_localstorage_installed = true;        
 
     if (window.fake_localstorage_installed){
         /*********************************************************************
         Create a fake localStorage for any browser that does not support it.
 
         Taken from https://gist.github.com/engelfrost/fd707819658f72b42f55:
-            Fake localStorage implementation.
-            Mimics localStorage, including events.
-            It will work just like localStorage, except for the persistant storage part.
+            Fake localStorage implementation. 
+            Mimics localStorage, including events. 
+            It will work just like localStorage, except for the persistant storage part. 
         *********************************************************************/
         var fakeLocalStorage = {};
-        var storage;
-
-        // If Storage exists we modify it to write to our fakeLocalStorage object instead.
-        // If Storage does not exist we create an empty object.
+        var storage; 
+  
+        // If Storage exists we modify it to write to our fakeLocalStorage object instead. 
+        // If Storage does not exist we create an empty object. 
         if (window.Storage && window.localStorage) {
-            storage = window.Storage.prototype;
+            storage = window.Storage.prototype; 
         } else {
             // We don't bother implementing a fake Storage object
-            window.localStorage = {};
-            storage = window.localStorage;
+            window.localStorage = {}; 
+            storage = window.localStorage; 
         }
-
+  
         // For older IE
         if (!window.location.origin) {
             window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
@@ -43037,11 +45301,11 @@ return index;
 	var minor = parseInt(splitVersion[1]);
 
 	var JQ_LT_17 = (major < 1) || (major == 1 && minor < 7);
-
+	
 	function eventsData($el) {
 		return JQ_LT_17 ? $el.data('events') : $._data($el[0]).events;
 	}
-
+	
 	function moveHandlerToTop($el, eventName, isDelegated) {
 		var data = eventsData($el);
 		var events = data[eventName];
@@ -43059,7 +45323,7 @@ return index;
 			events.unshift(events.pop());
 		}
 	}
-
+	
 	function moveEventHandlers($elems, eventsString, isDelegate) {
 		var events = eventsString.split(/\s+/);
 		$elems.each(function() {
@@ -43069,7 +45333,7 @@ return index;
 			}
 		});
 	}
-
+	
 	function makeMethod(methodName) {
 		$.fn[methodName + 'First'] = function() {
 			var args = $.makeArray(arguments);
@@ -43094,7 +45358,7 @@ return index;
 	$.fn.delegateFirst = function() {
 		var args = $.makeArray(arguments);
 		var eventsString = args[1];
-
+		
 		if (eventsString) {
 			args.splice(0, 2);
 			$.fn.delegate.apply(this, arguments);
@@ -43114,7 +45378,7 @@ return index;
 
 		return this;
 	};
-
+	
 	// on (jquery >= 1.7)
 	if (!JQ_LT_17) {
 		$.fn.onFirst = function(types, selector) {
@@ -49252,8 +51516,8 @@ if (typeof define === 'function' && define.amd) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function(Inputmask) {
@@ -49347,8 +51611,8 @@ if (typeof define === 'function' && define.amd) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(3), __webpack_require__(5) ],
-            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(3), __webpack_require__(5) ], 
+            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function($, window, undefined) {
@@ -50861,7 +53125,7 @@ if (typeof define === 'function' && define.amd) {
             function seekPrevious(pos, newBlock) {
                 var position = pos, tests;
                 if (position <= 0) return 0;
-                while (--position > 0 && (newBlock === true && getTest(position).match.newBlockMarker !== true || newBlock !== true && !isMask(position) && (tests = getTests(position),
+                while (--position > 0 && (newBlock === true && getTest(position).match.newBlockMarker !== true || newBlock !== true && !isMask(position) && (tests = getTests(position), 
                 tests.length < 2 || tests.length === 2 && tests[1].match.def === ""))) {}
                 return position;
             }
@@ -52098,8 +54362,8 @@ if (typeof define === 'function' && define.amd) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function($) {
@@ -52128,8 +54392,8 @@ if (typeof define === 'function' && define.amd) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function(Inputmask) {
@@ -52380,8 +54644,8 @@ if (typeof define === 'function' && define.amd) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function(Inputmask) {
@@ -52931,8 +55195,8 @@ if (typeof define === 'function' && define.amd) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4), __webpack_require__(2) ],
-            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4), __webpack_require__(2) ], 
+            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function($, Inputmask) {
@@ -53082,9 +55346,9 @@ if (typeof define === 'function' && define.amd) {
 (function ( $ ) {
 	var attachEvent = document.attachEvent,
 		stylesCreated = false;
-
+	
 	var jQuery_resize = $.fn.resize;
-
+	
 	$.fn.resize = function(callback) {
 		return this.each(function() {
 			if(this == window)
@@ -53099,14 +55363,14 @@ if (typeof define === 'function' && define.amd) {
 			removeResizeListener(this, callback);
 		});
 	}
-
+	
 	if (!attachEvent) {
 		var requestFrame = (function(){
 			var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
 								function(fn){ return window.setTimeout(fn, 20); };
 			return function(fn){ return raf(fn); };
 		})();
-
+		
 		var cancelFrame = (function(){
 			var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
 								   window.clearTimeout;
@@ -53130,7 +55394,7 @@ if (typeof define === 'function' && define.amd) {
 			return element.offsetWidth != element.__resizeLast__.width ||
 						 element.offsetHeight != element.__resizeLast__.height;
 		}
-
+		
 		function scrollListener(e){
 			var element = this;
 			resetTriggers(this);
@@ -53145,7 +55409,7 @@ if (typeof define === 'function' && define.amd) {
 				}
 			});
 		};
-
+		
 		/* Detect CSS Animations support to detect element display/re-attach */
 		var animation = false,
 			animationstring = 'animation',
@@ -53156,8 +55420,8 @@ if (typeof define === 'function' && define.amd) {
 			pfx  = '';
 		{
 			var elm = document.createElement('fakeelement');
-			if( elm.style.animationName !== undefined ) { animation = true; }
-
+			if( elm.style.animationName !== undefined ) { animation = true; }    
+			
 			if( animation === false ) {
 				for( var i = 0; i < domPrefixes.length; i++ ) {
 					if( elm.style[ domPrefixes[i] + 'AnimationName' ] !== undefined ) {
@@ -53171,12 +55435,12 @@ if (typeof define === 'function' && define.amd) {
 				}
 			}
 		}
-
+		
 		var animationName = 'resizeanim';
 		var animationKeyframes = '@' + keyframeprefix + 'keyframes ' + animationName + ' { from { opacity: 0; } to { opacity: 0; } } ';
 		var animationStyle = keyframeprefix + 'animation: 1ms ' + animationName + '; ';
 	}
-
+	
 	function createStyles() {
 		if (!stylesCreated) {
 			//opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
@@ -53185,7 +55449,7 @@ if (typeof define === 'function' && define.amd) {
 					'.resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }',
 				head = document.head || document.getElementsByTagName('head')[0],
 				style = document.createElement('style');
-
+			
 			style.type = 'text/css';
 			if (style.styleSheet) {
 				style.styleSheet.cssText = css;
@@ -53197,7 +55461,7 @@ if (typeof define === 'function' && define.amd) {
 			stylesCreated = true;
 		}
 	}
-
+	
 	window.addResizeListener = function(element, fn){
 		if (attachEvent) element.attachEvent('onresize', fn);
 		else {
@@ -53212,7 +55476,7 @@ if (typeof define === 'function' && define.amd) {
 				element.appendChild(element.__resizeTriggers__);
 				resetTriggers(element);
 				element.addEventListener('scroll', scrollListener, true);
-
+				
 				/* Listen for a css animation to detect element display/re-attach */
 				animationstartevent && element.__resizeTriggers__.addEventListener(animationstartevent, function(e) {
 					if(e.animationName == animationName)
@@ -53222,7 +55486,7 @@ if (typeof define === 'function' && define.amd) {
 			element.__resizeListeners__.push(fn);
 		}
 	};
-
+	
 	window.removeResizeListener = function(element, fn){
 		if (attachEvent) element.detachEvent('onresize', fn);
 		else {
@@ -53591,125 +55855,6 @@ if (typeof define === 'function' && define.amd) {
 
 }));
 
-;
-/****************************************************************************
-	modernizr-javascript.js,
-
-	(c) 2016, FCOO
-
-	https://github.com/FCOO/modernizr-javascript
-	https://github.com/FCOO
-
-****************************************************************************/
-
-(function ($, window, document, undefined) {
-	"use strict";
-
-	var ns = window;
-
-    //Extend the jQuery prototype
-    $.fn.extend({
-        modernizrOn : function( test ){
-            return this.modernizrToggle( test, true );
-        },
-
-        modernizrOff: function( test ){
-            return this.modernizrToggle( test, false );
-        },
-
-        modernizrToggle: function( test, on ){
-		if ( on === undefined )
-            return this.modernizrToggle( test, !this.hasClass( test ) );
-
-            on = !!on; //on => Boolean
-            return this.toggleClass( test, on ).toggleClass( 'no-' + test, !on );
-        }
-    });
-
-
-    //Add methods to window = works on <html>
-    ns.modernizrOn  = function( test ){ ns.modernizrToggle( test, true ); };
-
-    ns.modernizrOff = function( test ){ ns.modernizrToggle( test, false ); };
-
-    ns.modernizrToggle = function( test, on ){ $('html').modernizrToggle( test, on ); };
-
-}(jQuery, this, document));
-;
-/****************************************************************************
-	modernizr-mouse-events.js,
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/modernizr-mouse-events
-	https://github.com/FCOO
-*****************************************************************************/
-(function ($, window/*, document, undefined*/) {
-	"use strict";
-
-    /*
-    Create a Modernizr-test named 'mouse' to detect if there are a mouse-device
-    Solution by http://stackoverflow.com/users/1701813/hacktisch
-    Mouse devices (also touch screen laptops) first fire mousemove before they can fire touchstart and mouse is set to TRUE.
-    Touch devices (also for instance iOS which fires mousemove) FIRST fire touchstart upon click, and then mousemove.
-    That is why mouse will be set to FALSE.
-
-    Create a Modernizr-test named 'mouse-hover' to mark if hover "events" is fired. Can be use to prevent :hover {...} css to fail on touch devices
-    */
-
-    var mouseTest         = 'mouse',
-        mouseHoverTest    = 'mouse-hover',
-        mouseEventPostfix = '.modernizr.mouse.events',
-        hasModernizr = !!window.Modernizr,
-        hasTouchEventsTest = hasModernizr && (jQuery.type( window.Modernizr['touchevents'] ) === "boolean"),
-        hasTouchEvents = hasTouchEventsTest ? window.Modernizr['touchevents'] : true;
-
-    if (hasModernizr)
-        window.Modernizr.addTest(mouseTest, false);
-    window.modernizrOff(mouseTest);
-
-    //If Modernizr-test "touchevents" is included => use if to set "mouse-hover" else set "mouse-hover" = "mouse"
-    if (hasModernizr)
-        window.Modernizr.addTest( mouseHoverTest, !hasTouchEvents );
-    window.modernizrToggle( mouseHoverTest, !hasTouchEvents );
-
-    $(window)
-        //Check for mouse
-        .bind('mousemove'+mouseEventPostfix,function(){
-            $(window).unbind(mouseEventPostfix);
-            if (hasModernizr)
-                window.Modernizr[mouseTest] = true;
-            window.modernizrOn(mouseTest);
-/* REMOVED IN VERSION 2.0.0
-            if (!hasTouchEventsTest){
-                if (hasModernizr)
-                    window.Modernizr.addTest( mouseHoverTest, true );
-                window.modernizrOn(mouseHoverTest);
-            }
-*/
-        })
-        .bind('touchstart'+mouseEventPostfix,function(){
-            $(window).unbind(mouseEventPostfix);
-            if (hasModernizr)
-                window.Modernizr[mouseTest] = false;
-            window.modernizrOff(mouseTest);
-        })
-
-        //Create hidden dummy element to test for true hover support
-        .on( "load", function() {
-            var $elem = $('<i/>')
-                            .appendTo($('body'))
-                            .addClass('_test-for-hover_');
-
-            if ($elem.css('font-family') == "__HOVER_SUPPORT__"){
-                if (hasModernizr)
-                    window.Modernizr.addTest( mouseHoverTest, true );
-                window.modernizrOn(mouseHoverTest);
-            }
-        });
-
-
-}(jQuery, this, document));
 ;
 /****************************************************************************
     jquery-base-slider-handle,
@@ -65101,7 +67246,7 @@ if (typeof define === 'function' && define.amd) {
 
     var keys = ['Hours', 'Minutes', 'Seconds', 'Milliseconds'];
     var maxValues = [24, 60, 60, 1000];
-
+    
     // Capitalize first letter
     key = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
 
@@ -67359,213 +69504,15 @@ options:
 
 }(jQuery, this, document));
 ;
-(function() {
-    var url = (function() {
-
-        function _t() {
-            return new RegExp(/(.*?)\.?([^\.]*?)\.(gl|com|net|org|biz|ws|in|me|co\.uk|co|org\.uk|ltd\.uk|plc\.uk|me\.uk|edu|mil|br\.com|cn\.com|eu\.com|hu\.com|no\.com|qc\.com|sa\.com|se\.com|se\.net|us\.com|uy\.com|ac|co\.ac|gv\.ac|or\.ac|ac\.ac|af|am|as|at|ac\.at|co\.at|gv\.at|or\.at|asn\.au|com\.au|edu\.au|org\.au|net\.au|id\.au|be|ac\.be|adm\.br|adv\.br|am\.br|arq\.br|art\.br|bio\.br|cng\.br|cnt\.br|com\.br|ecn\.br|eng\.br|esp\.br|etc\.br|eti\.br|fm\.br|fot\.br|fst\.br|g12\.br|gov\.br|ind\.br|inf\.br|jor\.br|lel\.br|med\.br|mil\.br|net\.br|nom\.br|ntr\.br|odo\.br|org\.br|ppg\.br|pro\.br|psc\.br|psi\.br|rec\.br|slg\.br|tmp\.br|tur\.br|tv\.br|vet\.br|zlg\.br|br|ab\.ca|bc\.ca|mb\.ca|nb\.ca|nf\.ca|ns\.ca|nt\.ca|on\.ca|pe\.ca|qc\.ca|sk\.ca|yk\.ca|ca|cc|ac\.cn|com\.cn|edu\.cn|gov\.cn|org\.cn|bj\.cn|sh\.cn|tj\.cn|cq\.cn|he\.cn|nm\.cn|ln\.cn|jl\.cn|hl\.cn|js\.cn|zj\.cn|ah\.cn|gd\.cn|gx\.cn|hi\.cn|sc\.cn|gz\.cn|yn\.cn|xz\.cn|sn\.cn|gs\.cn|qh\.cn|nx\.cn|xj\.cn|tw\.cn|hk\.cn|mo\.cn|cn|cx|cz|de|dk|fo|com\.ec|tm\.fr|com\.fr|asso\.fr|presse\.fr|fr|gf|gs|co\.il|net\.il|ac\.il|k12\.il|gov\.il|muni\.il|ac\.in|co\.in|org\.in|ernet\.in|gov\.in|net\.in|res\.in|is|it|ac\.jp|co\.jp|go\.jp|or\.jp|ne\.jp|ac\.kr|co\.kr|go\.kr|ne\.kr|nm\.kr|or\.kr|li|lt|lu|asso\.mc|tm\.mc|com\.mm|org\.mm|net\.mm|edu\.mm|gov\.mm|ms|nl|no|nu|pl|ro|org\.ro|store\.ro|tm\.ro|firm\.ro|www\.ro|arts\.ro|rec\.ro|info\.ro|nom\.ro|nt\.ro|se|si|com\.sg|org\.sg|net\.sg|gov\.sg|sk|st|tf|ac\.th|co\.th|go\.th|mi\.th|net\.th|or\.th|tm|to|com\.tr|edu\.tr|gov\.tr|k12\.tr|net\.tr|org\.tr|com\.tw|org\.tw|net\.tw|ac\.uk|uk\.com|uk\.net|gb\.com|gb\.net|vg|sh|kz|ch|info|ua|gov|name|pro|ie|hk|com\.hk|org\.hk|net\.hk|edu\.hk|us|tk|cd|by|ad|lv|eu\.lv|bz|es|jp|cl|ag|mobi|eu|co\.nz|org\.nz|net\.nz|maori\.nz|iwi\.nz|io|la|md|sc|sg|vc|tw|travel|my|se|tv|pt|com\.pt|edu\.pt|asia|fi|com\.ve|net\.ve|fi|org\.ve|web\.ve|info\.ve|co\.ve|tel|im|gr|ru|net\.ru|org\.ru|hr|com\.hr|ly|xyz)$/);
-        }
-
-        function _d(s) {
-          return decodeURIComponent(s.replace(/\+/g, ' '));
-        }
-
-        function _i(arg, str) {
-            var sptr = arg.charAt(0),
-                split = str.split(sptr);
-
-            if (sptr === arg) { return split; }
-
-            arg = parseInt(arg.substring(1), 10);
-
-            return split[arg < 0 ? split.length + arg : arg - 1];
-        }
-
-        function _f(arg, str) {
-            var sptr = arg.charAt(0),
-                split = str.split('&'),
-                field = [],
-                params = {},
-                tmp = [],
-                arg2 = arg.substring(1);
-
-            for (var i = 0, ii = split.length; i < ii; i++) {
-                field = split[i].match(/(.*?)=(.*)/);
-
-                // TODO: regex should be able to handle this.
-                if ( ! field) {
-                    field = [split[i], split[i], ''];
-                }
-
-                if (field[1].replace(/\s/g, '') !== '') {
-                    field[2] = _d(field[2] || '');
-
-                    // If we have a match just return it right away.
-                    if (arg2 === field[1]) { return field[2]; }
-
-                    // Check for array pattern.
-                    tmp = field[1].match(/(.*)\[([0-9]+)\]/);
-
-                    if (tmp) {
-                        params[tmp[1]] = params[tmp[1]] || [];
-
-                        params[tmp[1]][tmp[2]] = field[2];
-                    }
-                    else {
-                        params[field[1]] = field[2];
-                    }
-                }
-            }
-
-            if (sptr === arg) { return params; }
-
-            return params[arg2];
-        }
-
-        return function(arg, url) {
-            var _l = {}, tmp, tmp2;
-
-            if (arg === 'tld?') { return _t(); }
-
-            url = url || window.location.toString();
-
-            if ( ! arg) { return url; }
-
-            arg = arg.toString();
-
-            if (tmp = url.match(/^mailto:([^\/].+)/)) {
-                _l.protocol = 'mailto';
-                _l.email = tmp[1];
-            }
-            else {
-
-                // Ignore Hashbangs.
-                if (tmp = url.match(/(.*?)\/#\!(.*)/)) {
-                    url = tmp[1] + tmp[2];
-                }
-
-                // Hash.
-                if (tmp = url.match(/(.*?)#(.*)/)) {
-                    _l.hash = tmp[2];
-                    url = tmp[1];
-                }
-
-                // Return hash parts.
-                if (_l.hash && arg.match(/^#/)) { return _f(arg, _l.hash); }
-
-                // Query
-                if (tmp = url.match(/(.*?)\?(.*)/)) {
-                    _l.query = tmp[2];
-                    url = tmp[1];
-                }
-
-                // Return query parts.
-                if (_l.query && arg.match(/^\?/)) { return _f(arg, _l.query); }
-
-                // Protocol.
-                if (tmp = url.match(/(.*?)\:?\/\/(.*)/)) {
-                    _l.protocol = tmp[1].toLowerCase();
-                    url = tmp[2];
-                }
-
-                // Path.
-                if (tmp = url.match(/(.*?)(\/.*)/)) {
-                    _l.path = tmp[2];
-                    url = tmp[1];
-                }
-
-                // Clean up path.
-                _l.path = (_l.path || '').replace(/^([^\/])/, '/$1');
-
-                // Return path parts.
-                if (arg.match(/^[\-0-9]+$/)) { arg = arg.replace(/^([^\/])/, '/$1'); }
-                if (arg.match(/^\//)) { return _i(arg, _l.path.substring(1)); }
-
-                // File.
-                tmp = _i('/-1', _l.path.substring(1));
-
-                if (tmp && (tmp = tmp.match(/(.*?)\.([^.]+)$/))) {
-                    _l.file = tmp[0];
-                    _l.filename = tmp[1];
-                    _l.fileext = tmp[2];
-                }
-
-                // Port.
-                if (tmp = url.match(/(.*)\:([0-9]+)$/)) {
-                    _l.port = tmp[2];
-                    url = tmp[1];
-                }
-
-                // Auth.
-                if (tmp = url.match(/(.*?)@(.*)/)) {
-                    _l.auth = tmp[1];
-                    url = tmp[2];
-                }
-
-                // User and pass.
-                if (_l.auth) {
-                    tmp = _l.auth.match(/(.*)\:(.*)/);
-
-                    _l.user = tmp ? tmp[1] : _l.auth;
-                    _l.pass = tmp ? tmp[2] : undefined;
-                }
-
-                // Hostname.
-                _l.hostname = url.toLowerCase();
-
-                // Return hostname parts.
-                if (arg.charAt(0) === '.') { return _i(arg, _l.hostname); }
-
-                // Domain, tld and sub domain.
-                if (_t()) {
-                    tmp = _l.hostname.match(_t());
-
-                    if (tmp) {
-                        _l.tld = tmp[3];
-                        _l.domain = tmp[2] ? tmp[2] + '.' + tmp[3] : undefined;
-                        _l.sub = tmp[1] || undefined;
-                    }
-                }
-
-                // Set port and protocol defaults if not set.
-                _l.port = _l.port || (_l.protocol === 'https' ? '443' : '80');
-                _l.protocol = _l.protocol || (_l.port === '443' ? 'https' : 'http');
-            }
-
-            // Return arg.
-            if (arg in _l) { return _l[arg]; }
-
-            // Return everything.
-            if (arg === '{}') { return _l; }
-
-            // Default to undefined for no match.
-            return undefined;
-        };
-    })();
-
-	if (typeof window.define === 'function' && window.define.amd) {
-		window.define('js-url', [], function () {
-		    return url;
-		});
-	} else {
-		if(typeof window.jQuery !== 'undefined') {
-			window.jQuery.extend({
-				url: function(arg, url) { return window.url(arg, url); }
-			});
-		}
-
-		window.url = url;
-	}
-
-})();
-
+/*! @websanova/url - v2.6.3 - 2020-01-25 */
+!function(){function t(t,r){var a,o={};if("tld?"!==t){if(r=r||window.location.toString(),!t)return r;if(t=t.toString(),a=r.match(/^mailto:([^\/].+)/))o.protocol="mailto",o.email=a[1];else{if((a=r.match(/(.*?)\/#\!(.*)/))&&(r=a[1]+a[2]),(a=r.match(/(.*?)#(.*)/))&&(o.hash=a[2],r=a[1]),o.hash&&t.match(/^#/))return h(t,o.hash);if((a=r.match(/(.*?)\?(.*)/))&&(o.query=a[2],r=a[1]),o.query&&t.match(/^\?/))return h(t,o.query);if((a=r.match(/(.*?)\:?\/\/(.*)/))&&(o.protocol=a[1].toLowerCase(),r=a[2]),(a=r.match(/(.*?)(\/.*)/))&&(o.path=a[2],r=a[1]),o.path=(o.path||"").replace(/^([^\/])/,"/$1"),t.match(/^[\-0-9]+$/)&&(t=t.replace(/^([^\/])/,"/$1")),t.match(/^\//))return e(t,o.path.substring(1));if((a=(a=e("/-1",o.path.substring(1)))&&a.match(/(.*?)\.([^.]+)$/))&&(o.file=a[0],o.filename=a[1],o.fileext=a[2]),(a=r.match(/(.*)\:([0-9]+)$/))&&(o.port=a[2],r=a[1]),(a=r.match(/(.*?)@(.*)/))&&(o.auth=a[1],r=a[2]),o.auth&&(a=o.auth.match(/(.*)\:(.*)/),o.user=a?a[1]:o.auth,o.pass=a?a[2]:void 0),o.hostname=r.toLowerCase(),"."===t.charAt(0))return e(t,o.hostname);o.port=o.port||("https"===o.protocol?"443":"80"),o.protocol=o.protocol||("443"===o.port?"https":"http")}return t in o?o[t]:"{}"===t?o:void 0}}function e(t,r){var a=t.charAt(0),o=r.split(a);return a===t?o:o[(t=parseInt(t.substring(1),10))<0?o.length+t:t-1]}function h(t,r){for(var a,o=t.charAt(0),e=r.split("&"),h=[],n={},c=[],i=t.substring(1),p=0,u=e.length;p<u;p++)if(""!==(h=(h=e[p].match(/(.*?)=(.*)/))||[e[p],e[p],""])[1].replace(/\s/g,"")){if(h[2]=(a=h[2]||"",decodeURIComponent(a.replace(/\+/g," "))),i===h[1])return h[2];(c=h[1].match(/(.*)\[([0-9]+)\]/))?(n[c[1]]=n[c[1]]||[],n[c[1]][c[2]]=h[2]):n[h[1]]=h[2]}return o===t?n:n[i]}window.url=t}();
 ;
-/*
-  @package NOTY - Dependency-free notification library
-  @version version: 3.1.4
-  @contributors https://github.com/needim/noty/graphs/contributors
-  @documentation Examples and Documentation - http://needim.github.com/noty
-  @license Licensed under the MIT licenses: http://www.opensource.org/licenses/mit-license.php
+/* 
+  @package NOTY - Dependency-free notification library 
+  @version version: 3.1.4 
+  @contributors https://github.com/needim/noty/graphs/contributors 
+  @documentation Examples and Documentation - http://needim.github.com/noty 
+  @license Licensed under the MIT licenses: http://www.opensource.org/licenses/mit-license.php 
 */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -69598,7 +71545,7 @@ Promise$2.prototype = {
     The primary way of interacting with a promise is through its `then` method,
     which registers callbacks to receive either a promise's eventual value or the
     reason why the promise cannot be fulfilled.
-
+  
     ```js
     findUser().then(function(user){
       // user is available
@@ -69606,14 +71553,14 @@ Promise$2.prototype = {
       // user is unavailable, and you are given the reason why
     });
     ```
-
+  
     Chaining
     --------
-
+  
     The return value of `then` is itself a promise.  This second, 'downstream'
     promise is resolved with the return value of the first promise's fulfillment
     or rejection handler, or rejected if the handler throws an exception.
-
+  
     ```js
     findUser().then(function (user) {
       return user.name;
@@ -69623,7 +71570,7 @@ Promise$2.prototype = {
       // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
       // will be `'default name'`
     });
-
+  
     findUser().then(function (user) {
       throw new Error('Found user, but still unhappy');
     }, function (reason) {
@@ -69636,7 +71583,7 @@ Promise$2.prototype = {
     });
     ```
     If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
-
+  
     ```js
     findUser().then(function (user) {
       throw new PedagogicalException('Upstream error');
@@ -69648,15 +71595,15 @@ Promise$2.prototype = {
       // The `PedgagocialException` is propagated all the way down to here
     });
     ```
-
+  
     Assimilation
     ------------
-
+  
     Sometimes the value you want to propagate to a downstream promise can only be
     retrieved asynchronously. This can be achieved by returning a promise in the
     fulfillment or rejection handler. The downstream promise will then be pending
     until the returned promise is settled. This is called *assimilation*.
-
+  
     ```js
     findUser().then(function (user) {
       return findCommentsByAuthor(user);
@@ -69664,9 +71611,9 @@ Promise$2.prototype = {
       // The user's comments are now available
     });
     ```
-
+  
     If the assimliated promise rejects, then the downstream promise will also reject.
-
+  
     ```js
     findUser().then(function (user) {
       return findCommentsByAuthor(user);
@@ -69676,15 +71623,15 @@ Promise$2.prototype = {
       // If `findCommentsByAuthor` rejects, we'll have the reason here
     });
     ```
-
+  
     Simple Example
     --------------
-
+  
     Synchronous Example
-
+  
     ```javascript
     let result;
-
+  
     try {
       result = findResult();
       // success
@@ -69692,9 +71639,9 @@ Promise$2.prototype = {
       // failure
     }
     ```
-
+  
     Errback Example
-
+  
     ```js
     findResult(function(result, err){
       if (err) {
@@ -69704,9 +71651,9 @@ Promise$2.prototype = {
       }
     });
     ```
-
+  
     Promise Example;
-
+  
     ```javascript
     findResult().then(function(result){
       // success
@@ -69714,15 +71661,15 @@ Promise$2.prototype = {
       // failure
     });
     ```
-
+  
     Advanced Example
     --------------
-
+  
     Synchronous Example
-
+  
     ```javascript
     let author, books;
-
+  
     try {
       author = findAuthor();
       books  = findBooksByAuthor(author);
@@ -69731,19 +71678,19 @@ Promise$2.prototype = {
       // failure
     }
     ```
-
+  
     Errback Example
-
+  
     ```js
-
+  
     function foundBooks(books) {
-
+  
     }
-
+  
     function failure(reason) {
-
+  
     }
-
+  
     findAuthor(function(author, err){
       if (err) {
         failure(err);
@@ -69768,9 +71715,9 @@ Promise$2.prototype = {
       }
     });
     ```
-
+  
     Promise Example;
-
+  
     ```javascript
     findAuthor().
       then(findBooksByAuthor).
@@ -69780,7 +71727,7 @@ Promise$2.prototype = {
       // something went wrong
     });
     ```
-
+  
     @method then
     @param {Function} onFulfilled
     @param {Function} onRejected
@@ -69792,25 +71739,25 @@ Promise$2.prototype = {
   /**
     `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
     as the catch block of a try/catch statement.
-
+  
     ```js
     function findAuthor(){
       throw new Error('couldn't find that author');
     }
-
+  
     // synchronous
     try {
       findAuthor();
     } catch(reason) {
       // something went wrong
     }
-
+  
     // async with promises
     findAuthor().catch(function(reason){
       // something went wrong
     });
     ```
-
+  
     @method catch
     @param {Function} onRejection
     Useful for tooling.
@@ -70737,7 +72684,7 @@ module.exports = g;
         //Therefore if iOS, we shall assume that PDF support is not available
         !isIOS && (
             //Modern versions of Firefox come bundled with PDFJS
-            isFirefoxWithPDFJS ||
+            isFirefoxWithPDFJS || 
             //Browsers that still support the original MIME type check
             supportsPdfMimeType || (
                 //Pity the poor souls still using IE
@@ -71200,21 +73147,21 @@ module.exports = g;
                 focus          : 'init_focus'
             };
 
-
         options = options || {};
+
+        //Add class-name corresponding to options
+        var newClass = [options.class || ''];
+        $.each( optionToClassName, function( id, className ){
+            if (options[id] && (!$.isFunction(options[id]) || options[id]()))
+                newClass.push(className);
+        });
+        options.class = newClass.join(' ');
+
         options =
             $._bsAdjustOptions( options, {
                 tagName         : 'a', //Using <a> instead of <button> to be able to control font-family
                 baseClass       : 'btn',
                 styleClass      : bsButtonClass,
-                class           : function( opt ){
-                                      var result = [opt.class || ''];
-                                      $.each( optionToClassName, function( id, className ){
-                                          if (opt[id] && (!$.isFunction(opt[id]) || opt[id]()))
-                                              result.push(className);
-                                      });
-                                     return result.join(' ');
-                                  } (options),
                 useTouchSize    : true,
                 addOnClick      : true,
                 returnFromClick : false
@@ -71275,7 +73222,6 @@ module.exports = g;
     $.bsCheckboxButton = function( options ){
         //Clone options to avoid reflux
         options = $.extend({}, options);
-
         options.class = 'allow-zero-selected';
 
         //Use modernizr-mode and classes if icon and/or text containe two values
@@ -76394,6 +78340,12 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                     //Create outer form-group
                     insideInputGroup = true;
                     $parent = $divXXGroup('form-group', options).appendTo( $parent );
+
+                    if (options.lineBefore)
+                        $('<hr/>')
+                            .toggleClass('above-label', !!options.label)
+                            .appendTo( $parent );
+
                     if (noValidation || options.noValidation)
                         $parent.addClass('no-validation');
                 }
@@ -76450,7 +78402,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 "use strict";var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol?"symbol":typeof obj};(function(f){if((typeof exports==="undefined"?"undefined":_typeof(exports))==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Url=f()}})(function(){var define,module,exports;return function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++){s(r[o])}return s}({1:[function(require,module,exports){window.addEventListener("popstate",function(e){Url.triggerPopStateCb(e)});var Url=module.exports={_onPopStateCbs:[],_isHash:false,queryString:function queryString(name,notDecoded){name=name.replace(/[\[]/,"\\[").replace(/[\]]/,"\\]");var regex=new RegExp("[\\?&]"+name+"=([^&#]*)"),results=regex.exec(location.search),encoded=null;if(results===null){regex=new RegExp("[\\?&]"+name+"(\\&([^&#]*)|$)");if(regex.test(location.search)){return true}return undefined}else{encoded=results[1].replace(/\+/g," ");if(notDecoded){return encoded}return decodeURIComponent(encoded)}},parseQuery:function parseQuery(search){var query={};if(typeof search!=="string"){search=window.location.search}search=search.replace(/^\?/g,"");if(!search){return{}}var a=search.split("&"),i=0,iequ,value=null;for(;i<a.length;++i){iequ=a[i].indexOf("=");if(iequ<0){iequ=a[i].length;value=true}else{value=decodeURIComponent(a[i].slice(iequ+1))}query[decodeURIComponent(a[i].slice(0,iequ))]=value}return query},stringify:function stringify(queryObj){if(!queryObj||queryObj.constructor!==Object){throw new Error("Query object should be an object.")}var stringified="";Object.keys(queryObj).forEach(function(c){var value=queryObj[c];stringified+=c;if(value!==true){stringified+="="+encodeURIComponent(queryObj[c])}stringified+="&"});stringified=stringified.replace(/\&$/g,"");return stringified},updateSearchParam:function updateSearchParam(param,value,push,triggerPopState){var searchParsed=this.parseQuery();if(value===undefined){delete searchParsed[param]}else{if(searchParsed[param]===value){return Url}searchParsed[param]=value}var newSearch="?"+this.stringify(searchParsed);this._updateAll(window.location.pathname+newSearch+location.hash,push,triggerPopState);return Url},getLocation:function getLocation(){return window.location.pathname+window.location.search+window.location.hash},hash:function hash(newHash,triggerPopState){if(newHash===undefined){return location.hash.substring(1)}if(!triggerPopState){setTimeout(function(){Url._isHash=false},0);Url._isHash=true}return location.hash=newHash},_updateAll:function _updateAll(s,push,triggerPopState){window.history[push?"pushState":"replaceState"](null,"",s);if(triggerPopState){Url.triggerPopStateCb({})}return s},pathname:function pathname(_pathname,push,triggerPopState){if(_pathname===undefined){return location.pathname}return this._updateAll(_pathname+window.location.search+window.location.hash,push,triggerPopState)},triggerPopStateCb:function triggerPopStateCb(e){if(this._isHash){return}this._onPopStateCbs.forEach(function(c){c(e)})},onPopState:function onPopState(cb){this._onPopStateCbs.push(cb)},removeHash:function removeHash(){this._updateAll(window.location.pathname+window.location.search,false,false)},removeQuery:function removeQuery(){this._updateAll(window.location.pathname+window.location.hash,false,false)},version:"2.3.1"}},{}]},{},[1])(1)});
 ;
 /****************************************************************************
-    url.js-extensions.js,
+    url.js-extensions.js, 
 
     (c) 2016, FCOO
 
@@ -76479,13 +78431,13 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     //Overwrite Url._updateAll to handle Security Error in Safari on Mac that prevent more that 100 history updates in 30 sec
     window.Url._updateAll = function(s, push, triggerPopState) {
         try {
-            window.history[push ? "pushState" : "replaceState"](null, "", s);
+            window.history[push ? "pushState" : "replaceState"](null, "", s);          
         }
         catch (e) {
-            //Use 'old' methods - perhaps it will reload the page
+            //Use 'old' methods - perhaps it will reload the page 
             window.location.replace( s );
         }
-
+        
         if (triggerPopState) {
             window.Url.triggerPopStateCb({});
         }
@@ -76495,7 +78447,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 
     /******************************************
     anyString(name, notDecoded, search, sep)
-    Copy of Url.queryString with optional input string (search)
+    Copy of Url.queryString with optional input string (search) 
     and separaator (sep)
     ******************************************/
     function anyString(name, notDecoded, search, sep){
@@ -76525,7 +78477,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     /******************************************
     _correctSearchOrHash
     Check and correct search or hash = ID_VALUE[&ID_VALUE]
-        ID_VALUE =
+        ID_VALUE = 
             ID or
             ID=VALUE or
             ID=VALUE,VALUE2,...,VALUEN
@@ -76535,10 +78487,10 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     function _correctSearchOrHash( str, preChar ){
         function decodeStr( str ){
             try {
-                decodeURIComponent( str );
-                return decodeURIComponent( str );
+                decodeURIComponent( str ); 
+                return decodeURIComponent( str ); 
             }
-            catch(err) {
+            catch(err) { 
                 return undefined;
             }
         }
@@ -76564,12 +78516,12 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         while (preChar && str.length && (str.charAt(0) == preChar) )
             str = str.slice(1);
 
-        strList = str.split('&');
+        strList = str.split('&'); 
 
         for (i=0; i<strList.length; i++ ){
             idValues = strList[i].split('=');
             id = decodeStr( idValues[0] );
-            values = idValues[1] || undefined;
+            values = idValues[1] || undefined; 
             oneValueOk = false;
             if ( id && (idRegEx.exec(id) == id ) ){
                 //Correct id
@@ -76596,7 +78548,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                     var firstValue = true;
                     for (j=0; j<valueList.length; j++ ){
                         value = valueList[j];
-                        result += (firstValue ? '=' : ',') + (value ? value : '');
+                        result += (firstValue ? '=' : ',') + (value ? value : ''); 
                         firstValue = false;
                     }
                 }
@@ -76610,30 +78562,30 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     adjustUrl
     Check and correct the url
     *******************************************/
-    function adjustUrl(){
+    function adjustUrl(){ 
         var oldSearch = window.location.search,
             newSearch = this._correctSearchOrHash( oldSearch, '?' ),
             oldHash   = window.location.hash,
             newHash   = this._correctSearchOrHash( oldHash, '#' ),
-            newUrl    = window.location.pathname +
-                          (newSearch ? '?' + encodeURI(newSearch) : '') +
+            newUrl    = window.location.pathname +  
+                          (newSearch ? '?' + encodeURI(newSearch) : '') + 
                           (newHash   ? '#' + encodeURI(newHash)   : '');
 
-        this._updateAll( newUrl );
+        this._updateAll( newUrl );          
         return newUrl;
     }
 
     /******************************************
     onHashchange( handler [, context])
     Add handler = function( event) to the event "hashchange"
-    Can by omitted if the hash-tag is updated using
+    Can by omitted if the hash-tag is updated using 
     Url.updateHashParam(..) or Url.updateHash(..)
     *******************************************/
     function onHashchange( handler, context ){
         this.hashchange = this.hashchange || [];
         this.hashchange.push( $.proxy(handler, context) );
     }
-
+   
     /******************************************
     hashString
     Same as queryString but for the hash
@@ -76642,19 +78594,19 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     function hashString(name, notDecoded){
         return anyString(name, notDecoded, window.location.hash, '#');
     }
-
+    
     /******************************************
     parseHash
     Same as parseQuery but for the hash
     *******************************************/
     function parseHash(){
-        return this.parseQuery( this.hash() );
+        return this.parseQuery( this.hash() );    
     }
 
     /******************************************
     updateHash(hashObj, dontCallHashChange)
     Update hash-tag with the id-value in hashObj
-    If dontCallHashChange==true the hashchange-event-functions
+    If dontCallHashChange==true the hashchange-event-functions 
     added with Url.onHashchange( function[, context]) will not be called
     *******************************************/
     function updateHash(hashObj, dontCallHashChange){
@@ -76664,11 +78616,11 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         //return window.location.hash = '#'+newHash;
         return this._updateAll(window.location.pathname + window.location.search + '#' + newHash, false);
     }
-
+     
     /******************************************
     updateHashParam
     Adds, updates or deletes a hash-tag
-    If dontCallHashChange==true the hashchange-event-functions
+    If dontCallHashChange==true the hashchange-event-functions 
     added with Url.onHashchange( function[, context]) will not be called
     *******************************************/
     function updateHashParam(hashParam, value, dontCallHashChange){
@@ -76700,7 +78652,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             if ($.type( jsonObj ) == 'object')
                 return true;
         }
-        catch (e) {
+        catch (e) { 
             return false;
         }
         return false;
@@ -76709,7 +78661,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     function validateValue( value, validator ){
         //Convert Boolean into String
         if ($.type( value ) === "boolean")
-            value = value ? 'true' : 'false';
+            value = value ? 'true' : 'false';  
         value = value || '';
 
         if (validator === undefined)
@@ -76734,11 +78686,11 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             case 'NOTEMPTY': validator = /.+/;                   break;
 
             //Special case for json-object-string
-            case 'JSON'    : return validateValue( value, validateJSONValue);
+            case 'JSON'    : return validateValue( value, validateJSONValue); 
         }
 
         var regExp = new RegExp(validator),
-            execResult = regExp.exec(value);
+            execResult = regExp.exec(value); 
         return !!(execResult && (execResult.length == 1) && (execResult[0] == value));
     }
 
@@ -76748,26 +78700,26 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     Parse obj after it is validated and converted acording to
     validatorObj, defaultObj, and options
 
-    validatorObj: object with {id: validator,..}. Failed values are removed
-    defaultObj  : object with {id: value}. Values to be used if `id` is missing or fails validation
+    validatorObj: object with {id: validator,..}. Failed values are removed 
+    defaultObj  : object with {id: value}. Values to be used if `id` is missing or fails validation 
     options: {
         convertBoolean: Boolean (default = true ) If true all values == "true" or "false" are converted into Boolean
         convertNumber : Boolean (default = true ) If true all values representing a number is converted to float
         convertJSON   : Boolean (default = true ) If true all values representing a stringify json-object is converted to a real json-object
-        queryOverHash : Boolean (default = true ) If true and the same id is given in both query-string and hash-tag the value from query-string is returned.
+        queryOverHash : Boolean (default = true ) If true and the same id is given in both query-string and hash-tag the value from query-string is returned. 
                                                   If false the value from hash-tag is returned
     }
     *******************************************/
     function _parseObject( obj, validatorObj, defaultObj, options ){
-        validatorObj = validatorObj || {};
-        defaultObj = defaultObj || {};
-        options = $.extend( {}, options, {
-            convertBoolean: true,
-            convertNumber : true,
+        validatorObj = validatorObj || {}; 
+        defaultObj = defaultObj || {}; 
+        options = $.extend( {}, options, { 
+            convertBoolean: true, 
+            convertNumber : true, 
             convertJSON   : true,
-            queryOverHash : true
-        });
-
+            queryOverHash : true 
+        }); 
+        
         var _this = this;
 
         //Validate all values
@@ -76775,20 +78727,20 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             //Convert '+' to space
             if ( $.type(value) == 'string' )
                 value = value.replace(/\+/g, " ");
-
+            
             //Validate value
             if ( !_this.validateValue( value, validatorObj[id] ) )
-                value = undefined;
+                value = undefined; 
 
             //Convert "true" and false" to Boolean
             if ( options.convertBoolean && ( (value == 'true') || (value == 'false') ) )
               value = (value == 'true');
-
+                
             //Convert String to Float
             if (options.convertNumber && _this.validateValue( value, 'NUMBER') ){
                 value = parseFloat( value );
             }
-
+                
             //Remove deleted keys
             if (value === undefined)
                 delete obj[id];
@@ -76801,8 +78753,8 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             $.each( obj, function( id, value ){
                 if ( _this.validateValue( value, 'JSON') )
                     obj[id] = JSON.parse( value );
-            });
-
+            });        
+        
         //Insert default values
         $.each( defaultObj, function( id, value ){
             if (obj[id] === undefined)
@@ -76822,7 +78774,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         var _this = this,
             queryOverHash = options ? !!options.queryOverHash : true;
 
-        function parseObj( str ){
+        function parseObj( str ){ 
             var obj = _this.parseQuery( str );
 
             //Use anyString(..) to get adjusted value
@@ -76830,14 +78782,14 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                 obj[id] = anyString(id, false, '?'+str, '?');
             });
 
-            return _this._parseObject( obj, validatorObj, defaultObj, options );
+            return _this._parseObject( obj, validatorObj, defaultObj, options ); 
         }
 
         var queryObj = parseObj( this._correctSearchOrHash( window.location.search, '?' ) ),
             hashObj  = parseObj( this._correctSearchOrHash( window.location.hash,   '#' ) );
 
-        return $.extend( queryOverHash ? hashObj  : queryObj,
-                         queryOverHash ? queryObj : hashObj   );
+        return $.extend( queryOverHash ? hashObj  : queryObj, 
+                         queryOverHash ? queryObj : hashObj   ); 
     }
 
     /******************************************
@@ -76886,11 +78838,11 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 
 
     /******************************************
-    Initialize/ready
+    Initialize/ready 
     *******************************************/
-    $(function() {
+    $(function() { 
         window.Url.adjustUrl();
-    });
+    }); 
     //******************************************
 
 
@@ -76899,14 +78851,14 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 
 /******************************************
 Variables in window.location making up the full url
-
+    
 var newURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname + window.location.search + window.location.hash;
 
 window.location.protocol
 window.location.host
 window.location.pathname
-window.location.search
-window.location.hash
+window.location.search 
+window.location.hash 
 
 ******************************************/
 
@@ -77018,7 +78970,7 @@ window.location.hash
 }(jQuery, this, document));
 ;
 /****************************************************************************
-    fcoo-settings.js,
+    fcoo-settings.js, 
 
     (c) 2016, FCOO
 
@@ -77029,7 +78981,7 @@ window.location.hash
 
 (function ($, window, document, undefined) {
     "use strict";
-
+    
     //Create fcoo.settings-namespace
     window.fcoo = window.fcoo || {};
     var ns = window.fcoo.settings = window.fcoo.settings || {};
@@ -77040,12 +78992,12 @@ window.location.hash
         storageIdSave  = 'fcoo_settings',
         storageIdForce = 'fcoo_settings_FORCE';
 
-        //Get query settings
-        try {
-            queryValues = JSON.parse( window.Url.queryString('settings') );
+        //Get query settings            
+        try { 
+            queryValues = JSON.parse( window.Url.queryString('settings') ); 
         }
-        catch (e) {
-            queryValues = {};
+        catch (e) { 
+            queryValues = {}; 
         }
 
     /**********************************
@@ -77054,7 +79006,7 @@ window.location.hash
     id [String]
     validator [null] | [String] | [function( value)]. If [String] => using Url.js-extensions validation
     applyFunc [function( value, id, defaultValue )] function to apply the settings for id
-    defaultValue
+    defaultValue 
     globalEvents {String} = Id of global-events in fcoo.events that aare fired when the setting is changed
     onError [function( value, id )] (optional). Called if a new value is invalid according to validator
     **********************************/
@@ -77075,16 +79027,16 @@ window.location.hash
 
     //Extend the prototype
     ns.Setting.prototype = {
-        apply:  function ( newValue, dontCallApplyFunc ){
+        apply:  function ( newValue, dontCallApplyFunc ){ 
                     var id = this.options.id;
                     newValue = (newValue === undefined) ? this.options.defaultValue : newValue;
 
-                    if ( !window.Url.validateValue(''+newValue, this.options.validator) ){
+                    if ( !window.Url.validateValue(''+newValue, this.options.validator) ){ 
                         if (this.options.onError)
                             this.options.onError( newValue, id );
                         newValue = this.options.defaultValue;
                     }
-
+                    
                     this.value = newValue;
 
                     //Set saveValue = newValue unless it is the value from query-string
@@ -77099,28 +79051,28 @@ window.location.hash
                     if (this.options.globalEvents && window.fcoo.events && window.fcoo.events.fire)
                         window.fcoo.events.fire( this.options.globalEvents, id, this.value );
 
-                }
-    };
+                }    
+    };    
 
     /**********************************
     add( options )
     options = {id, validator, applyFunc, defaultValue, globalEvents )
     id [String]
-    validator [null] | [String] | [function( value)]. If [String] =
-    defaultValue
+    validator [null] | [String] | [function( value)]. If [String] = 
+    defaultValue 
     **********************************/
     ns.add = function( options ){
         options = $.extend( {}, { callApply: true }, options );
         var setting = new ns.Setting( options );
         settings[options.id] = setting;
-        setting.apply( loadedValues[setting.options.id], !options.callApply );
+        setting.apply( loadedValues[setting.options.id], !options.callApply );                       
     };
-
+    
     /**********************************
     set( id, value, reload )
     id [String]
     value [any]
-    reload [Boolean]
+    reload [Boolean] 
     **********************************/
     ns.set = function( id, value, reload ){
         var setting = settings[id];
@@ -77135,7 +79087,7 @@ window.location.hash
         if (reload)
           window.location.reload();
     };
-
+    
     /**********************************
     get( id )
     id [String]
@@ -77163,7 +79115,7 @@ window.location.hash
             c: default values
     **********************************/
     ns.load = function(){
-        //1) Try loading from storageIdForce
+        //1) Try loading from storageIdForce 
         var str = window.sessionStorage.getItem( storageIdForce );
         if (str){
             window.sessionStorage.removeItem( storageIdForce );
@@ -77173,7 +79125,7 @@ window.location.hash
             //2) Load settings from...
             //a: url param 'settings = queryValues
 
-            //b: localStorage 'fcoo-settings',
+            //b: localStorage 'fcoo-settings', 
             var savedValues = this.loadFromLocalStorage();
 
             //c: default values - is set by fcoo.settings.add(...)
@@ -77182,14 +79134,14 @@ window.location.hash
             loadedValues =  $.extend( {}, savedValues, queryValues );
         }
 
-        $.each( settings, function( id, setting ){
-            setting.apply( loadedValues[id] );
+        $.each( settings, function( id, setting ){ 
+            setting.apply( loadedValues[id] ); 
         });
     };
-
+    
     /**********************************
     save( toForce, saveStr )
-    Save the settings in
+    Save the settings in 
     toForce == false: localStorage 'fcoo-settings'
     toForce == true : sessionStorage 'fcoo-settings-FORCE'
 
@@ -77198,7 +79150,7 @@ window.location.hash
     ns.save = function( toForce, saveStr ){
         //Save all saveValue from settings
         var settingValuesToSave = this.loadFromLocalStorage();
-        $.each( settings, function( id, setting ){
+        $.each( settings, function( id, setting ){ 
             if (setting.saveValue)
                 settingValuesToSave[ setting.options.id ] = setting.saveValue;
         });
@@ -77217,10 +79169,10 @@ window.location.hash
     ns.load();
 
     /******************************************
-    Initialize/ready
+    Initialize/ready 
     *******************************************/
-//    $(function() {
-//    });
+//    $(function() { 
+//    }); 
 
 }(jQuery, this, document));
 ;
@@ -77631,2145 +79583,6 @@ return index;
 
 }(jQuery, this.i18next, this, document));
 ;
-/*!
- * modernizr v3.3.1
- * Build http://modernizr.com/download?-csschunit-csspointerevents-cssremunit-flexbox-flexboxlegacy-flexboxtweener-flexwrap-fullscreen-touchevents-addtest-atrule-hasevent-mq-prefixed-setclasses-dontmin
- *
- * Copyright (c)
- *  Faruk Ates
- *  Paul Irish
- *  Alex Sexton
- *  Ryan Seddon
- *  Patrick Kettner
- *  Stu Cox
- *  Richard Herrera
-
- * MIT License
- */
-
-/*
- * Modernizr tests which native CSS3 and HTML5 features are available in the
- * current UA and makes the results available to you in two ways: as properties on
- * a global `Modernizr` object, and as classes on the `<html>` element. This
- * information allows you to progressively enhance your pages with a granular level
- * of control over the experience.
-*/
-
-;(function(window, document, undefined){
-  var tests = [];
-
-
-  /**
-   *
-   * ModernizrProto is the constructor for Modernizr
-   *
-   * @class
-   * @access public
-   */
-
-  var ModernizrProto = {
-    // The current version, dummy
-    _version: '3.3.1',
-
-    // Any settings that don't work as separate modules
-    // can go in here as configuration.
-    _config: {
-      'classPrefix': '',
-      'enableClasses': true,
-      'enableJSClass': true,
-      'usePrefixes': true
-    },
-
-    // Queue of tests
-    _q: [],
-
-    // Stub these for people who are listening
-    on: function(test, cb) {
-      // I don't really think people should do this, but we can
-      // safe guard it a bit.
-      // -- NOTE:: this gets WAY overridden in src/addTest for actual async tests.
-      // This is in case people listen to synchronous tests. I would leave it out,
-      // but the code to *disallow* sync tests in the real version of this
-      // function is actually larger than this.
-      var self = this;
-      setTimeout(function() {
-        cb(self[test]);
-      }, 0);
-    },
-
-    addTest: function(name, fn, options) {
-      tests.push({name: name, fn: fn, options: options});
-    },
-
-    addAsyncTest: function(fn) {
-      tests.push({name: null, fn: fn});
-    }
-  };
-
-
-
-  // Fake some of Object.create so we can force non test results to be non "own" properties.
-  var Modernizr = function() {};
-  Modernizr.prototype = ModernizrProto;
-
-  // Leak modernizr globally when you `require` it rather than force it here.
-  // Overwrite name so constructor name is nicer :D
-  Modernizr = new Modernizr();
-
-
-
-  var classes = [];
-
-
-  /**
-   * is returns a boolean if the typeof an obj is exactly type.
-   *
-   * @access private
-   * @function is
-   * @param {*} obj - A thing we want to check the type of
-   * @param {string} type - A string to compare the typeof against
-   * @returns {boolean}
-   */
-
-  function is(obj, type) {
-    return typeof obj === type;
-  }
-  ;
-
-  /**
-   * Run through all tests and detect their support in the current UA.
-   *
-   * @access private
-   */
-
-  function testRunner() {
-    var featureNames;
-    var feature;
-    var aliasIdx;
-    var result;
-    var nameIdx;
-    var featureName;
-    var featureNameSplit;
-
-    for (var featureIdx in tests) {
-      if (tests.hasOwnProperty(featureIdx)) {
-        featureNames = [];
-        feature = tests[featureIdx];
-        // run the test, throw the return value into the Modernizr,
-        // then based on that boolean, define an appropriate className
-        // and push it into an array of classes we'll join later.
-        //
-        // If there is no name, it's an 'async' test that is run,
-        // but not directly added to the object. That should
-        // be done with a post-run addTest call.
-        if (feature.name) {
-          featureNames.push(feature.name.toLowerCase());
-
-          if (feature.options && feature.options.aliases && feature.options.aliases.length) {
-            // Add all the aliases into the names list
-            for (aliasIdx = 0; aliasIdx < feature.options.aliases.length; aliasIdx++) {
-              featureNames.push(feature.options.aliases[aliasIdx].toLowerCase());
-            }
-          }
-        }
-
-        // Run the test, or use the raw value if it's not a function
-        result = is(feature.fn, 'function') ? feature.fn() : feature.fn;
-
-
-        // Set each of the names on the Modernizr object
-        for (nameIdx = 0; nameIdx < featureNames.length; nameIdx++) {
-          featureName = featureNames[nameIdx];
-          // Support dot properties as sub tests. We don't do checking to make sure
-          // that the implied parent tests have been added. You must call them in
-          // order (either in the test, or make the parent test a dependency).
-          //
-          // Cap it to TWO to make the logic simple and because who needs that kind of subtesting
-          // hashtag famous last words
-          featureNameSplit = featureName.split('.');
-
-          if (featureNameSplit.length === 1) {
-            Modernizr[featureNameSplit[0]] = result;
-          } else {
-            // cast to a Boolean, if not one already
-            /* jshint -W053 */
-            if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
-              Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
-            }
-
-            Modernizr[featureNameSplit[0]][featureNameSplit[1]] = result;
-          }
-
-          classes.push((result ? '' : 'no-') + featureNameSplit.join('-'));
-        }
-      }
-    }
-  }
-  ;
-
-  /**
-   * docElement is a convenience wrapper to grab the root element of the document
-   *
-   * @access private
-   * @returns {HTMLElement|SVGElement} The root element of the document
-   */
-
-  var docElement = document.documentElement;
-
-
-  /**
-   * A convenience helper to check if the document we are running in is an SVG document
-   *
-   * @access private
-   * @returns {boolean}
-   */
-
-  var isSVG = docElement.nodeName.toLowerCase() === 'svg';
-
-
-  /**
-   * setClasses takes an array of class names and adds them to the root element
-   *
-   * @access private
-   * @function setClasses
-   * @param {string[]} classes - Array of class names
-   */
-
-  // Pass in an and array of class names, e.g.:
-  //  ['no-webp', 'borderradius', ...]
-  function setClasses(classes) {
-    var className = docElement.className;
-    var classPrefix = Modernizr._config.classPrefix || '';
-
-    if (isSVG) {
-      className = className.baseVal;
-    }
-
-    // Change `no-js` to `js` (independently of the `enableClasses` option)
-    // Handle classPrefix on this too
-    if (Modernizr._config.enableJSClass) {
-      var reJS = new RegExp('(^|\\s)' + classPrefix + 'no-js(\\s|$)');
-      className = className.replace(reJS, '$1' + classPrefix + 'js$2');
-    }
-
-    if (Modernizr._config.enableClasses) {
-      // Add the new classes
-      className += ' ' + classPrefix + classes.join(' ' + classPrefix);
-      isSVG ? docElement.className.baseVal = className : docElement.className = className;
-    }
-
-  }
-
-  ;
-
-  /**
-   * hasOwnProp is a shim for hasOwnProperty that is needed for Safari 2.0 support
-   *
-   * @author kangax
-   * @access private
-   * @function hasOwnProp
-   * @param {object} object - The object to check for a property
-   * @param {string} property - The property to check for
-   * @returns {boolean}
-   */
-
-  // hasOwnProperty shim by kangax needed for Safari 2.0 support
-  var hasOwnProp;
-
-  (function() {
-    var _hasOwnProperty = ({}).hasOwnProperty;
-    /* istanbul ignore else */
-    /* we have no way of testing IE 5.5 or safari 2,
-     * so just assume the else gets hit */
-    if (!is(_hasOwnProperty, 'undefined') && !is(_hasOwnProperty.call, 'undefined')) {
-      hasOwnProp = function(object, property) {
-        return _hasOwnProperty.call(object, property);
-      };
-    }
-    else {
-      hasOwnProp = function(object, property) { /* yes, this can give false positives/negatives, but most of the time we don't care about those */
-        return ((property in object) && is(object.constructor.prototype[property], 'undefined'));
-      };
-    }
-  })();
-
-
-
-
-   // _l tracks listeners for async tests, as well as tests that execute after the initial run
-  ModernizrProto._l = {};
-
-  /**
-   * Modernizr.on is a way to listen for the completion of async tests. Being
-   * asynchronous, they may not finish before your scripts run. As a result you
-   * will get a possibly false negative `undefined` value.
-   *
-   * @memberof Modernizr
-   * @name Modernizr.on
-   * @access public
-   * @function on
-   * @param {string} feature - String name of the feature detect
-   * @param {function} cb - Callback function returning a Boolean - true if feature is supported, false if not
-   * @example
-   *
-   * ```js
-   * Modernizr.on('flash', function( result ) {
-   *   if (result) {
-   *    // the browser has flash
-   *   } else {
-   *     // the browser does not have flash
-   *   }
-   * });
-   * ```
-   */
-
-  ModernizrProto.on = function(feature, cb) {
-    // Create the list of listeners if it doesn't exist
-    if (!this._l[feature]) {
-      this._l[feature] = [];
-    }
-
-    // Push this test on to the listener list
-    this._l[feature].push(cb);
-
-    // If it's already been resolved, trigger it on next tick
-    if (Modernizr.hasOwnProperty(feature)) {
-      // Next Tick
-      setTimeout(function() {
-        Modernizr._trigger(feature, Modernizr[feature]);
-      }, 0);
-    }
-  };
-
-  /**
-   * _trigger is the private function used to signal test completion and run any
-   * callbacks registered through [Modernizr.on](#modernizr-on)
-   *
-   * @memberof Modernizr
-   * @name Modernizr._trigger
-   * @access private
-   * @function _trigger
-   * @param {string} feature - string name of the feature detect
-   * @param {function|boolean} [res] - A feature detection function, or the boolean =
-   * result of a feature detection function
-   */
-
-  ModernizrProto._trigger = function(feature, res) {
-    if (!this._l[feature]) {
-      return;
-    }
-
-    var cbs = this._l[feature];
-
-    // Force async
-    setTimeout(function() {
-      var i, cb;
-      for (i = 0; i < cbs.length; i++) {
-        cb = cbs[i];
-        cb(res);
-      }
-    }, 0);
-
-    // Don't trigger these again
-    delete this._l[feature];
-  };
-
-  /**
-   * addTest allows you to define your own feature detects that are not currently
-   * included in Modernizr (under the covers it's the exact same code Modernizr
-   * uses for its own [feature detections](https://github.com/Modernizr/Modernizr/tree/master/feature-detects)). Just like the offical detects, the result
-   * will be added onto the Modernizr object, as well as an appropriate className set on
-   * the html element when configured to do so
-   *
-   * @memberof Modernizr
-   * @name Modernizr.addTest
-   * @optionName Modernizr.addTest()
-   * @optionProp addTest
-   * @access public
-   * @function addTest
-   * @param {string|object} feature - The string name of the feature detect, or an
-   * object of feature detect names and test
-   * @param {function|boolean} test - Function returning true if feature is supported,
-   * false if not. Otherwise a boolean representing the results of a feature detection
-   * @example
-   *
-   * The most common way of creating your own feature detects is by calling
-   * `Modernizr.addTest` with a string (preferably just lowercase, without any
-   * punctuation), and a function you want executed that will return a boolean result
-   *
-   * ```js
-   * Modernizr.addTest('itsTuesday', function() {
-   *  var d = new Date();
-   *  return d.getDay() === 2;
-   * });
-   * ```
-   *
-   * When the above is run, it will set Modernizr.itstuesday to `true` when it is tuesday,
-   * and to `false` every other day of the week. One thing to notice is that the names of
-   * feature detect functions are always lowercased when added to the Modernizr object. That
-   * means that `Modernizr.itsTuesday` will not exist, but `Modernizr.itstuesday` will.
-   *
-   *
-   *  Since we only look at the returned value from any feature detection function,
-   *  you do not need to actually use a function. For simple detections, just passing
-   *  in a statement that will return a boolean value works just fine.
-   *
-   * ```js
-   * Modernizr.addTest('hasJquery', 'jQuery' in window);
-   * ```
-   *
-   * Just like before, when the above runs `Modernizr.hasjquery` will be true if
-   * jQuery has been included on the page. Not using a function saves a small amount
-   * of overhead for the browser, as well as making your code much more readable.
-   *
-   * Finally, you also have the ability to pass in an object of feature names and
-   * their tests. This is handy if you want to add multiple detections in one go.
-   * The keys should always be a string, and the value can be either a boolean or
-   * function that returns a boolean.
-   *
-   * ```js
-   * var detects = {
-   *  'hasjquery': 'jQuery' in window,
-   *  'itstuesday': function() {
-   *    var d = new Date();
-   *    return d.getDay() === 2;
-   *  }
-   * }
-   *
-   * Modernizr.addTest(detects);
-   * ```
-   *
-   * There is really no difference between the first methods and this one, it is
-   * just a convenience to let you write more readable code.
-   */
-
-  function addTest(feature, test) {
-
-    if (typeof feature == 'object') {
-      for (var key in feature) {
-        if (hasOwnProp(feature, key)) {
-          addTest(key, feature[ key ]);
-        }
-      }
-    } else {
-
-      feature = feature.toLowerCase();
-      var featureNameSplit = feature.split('.');
-      var last = Modernizr[featureNameSplit[0]];
-
-      // Again, we don't check for parent test existence. Get that right, though.
-      if (featureNameSplit.length == 2) {
-        last = last[featureNameSplit[1]];
-      }
-
-      if (typeof last != 'undefined') {
-        // we're going to quit if you're trying to overwrite an existing test
-        // if we were to allow it, we'd do this:
-        //   var re = new RegExp("\\b(no-)?" + feature + "\\b");
-        //   docElement.className = docElement.className.replace( re, '' );
-        // but, no rly, stuff 'em.
-        return Modernizr;
-      }
-
-      test = typeof test == 'function' ? test() : test;
-
-      // Set the value (this is the magic, right here).
-      if (featureNameSplit.length == 1) {
-        Modernizr[featureNameSplit[0]] = test;
-      } else {
-        // cast to a Boolean, if not one already
-        /* jshint -W053 */
-        if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
-          Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
-        }
-
-        Modernizr[featureNameSplit[0]][featureNameSplit[1]] = test;
-      }
-
-      // Set a single class (either `feature` or `no-feature`)
-      /* jshint -W041 */
-      setClasses([(!!test && test != false ? '' : 'no-') + featureNameSplit.join('-')]);
-      /* jshint +W041 */
-
-      // Trigger the event
-      Modernizr._trigger(feature, test);
-    }
-
-    return Modernizr; // allow chaining.
-  }
-
-  // After all the tests are run, add self to the Modernizr prototype
-  Modernizr._q.push(function() {
-    ModernizrProto.addTest = addTest;
-  });
-
-
-
-
-  /**
-   * If the browsers follow the spec, then they would expose vendor-specific style as:
-   *   elem.style.WebkitBorderRadius
-   * instead of something like the following, which would be technically incorrect:
-   *   elem.style.webkitBorderRadius
-
-   * Webkit ghosts their properties in lowercase but Opera & Moz do not.
-   * Microsoft uses a lowercase `ms` instead of the correct `Ms` in IE8+
-   *   erik.eae.net/archives/2008/03/10/21.48.10/
-
-   * More here: github.com/Modernizr/Modernizr/issues/issue/21
-   *
-   * @access private
-   * @returns {string} The string representing the vendor-specific style properties
-   */
-
-  var omPrefixes = 'Moz O ms Webkit';
-
-
-  var cssomPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.split(' ') : []);
-  ModernizrProto._cssomPrefixes = cssomPrefixes;
-
-
-  /**
-   * atRule returns a given CSS property at-rule (eg @keyframes), possibly in
-   * some prefixed form, or false, in the case of an unsupported rule
-   *
-   * @memberof Modernizr
-   * @name Modernizr.atRule
-   * @optionName Modernizr.atRule()
-   * @optionProp atRule
-   * @access public
-   * @function atRule
-   * @param {string} prop - String name of the @-rule to test for
-   * @returns {string|boolean} The string representing the (possibly prefixed)
-   * valid version of the @-rule, or `false` when it is unsupported.
-   * @example
-   * ```js
-   *  var keyframes = Modernizr.atRule('@keyframes');
-   *
-   *  if (keyframes) {
-   *    // keyframes are supported
-   *    // could be `@-webkit-keyframes` or `@keyframes`
-   *  } else {
-   *    // keyframes === `false`
-   *  }
-   * ```
-   *
-   */
-
-  var atRule = function(prop) {
-    var length = prefixes.length;
-    var cssrule = window.CSSRule;
-    var rule;
-
-    if (typeof cssrule === 'undefined') {
-      return undefined;
-    }
-
-    if (!prop) {
-      return false;
-    }
-
-    // remove literal @ from beginning of provided property
-    prop = prop.replace(/^@/, '');
-
-    // CSSRules use underscores instead of dashes
-    rule = prop.replace(/-/g, '_').toUpperCase() + '_RULE';
-
-    if (rule in cssrule) {
-      return '@' + prop;
-    }
-
-    for (var i = 0; i < length; i++) {
-      // prefixes gives us something like -o-, and we want O_
-      var prefix = prefixes[i];
-      var thisRule = prefix.toUpperCase() + '_' + rule;
-
-      if (thisRule in cssrule) {
-        return '@-' + prefix.toLowerCase() + '-' + prop;
-      }
-    }
-
-    return false;
-  };
-
-  ModernizrProto.atRule = atRule;
-
-
-
-  /**
-   * createElement is a convenience wrapper around document.createElement. Since we
-   * use createElement all over the place, this allows for (slightly) smaller code
-   * as well as abstracting away issues with creating elements in contexts other than
-   * HTML documents (e.g. SVG documents).
-   *
-   * @access private
-   * @function createElement
-   * @returns {HTMLElement|SVGElement} An HTML or SVG element
-   */
-
-  function createElement() {
-    if (typeof document.createElement !== 'function') {
-      // This is the case in IE7, where the type of createElement is "object".
-      // For this reason, we cannot call apply() as Object is not a Function.
-      return document.createElement(arguments[0]);
-    } else if (isSVG) {
-      return document.createElementNS.call(document, 'http://www.w3.org/2000/svg', arguments[0]);
-    } else {
-      return document.createElement.apply(document, arguments);
-    }
-  }
-
-  ;
-
-  /**
-   * Modernizr.hasEvent() detects support for a given event
-   *
-   * @memberof Modernizr
-   * @name Modernizr.hasEvent
-   * @optionName Modernizr.hasEvent()
-   * @optionProp hasEvent
-   * @access public
-   * @function hasEvent
-   * @param  {string|*} eventName - the name of an event to test for (e.g. "resize")
-   * @param  {Element|string} [element=HTMLDivElement] - is the element|document|window|tagName to test on
-   * @returns {boolean}
-   * @example
-   *  `Modernizr.hasEvent` lets you determine if the browser supports a supplied event.
-   *  By default, it does this detection on a div element
-   *
-   * ```js
-   *  hasEvent('blur') // true;
-   * ```
-   *
-   * However, you are able to give an object as a second argument to hasEvent to
-   * detect an event on something other than a div.
-   *
-   * ```js
-   *  hasEvent('devicelight', window) // true;
-   * ```
-   *
-   */
-
-  var hasEvent = (function() {
-
-    // Detect whether event support can be detected via `in`. Test on a DOM element
-    // using the "blur" event b/c it should always exist. bit.ly/event-detection
-    var needsFallback = !('onblur' in document.documentElement);
-
-    function inner(eventName, element) {
-
-      var isSupported;
-      if (!eventName) { return false; }
-      if (!element || typeof element === 'string') {
-        element = createElement(element || 'div');
-      }
-
-      // Testing via the `in` operator is sufficient for modern browsers and IE.
-      // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and
-      // "resize", whereas `in` "catches" those.
-      eventName = 'on' + eventName;
-      isSupported = eventName in element;
-
-      // Fallback technique for old Firefox - bit.ly/event-detection
-      if (!isSupported && needsFallback) {
-        if (!element.setAttribute) {
-          // Switch to generic element if it lacks `setAttribute`.
-          // It could be the `document`, `window`, or something else.
-          element = createElement('div');
-        }
-
-        element.setAttribute(eventName, '');
-        isSupported = typeof element[eventName] === 'function';
-
-        if (element[eventName] !== undefined) {
-          // If property was created, "remove it" by setting value to `undefined`.
-          element[eventName] = undefined;
-        }
-        element.removeAttribute(eventName);
-      }
-
-      return isSupported;
-    }
-    return inner;
-  })();
-
-
-  ModernizrProto.hasEvent = hasEvent;
-
-
-  /**
-   * getBody returns the body of a document, or an element that can stand in for
-   * the body if a real body does not exist
-   *
-   * @access private
-   * @function getBody
-   * @returns {HTMLElement|SVGElement} Returns the real body of a document, or an
-   * artificially created element that stands in for the body
-   */
-
-  function getBody() {
-    // After page load injecting a fake body doesn't work so check if body exists
-    var body = document.body;
-
-    if (!body) {
-      // Can't use the real body create a fake one.
-      body = createElement(isSVG ? 'svg' : 'body');
-      body.fake = true;
-    }
-
-    return body;
-  }
-
-  ;
-
-  /**
-   * injectElementWithStyles injects an element with style element and some CSS rules
-   *
-   * @access private
-   * @function injectElementWithStyles
-   * @param {string} rule - String representing a css rule
-   * @param {function} callback - A function that is used to test the injected element
-   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
-   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
-   * @returns {boolean}
-   */
-
-  function injectElementWithStyles(rule, callback, nodes, testnames) {
-    var mod = 'modernizr';
-    var style;
-    var ret;
-    var node;
-    var docOverflow;
-    var div = createElement('div');
-    var body = getBody();
-
-    if (parseInt(nodes, 10)) {
-      // In order not to give false positives we create a node for each test
-      // This also allows the method to scale for unspecified uses
-      while (nodes--) {
-        node = createElement('div');
-        node.id = testnames ? testnames[nodes] : mod + (nodes + 1);
-        div.appendChild(node);
-      }
-    }
-
-    style = createElement('style');
-    style.type = 'text/css';
-    style.id = 's' + mod;
-
-    // IE6 will false positive on some tests due to the style element inside the test div somehow interfering offsetHeight, so insert it into body or fakebody.
-    // Opera will act all quirky when injecting elements in documentElement when page is served as xml, needs fakebody too. #270
-    (!body.fake ? div : body).appendChild(style);
-    body.appendChild(div);
-
-    if (style.styleSheet) {
-      style.styleSheet.cssText = rule;
-    } else {
-      style.appendChild(document.createTextNode(rule));
-    }
-    div.id = mod;
-
-    if (body.fake) {
-      //avoid crashing IE8, if background image is used
-      body.style.background = '';
-      //Safari 5.13/5.1.4 OSX stops loading if ::-webkit-scrollbar is used and scrollbars are visible
-      body.style.overflow = 'hidden';
-      docOverflow = docElement.style.overflow;
-      docElement.style.overflow = 'hidden';
-      docElement.appendChild(body);
-    }
-
-    ret = callback(div, rule);
-    // If this is done after page load we don't want to remove the body so check if body exists
-    if (body.fake) {
-      body.parentNode.removeChild(body);
-      docElement.style.overflow = docOverflow;
-      // Trigger layout so kinetic scrolling isn't disabled in iOS6+
-      docElement.offsetHeight;
-    } else {
-      div.parentNode.removeChild(div);
-    }
-
-    return !!ret;
-
-  }
-
-  ;
-
-  /**
-   * Modernizr.mq tests a given media query, live against the current state of the window
-   * adapted from matchMedia polyfill by Scott Jehl and Paul Irish
-   * gist.github.com/786768
-   *
-   * @memberof Modernizr
-   * @name Modernizr.mq
-   * @optionName Modernizr.mq()
-   * @optionProp mq
-   * @access public
-   * @function mq
-   * @param {string} mq - String of the media query we want to test
-   * @returns {boolean}
-   * @example
-   * Modernizr.mq allows for you to programmatically check if the current browser
-   * window state matches a media query.
-   *
-   * ```js
-   *  var query = Modernizr.mq('(min-width: 900px)');
-   *
-   *  if (query) {
-   *    // the browser window is larger than 900px
-   *  }
-   * ```
-   *
-   * Only valid media queries are supported, therefore you must always include values
-   * with your media query
-   *
-   * ```js
-   * // good
-   *  Modernizr.mq('(min-width: 900px)');
-   *
-   * // bad
-   *  Modernizr.mq('min-width');
-   * ```
-   *
-   * If you would just like to test that media queries are supported in general, use
-   *
-   * ```js
-   *  Modernizr.mq('only all'); // true if MQ are supported, false if not
-   * ```
-   *
-   *
-   * Note that if the browser does not support media queries (e.g. old IE) mq will
-   * always return false.
-   */
-
-  var mq = (function() {
-    var matchMedia = window.matchMedia || window.msMatchMedia;
-    if (matchMedia) {
-      return function(mq) {
-        var mql = matchMedia(mq);
-        return mql && mql.matches || false;
-      };
-    }
-
-    return function(mq) {
-      var bool = false;
-
-      injectElementWithStyles('@media ' + mq + ' { #modernizr { position: absolute; } }', function(node) {
-        bool = (window.getComputedStyle ?
-                window.getComputedStyle(node, null) :
-                node.currentStyle).position == 'absolute';
-      });
-
-      return bool;
-    };
-  })();
-
-
-  ModernizrProto.mq = mq;
-
-
-
-
-  /**
-   * contains checks to see if a string contains another string
-   *
-   * @access private
-   * @function contains
-   * @param {string} str - The string we want to check for substrings
-   * @param {string} substr - The substring we want to search the first string for
-   * @returns {boolean}
-   */
-
-  function contains(str, substr) {
-    return !!~('' + str).indexOf(substr);
-  }
-
-  ;
-
-  /**
-   * Create our "modernizr" element that we do most feature tests on.
-   *
-   * @access private
-   */
-
-  var modElem = {
-    elem: createElement('modernizr')
-  };
-
-  // Clean up this element
-  Modernizr._q.push(function() {
-    delete modElem.elem;
-  });
-
-
-
-  var mStyle = {
-    style: modElem.elem.style
-  };
-
-  // kill ref for gc, must happen before mod.elem is removed, so we unshift on to
-  // the front of the queue.
-  Modernizr._q.unshift(function() {
-    delete mStyle.style;
-  });
-
-
-
-  /**
-   * domToCSS takes a camelCase string and converts it to kebab-case
-   * e.g. boxSizing -> box-sizing
-   *
-   * @access private
-   * @function domToCSS
-   * @param {string} name - String name of camelCase prop we want to convert
-   * @returns {string} The kebab-case version of the supplied name
-   */
-
-  function domToCSS(name) {
-    return name.replace(/([A-Z])/g, function(str, m1) {
-      return '-' + m1.toLowerCase();
-    }).replace(/^ms-/, '-ms-');
-  }
-  ;
-
-  /**
-   * nativeTestProps allows for us to use native feature detection functionality if available.
-   * some prefixed form, or false, in the case of an unsupported rule
-   *
-   * @access private
-   * @function nativeTestProps
-   * @param {array} props - An array of property names
-   * @param {string} value - A string representing the value we want to check via @supports
-   * @returns {boolean|undefined} A boolean when @supports exists, undefined otherwise
-   */
-
-  // Accepts a list of property names and a single value
-  // Returns `undefined` if native detection not available
-  function nativeTestProps(props, value) {
-    var i = props.length;
-    // Start with the JS API: http://www.w3.org/TR/css3-conditional/#the-css-interface
-    if ('CSS' in window && 'supports' in window.CSS) {
-      // Try every prefixed variant of the property
-      while (i--) {
-        if (window.CSS.supports(domToCSS(props[i]), value)) {
-          return true;
-        }
-      }
-      return false;
-    }
-    // Otherwise fall back to at-rule (for Opera 12.x)
-    else if ('CSSSupportsRule' in window) {
-      // Build a condition string for every prefixed variant
-      var conditionText = [];
-      while (i--) {
-        conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
-      }
-      conditionText = conditionText.join(' or ');
-      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
-        return getComputedStyle(node, null).position == 'absolute';
-      });
-    }
-    return undefined;
-  }
-  ;
-
-  /**
-   * cssToDOM takes a kebab-case string and converts it to camelCase
-   * e.g. box-sizing -> boxSizing
-   *
-   * @access private
-   * @function cssToDOM
-   * @param {string} name - String name of kebab-case prop we want to convert
-   * @returns {string} The camelCase version of the supplied name
-   */
-
-  function cssToDOM(name) {
-    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
-      return m1 + m2.toUpperCase();
-    }).replace(/^-/, '');
-  }
-  ;
-
-  // testProps is a generic CSS / DOM property test.
-
-  // In testing support for a given CSS property, it's legit to test:
-  //    `elem.style[styleName] !== undefined`
-  // If the property is supported it will return an empty string,
-  // if unsupported it will return undefined.
-
-  // We'll take advantage of this quick test and skip setting a style
-  // on our modernizr element, but instead just testing undefined vs
-  // empty string.
-
-  // Property names can be provided in either camelCase or kebab-case.
-
-  function testProps(props, prefixed, value, skipValueTest) {
-    skipValueTest = is(skipValueTest, 'undefined') ? false : skipValueTest;
-
-    // Try native detect first
-    if (!is(value, 'undefined')) {
-      var result = nativeTestProps(props, value);
-      if (!is(result, 'undefined')) {
-        return result;
-      }
-    }
-
-    // Otherwise do it properly
-    var afterInit, i, propsLength, prop, before;
-
-    // If we don't have a style element, that means we're running async or after
-    // the core tests, so we'll need to create our own elements to use
-
-    // inside of an SVG element, in certain browsers, the `style` element is only
-    // defined for valid tags. Therefore, if `modernizr` does not have one, we
-    // fall back to a less used element and hope for the best.
-    var elems = ['modernizr', 'tspan'];
-    while (!mStyle.style) {
-      afterInit = true;
-      mStyle.modElem = createElement(elems.shift());
-      mStyle.style = mStyle.modElem.style;
-    }
-
-    // Delete the objects if we created them.
-    function cleanElems() {
-      if (afterInit) {
-        delete mStyle.style;
-        delete mStyle.modElem;
-      }
-    }
-
-    propsLength = props.length;
-    for (i = 0; i < propsLength; i++) {
-      prop = props[i];
-      before = mStyle.style[prop];
-
-      if (contains(prop, '-')) {
-        prop = cssToDOM(prop);
-      }
-
-      if (mStyle.style[prop] !== undefined) {
-
-        // If value to test has been passed in, do a set-and-check test.
-        // 0 (integer) is a valid property value, so check that `value` isn't
-        // undefined, rather than just checking it's truthy.
-        if (!skipValueTest && !is(value, 'undefined')) {
-
-          // Needs a try catch block because of old IE. This is slow, but will
-          // be avoided in most cases because `skipValueTest` will be used.
-          try {
-            mStyle.style[prop] = value;
-          } catch (e) {}
-
-          // If the property value has changed, we assume the value used is
-          // supported. If `value` is empty string, it'll fail here (because
-          // it hasn't changed), which matches how browsers have implemented
-          // CSS.supports()
-          if (mStyle.style[prop] != before) {
-            cleanElems();
-            return prefixed == 'pfx' ? prop : true;
-          }
-        }
-        // Otherwise just return true, or the property name if this is a
-        // `prefixed()` call
-        else {
-          cleanElems();
-          return prefixed == 'pfx' ? prop : true;
-        }
-      }
-    }
-    cleanElems();
-    return false;
-  }
-
-  ;
-
-  /**
-   * List of JavaScript DOM values used for tests
-   *
-   * @memberof Modernizr
-   * @name Modernizr._domPrefixes
-   * @optionName Modernizr._domPrefixes
-   * @optionProp domPrefixes
-   * @access public
-   * @example
-   *
-   * Modernizr._domPrefixes is exactly the same as [_prefixes](#modernizr-_prefixes), but rather
-   * than kebab-case properties, all properties are their Capitalized variant
-   *
-   * ```js
-   * Modernizr._domPrefixes === [ "Moz", "O", "ms", "Webkit" ];
-   * ```
-   */
-
-  var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
-  ModernizrProto._domPrefixes = domPrefixes;
-
-
-  /**
-   * fnBind is a super small [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) polyfill.
-   *
-   * @access private
-   * @function fnBind
-   * @param {function} fn - a function you want to change `this` reference to
-   * @param {object} that - the `this` you want to call the function with
-   * @returns {function} The wrapped version of the supplied function
-   */
-
-  function fnBind(fn, that) {
-    return function() {
-      return fn.apply(that, arguments);
-    };
-  }
-
-  ;
-
-  /**
-   * testDOMProps is a generic DOM property test; if a browser supports
-   *   a certain property, it won't return undefined for it.
-   *
-   * @access private
-   * @function testDOMProps
-   * @param {array.<string>} props - An array of properties to test for
-   * @param {object} obj - An object or Element you want to use to test the parameters again
-   * @param {boolean|object} elem - An Element to bind the property lookup again. Use `false` to prevent the check
-   */
-  function testDOMProps(props, obj, elem) {
-    var item;
-
-    for (var i in props) {
-      if (props[i] in obj) {
-
-        // return the property name as a string
-        if (elem === false) {
-          return props[i];
-        }
-
-        item = obj[props[i]];
-
-        // let's bind a function
-        if (is(item, 'function')) {
-          // bind to obj unless overriden
-          return fnBind(item, elem || obj);
-        }
-
-        // return the unbound function or obj or value
-        return item;
-      }
-    }
-    return false;
-  }
-
-  ;
-
-  /**
-   * testPropsAll tests a list of DOM properties we want to check against.
-   * We specify literally ALL possible (known and/or likely) properties on
-   * the element including the non-vendor prefixed one, for forward-
-   * compatibility.
-   *
-   * @access private
-   * @function testPropsAll
-   * @param {string} prop - A string of the property to test for
-   * @param {string|object} [prefixed] - An object to check the prefixed properties on. Use a string to skip
-   * @param {HTMLElement|SVGElement} [elem] - An element used to test the property and value against
-   * @param {string} [value] - A string of a css value
-   * @param {boolean} [skipValueTest] - An boolean representing if you want to test if value sticks when set
-   */
-  function testPropsAll(prop, prefixed, elem, value, skipValueTest) {
-
-    var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
-    props = (prop + ' ' + cssomPrefixes.join(ucProp + ' ') + ucProp).split(' ');
-
-    // did they call .prefixed('boxSizing') or are we just testing a prop?
-    if (is(prefixed, 'string') || is(prefixed, 'undefined')) {
-      return testProps(props, prefixed, value, skipValueTest);
-
-      // otherwise, they called .prefixed('requestAnimationFrame', window[, elem])
-    } else {
-      props = (prop + ' ' + (domPrefixes).join(ucProp + ' ') + ucProp).split(' ');
-      return testDOMProps(props, prefixed, elem);
-    }
-  }
-
-  // Modernizr.testAllProps() investigates whether a given style property,
-  // or any of its vendor-prefixed variants, is recognized
-  //
-  // Note that the property names must be provided in the camelCase variant.
-  // Modernizr.testAllProps('boxSizing')
-  ModernizrProto.testAllProps = testPropsAll;
-
-
-
-  /**
-   * prefixed returns the prefixed or nonprefixed property name variant of your input
-   *
-   * @memberof Modernizr
-   * @name Modernizr.prefixed
-   * @optionName Modernizr.prefixed()
-   * @optionProp prefixed
-   * @access public
-   * @function prefixed
-   * @param {string} prop - String name of the property to test for
-   * @param {object} [obj] - An object to test for the prefixed properties on
-   * @param {HTMLElement} [elem] - An element used to test specific properties against
-   * @returns {string|false} The string representing the (possibly prefixed) valid
-   * version of the property, or `false` when it is unsupported.
-   * @example
-   *
-   * Modernizr.prefixed takes a string css value in the DOM style camelCase (as
-   * opposed to the css style kebab-case) form and returns the (possibly prefixed)
-   * version of that property that the browser actually supports.
-   *
-   * For example, in older Firefox...
-   * ```js
-   * prefixed('boxSizing')
-   * ```
-   * returns 'MozBoxSizing'
-   *
-   * In newer Firefox, as well as any other browser that support the unprefixed
-   * version would simply return `boxSizing`. Any browser that does not support
-   * the property at all, it will return `false`.
-   *
-   * By default, prefixed is checked against a DOM element. If you want to check
-   * for a property on another object, just pass it as a second argument
-   *
-   * ```js
-   * var rAF = prefixed('requestAnimationFrame', window);
-   *
-   * raf(function() {
-   *  renderFunction();
-   * })
-   * ```
-   *
-   * Note that this will return _the actual function_ - not the name of the function.
-   * If you need the actual name of the property, pass in `false` as a third argument
-   *
-   * ```js
-   * var rAFProp = prefixed('requestAnimationFrame', window, false);
-   *
-   * rafProp === 'WebkitRequestAnimationFrame' // in older webkit
-   * ```
-   *
-   * One common use case for prefixed is if you're trying to determine which transition
-   * end event to bind to, you might do something like...
-   * ```js
-   * var transEndEventNames = {
-   *     'WebkitTransition' : 'webkitTransitionEnd', * Saf 6, Android Browser
-   *     'MozTransition'    : 'transitionend',       * only for FF < 15
-   *     'transition'       : 'transitionend'        * IE10, Opera, Chrome, FF 15+, Saf 7+
-   * };
-   *
-   * var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
-   * ```
-   *
-   * If you want a similar lookup, but in kebab-case, you can use [prefixedCSS](#modernizr-prefixedcss).
-   */
-
-  var prefixed = ModernizrProto.prefixed = function(prop, obj, elem) {
-    if (prop.indexOf('@') === 0) {
-      return atRule(prop);
-    }
-
-    if (prop.indexOf('-') != -1) {
-      // Convert kebab-case to camelCase
-      prop = cssToDOM(prop);
-    }
-    if (!obj) {
-      return testPropsAll(prop, 'pfx');
-    } else {
-      // Testing DOM property e.g. Modernizr.prefixed('requestAnimationFrame', window) // 'mozRequestAnimationFrame'
-      return testPropsAll(prop, obj, elem);
-    }
-  };
-
-
-/*!
-{
-  "name": "Fullscreen API",
-  "property": "fullscreen",
-  "caniuse": "fullscreen",
-  "notes": [{
-    "name": "MDN documentation",
-    "href": "https://developer.mozilla.org/en/API/Fullscreen"
-  }],
-  "polyfills": ["screenfulljs"],
-  "builderAliases": ["fullscreen_api"]
-}
-!*/
-/* DOC
-Detects support for the ability to make the current website take over the user's entire screen
-*/
-
-  // github.com/Modernizr/Modernizr/issues/739
-  Modernizr.addTest('fullscreen', !!(prefixed('exitFullscreen', document, false) || prefixed('cancelFullScreen', document, false)));
-
-
-  /**
-   * List of property values to set for css tests. See ticket #21
-   * http://git.io/vUGl4
-   *
-   * @memberof Modernizr
-   * @name Modernizr._prefixes
-   * @optionName Modernizr._prefixes
-   * @optionProp prefixes
-   * @access public
-   * @example
-   *
-   * Modernizr._prefixes is the internal list of prefixes that we test against
-   * inside of things like [prefixed](#modernizr-prefixed) and [prefixedCSS](#-code-modernizr-prefixedcss). It is simply
-   * an array of kebab-case vendor prefixes you can use within your code.
-   *
-   * Some common use cases include
-   *
-   * Generating all possible prefixed version of a CSS property
-   * ```js
-   * var rule = Modernizr._prefixes.join('transform: rotate(20deg); ');
-   *
-   * rule === 'transform: rotate(20deg); webkit-transform: rotate(20deg); moz-transform: rotate(20deg); o-transform: rotate(20deg); ms-transform: rotate(20deg);'
-   * ```
-   *
-   * Generating all possible prefixed version of a CSS value
-   * ```js
-   * rule = 'display:' +  Modernizr._prefixes.join('flex; display:') + 'flex';
-   *
-   * rule === 'display:flex; display:-webkit-flex; display:-moz-flex; display:-o-flex; display:-ms-flex; display:flex'
-   * ```
-   */
-
-  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : []);
-
-  // expose these for the plugin API. Look in the source for how to join() them against your input
-  ModernizrProto._prefixes = prefixes;
-
-
-
-  /**
-   * testStyles injects an element with style element and some CSS rules
-   *
-   * @memberof Modernizr
-   * @name Modernizr.testStyles
-   * @optionName Modernizr.testStyles()
-   * @optionProp testStyles
-   * @access public
-   * @function testStyles
-   * @param {string} rule - String representing a css rule
-   * @param {function} callback - A function that is used to test the injected element
-   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
-   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
-   * @returns {boolean}
-   * @example
-   *
-   * `Modernizr.testStyles` takes a CSS rule and injects it onto the current page
-   * along with (possibly multiple) DOM elements. This lets you check for features
-   * that can not be detected by simply checking the [IDL](https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Interface_development_guide/IDL_interface_rules).
-   *
-   * ```js
-   * Modernizr.testStyles('#modernizr { width: 9px; color: papayawhip; }', function(elem, rule) {
-   *   // elem is the first DOM node in the page (by default #modernizr)
-   *   // rule is the first argument you supplied - the CSS rule in string form
-   *
-   *   addTest('widthworks', elem.style.width === '9px')
-   * });
-   * ```
-   *
-   * If your test requires multiple nodes, you can include a third argument
-   * indicating how many additional div elements to include on the page. The
-   * additional nodes are injected as children of the `elem` that is returned as
-   * the first argument to the callback.
-   *
-   * ```js
-   * Modernizr.testStyles('#modernizr {width: 1px}; #modernizr2 {width: 2px}', function(elem) {
-   *   document.getElementById('modernizr').style.width === '1px'; // true
-   *   document.getElementById('modernizr2').style.width === '2px'; // true
-   *   elem.firstChild === document.getElementById('modernizr2'); // true
-   * }, 1);
-   * ```
-   *
-   * By default, all of the additional elements have an ID of `modernizr[n]`, where
-   * `n` is its index (e.g. the first additional, second overall is `#modernizr2`,
-   * the second additional is `#modernizr3`, etc.).
-   * If you want to have more meaningful IDs for your function, you can provide
-   * them as the fourth argument, as an array of strings
-   *
-   * ```js
-   * Modernizr.testStyles('#foo {width: 10px}; #bar {height: 20px}', function(elem) {
-   *   elem.firstChild === document.getElementById('foo'); // true
-   *   elem.lastChild === document.getElementById('bar'); // true
-   * }, 2, ['foo', 'bar']);
-   * ```
-   *
-   */
-
-  var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
-
-/*!
-{
-  "name": "Touch Events",
-  "property": "touchevents",
-  "caniuse" : "touch",
-  "tags": ["media", "attribute"],
-  "notes": [{
-    "name": "Touch Events spec",
-    "href": "https://www.w3.org/TR/2013/WD-touch-events-20130124/"
-  }],
-  "warnings": [
-    "Indicates if the browser supports the Touch Events spec, and does not necessarily reflect a touchscreen device"
-  ],
-  "knownBugs": [
-    "False-positive on some configurations of Nokia N900",
-    "False-positive on some BlackBerry 6.0 builds – https://github.com/Modernizr/Modernizr/issues/372#issuecomment-3112695"
-  ]
-}
-!*/
-/* DOC
-Indicates if the browser supports the W3C Touch Events API.
-
-This *does not* necessarily reflect a touchscreen device:
-
-* Older touchscreen devices only emulate mouse events
-* Modern IE touch devices implement the Pointer Events API instead: use `Modernizr.pointerevents` to detect support for that
-* Some browsers & OS setups may enable touch APIs when no touchscreen is connected
-* Future browsers may implement other event models for touch interactions
-
-See this article: [You Can't Detect A Touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/).
-
-It's recommended to bind both mouse and touch/pointer events simultaneously – see [this HTML5 Rocks tutorial](http://www.html5rocks.com/en/mobile/touchandmouse/).
-
-This test will also return `true` for Firefox 4 Multitouch support.
-*/
-
-  // Chrome (desktop) used to lie about its support on this, but that has since been rectified: http://crbug.com/36415
-  Modernizr.addTest('touchevents', function() {
-    var bool;
-    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
-      bool = true;
-    } else {
-      // include the 'heartz' as a way to have a non matching MQ to help terminate the join
-      // https://git.io/vznFH
-      var query = ['@media (', prefixes.join('touch-enabled),('), 'heartz', ')', '{#modernizr{top:9px;position:absolute}}'].join('');
-      testStyles(query, function(node) {
-        bool = node.offsetTop === 9;
-      });
-    }
-    return bool;
-  });
-
-/*!
-{
-  "name": "CSS Font ch Units",
-  "authors": ["Ron Waldon (@jokeyrhyme)"],
-  "property": "csschunit",
-  "tags": ["css"],
-  "notes": [{
-    "name": "W3C Spec",
-    "href": "https://www.w3.org/TR/css3-values/#font-relative-lengths"
-  }]
-}
-!*/
-
-  Modernizr.addTest('csschunit', function() {
-    var elemStyle = modElem.elem.style;
-    var supports;
-    try {
-      elemStyle.fontSize = '3ch';
-      supports = elemStyle.fontSize.indexOf('ch') !== -1;
-    } catch (e) {
-      supports = false;
-    }
-    return supports;
-  });
-
-
-  /**
-   * testAllProps determines whether a given CSS property is supported in the browser
-   *
-   * @memberof Modernizr
-   * @name Modernizr.testAllProps
-   * @optionName Modernizr.testAllProps()
-   * @optionProp testAllProps
-   * @access public
-   * @function testAllProps
-   * @param {string} prop - String naming the property to test (either camelCase or kebab-case)
-   * @param {string} [value] - String of the value to test
-   * @param {boolean} [skipValueTest=false] - Whether to skip testing that the value is supported when using non-native detection
-   * @example
-   *
-   * testAllProps determines whether a given CSS property, in some prefixed form,
-   * is supported by the browser.
-   *
-   * ```js
-   * testAllProps('boxSizing')  // true
-   * ```
-   *
-   * It can optionally be given a CSS value in string form to test if a property
-   * value is valid
-   *
-   * ```js
-   * testAllProps('display', 'block') // true
-   * testAllProps('display', 'penguin') // false
-   * ```
-   *
-   * A boolean can be passed as a third parameter to skip the value check when
-   * native detection (@supports) isn't available.
-   *
-   * ```js
-   * testAllProps('shapeOutside', 'content-box', true);
-   * ```
-   */
-
-  function testAllProps(prop, value, skipValueTest) {
-    return testPropsAll(prop, undefined, undefined, value, skipValueTest);
-  }
-  ModernizrProto.testAllProps = testAllProps;
-
-/*!
-{
-  "name": "Flexbox",
-  "property": "flexbox",
-  "caniuse": "flexbox",
-  "tags": ["css"],
-  "notes": [{
-    "name": "The _new_ flexbox",
-    "href": "http://dev.w3.org/csswg/css3-flexbox"
-  }],
-  "warnings": [
-    "A `true` result for this detect does not imply that the `flex-wrap` property is supported; see the `flexwrap` detect."
-  ]
-}
-!*/
-/* DOC
-Detects support for the Flexible Box Layout model, a.k.a. Flexbox, which allows easy manipulation of layout order and sizing within a container.
-*/
-
-  Modernizr.addTest('flexbox', testAllProps('flexBasis', '1px', true));
-
-/*!
-{
-  "name": "Flexbox (legacy)",
-  "property": "flexboxlegacy",
-  "tags": ["css"],
-  "polyfills": ["flexie"],
-  "notes": [{
-    "name": "The _old_ flexbox",
-    "href": "https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/"
-  }]
-}
-!*/
-
-  Modernizr.addTest('flexboxlegacy', testAllProps('boxDirection', 'reverse', true));
-
-/*!
-{
-  "name": "Flexbox (tweener)",
-  "property": "flexboxtweener",
-  "tags": ["css"],
-  "polyfills": ["flexie"],
-  "notes": [{
-    "name": "The _inbetween_ flexbox",
-    "href": "https://www.w3.org/TR/2011/WD-css3-flexbox-20111129/"
-  }],
-  "warnings": ["This represents an old syntax, not the latest standard syntax."]
-}
-!*/
-
-  Modernizr.addTest('flexboxtweener', testAllProps('flexAlign', 'end', true));
-
-/*!
-{
-  "name": "Flex Line Wrapping",
-  "property": "flexwrap",
-  "tags": ["css", "flexbox"],
-  "notes": [{
-    "name": "W3C Flexible Box Layout spec",
-    "href": "http://dev.w3.org/csswg/css3-flexbox"
-  }],
-  "warnings": [
-    "Does not imply a modern implementation – see documentation."
-  ]
-}
-!*/
-/* DOC
-Detects support for the `flex-wrap` CSS property, part of Flexbox, which isn’t present in all Flexbox implementations (notably Firefox).
-
-This featured in both the 'tweener' syntax (implemented by IE10) and the 'modern' syntax (implemented by others). This detect will return `true` for either of these implementations, as long as the `flex-wrap` property is supported. So to ensure the modern syntax is supported, use together with `Modernizr.flexbox`:
-
-```javascript
-if (Modernizr.flexbox && Modernizr.flexwrap) {
-  // Modern Flexbox with `flex-wrap` supported
-}
-else {
-  // Either old Flexbox syntax, or `flex-wrap` not supported
-}
-```
-*/
-
-  Modernizr.addTest('flexwrap', testAllProps('flexWrap', 'wrap', true));
-
-/*!
-{
-  "name": "CSS Pointer Events",
-  "caniuse": "pointer-events",
-  "property": "csspointerevents",
-  "authors": ["ausi"],
-  "tags": ["css"],
-  "builderAliases": ["css_pointerevents"],
-  "notes": [
-    {
-      "name": "MDN Docs",
-      "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events"
-    },{
-      "name": "Test Project Page",
-      "href": "https://ausi.github.com/Feature-detection-technique-for-pointer-events/"
-    },{
-      "name": "Test Project Wiki",
-      "href": "https://github.com/ausi/Feature-detection-technique-for-pointer-events/wiki"
-    },
-    {
-      "name": "Related Github Issue",
-      "href": "https://github.com/Modernizr/Modernizr/issues/80"
-    }
-  ]
-}
-!*/
-
-  Modernizr.addTest('csspointerevents', function() {
-    var style = createElement('a').style;
-    style.cssText = 'pointer-events:auto';
-    return style.pointerEvents === 'auto';
-  });
-
-/*!
-{
-  "name": "CSS Font rem Units",
-  "caniuse": "rem",
-  "authors": ["nsfmc"],
-  "property": "cssremunit",
-  "tags": ["css"],
-  "builderAliases": ["css_remunit"],
-  "notes": [{
-    "name": "W3C Spec",
-    "href": "https://www.w3.org/TR/css3-values/#relative0"
-  },{
-    "name": "Font Size with rem by Jonathan Snook",
-    "href": "http://snook.ca/archives/html_and_css/font-size-with-rem"
-  }]
-}
-!*/
-
-  // "The 'rem' unit ('root em') is relative to the computed
-  // value of the 'font-size' value of the root element."
-  // you can test by checking if the prop was ditched
-
-  Modernizr.addTest('cssremunit', function() {
-    var style = createElement('a').style;
-    try {
-      style.fontSize = '3rem';
-    }
-    catch (e) {}
-    return (/rem/).test(style.fontSize);
-  });
-
-
-  // Run each test
-  testRunner();
-
-  // Remove the "no-js" class if it exists
-  setClasses(classes);
-
-  delete ModernizrProto.addTest;
-  delete ModernizrProto.addAsyncTest;
-
-  // Run the things that are supposed to run after the tests
-  for (var i = 0; i < Modernizr._q.length; i++) {
-    Modernizr._q[i]();
-  }
-
-  // Leak Modernizr namespace
-  window.Modernizr = Modernizr;
-
-
-;
-
-})(window, document);
-;
-/***************************************************************************
-    modernizr-device.js,
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-device
-    https://github.com/FCOO
-
-****************************************************************************/
-
-(function (Modernizr, $, window, document/*, undefined*/) {
-    "use strict";
-
-    var ns = window;
-
-    function ModernizrDevice( options ) {
-        this.VERSION = "4.0.0";
-
-        this.modernizr = Modernizr;
-
-        this.options = $.extend({
-            scale          : false, //When true: Calculate 'best' scaling of font-size
-            referenceScreen: {
-                width       : 1366,
-                height      : 768,
-                diagonal_inc: 20
-            },
-            modernizr: {
-                device: false,  //When true: Add Modernizr-tests desktop mobile phone tablet
-                os    : true,   //When true: Add Modernizr-tests windows ios android
-                ie    : false   //When true: Add Modernizr-tests ie7 ie8 ie9 ie10
-            }
-        }, options || {} );
-
-        //Extend ModernizrDevice with some of the methods from Device.js (c) 2014 Matthew Hudson http://matthewhudson.me/projects/device.js/
-
-        // The client user agent string.
-        // Lowercase, so we can use the more efficient indexOf(), instead of Regex
-        this.userAgent = window.navigator.userAgent.toLowerCase();
-
-        this.find = function(needle) { return this.userAgent.indexOf(needle) !== -1; };
-
-        // Main functions
-        this.ios                = function () { return this.iphone() || this.ipod() || this.ipad(); };
-        this.iphone             = function () { return !this.windows() && this.find('iphone'); };
-        this.ipod               = function () { return this.find('ipod'); };
-        this.ipad               = function () { return this.find('ipad'); };
-        this.android            = function () { return !this.windows() && this.find('android'); };
-        this.androidPhone       = function () { return this.android() && this.find('mobile'); };
-        this.androidTablet      = function () { return this.android() && !this.find('mobile'); };
-        this.blackberry         = function () { return this.find('blackberry') || this.find('bb10') || this.find('rim'); };
-        this.blackberryPhone    = function () { return this.blackberry() && !this.find('tablet'); };
-        this.blackberryTablet   = function () { return this.blackberry() && this.find('tablet'); };
-        this.windows            = function () { return this.find('windows'); };
-        this.windowsPhone       = function () { return this.windows() && this.find('phone'); };
-        this.windowsTablet      = function () { return this.windows() && (this.find('touch') && !this.windowsPhone()); };
-        this.fxos               = function () { return (this.find('(mobile;') || this.find('(tablet;')) && this.find('; rv:'); };
-        this.fxosPhone          = function () { return this.fxos() && this.find('mobile'); };
-        this.fxosTablet         = function () { return this.fxos() && this.find('tablet'); };
-        this.meego              = function () { return this.find('meego'); };
-        this.cordova            = function () { return window.cordova && location.protocol === 'file:'; };
-        this.nodeWebkit         = function () { return typeof window.process === 'object';  };
-        this.mobile             = function () { return this.androidPhone() || this.iphone() || this.ipod() || this.windowsPhone() || this.blackberryPhone() || this.fxosPhone() || this.meego(); };
-        this.tablet             = function () { return this.ipad() || this.androidTablet() || this.blackberryTablet() || this.windowsTablet() || this.fxosTablet(); };
-        this.desktop            = function () { return !this.tablet() && !this.mobile(); };
-
-
-        if (this.options.scale){
-            var docEl = document.documentElement;
-            //this.devicePixelRatio = ('devicePixelRatio' in window) ? window.devicePixelRatio : 'unsupported';
-            this.screen_width  = screen.width;
-            this.screen_height = screen.height;
-
-            this.client_width = docEl.clientWidth;
-            this.client_width = docEl.clientHeight;
-
-            this.screen_width_em  = this.screen_width/16;
-            this.screen_height_em = this.screen_height/16;
-
-            this.dpi = 96;
-            for (var dpi=1; dpi<400; dpi++ )
-                if ( window.Modernizr.mq('(resolution: '+dpi+'dpi)') ){
-                    this.dpi = dpi;
-                    break;
-                }
-
-            this.dpr = window.devicePixelRatio;
-            if (!this.dpr){
-                this.dpr = 1;
-                for (var dpr=1; dpr<4; dpr=dpr+0.1 )
-                    if (
-                        Modernizr.mq('(-webkit-device-pixel-ratio: '+dpr+')') ||
-                        Modernizr.mq('(min--moz-device-pixel-ratio: '+dpr+')') ||
-                        Modernizr.mq('(-o-min-device-pixel-ratio: '+dpr+'/1)')
-                    ){
-                        this.dpr = dpr;
-                        break;
-                    }
-            }
-
-            this.dpr = Math.round(100*this.dpr)/100;
-
-            this.screen_diagonal = Math.sqrt( Math.pow(this.screen_width, 2) + Math.pow(this.screen_height,2) );
-            this.screen_diagonal_inc = this.screen_diagonal/this.dpi; //Best guest !
-
-            //Calculate the diagonal and dpi for the reference screen
-            var ref_screen_diagonal = Math.sqrt( Math.pow(this.options.referenceScreen.width, 2) + Math.pow(this.options.referenceScreen.height, 2) );
-            this.ref_dpi = ref_screen_diagonal/this.options.referenceScreen.diagonal_inc;
-
-            //The scale is best guest for a scale (eq. html.style.font-size=this.scale) of the screen to have elements the same size as on the reference screen
-            this.scale = 100;
-            if ((this.dpr != 1) || (this.dpi != 96))
-                this.scale = Math.sqrt(this.dpi / this.ref_dpi)*100;
-
-        } //if (this.options.scale){...
-
-        //Get a string with browser and version
-        this.browser_version = function() {
-            if(typeof navigator === 'undefined'){
-                return 'unknown';
-            }
-            var ua = navigator.userAgent, tem,
-            M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-            if(/trident/i.test(M[1])){
-                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-                return 'IE '+(tem[1] || '');
-            }
-            if(M[1]=== 'Chrome'){
-                tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
-                if(tem!== null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
-            }
-            M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-            if((tem= ua.match(/version\/(\d+)/i))!= null)
-                M.splice(1, 1, tem[1]);
-            return M.join(' ');
-        }();
-
-        //Set properties
-        this.isDesktop   = this.desktop();
-        this.isMobile    = this.mobile() || this.tablet();
-        this.isPhone     = this.mobile();
-        this.isTablet    = this.tablet();
-
-        this.isWindows   = this.windows();
-        this.isIos       = this.ios();
-        this.isAndroid   = this.android();
-
-        //Add tests to Modernizr
-        if (this.options.modernizr.device)
-            Modernizr.addTest({
-                desktop: this.isDesktop,
-                mobile : this.isMobile,
-                phone  : this.isPhone,
-                tablet : this.isTablet
-            });
-
-        if (this.options.modernizr.os)
-            Modernizr.addTest({
-                windows: this.isWindows,
-                ios    : this.isIos,
-                android: this.isAndroid
-            });
-
-        if (this.options.modernizr.ie){
-            //Adding test for Internet Explore versions 10
-            Modernizr.addTest('ie10', this.browser_version == 'MSIE 10' );
-
-            //Adding test for Internet Explore versions 11
-            Modernizr.addTest('ie11', this.browser_version == 'IE 11');
-        }
-    }
-
-    // expose access to the constructor
-    ns.ModernizrDevice = ModernizrDevice;
-
-
-}(window.Modernizr, jQuery, this, document));
-
-
-;
-/***************************************************************************
-    modernizr-mediaquery.js,
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-mediaquery
-    https://github.com/FCOO
-
-****************************************************************************/
-
-(function (Modernizr, $, window, document, undefined) {
-    "use strict";
-
-    //***********************************************
-    // Thank you: https://github.com/sindresorhus/query-string
-    function parseStyleToObject(str) {
-        var styleObject = {};
-        if (typeof str !== 'string')
-            return styleObject;
-
-        str = str.trim().slice(1, -1); // browsers re-quote string style values
-        if (!str)
-            return styleObject;
-
-        styleObject = str.split('&').reduce(function(ret, param) {
-            var parts = param.replace(/\+/g, ' ').split('='),
-                key = parts[0],
-                val = parts[1];
-            key = decodeURIComponent(key);
-
-            // missing `=` should be `null`:
-            // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
-            val = val === undefined ? null : decodeURIComponent(val);
-
-            if (!ret.hasOwnProperty(key)) {
-                ret[key] = val;
-            } else
-                if (Array.isArray(ret[key])) {
-                    ret[key].push(val);
-                } else {
-                    ret[key] = [ret[key], val];
-                }
-            return ret;
-        }, {});
-
-        return styleObject;
-    }
-    //***********************************************
-
-    var ns = window;
-    var plugin_count = 1;
-
-    function ModernizrMediaquery( options ) {
-        this.plugin_count = plugin_count++;
-        this.modernizr           = Modernizr;
-        this.globalEvents        = new window.GlobalEvents();
-        this.defaultHtmlFontSize = this._getHtmlFontSize();
-
-        this.options = $.extend({
-            //Default options
-            VERSION             : "1.3.1",
-            htmlFontSize        : 16,
-            createFIRSTup       : false, //When true the media query FIRST-up (allway display) and no-FIRST-up (allways hidden) are created. MUST MATCH $create-FIRST-up
-            createLASTdown      : false, //When true the media query LAST-down (allway display) and no-LAST-down (allways hidden) are created. MUST MATCH $create-LAST-down
-            useWindowClientDim: true,
-        }, options || {} );
-
-        var _this = this,
-            meta,
-            mediaJSON  = {},
-            minMaxJSON = {};
-
-        if (this.options.breakpoints){
-            //Create mediaJSON and minMaxJSON from options.breakpoints
-            var breakpointList = [];
-            $.each( this.options.breakpoints, function( id, minPx ){
-                breakpointList.push( {id: id, minPx: minPx} );
-            });
-            breakpointList.sort( function( bp1, bp2 ){return bp1 > bp2; });
-
-            $.each( breakpointList, function( index, bp ){
-                //Set max eq next min - 1
-                var id = bp.id,
-                    minPx = bp.minPx,
-                    maxPx = (index == breakpointList.length-1) ? 0 : breakpointList[index+1].minPx-1,
-                    min = minPx / _this.options.htmlFontSize,
-                    minEm = min+'em',
-                    max = maxPx / _this.options.htmlFontSize,
-                    maxEm = max+'em',
-                    mq     = '',
-                    mqUp   = '',
-                    mqDown = '';
-
-                if (min > 0) {
-                    mq   = mq   + ' and (min-width: '+ minEm+')';
-                    mqUp = mqUp + ' and (min-width: '+ minEm+')';
-                }
-                if (max > 0) {
-                    mq     = mq     + ' and (max-width: '+ maxEm+')';
-                    mqDown = mqDown + ' and (max-width: '+ maxEm+')';
-                }
-
-                //Add mediaquery and minMax for id
-                mediaJSON[id]  = 'screen' + mq;
-                minMaxJSON[id] = minPx + 'px_' + maxPx+'px';
-
-                //Add mediaquery for id-down
-                if ((index < breakpointList.length-1) || options.createLASTdown){
-                    mediaJSON[id+'-down']  = 'screen' + mqDown;
-                    minMaxJSON[id+'-down'] = '0_' + maxPx+'px';
-                }
-
-                //Add mediaquery for id-up
-                if (index || options.createFIRSTup){
-                    mediaJSON[id+'-up']  = 'screen' + mqUp;
-                    minMaxJSON[id+'-up'] = minPx + 'px_0';
-                }
-            });
-
-            //Add special values for portrait and landscape
-            mediaJSON['landscape'] = 'screen and (orientation: landscape)';
-            minMaxJSON['landscape'] = '0_1_1';
-            mediaJSON['portrait'] = 'screen and (orientation: portrait)';
-            minMaxJSON['portrait'] = '0_1_0_1';
-        }
-        else {
-            //Reads the different media queries from the css-file using the 'dummy' class "modernizr-mediaquery-media-query"
-            meta      = $('<meta class="modernizr-mediaquery-media-query">').appendTo(document.head);
-            mediaJSON = parseStyleToObject(meta.css('font-family'));
-            meta.remove();
-
-            //Reads the different min-max-intervalls from the css-file using the 'dummy' class "modernizr-mediaquery-min-max"
-            meta      = $('<meta class="modernizr-mediaquery-min-max">').appendTo(document.head);
-            minMaxJSON = parseStyleToObject(meta.css('font-family'));
-            meta.remove();
-        }
-
-        //Convert mediaJSON
-        this.mediaQueryList = [];
-        $.each( mediaJSON, function( id, mq ){
-            _this.mediaQueryList.push({id: id, mq: mq, on: false });
-        });
-
-        //Convert minMaxJSON
-        this.minMaxRatioList = [];
-        $.each( minMaxJSON, function( id, value ){
-            var minMaxRatio = value.split('_');
-            _this.minMaxRatioList.push({
-                id      : id,
-                min     : parseFloat(minMaxRatio[0]),
-                max     : parseFloat(minMaxRatio[1]) || 100000,
-                minRatio: minMaxRatio.length > 2 ? parseFloat(minMaxRatio[2]) : 100000,
-                maxRatio: minMaxRatio.length > 3 ? parseFloat(minMaxRatio[3]) : 100000,
-                on      : false
-            });
-        });
-
-
-        //Set the 'change media-query event'
-        $(window).on('resize.mmq', $.proxy( this._onMediaQuery, this ));
-
-        this._onMediaQuery();
-    }
-
-    // expose access to the constructor
-    ns.ModernizrMediaquery = ModernizrMediaquery;
-
-    //Extend the prototype
-    ns.ModernizrMediaquery.prototype = {
-
-        //Methods to add media-query-events
-        on  : function( mediaQueries, callback, context ){ this.globalEvents.on(   mediaQueries, callback, context ); },
-        off : function( mediaQueries, callback, context ){ this.globalEvents.off(  mediaQueries, callback, context ); },
-        once: function( mediaQueries, callback, context ){ this.globalEvents.once( mediaQueries, callback, context ); },
-        one : function( mediaQueries, callback, context ){ this.globalEvents.one(  mediaQueries, callback, context ); },
-
-
-        setHtmlFontSizePx: function( fontSizePx ){
-            $('html').css('font-size', fontSizePx);
-            $(window).trigger('resize.mmq');
-            return fontSizePx;
-        },
-
-        setHtmlFontSizePercent: function( fontSizePercent ){
-            return this.setHtmlFontSizePx( fontSizePercent/100*this.defaultHtmlFontSize );
-        },
-
-        _getHtmlFontSize: function(){ return parseFloat( $('html').css('font-size') ); },
-
-        _isOn_mediaQueryMode: function( mediaQuery ){
-            return !!this.modernizr.mq(mediaQuery.mq);
-        },
-        _isOn_minMaxRatioMode: function( minMaxRatio ){
-            return ( (this.window_width_em >= (minMaxRatio.min / this.defaultHtmlFontSize)) &&
-                     (this.window_width_em <= (minMaxRatio.max / this.defaultHtmlFontSize)) ) ||
-                   ( (this.window_ratio >= minMaxRatio.minRatio) &&
-                     ( this.window_ratio <= minMaxRatio.maxRatio ) );
-        },
-
-        _onMediaQuery: function( /*event*/ ){
-            var i, list, listElem, isOn, isOnFunc;
-            this.screen_width  = screen.width;
-            this.screen_height = screen.height;
-            this.window_width  = window.innerWidth;
-            this.window_height = window.innerHeight;
-            this.htmlFontSize  = this._getHtmlFontSize();
-
-            this.window_width_em  = this.window_width / this.htmlFontSize;
-            this.window_height_em = this.window_height / this.htmlFontSize;
-
-            this.window_ratio = this.window_width / this.window_height;
-
-            if (this.options.useWindowClientDim){
-                list = this.minMaxRatioList;
-                isOnFunc = $.proxy(this._isOn_minMaxRatioMode, this);
-            }
-            else {
-                list = this.mediaQueryList;
-                isOnFunc = $.proxy(this._isOn_mediaQueryMode, this);
-            }
-
-            for (i=0; i<list.length; i++ ){
-                listElem = list[i];
-                isOn = isOnFunc(listElem);
-                window.modernizrToggle( listElem.id,  isOn );
-
-                if (isOn && !listElem.on)
-                    //Fire event
-                    this.globalEvents.fire(listElem.id, listElem.id, this);
-
-                listElem.on = isOn;
-            }
-        }
-
-
-    };
-
-}(window.Modernizr, jQuery, this, document));
-
-
-;
-/****************************************************************************
-    fcoo-modernizr-mediaquery-device.js,
-
-    (c) 2016, FCOO
-
-    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
-    https://github.com/FCOO
-
-****************************************************************************/
-
-(function (Modernizr, $, window/*, document, undefined*/) {
-    "use strict";
-
-    //Create fcoo-namespace
-    window.fcoo = window.fcoo || {};
-    var ns = window.fcoo;
-
-    //modernizrMediaqueryOptions *MUST* match $html-font-size, $create-FIRST-up, $create-LAST-down and $breakpoints in src/_fcoo-modernizr-mediaquery-variables.scss
-    var modernizrMediaqueryOptions = {
-            useWindowClientDim: true,
-            htmlFontSize      : 16,     // = $html-font-size
-            createFIRSTup     : false,  // = $create-FIRST-up
-            createLASTdown    : false,  // = $create-LAST-down
-            breakpoints       : {       // = $breakpoints
-                "mini"       :    0, //Smaller than small phone portrait (< 320)
-                "xsmall-port":  320, //Small phone portrait (320-479)
-                "xsmall-land":  480, //Small phone landscape (480-576)
-                "small"      :  576, //Small devices
-                "medium"     :  768, //Tablets portrait
-                "large"      :  992, //Table landscape + desttop
-                "xlarge"     : 1200  //Large desttop
-            }
-        };
-
-
-    //Create fcoo.modernizrDevice
-    ns.modernizrDevice = new window.ModernizrDevice({
-        scale: false,
-        modernizr: {
-            device: false,
-            os    : true,
-            ie    : true
-        }
-    });
-
-    //Create fcoo.modernizrMediaquery
-    ns.modernizrMediaquery = new window.ModernizrMediaquery( modernizrMediaqueryOptions );
-
-    //For consistency: 'create' modernizr in window.fcoo
-    ns.modernizr = Modernizr;
-
-    //Add https-test
-    ns.modernizr.addTest('https', window.location.protocol == 'https:');
-
-}(window.Modernizr, jQuery, this, document));
-;
 /****************************************************************************
 	fcoo-moment.js,
 
@@ -79998,7 +79811,7 @@ Greenland
 }(jQuery, moment, i18next, this, document));
 ;
 /****************************************************************************
-    kl.js,
+    kl.js, 
 
     Translation of Moment text to Kalaallisut/Greenlandic (language code = kl)
 
@@ -80006,7 +79819,7 @@ Greenland
 
 moment.defineLocale('kl', {
     parentLocale: 'da',
-
+  
     /* TODO */
 
 
@@ -80705,7 +80518,7 @@ moment.defineLocale('kl', {
         }
     });
 
-
+    
 
 (function() {
         numeral.register('format', 'bps', {
@@ -84164,153 +83977,6 @@ return ImagesLoaded;
 
 });
 
-;
-/****************************************************************************
-	history.js,
-
-	(c) 2019, FCOO
-
-	https://github.com/FCOO/history.js
-	https://github.com/FCOO
-
-****************************************************************************/
-
-(function ($/*, window, document, undefined*/) {
-	"use strict";
-
-	var ns = window;
-
-	function HistoryList( options, plugin_count) {
-		this.plugin_count = plugin_count;
-
-		this.options = $.extend({
-			//Default options
-
-
-            initValue: null, //Any item or list of items to initialize the list = first item
-            action   : function(/* item, historyList */){
-                         //function to be called when a item is poped from the list using goFirst, goBack, goForward or goLast
-                     },
-
-            onUpdate : function(/*backwardAvail, forwardAvail, historyList*/){
-                          //Called when the list is updated.
-                          //backwardAvail [BOOLEAN] true if it is possible to go backwards
-                          //forwardAvail [BOOLEAN] true if it is possible to go forwards
-                       },
-            compare  : function( item1, item2 ){
-                           //Compare two items and return true if the two items are equal
-                           //Can be overwriten for other types of items
-                           return (item1 == item2);
-                       }
-
-        }, options || {} );
-
-        this.list = [];
-        this.index = -1;
-        this.lastIndex = -1;
-        this.addToList = true;
-        this.callAction = true;
-
-        if (options.initValue){
-            options.initValue = $.isArray(options.initValue) ? options.initValue : [options.initValue];
-            var _this = this;
-            $.each( options.initValue, function(index, item){
-                _this.callAction = false;
-                _this.add(item);
-            });
-        }
-
-        this._callOnUpdate();
-	}
-
-    // expose access to the constructor
-    ns.HistoryList = HistoryList;
-
-    //Extend the prototype
-	ns.HistoryList.prototype = {
-
-        add: function( item ){
-            //Check:
-            if (this.addToList){
-                //1: Is item already the current item on the list => do not add
-                if ( this.list.length && this.options.compare(item, this.list[this.index]) )
-                    this.addToList = false;
-                else
-                    //2: Is item the next item => goForward
-                    if ((this.index < this.lastIndex) &&  this.options.compare(item, this.list[this.index+1]) ) {
-                        this.index++;
-                        this.addToList = false;
-                    }
-            }
-
-            if (this.addToList){
-                this.index++;
-                this.list.splice(this.index);
-                this.list.push(item);
-                this.lastIndex = this.list.length-1;
-            }
-
-            if (this.callAction){
-                this.callAction = false; //Prevent recursion
-                this.addToList = false;
-                this.options.action( item, this );
-                this._callOnUpdate();
-            }
-            this.callAction = true;
-            this.addToList = true;
-            return this;
-        },
-
-
-        _callOnUpdate: function(){
-            this.options.onUpdate( this.index>0, this.lastIndex > this.index, this);
-            return this;
-        },
-
-        _goto: function( deltaIndex ){
-            this.index = this.index + deltaIndex;
-            this.addToList = false;
-            return this.add( this.list[this.index] );
-        },
-
-        goFirst: function() {
-            return this.index > 0 ? this._goto(-1*this.index) : this;
-        },
-
-
-        goBack: function() {
-            return this.index > 0 ? this._goto(-1) : this;
-        },
-
-        goForward: function() {
-            return this.index < this.lastIndex ? this._goto(+1) : this;
-        },
-
-        goLast: function() {
-            return this.lastIndex > this.index ? this._goto(this.lastIndex-this.index) : this;
-        },
-
-        clearHistory: function() {
-            if (this.index > 0){
-                this.list.splice(0, this.index);
-                this.index = 0;
-                this.lastIndex = this.list.length - 1;
-                this._callOnUpdate();
-            }
-            return this;
-        },
-
-        clearFuture: function() {
-            if (this.lastIndex > this.index){
-                this.list.splice(this.index+1);
-                this.lastIndex = this.index;
-                this._callOnUpdate();
-            }
-            return this;
-        },
-
-    };
-}(jQuery, this, document));
 ;
 ;/*! showdown v 1.9.1 - 02-11-2019 */
 (function(){
@@ -90467,7 +90133,7 @@ if (typeof define === 'function' && define.amd) {
       _error;
     }
     return results;
-  }, Offline = {}, Offline.options = window.Offline ? window.Offline.options || {} :{},
+  }, Offline = {}, Offline.options = window.Offline ? window.Offline.options || {} :{}, 
   defaultOptions = {
     checks:{
       xhr:{
@@ -90490,22 +90156,22 @@ if (typeof define === 'function' && define.amd) {
     deDupBody:!1
   }, grab = function(obj, key) {
     var cur, i, j, len, part, parts;
-    for (cur = obj, parts = key.split("."), i = j = 0, len = parts.length; j < len && (part = parts[i],
+    for (cur = obj, parts = key.split("."), i = j = 0, len = parts.length; j < len && (part = parts[i], 
     "object" == typeof (cur = cur[part])); i = ++j) ;
     return i === parts.length - 1 ? cur :void 0;
   }, Offline.getOption = function(key) {
     var ref, val;
-    return val = null != (ref = grab(Offline.options, key)) ? ref :grab(defaultOptions, key),
+    return val = null != (ref = grab(Offline.options, key)) ? ref :grab(defaultOptions, key), 
     "function" == typeof val ? val() :val;
   }, "function" == typeof window.addEventListener && window.addEventListener("online", function() {
     return setTimeout(Offline.confirmUp, 100);
   }, !1), "function" == typeof window.addEventListener && window.addEventListener("offline", function() {
     return Offline.confirmDown();
   }, !1), Offline.state = "up", Offline.markUp = function() {
-    if (Offline.trigger("confirmed-up"), "up" !== Offline.state) return Offline.state = "up",
+    if (Offline.trigger("confirmed-up"), "up" !== Offline.state) return Offline.state = "up", 
     Offline.trigger("up");
   }, Offline.markDown = function() {
-    if (Offline.trigger("confirmed-down"), "down" !== Offline.state) return Offline.state = "down",
+    if (Offline.trigger("confirmed-down"), "down" !== Offline.state) return Offline.state = "down", 
     Offline.trigger("down");
   }, handlers = {}, Offline.on = function(event, handler, ctx) {
     var e, events, j, len, results;
@@ -90518,7 +90184,7 @@ if (typeof define === 'function' && define.amd) {
     var _handler, i, ref, results;
     if (null != handlers[event]) {
       if (handler) {
-        for (i = 0, results = []; i < handlers[event].length; ) ref = handlers[event][i],
+        for (i = 0, results = []; i < handlers[event].length; ) ref = handlers[event][i], 
         ref[0], _handler = ref[1], _handler === handler ? results.push(handlers[event].splice(i, 1)) :results.push(i++);
         return results;
       }
@@ -90527,7 +90193,7 @@ if (typeof define === 'function' && define.amd) {
   }, Offline.trigger = function(event) {
     var ctx, handler, j, len, ref, ref1, results;
     if (null != handlers[event]) {
-      for (ref = handlers[event].slice(0), results = [], j = 0, len = ref.length; j < len; j++) ref1 = ref[j],
+      for (ref = handlers[event].slice(0), results = [], j = 0, len = ref.length; j < len; j++) ref1 = ref[j], 
       ctx = ref1[0], handler = ref1[1], results.push(handler.call(ctx));
       return results;
     }
@@ -90546,8 +90212,8 @@ if (typeof define === 'function' && define.amd) {
     });
   }, Offline.checks = {}, Offline.checks.xhr = function() {
     var xhr;
-    xhr = new XMLHttpRequest(), xhr.offline = !1, xhr.open(Offline.getOption("checks.xhr.type"), Offline.getOption("checks.xhr.url"), !0),
-    null != xhr.timeout && (xhr.timeout = Offline.getOption("checks.xhr.timeout")),
+    xhr = new XMLHttpRequest(), xhr.offline = !1, xhr.open(Offline.getOption("checks.xhr.type"), Offline.getOption("checks.xhr.url"), !0), 
+    null != xhr.timeout && (xhr.timeout = Offline.getOption("checks.xhr.timeout")), 
     checkXHR(xhr, Offline.markUp, Offline.markDown);
     try {
       xhr.send();
@@ -90557,7 +90223,7 @@ if (typeof define === 'function' && define.amd) {
     return xhr;
   }, Offline.checks.image = function() {
     var img;
-    img = document.createElement("img"), img.onerror = Offline.markDown, img.onload = Offline.markUp,
+    img = document.createElement("img"), img.onerror = Offline.markDown, img.onload = Offline.markUp, 
     img.src = Offline.getOption("checks.image.url");
   }, Offline.checks.down = Offline.markDown, Offline.checks.up = Offline.markUp, Offline.check = function() {
     return Offline.trigger("checking"), Offline.checks[Offline.getOption("checks.active")]();
@@ -90578,13 +90244,13 @@ if (typeof define === 'function' && define.amd) {
       };
     }, _XMLHttpRequest = window.XMLHttpRequest, window.XMLHttpRequest = function(flags) {
       var _overrideMimeType, _setRequestHeader, req;
-      return req = new _XMLHttpRequest(flags), monitorXHR(req, flags), _setRequestHeader = req.setRequestHeader,
+      return req = new _XMLHttpRequest(flags), monitorXHR(req, flags), _setRequestHeader = req.setRequestHeader, 
       req.headers = {}, req.setRequestHeader = function(name, value) {
         return req.headers[name] = value, _setRequestHeader.call(req, name, value);
       }, _overrideMimeType = req.overrideMimeType, req.overrideMimeType = function(type) {
         return req.mimeType = type, _overrideMimeType.call(req, type);
       }, req;
-    }, extendNative(window.XMLHttpRequest, _XMLHttpRequest), null != window.XDomainRequest) return _XDomainRequest = window.XDomainRequest,
+    }, extendNative(window.XMLHttpRequest, _XMLHttpRequest), null != window.XDomainRequest) return _XDomainRequest = window.XDomainRequest, 
     window.XDomainRequest = function() {
       var req;
       return req = new _XDomainRequest(), monitorXHR(req), req;
@@ -90600,37 +90266,37 @@ if (typeof define === 'function' && define.amd) {
   if (!window.Offline) throw new Error("Offline Reconnect brought in without offline.js");
   rc = Offline.reconnect = {}, retryIntv = null, reset = function() {
     var ref;
-    return null != rc.state && "inactive" !== rc.state && Offline.trigger("reconnect:stopped"),
+    return null != rc.state && "inactive" !== rc.state && Offline.trigger("reconnect:stopped"), 
     rc.state = "inactive", rc.remaining = rc.delay = null != (ref = Offline.getOption("reconnect.initialDelay")) ? ref :3;
   }, next = function() {
     var delay, ref;
-    return delay = null != (ref = Offline.getOption("reconnect.delay")) ? ref :Math.min(Math.ceil(1.5 * rc.delay), 3600),
+    return delay = null != (ref = Offline.getOption("reconnect.delay")) ? ref :Math.min(Math.ceil(1.5 * rc.delay), 3600), 
     rc.remaining = rc.delay = delay;
   }, tick = function() {
-    if ("connecting" !== rc.state) return rc.remaining -= 1, Offline.trigger("reconnect:tick"),
+    if ("connecting" !== rc.state) return rc.remaining -= 1, Offline.trigger("reconnect:tick"), 
     0 === rc.remaining ? tryNow() :void 0;
   }, tryNow = function() {
-    if ("waiting" === rc.state) return Offline.trigger("reconnect:connecting"), rc.state = "connecting",
+    if ("waiting" === rc.state) return Offline.trigger("reconnect:connecting"), rc.state = "connecting", 
     Offline.check();
   }, down = function() {
-    if (Offline.getOption("reconnect")) return reset(), rc.state = "waiting", Offline.trigger("reconnect:started"),
+    if (Offline.getOption("reconnect")) return reset(), rc.state = "waiting", Offline.trigger("reconnect:started"), 
     retryIntv = setInterval(tick, 1e3);
   }, up = function() {
     return null != retryIntv && clearInterval(retryIntv), reset();
   }, nope = function() {
-    if (Offline.getOption("reconnect")) return "connecting" === rc.state ? (Offline.trigger("reconnect:failure"),
+    if (Offline.getOption("reconnect")) return "connecting" === rc.state ? (Offline.trigger("reconnect:failure"), 
     rc.state = "waiting", next()) :void 0;
-  }, rc.tryNow = tryNow, reset(), Offline.on("down", down), Offline.on("confirmed-down", nope),
+  }, rc.tryNow = tryNow, reset(), Offline.on("down", down), Offline.on("confirmed-down", nope), 
   Offline.on("up", up);
 }.call(this), function() {
   var clear, flush, held, holdRequest, makeRequest, waitingOnConfirm;
   if (!window.Offline) throw new Error("Requests module brought in without offline.js");
   held = [], waitingOnConfirm = !1, holdRequest = function(req) {
-    if (!1 !== Offline.getOption("requests")) return Offline.trigger("requests:capture"),
+    if (!1 !== Offline.getOption("requests")) return Offline.trigger("requests:capture"), 
     "down" !== Offline.state && (waitingOnConfirm = !0), held.push(req);
   }, makeRequest = function(arg) {
     var body, name, password, ref, type, url, user, val, xhr;
-    if (xhr = arg.xhr, url = arg.url, type = arg.type, user = arg.user, password = arg.password,
+    if (xhr = arg.xhr, url = arg.url, type = arg.type, user = arg.user, password = arg.password, 
     body = arg.body, !1 !== Offline.getOption("requests")) {
       xhr.abort(), xhr.open(type, url, !0, user, password), ref = xhr.headers;
       for (name in ref) val = ref[name], xhr.setRequestHeader(name, val);
@@ -90641,10 +90307,10 @@ if (typeof define === 'function' && define.amd) {
   }, flush = function() {
     var body, i, key, len, request, requests, url;
     if (!1 !== Offline.getOption("requests")) {
-      for (Offline.trigger("requests:flush"), requests = {}, i = 0, len = held.length; i < len; i++) request = held[i],
+      for (Offline.trigger("requests:flush"), requests = {}, i = 0, len = held.length; i < len; i++) request = held[i], 
       url = request.url.replace(/(\?|&)_=[0-9]+/, function(match, chr) {
         return "?" === chr ? chr :"";
-      }), Offline.getOption("deDupBody") ? (body = request.body, body = "[object Object]" === body.toString() ? JSON.stringify(body) :body.toString(),
+      }), Offline.getOption("deDupBody") ? (body = request.body, body = "[object Object]" === body.toString() ? JSON.stringify(body) :body.toString(), 
       requests[request.type.toUpperCase() + " - " + url + " - " + body] = request) :requests[request.type.toUpperCase() + " - " + url] = request;
       for (key in requests) request = requests[key], makeRequest(request);
       return clear();
@@ -90660,10 +90326,10 @@ if (typeof define === 'function' && define.amd) {
         return holdRequest(request);
       }, _send = xhr.send, xhr.send = function(body) {
         return request.body = body, _send.apply(xhr, arguments);
-      }, async)) return null === xhr.onprogress ? (xhr.addEventListener("error", hold, !1),
-      xhr.addEventListener("timeout", hold, !1)) :(_onreadystatechange = xhr.onreadystatechange,
+      }, async)) return null === xhr.onprogress ? (xhr.addEventListener("error", hold, !1), 
+      xhr.addEventListener("timeout", hold, !1)) :(_onreadystatechange = xhr.onreadystatechange, 
       xhr.onreadystatechange = function() {
-        return 0 === xhr.readyState ? hold() :4 === xhr.readyState && (0 === xhr.status || xhr.status >= 12e3) && hold(),
+        return 0 === xhr.readyState ? hold() :4 === xhr.readyState && (0 === xhr.status || xhr.status >= 12e3) && hold(), 
         "function" == typeof _onreadystatechange ? _onreadystatechange.apply(null, arguments) :void 0;
       });
     }), Offline.requests = {
@@ -90682,12 +90348,12 @@ if (typeof define === 'function' && define.amd) {
       _error, simulate = !1;
     }
   }
-  simulate && (null == Offline.options && (Offline.options = {}), null == (base = Offline.options).checks && (base.checks = {}),
+  simulate && (null == Offline.options && (Offline.options = {}), null == (base = Offline.options).checks && (base.checks = {}), 
   Offline.options.checks.active = state);
 }.call(this), function() {
   var RETRY_TEMPLATE, TEMPLATE, _onreadystatechange, addClass, content, createFromHTML, el, flashClass, flashTimeouts, init, removeClass, render, roundTime;
   if (!window.Offline) throw new Error("Offline UI brought in without offline.js");
-  TEMPLATE = '<div class="offline-ui"><div class="offline-ui-content"></div></div>',
+  TEMPLATE = '<div class="offline-ui"><div class="offline-ui-content"></div></div>', 
   RETRY_TEMPLATE = '<a href class="offline-ui-retry"></a>', createFromHTML = function(html) {
     var el;
     return el = document.createElement("div"), el.innerHTML = html, el.children[0];
@@ -90696,7 +90362,7 @@ if (typeof define === 'function' && define.amd) {
   }, removeClass = function(name) {
     return el.className = el.className.replace(new RegExp("(^| )" + name.split(" ").join("|") + "( |$)", "gi"), " ");
   }, flashTimeouts = {}, flashClass = function(name, time) {
-    return addClass(name), null != flashTimeouts[name] && clearTimeout(flashTimeouts[name]),
+    return addClass(name), null != flashTimeouts[name] && clearTimeout(flashTimeouts[name]), 
     flashTimeouts[name] = setTimeout(function() {
       return removeClass(name), delete flashTimeouts[name];
     }, 1e3 * time);
@@ -90708,39 +90374,39 @@ if (typeof define === 'function' && define.amd) {
       minute:60,
       second:1
     };
-    for (unit in units) if (mult = units[unit], sec >= mult) return val = Math.floor(sec / mult),
+    for (unit in units) if (mult = units[unit], sec >= mult) return val = Math.floor(sec / mult), 
     [ val, unit ];
     return [ "now", "" ];
   }, render = function() {
     var button, handler;
-    return el = createFromHTML(TEMPLATE), document.body.appendChild(el), null != Offline.reconnect && Offline.getOption("reconnect") && (el.appendChild(createFromHTML(RETRY_TEMPLATE)),
+    return el = createFromHTML(TEMPLATE), document.body.appendChild(el), null != Offline.reconnect && Offline.getOption("reconnect") && (el.appendChild(createFromHTML(RETRY_TEMPLATE)), 
     button = el.querySelector(".offline-ui-retry"), handler = function(e) {
       return e.preventDefault(), Offline.reconnect.tryNow();
-    }, null != button.addEventListener ? button.addEventListener("click", handler, !1) :button.attachEvent("click", handler)),
+    }, null != button.addEventListener ? button.addEventListener("click", handler, !1) :button.attachEvent("click", handler)), 
     addClass("offline-ui-" + Offline.state), content = el.querySelector(".offline-ui-content");
   }, init = function() {
     return render(), Offline.on("up", function() {
-      return removeClass("offline-ui-down"), addClass("offline-ui-up"), flashClass("offline-ui-up-2s", 2),
+      return removeClass("offline-ui-down"), addClass("offline-ui-up"), flashClass("offline-ui-up-2s", 2), 
       flashClass("offline-ui-up-5s", 5);
     }), Offline.on("down", function() {
-      return removeClass("offline-ui-up"), addClass("offline-ui-down"), flashClass("offline-ui-down-2s", 2),
+      return removeClass("offline-ui-up"), addClass("offline-ui-down"), flashClass("offline-ui-down-2s", 2), 
       flashClass("offline-ui-down-5s", 5);
     }), Offline.on("reconnect:connecting", function() {
       return addClass("offline-ui-connecting"), removeClass("offline-ui-waiting");
     }), Offline.on("reconnect:tick", function() {
       var ref, time, unit;
-      return addClass("offline-ui-waiting"), removeClass("offline-ui-connecting"), ref = roundTime(Offline.reconnect.remaining),
-      time = ref[0], unit = ref[1], content.setAttribute("data-retry-in-value", time),
+      return addClass("offline-ui-waiting"), removeClass("offline-ui-connecting"), ref = roundTime(Offline.reconnect.remaining), 
+      time = ref[0], unit = ref[1], content.setAttribute("data-retry-in-value", time), 
       content.setAttribute("data-retry-in-unit", unit);
     }), Offline.on("reconnect:stopped", function() {
-      return removeClass("offline-ui-connecting offline-ui-waiting"), content.setAttribute("data-retry-in-value", null),
+      return removeClass("offline-ui-connecting offline-ui-waiting"), content.setAttribute("data-retry-in-value", null), 
       content.setAttribute("data-retry-in-unit", null);
     }), Offline.on("reconnect:failure", function() {
       return flashClass("offline-ui-reconnect-failed-2s", 2), flashClass("offline-ui-reconnect-failed-5s", 5);
     }), Offline.on("reconnect:success", function() {
       return flashClass("offline-ui-reconnect-succeeded-2s", 2), flashClass("offline-ui-reconnect-succeeded-5s", 5);
     });
-  }, "complete" === document.readyState ? init() :null != document.addEventListener ? document.addEventListener("DOMContentLoaded", init, !1) :(_onreadystatechange = document.onreadystatechange,
+  }, "complete" === document.readyState ? init() :null != document.addEventListener ? document.addEventListener("DOMContentLoaded", init, !1) :(_onreadystatechange = document.onreadystatechange, 
   document.onreadystatechange = function() {
     return "complete" === document.readyState && init(), "function" == typeof _onreadystatechange ? _onreadystatechange.apply(null, arguments) :void 0;
   });
@@ -94969,8 +94635,11 @@ Create and manage the main structure for FCOO web applications
             keepRightMenuButton : false, //Keeps the right menu-button even if leftMenu is null
             bottomMenu          : null,  //Options for bottom-menu. See src/fcoo-application-touch.js
 
-            onResize            : null,  //function(main) to be called when the main-container is finish resizing
-            onResizeDelay       :    0,  //mS before onResize is fired to avoid many calls if the size is changed rapidly
+            onResizeStart       : null,  //function(main) to be called when the main-container starts resizing
+            onResizing          : null,  //function(main) to be called when the main-container is being resized
+            onResizeFinish      : null,  //function(main) to be called when the main-container is finish resizing
+            onResize            : null,  //Alternative to onResizeFinish
+            onResizeDelay       :  100,  //mS before onResize is fired to avoid many calls if the size is changed rapidly
         }, options );
 
         var result = {
@@ -94989,7 +94658,6 @@ Create and manage the main structure for FCOO web applications
                 null;
 
         $mainContainer.addClass("main-container");
-
 
         //Append left-menu (if any)
         if (result.options.leftMenu){
@@ -95083,7 +94751,6 @@ Create and manage the main structure for FCOO web applications
         setHeightAndCreateCloseButton('left', '');
         setHeightAndCreateCloseButton('right', 'ml-auto');
 
-
         //Toggle left and right-menu on click
         if (result.options.leftMenu)
             result.topMenuObject.leftMenu.on('click', $.proxy(result.leftMenu.toggle, result.leftMenu));
@@ -95099,23 +94766,21 @@ Create and manage the main structure for FCOO web applications
             if (result.options.leftMenu)
                 result.maxSingleMenuWidth = Math.max(result.maxSingleMenuWidth, result.leftMenu.options.menuDimAndSize.size);
 
-            if (result.options.rightMenu){
-                result.rightMenu._onOpen = _onOpen;
+            if (result.options.rightMenu)
                 result.maxSingleMenuWidth = Math.max(result.maxSingleMenuWidth, result.rightMenu.options.menuDimAndSize.size);
-            }
 
             //Left and right points to each other
             if (result.options.leftMenu && result.options.rightMenu){
                 result.totalMenuWidth = result.leftMenu.options.menuDimAndSize.size + result.rightMenu.options.menuDimAndSize.size;
 
-                var _onOpen  = $.proxy(_menu_onOpen, result),
-                    _onClose = $.proxy(_menu_onClose, result);
-                result.leftMenu._onOpen = _onOpen;
-                result.leftMenu._onClose = _onClose;
+                var _onOpen  = $.proxy(_left_right_menu_onOpen, result),
+                    _onClose = $.proxy(_left_right_menu_onClose, result);
+                result.leftMenu._onOpen.push(_onOpen);
+                result.leftMenu._onClose.push(_onClose);
                 result.leftMenu.theOtherMenu = result.rightMenu;
 
-                result.rightMenu._onOpen = _onOpen;
-                result.rightMenu._onClose = _onClose;
+                result.rightMenu._onOpen.push(_onOpen);
+                result.rightMenu._onClose.push(_onClose);
                 result.rightMenu.theOtherMenu = result.leftMenu;
             }
 
@@ -95124,27 +94789,46 @@ Create and manage the main structure for FCOO web applications
             result._onBodyResize();
         }
 
-        //Methods for main-container resize
-        result.onResizeList = [];
-        if (result.options.onResize)
-            result.onResizeList.push(result.options.onResize);
-        result.onResize = addOnResize;
-        result._onMainResize = _onMainResize;
-        result._onMainResizeFinish = $.proxy(_onMainResizeFinish, result);
-        $mainContainer.resize( $.proxy(_onMainResize, result) );
-        result._onMainResize();
 
+        /*
+        Set up for detecting resize-start and resize-end of main-container
+        */
+
+        //Detect when any of the touch-menus are opened/closed using touch
+        var mainResize_onTouchStart  = $.proxy(_mainResize_onTouchStart, result),
+            mainResize_onTouchEnd    = $.proxy(_mainResize_onTouchEnd, result),
+            mainResize_onOpenOrClose = $.proxy(_mainResize_onOpenOrClose, result);
+
+        result.options.onResizeStart = result.options.onResizeStart || result.options.onResize;
+
+        $mainContainer.resize( $.proxy(main_onResize, result) );
+
+        $.each(['leftMenu', 'rightMenu', 'topMenu', 'bottomMenu'], function(index, menuId){
+            var menu = result[menuId];
+            if (menu){
+                menu.onTouchStart = mainResize_onTouchStart;
+                menu.onTouchEnd   = mainResize_onTouchEnd;
+
+                menu._onOpen.push(mainResize_onOpenOrClose);
+                menu._onClose.push(mainResize_onOpenOrClose);
+            }
+        });
 
         return result;
     }; //end of createMain
 
+
+    /******************************************************
+    Functions to manage the automatic closing of the menu
+    on the other side when a left or right menu is opened
+    ******************************************************/
     var wasForcedToClose = null;
-    function _menu_onOpen(menu){
+    function _left_right_menu_onOpen(menu){
         this.lastOpenedMenu = menu;
         this._onBodyResize();
     }
 
-    function _menu_onClose(menu){
+    function _left_right_menu_onClose(menu){
         if (wasForcedToClose && (wasForcedToClose !== menu))
             wasForcedToClose.open();
         wasForcedToClose = null;
@@ -95171,34 +94855,61 @@ Create and manage the main structure for FCOO web applications
             if (!newModeIsOver)
                 wasForcedToClose = firstOpenedMenu;
         }
-
     }
 
-    //On-resize main-container
-    function addOnResize( method, context ){
-        this.onResizeList.push($.proxy(method, context));
+    /******************************************************
+    Functions to detect resize of main-container
+    ******************************************************/
+    function _mainResize_onTouchStart(){
+        this.resizeWait = true;
+        main_onResize.call(this);
     }
 
-    //To prevent calling the events every time the user drag the touch menus a delay is ibsert before calling the events-methods
-    var timeout = null;
+    function _mainResize_onTouchEnd(){
+        this.resizeWait = false;
+        main_onResize.call(this);
+    }
 
-    function _onMainResize(){
-        if (this.options.onResizeDelay){
-            if (timeout)
-                window.clearTimeout(timeout);
-            timeout = setTimeout( this._onMainResizeFinish, this.options.onResizeDelay);
+    function _mainResize_onOpenOrClose(){
+        if (!this.checkForResizeEnd){
+            this.checkForResizeEnd = true;
+            this.resizeWait = false;
+            main_onResize.call(this);
         }
-        else
-            this._onMainResizeFinish();
     }
 
-    function _onMainResizeFinish(){
-        var _this = this;
-        $.each(this.onResizeList, function(index, func){
-            func(_this);
-        });
+    var mainResizeTimeoutId,
+        mainResizingTimeoutId;
+    function main_onResize(){
+
+        if (!this.resizeStarted){
+            this.resizeStarted = true;
+            if (this.options.onResizeStart)
+                this.options.onResizeStart(this);
+        };
+        window.clearTimeout(mainResizeTimeoutId);
+        mainResizeTimeoutId = window.setTimeout($.proxy(main_onResizeEnd, this), 400);
+
+        window.clearTimeout(mainResizingTimeoutId);
+        mainResizingTimeoutId = window.setTimeout($.proxy(main_onResizing, this), 20);
     }
 
+    function main_onResizing(){
+        if (this.options.onResizing)
+            this.options.onResizing(this);
+    }
+
+    function main_onResizeEnd(){
+        if (this.resizeWait)
+            main_onResize.call(this);
+        else {
+            this.resizeStarted = false;
+            this.checkForResizeEnd = false;
+
+            if (this.options.onResizeEnd)
+                this.options.onResizeEnd(this);
+        }
+    }
 }(jQuery, this, document));
 ;
 /****************************************************************************
@@ -95551,6 +95262,8 @@ Is adjusted fork of Touch-Menu-Like-Android (https://github.com/ericktatsui/Touc
         this.countStart = 0;
         this.velocity   = 0.0;
 
+        this._onOpen = [];
+        this._onClose = [];
         this.isOpen = false;
 
         this.options = $.extend({
@@ -95793,6 +95506,7 @@ Is adjusted fork of Touch-Menu-Like-Android (https://github.com/ericktatsui/Touc
 
         //Events on menuHammer
         touchStartMenu: function (event) {
+            var firstTime = !this.isPanning;
             //Detect if only one direction is allowed
             if (
                 //No already panning
@@ -95815,6 +95529,12 @@ Is adjusted fork of Touch-Menu-Like-Android (https://github.com/ericktatsui/Touc
             if (this.onlyScroll)
                 return;
 
+            if (firstTime && !this.touchOpening){
+                this.touchOpening = true;
+                if (this.onTouchStart)
+                    this.onTouchStart(this);
+            }
+
             if (this.$container.hasClass('closed'))
                 this.$container.addClass('opening');
 
@@ -95832,10 +95552,16 @@ Is adjusted fork of Touch-Menu-Like-Android (https://github.com/ericktatsui/Touc
             if (!this.onlyScroll){
                 this.currentPos = this._getEventDelta(event);
                 this.checkMenuState(this.currentPos);
+
+                this.touchOpening = false;
+                if (this.onTouchEnd)
+                    this.onTouchEnd(this);
             }
             this.onlyScroll = false;
             this.isPanning = false;
             this.$menu.unlockScrollbar();
+
+
         },
 
         //Events on maskHammer
@@ -95928,11 +95654,10 @@ Is adjusted fork of Touch-Menu-Like-Android (https://github.com/ericktatsui/Touc
                 fn.apply(this);
         },
 
-        _onOpen: function(){
-            //Empty
-        },
+        _onOpen: [],
 
         open: function (noAnimation) {
+            var _this = this;
             this.$container.addClass('opened').removeClass('opening closing closed');
             this._copyClassName();
 
@@ -95944,14 +95669,17 @@ Is adjusted fork of Touch-Menu-Like-Android (https://github.com/ericktatsui/Touc
             this.$container.removeClass('no-animation');
 
             this.showMask();
-            this._onOpen(this);
+            $.each(this._onOpen, function(index, func){
+                func(_this);
+            });
+
             this._invoke(this.options.onOpen);
         },
 
-        _onClose: function(){
-            //Empty
-        },
+        _onClose: [],
+
         close: function (noAnimation) {
+            var _this = this;
             this.$container.addClass('closed').removeClass('opening closing opened');
             this._copyClassName();
 
@@ -95961,7 +95689,10 @@ Is adjusted fork of Touch-Menu-Like-Android (https://github.com/ericktatsui/Touc
             this.isOpen = false;
             this.hideMask();
 
-            this._onClose(this);
+            $.each(this._onClose, function(index, func){
+                func(_this);
+            });
+
             this._invoke(this.options.onClose);
         },
 
@@ -97709,7 +97440,7 @@ Extent L.Map with methods
             //bottomcenter need an extra container to be placed at the bottom
             this._controlCorners['bottomcenter'] =
                 L.DomUtil.create(
-                    'div',
+                    'div', 
                     'leaflet-bottom leaflet-center',
                     L.DomUtil.create('div', 'leaflet-control-bottomcenter',    this._controlContainer)
                 );
@@ -97832,7 +97563,7 @@ Extent L.Map with methods
 
 ;
 /*! =======================================================
-                      VERSION  10.6.2
+                      VERSION  10.6.2              
 ========================================================= */
 "use strict";
 
@@ -100193,6 +99924,19 @@ Create leaflet-control for jquery-bootstrap button-classes:
         _createContent: function(){ return $.bsButton(this.options); }
     });
 
+
+    L.Control.BsCheckboxButton = _bsButtons.extend({
+        initialize: function(options){
+            //Set default _bsButtons-options
+            _bsButtons.prototype.initialize.call(this, options);
+
+            L.Util.setOptions(this, options);
+        },
+
+        _createContent: function(){ return $.bsCheckboxButton(this.options); }
+    });
+
+
     L.Control.BsButtonGroup = _bsButtons.extend({
         options       : { vertical: true },
 
@@ -100211,6 +99955,7 @@ Create leaflet-control for jquery-bootstrap button-classes:
     });
 
     L.control.bsButton           = function(options){ return new L.Control.BsButton(options);           };
+    L.control.bsCheckboxButton   = function(options){ return new L.Control.BsCheckboxButton(options);   };
     L.control.bsButtonGroup      = function(options){ return new L.Control.BsButtonGroup(options);      };
     L.control.bsRadioButtonGroup = function(options){ return new L.Control.BsRadioButtonGroup(options); };
 
@@ -101236,7 +100981,6 @@ Options for selectiong position-format and to activate context-menu
             popupPlacement  : 'top',
             tooltipDirection: 'top',
 
-NIELS: 'DAV do',
             content     : {
                 semiTransparent    : true,
                 clickable          : true,
@@ -101301,8 +101045,16 @@ NIELS: 'DAV do',
             window.latLngFormat.onChange( $.proxy( this._onLatLngFormatChanged, this ));
         },
 
-        onAdd: function(map){
+        addMapContainer: function(map){
+            this.$mapContainers = this.$mapContainers || {};
+            this.$mapContainers[ L.Util.stamp(map) ] = $(map.getContainer());
+        },
+
+        addCenterMarker: function(map, isInOtherMap){
             //Create pane to contain marker for map center. Is placed just below popup-pane
+            var mapId = L.Util.stamp(map);
+            this.centerMarkers = this.centerMarkers || {};
+
             if (!map.getPane(controlPositionMarkerPane)){
                 map.createPane(controlPositionMarkerPane);
 
@@ -101314,17 +101066,21 @@ NIELS: 'DAV do',
             }
 
             //Append the cross in the center of the map
-            this.centerMarker = L.marker([0,0], {
+            var centerMarker = L.marker([0,0], {
                 icon: L.divIcon({
-                    className : 'leaflet-position-marker show-for-control-position-map-center',
+                    className : 'leaflet-position-marker show-for-control-position-map-center' + (isInOtherMap ? ' inside-other-map' : ''),
                     iconSize  : [36, 36],
                     iconAnchor: [18, 18],
                 }),
                 pane: controlPositionMarkerPane
             });
-            this.centerMarker.addTo(map);
+            centerMarker.addTo(map);
+            this.centerMarkers[ mapId ] = centerMarker;
+        },
 
-            this.$mapContainer = $(map.getContainer());
+        onAdd: function(map){
+            this.addMapContainer(map);
+            this.addCenterMarker(map);
 
             //Create the content for the control
             var result = L.Control.BsButtonBox.prototype.onAdd.call(this, map ),
@@ -101410,7 +101166,8 @@ NIELS: 'DAV do',
         },
 
         onRemove: function (map) {
-            this.centerMarker.remove();
+            this.centerMarkers[L.Util(map)].remove();
+            delete this.centerMarkers[L.Util(map)];
             map.off('mouseposition', this._onMousePosition, this);
             map.off('move', this._onMapMove, this);
             map.off('moveend', this._onMapMoveEnd, this);
@@ -101434,14 +101191,19 @@ NIELS: 'DAV do',
             this._updatePositions();
 
             this.bsButton.modernizrToggle( 'checked', isCursor );
-            this.$mapContainer
-                .modernizrToggle( 'control-position-cursor', isCursor )
-                .modernizrToggle( 'control-position-map-center',  !isCursor );
+
+            $.each(this.$mapContainers, function(id, $container){
+                $container
+                    .modernizrToggle( 'control-position-cursor',       isCursor )
+                    .modernizrToggle( 'control-position-map-center',  !isCursor );
+            });
         },
 
         setCenterMarker: function( show ){
-            var $icon = $(this.centerMarker._icon);
-            show ? $icon.show() : $icon.hide();
+            $.each(this.centerMarkers, function(id, marker){
+                var $icon = $(marker._icon);
+                show ? $icon.show() : $icon.hide();
+            });
         },
 
 
@@ -101509,8 +101271,12 @@ NIELS: 'DAV do',
         },
 
         _onMapMoveEnd: function(){
-            this.centerMarker.setLatLng(this._map.getCenter());
-            this.$centerPosition.html( this._formatLatLng( this._map.getCenter() ) );
+            var position = this._map.getCenter();
+            $.each( this.centerMarkers, function(id, marker){
+                marker.setLatLng(position);
+            });
+
+            this.$centerPosition.html( this._formatLatLng( position ) );
         },
 
         _fireContentmenuOnMapCenter: function(){
@@ -101535,7 +101301,6 @@ NIELS: 'DAV do',
                 visibility.push(element.style.visibility);
                 element.style.visibility = 'hidden'; // Temporarily hide the element (without changing the layout)
             }
-
 
             //Reset visibility
             $.each( elements, function(index, elem){
@@ -101566,6 +101331,41 @@ NIELS: 'DAV do',
                     target: theElement
                 }
             });
+        },
+
+        /*****************************************************
+        add and remove other maps
+        *****************************************************/
+        addOther: function(map, onlyCursorPosition){
+            if (!map.bsPositionControl){
+                map.bsPositionControl = this;
+                map.on('mouseposition', map.bsPositionControl._onMousePosition, map.bsPositionControl);
+                if (onlyCursorPosition)
+                    this.addMapContainer(map);
+                else
+                    map.bsPositionControl.addCenterMarker(map, true);
+
+                this.setMode( this.options.showCursorPosition );
+            }
+            return map;
+        },
+
+        removeOther: function(map){
+            if (map.bsPositionControl){
+                var mapId = L.Util.stamp(map);
+
+                map.off('mouseposition', map.bsPositionControl._onMousePosition, map.bsPositionControl);
+
+                if (this.centerMarkers[mapId]){
+                    this.centerMarkers[mapId].remove();
+                    delete this.centerMarkers[mapId];
+                }
+
+                delete this.$mapContainers[mapId];
+
+                map.bsPositionControl = null;
+            }
+            return map;
         }
 
     });//end of L.Control.BsPosition
@@ -101596,7 +101396,7 @@ Create a zoom-control inside a bsButtonBox
 Can be used as leaflet standard zoom control with Bootstrap style
 
 ****************************************************************************/
-(function ($, L, window/*, document, undefined*/) {
+(function ($, L, window, document, undefined) {
     "use strict";
 
     /********************************************************************************
@@ -101621,7 +101421,7 @@ Can be used as leaflet standard zoom control with Bootstrap style
             extended   : false,
             showSlider : false,
             showHistory: false,
-
+            historyDisabled: false,
             semiTransparent: false,
 
             tooltipDirection: 'top',
@@ -101630,6 +101430,8 @@ Can be used as leaflet standard zoom control with Bootstrap style
             popupText   : {da:'Inds.', en:'Set.'},
 
             content     :'',
+
+            map_setView_options: {animate: false} //options for map.setView(center, zoom, options). Can beoverwriten
         },
 
         initialize: function ( options ) {
@@ -101642,8 +101444,8 @@ Can be used as leaflet standard zoom control with Bootstrap style
                     semiTransparent    : true,
                     noVerticalPadding  : true,
                     noHorizontalPadding: true,
-                    header: {text: {da:'Zoom/Center', en:'Zoom/Centre'}},
-                    content: 'This is not empty'
+                    header             : {text: {da:'Zoom/Center', en:'Zoom/Centre'}},
+                    content            : 'This is not empty'
                 };
             }
             else {
@@ -101655,6 +101457,9 @@ Can be used as leaflet standard zoom control with Bootstrap style
             //Set default BsButtonBox-options and own options
             L.Control.BsButtonBox.prototype.initialize.call(this, options);
             L.Util.setOptions(this, options);
+
+
+            this.historyListEnabled = !this.options.historyDisabled;
 
             //Adjust popupPlacement to position
             function includes(pos, substring){
@@ -101725,6 +101530,9 @@ Can be used as leaflet standard zoom control with Bootstrap style
                     if (!$backButtons) return;
                     $backButtons.toggleClass('disabled', !backAvail );
                     $forwardButtons.toggleClass('disabled', !forwardAvail );
+                },
+                compare: function(zoomCenter1, zoomCenter2){
+                    return (zoomCenter1.zoom == zoomCenter2.zoom) && zoomCenter1.center.equals(zoomCenter2.center);
                 }
             });
 
@@ -101808,6 +101616,16 @@ Can be used as leaflet standard zoom control with Bootstrap style
             map.off('moveend', this._onMoveEnd, this);
         },
 
+
+        enableHistory: function(on){
+            this.historyListEnabled = (on === undefined) ? true : !!on;
+            return this;
+        },
+
+        disableHistory: function(){
+            return this.enableHistory(false);
+        },
+
         _getZoomCenter: function() {
             return {
                 zoom  : this._map.getZoom(),
@@ -101815,7 +101633,7 @@ Can be used as leaflet standard zoom control with Bootstrap style
             };
         },
         _setZoomCenter: function( zoomCenter ) {
-            this._map.setView( zoomCenter.center, zoomCenter.zoom, {animate: false} );
+            this._map.setView( zoomCenter.center, zoomCenter.zoom, this.options.map_setView_options );
         },
 
         _onLoad: function(){
@@ -101824,9 +101642,11 @@ Can be used as leaflet standard zoom control with Bootstrap style
         },
 
         _onMoveEnd: function(){
-            this.historyList.callAction = false;
-            this.historyList.add( this._getZoomCenter() );
-            this.historyList._callOnUpdate();
+            if (this.historyListEnabled){
+                this.historyList.callAction = false;
+                this.historyList.add( this._getZoomCenter() );
+                this.historyList._callOnUpdate();
+            }
         },
 
         _showHistory: function(id, show){
@@ -108479,7 +108299,7 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
 
 ;
 /****************************************************************************
-    leaflet-control-permalink.js,
+    leaflet-control-permalink.js, 
 
     (c) 2016, FCOO
 
@@ -108487,8 +108307,8 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
     https://github.com/FCOO
 
     L.Control.Permalink works like this:
-    To include the setting for a given control (or other) eg. named "myControl"
-    include a function "initialize_myControl()" (must be named "initialize_...")
+    To include the setting for a given control (or other) eg. named "myControl" 
+    include a function "initialize_myControl()" (must be named "initialize_...") 
     to "L.Control.Permalink" that sets up the needed calls to "this._update( obj )"
     where obj = json-object with {id:value}
 
@@ -108501,10 +108321,10 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
             this._map.on('something', this._update_myControl, this);
         },
         _update_myControl: function(){
-            this._update( {'myControl': myControl.getSomeValue() } );
+            this._update( {'myControl': myControl.getSomeValue() } ); 
         }
 
-    L.Control.Permalink.initialize contains the setups for different
+    L.Control.Permalink.initialize contains the setups for different 
     leaflet-controls needed to be included in Permalink
 
 ****************************************************************************/
@@ -108518,14 +108338,14 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
             useLocalStorage: false,
             localStorageId : 'paramsTemp',
             postfix        : '',
-            urlParseOptions: {
-                convertBoolean: true,
-                convertNumber : true,
+            urlParseOptions: { 
+                convertBoolean: true, 
+                convertNumber : true, 
                 convertJSON   : true
             }
         },
 
-        //Bug fix to overcome that "Deprecated include of L.Mixin.Events: this property will be removed in future releases"
+        //Bug fix to overcome that "Deprecated include of L.Mixin.Events: this property will be removed in future releases" 
         on: function(){
             this._evented.on.apply( this._evented, arguments );
         },
@@ -108554,11 +108374,11 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
             this._map = map;
 
             this._fireUpdate();
-
+    
             window.Url.onHashchange( this._set_urlvars, this );
 
             this.fire('add', {map: map});
-
+    
             return container;
         },
 
@@ -108570,7 +108390,7 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
                 window.localStorage.setItem(this.options.localStorageId, window.Url.stringify(this._params));
 
         },
-
+    
         _fireUpdate: function(){
             if (this.options.urlParseOptions)
               window.Url._parseObject( this._params, null, null, this.options.urlParseOptions );
@@ -108588,10 +108408,10 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
                 else
                     delete this._params[i];
             }
-
+    
             this._update_href();
         },
-
+    
 
         _get_params_from_url: function(){
             var result = window.Url.parseHash();
@@ -108609,20 +108429,20 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
                 return true;
             }
             //************************************************
-
+                
             var new_params = this._get_params_from_url();
 
             if (eq(new_params, this._params) && eq(this._params, new_params))
                 return;
 
             this._params = new_params;
-            this._update_href();
+            this._update_href(); 
             this._fireUpdate();
         }
     });
-
+    
     /*****************************************************************************
-    Add default object to L.Control.Permalink to save and update
+    Add default object to L.Control.Permalink to save and update 
     center position and zoom of the map
     *****************************************************************************/
     L.Control.Permalink.include({
@@ -108637,7 +108457,7 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
         },
 
         _round_latlng: function( latLng ){
-            if (!this._map) return latLng;
+            if (!this._map) return latLng;            
 
             //********************************
             function round(x, p) {
@@ -108652,24 +108472,24 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
             }
             //********************************
             var size = this._map.getSize(),
-                bounds = this._map.getBounds(),
-                ne = bounds.getNorthEast(),
+                bounds = this._map.getBounds(), 
+                ne = bounds.getNorthEast(), 
                 sw = bounds.getSouthWest();
 
             return L.latLng(
-                round(latLng.lat, (ne.lat - sw.lat) / size.y),
+                round(latLng.lat, (ne.lat - sw.lat) / size.y), 
                 round(latLng.lng, (ne.lng - sw.lng) / size.x)
             );
         },
 
         _update_center_and_zoom: function() {
             if (!this._map) return;
-
+        
             var point = this._round_latlng( this._map.getCenter() ),
                 postfix = this.options.postfix,
                 params = {};
             params['zoom'+postfix] = String(this._map.getZoom());
-            params['lat'+postfix]  = String(point.lat);
+            params['lat'+postfix]  = String(point.lat); 
             params['lon'+postfix]  = String(point.lng);
             this._update( params );
         },
@@ -108684,7 +108504,7 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
                 return defaultValue;
             }
 
-            //Check if this._maps etc is set. Added to try to fix error in Safari
+            //Check if this._maps etc is set. Added to try to fix error in Safari 
             if (!(e && e.params && this._map && this.options))
                 return;
 
@@ -108700,23 +108520,23 @@ L.Control.Box = L.Control.FontAwesomeButton.extend({
 
                 //To prevent the map from panning infinitely due to rounding the map is only updated if the new position would give a new permalink-value
                 mapCenterRound = this._round_latlng( _map.getCenter() ),
-                newCenterRound = this._round_latlng( L.latLng(
-                                                         validate( e.params['lat'+postfix], minLat, maxLat, mapCenter.lat ),
+                newCenterRound = this._round_latlng( L.latLng( 
+                                                         validate( e.params['lat'+postfix], minLat, maxLat, mapCenter.lat ), 
                                                          validate( e.params['lon'+postfix], minLng, maxLng, mapCenter.lng )
-                                                     )
+                                                     ) 
                                                    ),
                 newLat = newCenterRound.lat != mapCenterRound.lat ? newCenterRound.lat : mapCenter.lat,
                 newLng = newCenterRound.lng != mapCenterRound.lng ? newCenterRound.lng : mapCenter.lng;
 
-
-            this._map.setView(
-                L.latLng( newLat, newLng ),
+           
+            this._map.setView( 
+                L.latLng( newLat, newLng ), 
                 validate( e.params['zoom'+postfix], _map.getMinZoom(), _map.getMaxZoom(), _map.getZoom() )
             );
         },
     });
 
-
+ 
 }(jQuery, L, this, document));
 
 ;
@@ -110047,7 +109867,7 @@ You can find the project at: https://github.com/domoritz/leaflet-locatecontrol
                         this._compass.setStyle(cStyle);
                     }
                 }
-                //
+                // 
             }
             if (this._compass && (!this.options.showCompass || this._compassHeading === null)) {
                 this._compass.removeFrom(this._layer);
@@ -111926,11 +111746,8 @@ Estendetions to L.Control.locate
                         map       = this._map,
                         mapSync   = map._mapSync;
 
-                    if (
-                        mapSync && mapSync.options.showShadowCursor &&
-                        map.options.mapSync && map.options.mapSync.enabled &&
-                        ((key in this._panKeys) || (key in this._zoomKeys))
-                    ){
+                    if ( map._mapSync_showShadowCursor() &&
+                         ((key in this._panKeys) || (key in this._zoomKeys)) ){
                         //It is a pan or zoom key on a enabled map and there are shadow-cursors => hide shadow-cursor and show them again in 1000ms if no key is pressed before
                         if (mapSync.timeoutId)
                             window.clearTimeout(mapSync.timeoutId);
@@ -111953,19 +111770,22 @@ Estendetions to L.Control.locate
     function map_on_XX_cursor(){
     ********************************************************************/
     function map_whenReady_cursor(){
-        //Create a marker to be used as 'shadow' cursor and move it to a popupPane to make the cursor apear over the popups
-        var divIcon = L.divIcon({ className: 'map-sync-cursor-icon', iconSize: ns.iconSize });
-        this.options.mapSync.cursorMarker = L.marker( this.getCenter(), {icon: divIcon} ).addTo(this);
+        //Create a marker to be used as 'shadow' cursor
+        this.options.mapSync.cursorMarker =
+            L.marker(this.getCenter(), {
+                icon: L.divIcon({
+                    className : 'map-sync-cursor-icon',
+                    iconSize  : ns.iconSize,
+                }),
+                pane: this.maySyncPaneCursor
+            });
 
-        //Create a new pane above everything and move the shadow-cursor from markerPane to this pane
-        var cursorContainer = L.DomUtil.create( 'div', 'show-for-leaflet-map-sync-cursor map-sync-cursor-container', this._mapPane );
-        this._panes.markerPane.removeChild( this.options.mapSync.cursorMarker._icon );
-        cursorContainer.appendChild( this.options.mapSync.cursorMarker._icon );
+        this.options.mapSync.cursorMarker.addTo(this);
     }
 
     function map_on_zoomstart_cursor(){
         var mapSync = this._mapSync;
-        if (mapSync && mapSync.options.showShadowCursor && this.options.mapSync && this.options.mapSync.enabled && !mapSync.mapWithFirstZoomstart){
+        if (this._mapSync_showShadowCursor() && !mapSync.mapWithFirstZoomstart){
             mapSync.mapWithFirstZoomstart = this;
             mapSync.disableShadowCursor();
         }
@@ -111990,12 +111810,12 @@ Estendetions to L.Control.locate
 
     function map_on_mousemove_cursor( mouseEvent ){
         //Update the position of the shadow-cursor
-        if (this._mapSync && this.options.mapSync.enabled)
+        if (this._mapSyncOptions())
             this._mapSync._updateCursor( mouseEvent.latlng );
     }
 
     function map_setCursorFromMouseEvent( mouseEvent ){
-        if (this._mapSync && this.options.mapSync.enabled)
+        if (this._mapSyncOptions())
             this._mapSync._setCursorFromMouseEvent( mouseEvent );
     }
 
@@ -112016,7 +111836,7 @@ Estendetions to L.Control.locate
             mapSync.timeoutId = window.setTimeout( $.proxy(map_showShadowCursorAgain, this), 500);
         }
 
-        if (mapSync && this.options.mapSync.enabled)
+        if (this._mapSyncOptions())
             mapSync._setCursorFromElement( this._container );
     }
 
@@ -112068,11 +111888,9 @@ Estendetions to L.Control.locate
 (function ($, L, window, document, undefined) {
     "use strict";
 
-    var NO_ANIMATION = {
-        animate: false,
-        reset  : true,
-        disableViewprereset: true
-    };
+    var maySyncPaneOutline = 'map-sync-outline',
+        maySyncPaneCursor  = 'map-sync-cursor',
+        mapSyncId          = 0;
 
     /***********************************************************
     Extentions for L.Map
@@ -112082,26 +111900,110 @@ Estendetions to L.Control.locate
         ------------------------ ----------------------------------------
         mapsyncenabled           MapSync.enable( map )
         mapsyncdisabled          MapSync.disable( map )
-  TODO: mapsynczoomenabled       MapSync.enableZoom( map )
-  TODO: mapsynczoomdisabled      MapSync.disableZoom( map )
         mapsynczoomoffsetchanged MapSync.setZoomOffset( map, zoomOffset )
 
     ***********************************************************/
     L.Map.include({
+        _mapSync_NO_ANIMATION: {
+            animate: false,
+            reset  : true,
+            disableViewprereset: true
+        },
+
+        _addToMapSync: function( mapSync, options ){
+            this.$container = this.$container || $(this.getContainer());
+            this._mapSync = mapSync;
+            this._syncOffsetFns = {};
+            this.options = this.options || {};
+            this.options.mapSync = options;
+            this.options.mapSync.id = 'mapSync' + mapSyncId++;
+            this.$container.addClass('map-sync-container');
+
+            //Create a container to contain the outline of other maps as div
+            //z-index for div-outlines = just below controls
+            this.options.mapSync.zIndex = parseInt($(this._controlContainer).children().css('z-index')) - 20;
+
+            this.$mapSyncOutlineContainer = this.$mapSyncOutlineContainer ||
+                $('<div/>')
+                    .addClass('map-sync-outline-container show-for-leaflet-map-sync-outline')
+                    .appendTo( this.$container );
+
+            //Create pane to contain cursor and outline as rectangles for map.
+            if (!this.getPane(maySyncPaneOutline)){
+                this.createPane(maySyncPaneOutline);
+                this.maySyncPaneOutline = this.getPane(maySyncPaneOutline);
+                $(this.maySyncPaneOutline).addClass('show-for-leaflet-map-sync-outline');
+
+                this.createPane(maySyncPaneCursor);
+                this.maySyncPaneCursor = this.getPane(maySyncPaneCursor);
+                $(this.maySyncPaneCursor).addClass('show-for-leaflet-map-sync-cursor');
+
+                this.whenReady( function(){
+                    var zIndex = parseInt($(this.getPanes().popupPane).css('z-index'));
+                    //Shadow cursor is palced above popups
+                    $(this.maySyncPaneCursor).css('z-index', zIndex + 1 );
+                    //Outlines are placed below popups
+                    $(this.maySyncPaneOutline).css('z-index', zIndex - 1 );
+                }, this);
+            }
+        },
+
+
+        _mapSyncSetClass: function(){
+            var enabled      = this.options.mapSync.enabled,
+                isMainMap    = this.options.mapSync.isMainMap,
+                inclDisabled = this._mapSync.options.inclDisabled;
+            this.$container
+                .toggleClass('map-sync-main',    enabled &&  isMainMap)
+                .toggleClass('map-sync-normal',  enabled && !isMainMap)
+                .toggleClass('map-sync-visible', !enabled  &&  inclDisabled)
+                .toggleClass('map-sync-hidden',  !enabled  && !inclDisabled);
+        },
 
         /***********************************
-        _mapSync_allOtherMaps(mapFunction, arg)
+        _mapSyncOptions(optionsId, testVisible)
+        Return true if mapSync[optionsId] is true and check if this is vissible if testVisible == true
+        ***********************************/
+        _mapSyncOptions: function(optionsId, testVisible){
+            var mapSync = this._mapSync,
+                result = mapSync &&
+                         (!optionsId || mapSync.options[optionsId]);
+            if (result)
+                result = mapSync.options.inclDisabled || (this.options.mapSync && this.options.mapSync.enabled);
+            if (result && testVisible){
+                result = mapSync.options.mapIsVisible(this);
+            }
+            return !!result;
+        },
+
+        /***********************************
+        _mapSync_showShadowCursor()
+        ***********************************/
+        _mapSync_showShadowCursor: function(){
+            return this._mapSyncOptions('showShadowCursor');
+        },
+
+        /***********************************
+        _mapSync_showOutline()
+        ***********************************/
+        _mapSync_showOutline: function(){
+            return this._mapSyncOptions('showOutline', true);
+        },
+
+        /***********************************
+        _mapSync_allOtherMaps(mapFunction, arg, allowDisabled)
         mapFunction = function(map, arg[0], arg[1],..., arg[N])
         Visit all the other enabled amps from this._mapSync and call
         mapFunction(map, arg[0], arg[1],..., arg[N])
         ***********************************/
-        _mapSync_allOtherMaps: function (mapFunction, arg){
-            if (this._mapSync && this.options.mapSync && this.options.mapSync.enabled)
+        _mapSync_allOtherMaps: function (mapFunction, arg, allowDisabled){
+            if (this._mapSync && this.options.mapSync && this.options.mapSync.enabled || allowDisabled)
                 this._mapSync._forEachMap({
-                    'mapFunction' : mapFunction,
-                    'arguments'   : arg,
-                    'excludeMap'  : this,
-                    'inclDisabled': false
+                    mapFunction  : mapFunction,
+                    arguments    : arg,
+                    excludeMap   : this,
+                    inclDisabled : false,
+                    allowDisabled: allowDisabled
                 });
         },
 
@@ -112148,7 +112050,7 @@ Estendetions to L.Control.locate
                 this.options.mapSync.minZoomOriginal = minZoom !== undefined ? minZoom : this.options.mapSync.minZoomOriginal;
                 this.options.mapSync.maxZoomOriginal = maxZoom !== undefined ? maxZoom : this.options.mapSync.maxZoomOriginal;
 
-                if (!this.options.mapSync.enabled/*TODO || this.options.mapSync.zoomEnabled*/){
+                if (!this.options.mapSync.enabled){
                     this.setMinZoom( this.options.mapSync.minZoomOriginal, true );
                     this.setMaxZoom( this.options.mapSync.maxZoomOriginal, true );
                 }
@@ -112157,18 +112059,28 @@ Estendetions to L.Control.locate
         },
 
         /***********************************
-        _mapSync_setMinMaxZoom()
+        _mapSync_adjustMinMaxZoom()
         Adjust min- and max-zoom according to min- and max-zoom of the main map
         ***********************************/
         _mapSync_adjustMinMaxZoom: function(){
-            this.setMinZoom( this._mapSync.mainMap.getMinZoom() + this.options.mapSync.zoomOffset, true );
-            this.setMaxZoom( this._mapSync.mainMap.getMaxZoom() + this.options.mapSync.zoomOffset, true );
-        },
+            var mainMap = this._mapSync.mainMap,
+                minZoom = mainMap.getMinZoom() + this.options.mapSync.zoomOffset,
+                maxZoom = mainMap.getMaxZoom() + this.options.mapSync.zoomOffset;
 
+            this.options.minZoom = minZoom;
+            this.options.maxZoom = maxZoom;
+
+            if (this.options.mapSync.enabled)
+                    mainMap._selfSetView();
+            else
+                //Adjust zoom to new min and max
+                if ((this.getZoom() > maxZoom) || (this.getZoom() < minZoom))
+                    this.setZoom( Math.min( maxZoom, Math.max( minZoom, this.getZoom() ) ) );
+        },
 
         _selfSetView: function (/*event*/) {
             // reset the map, and let setView synchronize the others.
-            this.setView(this.getCenter(), this.getZoom(), NO_ANIMATION);
+            this.setView(this.getCenter(), this.getZoom(), this._mapSync_NO_ANIMATION);
         },
 
         _syncOnMoveend: function (event) {
@@ -112187,7 +112099,6 @@ Estendetions to L.Control.locate
             // It is ugly to have state, but we need it in case of inertia.
             this._syncDragend = true;
         },
-
 
         /***********************************
         _tryAnimatedZoom
@@ -112238,10 +112149,10 @@ Estendetions to L.Control.locate
                 });
 
                 if (!sync && this._mapSync && this.options.mapSync.enabled) {
-                    var newMainZoom = zoom - this.options.mapSync.zoomOffset; //TODO var newMainZoom = this.options.mapSync.zoomEnabled ? zoom - this.options.mapSync.zoomOffset : null;
+                    var newMainZoom = zoom - this.options.mapSync.zoomOffset;
                     this._mapSync_allOtherMaps( function(otherMap) {
                         sandwich(otherMap, function (/*obj*/) {
-                            var newMapZoom = newMainZoom + otherMap.options.mapSync.zoomOffset; //TODO var newMapZoom = (newMainZoom !== null) && otherMap.options.mapSync.zoomEnabled ? newMainZoom + otherMap.options.mapSync.zoomOffset : otherMap.getZoom();
+                            var newMapZoom = newMainZoom + otherMap.options.mapSync.zoomOffset;
                             return otherMap.setView(center, newMapZoom, options, true );
                         });
                     });
@@ -112342,153 +112253,274 @@ Estendetions to L.Control.locate
     leaflet-map-sync-outline
 
     Creating and updating the outline of other maps
-
-
 ****************************************************************************/
 
-(function ($, L/*, window, document, undefined*/) {
+(function ($, L, window/*, document, undefined*/) {
     "use strict";
 
+    /**********************************************************
+    Outline reprecent a outline of one map in another map.
+    If mapSync.options.inclDisabled => create a rectangle to be used when a map is disabled
+    **********************************************************/
+
+    L.MapSync_outline = function(map, insideMap){
+        this.map   = map;
+        this.mapId = map.options.mapSync.id;
+
+        this.insideMap   = insideMap;
+        this.insideMapId = insideMap.options.mapSync.id;
+
+        this.mapSync = map._mapSync;
+
+        /*
+        Create the outline for this.map in this.insideMap
+        There are two versions:
+            div      : used when two maps are enabled => they have the same center and there outlines are div centered on the other map
+            rectangle: used when one or both the maps are disabled BUT inclDisabled is set in mapSync => They are rectangles with fixed positions
+        */
+        this.$div =
+            $('<div><div/></div>')
+                .addClass('map-sync-outline')
+                .css('z-index', this.map.options.mapSync.zIndex )
+                .appendTo( this.insideMap.$mapSyncOutlineContainer);
+
+        this.rectangle = null; //Created in update
+    };
+
+
+    L.MapSync_outline.prototype = {
+
+		/*************************************************
+        update - Update and show/hide the outline of this.map in this.insideMap
+        **************************************************/
+		update: function( mapIsActive ){
+            var _this           = this,
+                map             = this.map,
+                //mapId           = this.mapId,
+                mapBounds       = this.mapBounds = map.getBounds(),
+                insideMap       = this.insideMap,
+                //insideMapId     = this.insideMapId,
+                insideMapBounds = insideMap.getBounds(),
+
+                mapSync         = map._mapSync,
+                mapIsVisible    = mapSync.options.mapIsVisible,
+
+                //maxMargin = 2% of lat-lng-range to avoid two maps almost same size to be outlined inside each other
+                maxMargin       = 2 * Math.max(
+                                          Math.abs( insideMapBounds.getWest() - insideMapBounds.getEast() ),
+                                          Math.abs( insideMapBounds.getSouth() - insideMapBounds.getNorth() )
+                                      ) / 100,
+                displayAsDiv    = this.displayAsDiv = (map.options.mapSync.enabled && insideMap.options.mapSync.enabled),
+                show            = false;
+
+
+            if (!displayAsDiv && !this.rectangle){
+                this.rectangle = L.rectangle(
+                    map.getBounds(), {
+                        pane     : insideMap.maySyncPaneOutline,
+                        className: 'map-sync-outline',
+                        noClip   : true
+                    });
+                this.rectangle.addTo( insideMap );
+            }
+
+            if (mapIsVisible(map) && mapIsVisible(insideMap)){
+                //Detect if the outline of map is visible in insideMap
+                if (displayAsDiv){
+                    //Both map and insideMap is enabled => they have same center-position => check if map fits inside insideMap
+                    show = !mapBounds.equals(insideMapBounds, maxMargin) && insideMapBounds.contains( mapBounds );
+                    if (!show)
+                        //If map don't coner insideMap and map is zoomed out compared to outline map => show the outline
+                        show =  !mapBounds.contains( insideMapBounds ) && (map.getZoom() > insideMap.getZoom());
+                }
+                else
+                    if (map._mapSync_showOutline() && insideMap._mapSync_showOutline()) {
+                        //Show if the outline of map inside insideMap is less that the container of insideMap
+                        //Scale the size of map's container to same zoom as insideMap and check if resized container of map is bigger that insideMap's container
+                        var zoomScale = map.getZoomScale( insideMap.getZoom(), map.getZoom());
+                        show = ( zoomScale*map.$container.height() < insideMap.$container.height() ) ||
+                               ( zoomScale*map.$container.width()  < insideMap.$container.width() );
+                    }
+            }
+
+            if (show){
+                if (displayAsDiv){
+                    //Adjust outline-div
+                    var topLeft     = insideMap.latLngToContainerPoint( mapBounds.getNorthWest() ),
+                        bottomRight = insideMap.latLngToContainerPoint( mapBounds.getSouthEast() );
+                    this.$div.css({
+                        top   : topLeft.y,
+                        left  : topLeft.x,
+                        width : bottomRight.x - topLeft.x,
+                        height: bottomRight.y - topLeft.y
+                    });
+                }
+                else {
+                    this.rectangle.setBounds( mapBounds );
+                }
+            }
+
+            //Set class for outline map container to show/hide outline and border
+            this.$element = displayAsDiv ? this.$div : $(this.rectangle._path);
+            this.setShow(show);
+            this.$element.toggleClass('map-sync-outline-dragging', show && !!mapIsActive);
+
+            //Adjust the style-class to be equal that of the map
+            $.each(['map-sync-main', 'map-sync-normal', 'map-sync-visible'], function(index, className){
+                _this.$element.toggleClass(className, map.$container.hasClass(className));
+            });
+
+            return show;
+		},
+
+        setShow: function(show){
+            this.show = show;
+            this.$element.toggleClass('map-sync-outline-show', show);
+        }
+
+	};
+
+    /**********************************************************
+    Extend L.Map with methods for may-sync outlines
+    **********************************************************/
     L.Map.include({
 
-        /***********************************
+        /***************************************************
         _mapSync_update_outline
         Draw/updates the outlines of this in other maps and
         the outline of other maps in this.
-        If onlyInMap !== null only this' outline in onlyInMap are updated
-        ***********************************/
-        _mapSync_update_outline: function(){
+        *****************************************************/
+        _mapSync_update_outline: function( isActiveMap ){
             // The outline of mapA is shown in mapB if
             //    - mapB cover mapA, or
             //    - mapA and mapB overlaps AND mapA.zoom > mapB.zoom
+            var _this  = this,
+                thisId = this.options.mapSync.id;
 
-            //************************************************************************************
-            function setOutlineMap( map, outlineMap, $mapOutline, role ){
-                var outlineBounds = outlineMap.getBounds(),
-                    mapBounds    = map.getBounds(),
-                    showOutline   = false;
+            //Draw outline maps of this in all other maps
+            var outlineVisibleInOtherMaps = false;
+            $.each( _this.options.mapSync.outlineList, function( id, outline ){
+                outlineVisibleInOtherMaps = outline.update(isActiveMap) || outlineVisibleInOtherMaps;
+            });
+            if (outlineVisibleInOtherMaps)
+                this.$container.addClass('map-sync-outline');
 
-                if ( map.options.mapSync.enabled && outlineMap.options.mapSync.enabled && (outlineMap != map) && !outlineBounds.equals(mapBounds) ){
+            //Draw outline maps of all other maps in this
+            this._mapSync_allOtherMaps( function( otherMap ){
+                otherMap.$container
+                    .toggleClass(
+                        'map-sync-outline',
+                        otherMap.options.mapSync.outlineList[thisId].update(false)
+                    );
+            }, [], true);
 
-                    if (mapBounds.contains( outlineBounds ) )
-                        showOutline = true;
-                    else {
-                        //If Outline map don't coner map and map is zoomed out compared to outline map => show the outline
-                        showOutline = !outlineBounds.contains( mapBounds ) && (outlineMap.getZoom() > map.getZoom());
+
+            //Hide duplets outlines (if any) in the map
+            var visibleOutlines = [];
+            this._mapSync_allOtherMaps(function(otherMap){
+                var outline = otherMap.options.mapSync.outlineList[thisId];
+                if (outline.show)
+                    visibleOutlines.push(outline);
+            });
+            visibleOutlines.sort(function(outline1, outline2){ return (outline1.show?1:0) + (outline2.show?-1:0); });
+
+            for (var map1Index=1; map1Index < visibleOutlines.length; map1Index++){
+                var bounds1 = visibleOutlines[map1Index].mapBounds;
+                for (var map2Index=0; map2Index < map1Index; map2Index++)
+                    //if "map2" is the same as "map1" => hide "map1"
+                    if (bounds1.equals( visibleOutlines[map2Index].mapBounds )){
+                        visibleOutlines[map1Index].setShow(false);
+                        break;
                     }
-                    if (showOutline){
-                        //Adjust outline-div
-                        var topLeft     = map.latLngToContainerPoint( outlineBounds.getNorthWest() ),
-                            bottomRight = map.latLngToContainerPoint( outlineBounds.getSouthEast() );
-                        $mapOutline.css({
-                            top   : topLeft.y,
-                            left  : topLeft.x,
-                            width : bottomRight.x - topLeft.x,
-                            height: bottomRight.y - topLeft.y
-                         });
-                    }
-                }
-
-                //Set class for outline map container to show/hide outline and border
-                if ($mapOutline)
-                    $mapOutline
-                        .toggleClass('map-sync-outline-show',   showOutline)
-                        .toggleClass('map-sync-outline-main',   showOutline && (role == 'MAIN')   )
-                        .toggleClass('map-sync-outline-second', showOutline && (role == 'SECOND') );
-
-                return showOutline;
             }
-            //************************************************************************************
-
-            var _this = this;
-
-            //Draw 'yellow' outline maps of this in all other maps
-            $.each( this._mapSync.list, function( index, otherMap ){
-                var $mapOutline = _this.options.mapSync.outlineList[ index ]; // = the outline map of _this in otherMap
-                if ( setOutlineMap(  otherMap, _this, $mapOutline ) )
-                    _this.options.mapSync.$map_container.addClass('map-sync-active-dragging');
-            });
-
-            //Draw 'open yellow' (or 'blue' for main map) outline maps of all other maps in this
-            $.each( this._mapSync.list, function( index, otherMap ){
-                var thisIndexInList = _this.options.mapSync.indexInList,
-                    $mapOutline = otherMap.options.mapSync.outlineList[ thisIndexInList ], // = the outline map of otherMap in _this
-                    otherMapIsMain = _this._mapSync.mainMap == otherMap;
-
-                if ( setOutlineMap(  _this, otherMap, $mapOutline, otherMapIsMain ? 'MAIN' : 'SECOND' ) ){
-                    otherMap.options.mapSync.$map_container.addClass( otherMapIsMain ? 'map-sync-main-dragging' : 'map-sync-second-dragging');
-
-                    //Hide the outline map if there already is a exact copy
-                    for (var i=0; i<index; i++ )
-                        if (i != thisIndexInList){
-                            var $otherMapOutline = _this._mapSync.list[i].options.mapSync.outlineList[ thisIndexInList ];
-
-                            //If the two outlines $mapOutline and $otherMapOutline are equal => hide $mapOutline
-                            if (
-                                ( $mapOutline.css("left") == $otherMapOutline.css("left") ) &&
-                                ( $mapOutline.css("top") == $otherMapOutline.css("top") ) &&
-                                ( $mapOutline.css("width") == $otherMapOutline.css("width") ) &&
-                                ( $mapOutline.css("height") == $otherMapOutline.css("height") ) &&
-                                ( $mapOutline.attr("class") == $otherMapOutline.attr("class") )
-                               ){
-                                $mapOutline.removeClass('map-sync-outline-show');
-                                break;
-                            }
-                        }
-                }
-            });
-
         }, //end of _mapSync_update_outline
 
-        /***********************************
+        /***************************************************
         _mapSync_hide_outlines
-        Hide all outline maps in other maps and reset own border etc.
-        ***********************************/
+        Hide all outline of other maps and reset own border etc.
+        ***************************************************/
         _mapSync_hide_outlines: function(){
-            for (var i=0; i<this._mapSync.list.length; i++ ){
-                var $mapOutline = this.options.mapSync.outlineList[i]; // = the outline map of _this in otherMap
-                if ($mapOutline)
-                  $mapOutline.removeClass('map-sync-outline-show map-sync-outline-main map-sync-outline-second');
-            }
-            this.options.mapSync.$map_container.removeClass('map-sync-main-dragging map-sync-active-dragging map-sync-second-dragging' );
+            this.$container.find('.map-sync-outline-show').removeClass('map-sync-outline-show');
+            this.$container.removeClass('map-sync-dragging' );
         }
 
     }); //End of  L.Map.include({...
 
     //Show outline map
     function map_on_dragstart_outline(){
-        if (this._mapSync && this.options.mapSync.enabled){
-            this._mapSync._update_outlines( this );
+        var _this = this;
+
+        //Hide the shadow cursors in all maps while dragging
+        this._mapSync.options.save_showShadowCursor = this._mapSync.options.save_showShadowCursor || this._mapSync.options.showShadowCursor;
+        this._mapSync.disableShadowCursor();
+
+        if (this._mapSync_showOutline()){
+            this._mapSync_update_outline(true);
             this.options.mapSync.dragging = true;
+            this.$container.addClass('map-sync-dragging');
+            window.modernizrOn('leaflet-map-sync-dragging');
+            this.rectangleList = [];
+
+            //Create list of rectangles to be updated on drag = visible outlines of this in other maps as rectangles
+            this.rectangleList = [];
+            $.each(this.options.mapSync.outlineList, function(id, outline){
+                if (outline.show && !outline.displayAsDiv)
+                    _this.rectangleList.push(outline.rectangle);
+            });
+        }
+    }
+
+    //Only if inclDisabled: Update outline of disabled maps in this or this in other maps if this is disabled
+    function map_on_drag_outline(){
+        if (this.callDragstartOnNextDrag){
+            this.callDragstartOnNextDrag = false;
+            this.fire('dragstart');
+        }
+
+
+        if (this._mapSync_showOutline()){
+            var bounds = this.getBounds();
+            for(var i=0; i<this.rectangleList.length; i++)
+                this.rectangleList[i].setBounds(bounds);
         }
     }
 
     //Hide outlines map
     function map_on_dragend_outline(){
-        if (this._mapSync && this.options.mapSync.enabled){
-            this._mapSync._update_outlines( this );
+        this.callDragstartOnNextDrag = false;
+
+        //Show the shadow cursors in all maps after dragging
+        if (this._mapSync.options.save_showShadowCursor){
+            this._mapSync.enableShadowCursor();
+            this._mapSync.options.save_showShadowCursor = false;
+        }
+
+        if (this._mapSync_showOutline()){
             this._mapSync._hide_outlines();
             this.options.mapSync.dragging = false;
+            this.$container.removeClass('map-sync-dragging map-sync-outline');
+            window.modernizrOff('leaflet-map-sync-dragging');
+            this.rectangleList = [];
         }
     }
 
-    //Redraw outlines for all no-zoom-sync maps when zoom ends
+    //Redraw outlines for all disabled maps when zoom ends (and inclDisabled == true)
     function map_on_zoomend_outline(){
-        var _this = this;
-        if (this._mapSync && this.options.mapSync.dragging)
-            $.each( this._mapSync.list, function( index, otherMap ){
-                if (otherMap.options.mapSync.enabled && !otherMap.options.mapSync.zoomEnabled){
-                    _this._mapSync._update_outlines( _this );
-                    return false;
-                }
-            });
+        //If zoom is made during dragging => reset and update on next drag
+        if (this.$container.hasClass('map-sync-dragging')){
+            this.fire('dragend');
+            this.callDragstartOnNextDrag = true;
+        }
     }
 
     L.Map.include({
         _mapSync_addEvents_outline: function(){
             this.on('dragstart', map_on_dragstart_outline);
             this.on('dragend',   map_on_dragend_outline  );
-            this.on('zoomend',   map_on_zoomend_outline  );
+            if (this._mapSync.options.inclDisabled){
+                this.on('drag', map_on_drag_outline);
+                this.on('zoomend', map_on_zoomend_outline );
+            }
         }
     });
 
@@ -112514,21 +112546,17 @@ Estendetions to L.Control.locate
 (function ($, L, window, document, undefined) {
     "use strict";
 
-    var NO_ANIMATION = {
-            animate: false,
-            reset  : true,
-            disableViewprereset: true
-        };
-
     /********************************************************************
     L.MapSync
     ********************************************************************/
     L.MapSync = L.Class.extend({
         options: {
-            VERSION : "2.0.0",
+            VERSION : "2.3.0",
             iconName: 'hand',
             showShadowCursor: true,
-            showOutline     : true
+            showOutline     : true,
+            inclDisabled    : false,
+            mapIsVisible    : function(/*map*/){ return true; }
         },
 
         /***********************************************************
@@ -112536,10 +112564,11 @@ Estendetions to L.Control.locate
         ***********************************************************/
         initialize: function(options) {
             L.setOptions(this, options);
-            this.list = [];
+            this.list = {};
 
             this.enableShadowCursor( this.options.showShadowCursor );
             this.enableOutline( this.options.showOutline );
+            this.save_showShadowCursor = false;
         },
 
         /***********************************************************
@@ -112549,15 +112578,9 @@ Estendetions to L.Control.locate
             options = L.Util.extend( {
                 enabled       : true,
                 zoomOffset    : 0,
-                //TODO zoomEnabled   : true,
-                $map_container: $(map.getContainer())
             }, options || {});
 
-            map._mapSync = this;
-            map._syncOffsetFns = {};
-            map.options = map.options || {};
-            map.options.mapSync = options;
-            map.options.mapSync.$map_container.addClass('map-sync-container');
+            map._addToMapSync( this, options );
 
             this.mainMap = this.mainMap ? this.mainMap : map;
             map.options.mapSync.isMainMap = (map == this.mainMap);
@@ -112566,12 +112589,11 @@ Estendetions to L.Control.locate
                 //Main map is always on
                 map.options.mapSync.enabled = true;
                 map.options.mapSync.zoomOffset = 0;
-                //TODO map.options.mapSync.zoomEnabled = true;
             }
             else
                 //Set no-main on-loaded maps to match the main map
                 if (!map._loaded)
-                    map.setView(this.mainMap.getCenter(), this.mainMap.getZoom() +  options.zoomOffset, NO_ANIMATION );
+                    map.setView(this.mainMap.getCenter(), this.mainMap.getZoom() +  options.zoomOffset, map._mapSync_NO_ANIMATION );
 
             //Add all events for map sync
             map._mapSync_addEvents_map();
@@ -112583,37 +112605,35 @@ Estendetions to L.Control.locate
             Create and add events and overwrite methods to show, hide, and update outlines
             showing either the active map in other maps or the main map in the active map
             *********************************************************************************************/
-            function create_$mapOutline(){
-                return $('<div class="show-for-leaflet-map-sync-outline map-sync-outline"><div/></div>');
-            }
+            /*
+            Create a outline in all other maps and create a outline inside the map for all other maps
+            There are two versions:
+                div      : used when two maps are enabled => they have the same center and there outlines are div centered on the other map
+                rectangle: used when one or both the maps ar disabled BUT inclDisabled is set in mapSync => They are rectangles with fixed positions
+            */
+            map.options.mapSync.outlineList = {};
 
-            //Create the outlines showing either the active map in other maps or the main map in the active map
-            map.options.mapSync.$mapOutline = create_$mapOutline();
-            map.options.mapSync.$map_container.append( map.options.mapSync.$mapOutline );
+            $.each( this.list, function( id, otherMap ){
+                //Create div-outline and rectangle-outline of map in the other map
+                map.options.mapSync.outlineList[id] = new L.MapSync_outline(map, otherMap);
 
-            //Create a outline in all other maps and create a outline inside the map for all other maps
-            map.options.mapSync.outlineList = [];
-            map.options.mapSync.indexInList = this.list.length;
-            $.each( this.list, function( index, otherMap ){
-                //Create outline of map in the other map
-                var $mapOutline = create_$mapOutline();
-                otherMap.options.mapSync.$map_container.append( $mapOutline );
-                map.options.mapSync.outlineList[ index ] = $mapOutline;
-
-                //Craete outline of the other map in map
-                $mapOutline = create_$mapOutline();
-                map.options.mapSync.$map_container.append( $mapOutline );
-                otherMap.options.mapSync.outlineList[ map.options.mapSync.indexInList ] = $mapOutline;
-
+                //Craete div-outline and rectangle-outline of the other map in map
+                otherMap.options.mapSync.outlineList[map.options.mapSync.id] = new L.MapSync_outline(otherMap, map);
             });
             map._mapSync_addEvents_outline();
 
             //Add to list
-            this.list.push(map);
+            this.list[map.options.mapSync.id] = map;
+
+            //Save original min- and max-zoom
+            map.options.mapSync.minZoomOriginal = map.getMinZoom();
+            map.options.mapSync.maxZoomOriginal = map.getMaxZoom();
 
             //Enable the map
             if (options.enabled)
                 this.enable( map );
+            else
+                this.disable( map );
 
             return map;
         }, //end of add
@@ -112655,24 +112675,19 @@ Estendetions to L.Control.locate
             //Check if map has been added to a MapSync-object
             if (map.options && map.options.mapSync && map._mapSync == this){
 
-                //Save original min- and max-zoom
-                map.options.mapSync.minZoomOriginal = map.getMinZoom();
-                map.options.mapSync.maxZoomOriginal = map.getMaxZoom();
+                map.options.mapSync.enabled = true;
 
                 //Set the maps min- and max-zoom
-                map.setView(this.mainMap.getCenter(), this.mainMap.getZoom() + map.options.mapSync.zoomOffset, NO_ANIMATION );
                 map._mapSync_adjustMinMaxZoom();
 
-                map.options.mapSync.$map_container.addClass( 'map-sync-enabled' );
-                map.options.mapSync.enabled = true;
                 //If the cursor is over an enabled map => fire a mouseover to update the other maps
                 this._forEachMap({
                     mapFunction: function( map ) {
-                        if (map.options.mapSync.$map_container.hasClass( 'map-sync-mouseover' ) )
+                        if (map.$container.hasClass( 'map-sync-mouseover' ) )
                             map._mapSync._onMouseOverMap( map );
                     }
                 });
-
+                map._mapSyncSetClass();
                 map.fire("mapsyncenabled");
             }
         },
@@ -112684,12 +112699,11 @@ Estendetions to L.Control.locate
             //Check if map has been added to a MapSync-object
             if (map.options && map.options.mapSync && (map._mapSync == this) && !map.options.mapSync.isMainMap){
 
-                var mouseIsOver = map.options.mapSync.$map_container.hasClass( 'map-sync-mouseover' );
+                var mouseIsOver = map.$container.hasClass( 'map-sync-mouseover' );
                 //If the cursor is over the enabled map => fire a mouseout to update the other maps
                 if (mouseIsOver)
                     this._onMouseOutMap( map );
 
-                map.options.mapSync.$map_container.removeClass( 'map-sync-enabled' );
                 map.options.mapSync.enabled = false;
 
                 if (mouseIsOver)
@@ -112699,43 +112713,18 @@ Estendetions to L.Control.locate
                 map.setMinZoom( map.options.mapSync.minZoomOriginal, true );
                 map.setMaxZoom( map.options.mapSync.maxZoomOriginal, true );
 
+                map._mapSyncSetClass();
                 map.fire("mapsyncdisabled");
             }
         },
-
-/* TODO
-        //**************************************************************************
-        //enableZoom( map ) - enable the sync of zoom for map
-        enableZoom: function( map ){
-            if (map.options && map.options.mapSync && (map._mapSync == this) && !map.options.mapSync.isMainMap){
-                map.options.mapSync.zoomEnabled = true;
-                if (map.options.mapSync.enabled)
-                    //Adjust zoom (center is already in sync)
-                    map.setView(map.getCenter(), this.mainMap.getZoom() + map.options.mapSync.zoomOffset, NO_ANIMATION );
-
-                map.fire("mapsynczoomenabled");
-            }
-        },
-
-        //**************************************************************************
-        //disableZoom( map ) - disable the sync of zoom for map
-        disableZoom: function( map ){
-            if (map.options && map.options.mapSync && (map._mapSync == this) && !map.options.mapSync.isMainMap){
-                map.options.mapSync.zoomEnabled = false;
-                map.fire("mapsynczoomdisabled");
-            }
-        },
-*/
 
         //**************************************************************************
         //setZoomOffset( map, zoomOffset ) - Change the zoom-offset for map relative to main-map
         setZoomOffset: function( map, zoomOffset ){
             if (map.options && map.options.mapSync && (map._mapSync == this) && !map.options.mapSync.isMainMap){
                 map.options.mapSync.zoomOffset = zoomOffset;
-                map._mapSync_adjustMinMaxZoom();
 
-                if (map.options.mapSync.enabled/*TODO && map.options.mapSync.zoomEnabled*/)
-                    map.setView(this.mainMap.getCenter(), this.mainMap.getZoom() + map.options.mapSync.zoomOffset, NO_ANIMATION );
+                map._mapSync_adjustMinMaxZoom();
 
                 map.fire("mapsynczoomoffsetchanged");
             }
@@ -112744,19 +112733,16 @@ Estendetions to L.Control.locate
         //**************************************************************************
         //remove( map )
         remove: function( map ){
-            for (var i=0; i<this.list.length; i++ )
-                if (this.list[i] == map){
-                    this.list.splice(i, 1);
-                    break;
-                }
+            delete this.list[map.options.mapSync.id];
         },
 
         //**************************************************************************
         //forEachMap( function( index, map ) ) - Call the function with each map
         forEachMap: function( mapFunction, inclDisabled ){
-            for (var i=0; i<this.list.length; i++ )
-                if (inclDisabled || this.list[i].options.mapSync.enabled)
-                    mapFunction( i, this.list[i] );
+            $.each(this.list, function(id, map){
+                if (inclDisabled || map.options.mapSync.enabled)
+                    mapFunction( id, map );
+            });
         },
 
         /**************************************************************************
@@ -112766,36 +112752,25 @@ Estendetions to L.Control.locate
             {mapFunction: function(map, arg), arguments: [], excludeMap: leaflet-map, inclDisabled: boolean } )
         **************************************************************************/
         _forEachMap: function( options ){
-            var i, nextMap, nextArg;
+            var _this = this,
+                nextArg;
             if ($.isFunction(options))
-                $.each(this.list, function(index, nextMap){ options(nextMap); });
+                $.each(this.list, function(index, map){
+                    options(map);
+                });
             else
-                for (i=0; i<this.list.length; i++ ){
-                    nextMap = this.list[i];
-                    if ((nextMap != options.excludeMap) && (options.inclDisabled || nextMap.options.mapSync.enabled)){
-                        nextArg = [nextMap];
+                $.each(this.list, function(id, map){
+                    if ((map != options.excludeMap) && (map.options.mapSync.enabled || options.inclDisabled || (options.allowDisabled && _this.options.inclDisabled))){
+                        nextArg = [map];
                         options.mapFunction.apply(undefined, nextArg.concat(options.arguments || []) );
                     }
-                }
+                });
         },
 
         //**************************************************************************
         //_updateMaps - Update the center and zoom for all enabled maps to be equal mainMap
         _updateMaps: function(){
             this.mainMap.setView( this.mainMap.getCenter(), this.mainMap.getZoom() );
-        },
-
-        //**************************************************************************
-        //_update_outlines - set dimentions, color and display for all outlines
-        // activeMap = the map being dragged
-        _update_outlines: function( activeMap ){
-
-            //Clean up: Hide all outline
-            this._hide_outlines();
-
-            //Draw all outline
-            activeMap._mapSync_update_outline();
-
         },
 
         //**************************************************************************
@@ -112825,36 +112800,38 @@ Estendetions to L.Control.locate
         //**************************************************************************
         //_onMouseOverMap - call when mouseover map._container
         _onMouseOverMap: function ( map ){
-            map.options.mapSync.$map_container.addClass( 'map-sync-mouseover' );
+            map.$container.addClass( 'map-sync-mouseover' );
 
             //Add passive-class to all sibling-maps
-            map._mapSync_allOtherMaps( function(otherMap){
-                otherMap.options.mapSync.$map_container.addClass( 'map-sync-passive' );
-            });
+            map._mapSync_allOtherMaps(
+                function(otherMap){
+                    otherMap.$container.addClass( 'map-sync-passive' );
+                },
+                null,   //arguments
+                true    //allowDisabled
+            );
         },
 
         //**************************************************************************
         //_onMouseOutMap - call when mouseout from map._container
         _onMouseOutMap: function ( map ){
-            map.options.mapSync.$map_container.removeClass( 'map-sync-mouseover' );
+            map.$container.removeClass( 'map-sync-mouseover' );
 
-           //Remove passive-class from all maps
-            if (map.options.mapSync.enabled)
-                this._forEachMap({
-                    mapFunction : function(map){ map.options.mapSync.$map_container.removeClass( 'map-sync-passive' ); },
-                    inclDisabled: true
+            //Remove passive-class from all maps
+            this._forEachMap({
+                mapFunction : function(map){
+                    map.$container.removeClass( 'map-sync-passive' );
+                },
+                inclDisabled: true
             });
         },
-
 
         //**************************************************************************
         //_updateCursor - Update the latlng-position of all the shadow-cursors
         _updateCursor: function( latlng ){
             if (latlng)
                 this._forEachMap({
-                    mapFunction : function( map, latlng ) {
-                        map.options.mapSync.cursorMarker.setLatLng( latlng );
-                    },
+                    mapFunction : function( map, latlng ) { map.options.mapSync.cursorMarker.setLatLng( latlng ); },
                     arguments   : [latlng],
                     inclDisabled: true
                 });
@@ -112903,7 +112880,7 @@ Estendetions to L.Control.locate
 }(jQuery, L, this, document));
 ;
 /****************************************************************************
-	jquery-screen-ratio.js,
+	jquery-screen-ratio.js, 
 
 	(c) 2017, FCOO
 
@@ -112914,11 +112891,11 @@ Estendetions to L.Control.locate
 
 (function ($, window/*, document, undefined*/) {
 	"use strict";
-
+	
     /********************************************
     Screen Ratio
     *********************************************/
-	$.fn.screenRatio = function ( minDimension ) {
+	$.fn.screenRatio = function ( minDimension ) { 
 		return this.each(function() {
             var $this = $(this);
             $this.data("screenRatio_minDimension", minDimension);
@@ -112927,24 +112904,24 @@ Estendetions to L.Control.locate
 		});
 	};
 
-    $.fn._setScreenRatio = function () {
-        var w = screen.availWidth,
-            h = screen.availHeight,
+    $.fn._setScreenRatio = function () { 
+        var w = screen.availWidth, 
+            h = screen.availHeight, 
             r = h/w,
             p = r > 1,
             minD = parseFloat( this.data('screenRatio_minDimension') ),
-            maxD = minD*(p ? r : 1/r );
+            maxD = minD*(p ? r : 1/r ); 
 
         this
             .height( p ? maxD : minD )
             .width( p ? minD : maxD );
     };
-
+    
 
     /********************************************
     Window Ratio
     *********************************************/
-	$.fn.windowRatio = function ( minDimension, maxDimension ) {
+	$.fn.windowRatio = function ( minDimension, maxDimension ) { 
 		return this.each(function() {
             var $this = $(this);
             $this.data("windowRatio_minDimension", minDimension);
@@ -112955,8 +112932,8 @@ Estendetions to L.Control.locate
 	};
 
 
-    $.fn._setWindowRatio = function () {
-        var w = window.innerWidth,
+    $.fn._setWindowRatio = function () { 
+        var w = window.innerWidth, 
             h = window.innerHeight,
             r = h/w,
             p = r > 1,
@@ -112965,7 +112942,7 @@ Estendetions to L.Control.locate
             maxmaxD = parseFloat( this.data('windowRatio_maxDimension') );
 
             maxD = maxmaxD ? Math.min( maxD, maxmaxD ) : maxD;
-
+        
         this
             .height( p ? maxD : minD )
             .width( p ? minD : maxD );
@@ -113002,7 +112979,8 @@ NAME  col#1  col#2  col#3  col#4  col#5
 1-1-2 = 2-1-1 + multi-map-reverse
 
 */
-    var multiMapsSetups = {
+    var defaultId = '1',
+        multiMapsSetups = {
         //id       maps      className                                       mapClassNamePostfix = [] postfix of className of element where to append the map
         '1'    : { maps: 1,  className: 'multi-map-1',                       mapClassNamePostfix: ['2'                              ] },
         '1-1'  : { maps: 2,  className: 'multi-map-1-1',                     mapClassNamePostfix: ['2',   '3'                       ] },
@@ -113015,39 +112993,52 @@ NAME  col#1  col#2  col#3  col#4  col#5
         '1-1-2': { maps: 4,  className: 'multi-map-2-1-1 multi-map-reverse', mapClassNamePostfix: ['2',   '3',   '1-1', '1-2'       ] },
         '1-3'  : { maps: 4,  className: 'multi-map-3-1 multi-map-reverse',   mapClassNamePostfix: ['2',   '1-1', '1-2', '1-3'       ] },
         '2-1-2': { maps: 5,  className: 'multi-map-2-1-2',                   mapClassNamePostfix: ['2',   '1-1', '1-2', '5-1', '5-2'] }
+/*
+TODO: New setup: 3-2 with 3 small and 2 medium
+Need to extend font-class
+*/
+
     };
-
-    var multiMapsSetupList = [];
-    $.each( multiMapsSetups, function( id, setup ){
-        multiMapsSetupList.push( $.extend( {id: id}, setup ) );
-    });
-
 
     //Default update-function
     function multiMaps_update( index, map, $container ){
         if (map){
-            $container.append( $(map.getContainer())  );
+            map._multiMapsIndex = index;
+            $(map.getContainer())
+                .detach()
+                .appendTo( $container );
             map._onResize();
         }
     }
 
     //Extend base leaflet class
     L.MultiMaps = L.Class.extend({
-        setups   : multiMapsSetups,
-        setupList: multiMapsSetupList,
-        setup    : null,
+        setup: null,
 
         //Default options
         options: {
-            VERSION: "1.2.3",
-            id     : multiMapsSetupList[0].id,
+            VERSION: "1.4.1",
+            id     : defaultId,
             border : true,
+            maxMaps: 5
         },
 
         //initialize
         initialize: function( container, options ) {
-
             L.setOptions(this, options);
+
+            this.options.maxMaps = Math.min(5, this.options.maxMaps || 5);
+            var _this = this;
+
+            this.setups = {};//$.extend({}, multiMapsSetups);
+            this.setupList = [];
+            $.each( multiMapsSetups, function( id, setup ){
+                setup = $.extend( {id: id}, setup );
+                if (setup.maps <= _this.options.maxMaps){
+                    _this.setups[id] = setup;
+                    _this.setupList.push(setup);
+                }
+            });
 
             this.$container = container instanceof $ ? container : $(container);
 
@@ -113101,13 +113092,23 @@ NAME  col#1  col#2  col#3  col#4  col#5
 
             $container.append( $col);
 
+            //this.$tempContainer = container for all maps not displayed
+            this.$tempContainer =
+                $('<div/>')
+                    .addClass('multi-map-container-hidden')
+                    .appendTo( $container );
+
+
         },
 
 
         addMap: function ( options ){
-            var map = L.map( $('<div/>')[0], options );
-            this.mapList.push( map );
+            var $div = $('<div/>').appendTo( this.$tempContainer ),
+                map = L.map( $div.get(0), options );
+            map.isVisibleInMultiMaps = false;
+            map.fire('hideInMultiMaps');
 
+            this.mapList.push( map );
             return map;
         },
 
@@ -113141,26 +113142,36 @@ NAME  col#1  col#2  col#3  col#4  col#5
 
         //updateSubMaps
         updateSubMaps: function () {
-            var i,
-                map,
-                $map_container;
+            var _this = this;
 
-            //Remove the maps (if any) from its current container
-            for (i=0; i<this.mapList.length; i++ ){
-                map = this.mapList[i];
-                $map_container = $(map.getContainer());
+            //Move the maps from its current container to this.$tempContainer
+            $.each(this.mapList, function(index, map){
+                var $map_container = $(map.getContainer());
 
-                if ($map_container.parent().length )
-                    $map_container.detach();
-            }
+                if ($map_container.parent().get(0) !== _this.$tempContainer.get(0))
+                    $map_container
+                        .detach()
+                        .appendTo( _this.$tempContainer );
+            });
+
+            //Fire event "showInMultiMaps" or "hideInMultiMaps" for all maps (if any)
+            var visibleMaps = this.setup.mapClassNamePostfix.length;
+            $.each(this.mapList, function(index, map){
+                var isVisible = (index < visibleMaps);
+                if (map.isVisibleInMultiMaps != isVisible){
+                    map.isVisibleInMultiMaps = isVisible;
+                    map.fire(isVisible ? 'showInMultiMaps' : 'hideInMultiMaps');
+                }
+            });
 
             //Call this.update for all visible sub-maps
-            for (i=0; i<this.setup.mapClassNamePostfix.length; i++ )
-                this.update.call( this,
-                    /*index     :*/ i,
-                    /*map       :*/ this.mapList && (i < this.mapList.length) ? this.mapList[i] : null,
-                    /*$container:*/ this.$container.find('.multi-map-'+this.setup.mapClassNamePostfix[i] )
+            $.each(this.setup.mapClassNamePostfix, function(index, mapClassNamePostfix){
+                _this.update.call( _this,
+                    /*index     :*/ index,
+                    /*map       :*/ _this.mapList && _this.mapList[index] ? _this.mapList[index] : null,
+                    /*$container:*/ _this.$container.find('.multi-map-' + mapClassNamePostfix )
                 );
+            });
         }
 
     });

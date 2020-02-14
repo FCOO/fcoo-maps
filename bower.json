@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "homepage": "https://github.com/FCOO/fcoo-maps",
   "authors": [
     "Niels Holt"
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "fcoo-application": "https://gitlab.com/FCOO/fcoo-application.git#^7.3.4",
-    "fcoo-leaflet": "https://gitlab.com/FCOO/fcoo-leaflet.git#^7.0.2",
+    "fcoo-leaflet": "https://gitlab.com/FCOO/fcoo-leaflet.git#^7.0.0",
     "leaflet-map-sync": "FCOO/leaflet-map-sync#^2.0.0",
     "leaflet-multi-maps": "FCOO/leaflet-multi-maps#^1.1.2"
   },
@@ -35,5 +35,91 @@
   ],
   "moduleType": [
     "es6"
-  ]
+  ],
+  "overrides": {
+    "modernizr-mouse-events": {
+      "dependencies": {
+        "fcoo-modernizr-mediaquery-device": "latest"
+      }
+    },
+    "offline": {
+      "main": [
+        "offline.js"
+      ]
+    },
+    "bootstrap-select": {
+      "main": [
+        "dist/js/bootstrap-select.js"
+      ]
+    },
+    "jquery.scrollbar": {
+      "main": [
+        "jquery.scrollbar.js"
+      ]
+    },
+    "bootstrap": {
+      "dependencies": {
+        "jquery": "latest"
+      },
+      "main": [
+        "dist/js/bootstrap.bundle.js"
+      ]
+    },
+    "inputmask": {
+      "main": [
+        "dist/jquery.inputmask.bundle.js"
+      ]
+    },
+    "js-url": {
+      "main": [
+        "dist/url.min.js"
+      ]
+    },
+    "perfect-scrollbar": {
+      "main": [
+        "dist/perfect-scrollbar.js",
+        "css/perfect-scrollbar.css"
+      ]
+    },
+    "moment": {
+      "main": [
+        "moment.js",
+        "locale/da.js",
+        "locale/de.js",
+        "locale/sv.js",
+        "locale/nb.js",
+        "locale/fo.js"
+      ]
+    },
+    "leaflet": {
+      "main": [
+        "dist/leaflet-src.js",
+        "dist/leaflet.css"
+      ],
+      "dependencies": {
+        "fcoo-global-switches": "latest"
+      }
+    },
+    "leaflet.locatecontrol": {
+      "main": [
+        "src/L.Control.Locate.js"
+      ]
+    },
+    "Leaflet.GeometryUtil": {
+      "main": "src/leaflet.geometryutil.js",
+      "dependencies": {
+        "leaflet": "latest"
+      }
+    },
+    "Leaflet.Geodesic": {
+      "dependencies": {
+        "leaflet": "latest"
+      }
+    }
+  },
+  "resolutions": {
+    "bootstrap": "^4.0.0",
+    "i18next-phrases": "^2.0.0",
+    "leaflet": "1.4.0"
+  }
 }

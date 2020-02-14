@@ -30,7 +30,21 @@ fcoo-maps-setup-file
             rightMenuWidth     : 300,   //Set to 0 to aviod right-side menu
             keepRightMenuButton: false, //Set to true if rightMenuWidth == 0 to keep menu-button
 
-        };
+            //Default map
+            map: {
+                minZoom:  3,
+                maxZoom: 12,
+            },
+
+            //Multi maps
+            multiMaps: {
+                enabled      : true,
+                maxMaps      : 5, //OR {mobile, tablet, desktop}
+                maxZoomOffset: 2
+            }
+
+
+    };
 
 
     /*************************************************************************
@@ -49,7 +63,7 @@ fcoo-maps-setup-file
     adjustData( data )
     *************************************************************************/
     function adjustData( data ){
-        data = $.extend(true, {}, default_setup, data );
+        ns.setupData = data = $.extend(true, {}, default_setup, data );
 
         //Add header to top-menu
         data.topMenu.header = data.applicationName;
@@ -70,6 +84,15 @@ fcoo-maps-setup-file
         //Adjust menu-width
         data.leftMenu  = data.leftMenuWidth  ? {width: data.leftMenuWidth}  : null;
         data.rightMenu = data.rightMenuWidth ? {width: data.rightMenuWidth} : null;
+
+
+        //Get max-maps
+        if (data.multiMaps && data.multiMaps.enabled && $.isPlainObject(data.multiMaps.maxMaps)){
+            data.multiMaps.maxMaps =
+                window.fcoo.modernizrDevice.isDesktop ? data.multiMaps.maxMaps.desktop :
+                window.fcoo.modernizrDevice.isTablet  ? data.multiMaps.maxMaps.tablet :
+                data.multiMaps.maxMaps.mobile;
+        }
 
 
 

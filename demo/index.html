@@ -17,15 +17,25 @@
 	<!-- <div id="map" style="width: 800px; height: 600px"></div> -->
 
 	<script src="bower_components.js"></script>
+	<script src="../src/fcoo-maps-icon.js"></script>
+	<script src="../src/fcoo-maps-multi-maps.js"></script>
 	<script src="../src/fcoo-maps-leaflet.js"></script>
 	<script src="../src/fcoo-maps-search.js"></script>
 	<script src="../src/fcoo-maps-setup-file.js"></script>
 	<script src="../src/fcoo-maps.js"></script>
 
     <script>
-//        window.fcoo.LOCAL_DATA = true;
+        window.fcoo.LOCAL_DATA = true;
 
-		$(function() {
+//HER        window.bsIsTouch = false;
+//HER        window.bsIsTouch = (window.location.search =='?touch');
+
+
+        i18next.init();
+        i18next.changeLanguage('da');
+        i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
+
+        $(function() {
             window.fcoo.map.readSetupFile({subDir:'setup', fileName:'ifm_test.json'} );
 
 

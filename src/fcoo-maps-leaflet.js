@@ -6,96 +6,150 @@ Objects and methods to handle leaflet-maps
 	"use strict";
 
     window.fcoo = window.fcoo || {};
-    var ns = window.fcoo.map = window.fcoo.map || {},
-        multiMapsModalForm = null,
-        $currentMapStructureIcon = null; //$-element with the current map-structure as icon
+    var ns = window.fcoo.map = window.fcoo.map || {};
 
-        function getMultiMapId( data ){
-            return data[data.maps];
-        }
+    //Create a list of all maps-object created
+    ns.mapList = {};
+    ns.mapIndex = [];
+    var fcooMapId = 0;
 
-        function updateCurrentMapStructureIcon(data){
-            var id = getMultiMapId( data || multiMapsModalForm.getValues() );
-            $currentMapStructureIcon
-                .removeClass()
-                .addClass('far famm-'+id);
-        }
+    function whenReady(){
+        ns.mapIndex[this.fcooMapIndex] = this;
+        ns.mapList[this.fcooMapId] = this;
+    }
+    function onUnload() {
+        ns.mapIndex[this.fcooMapIndex] = null;
+        ns.mapList[this.fcooMapId] = null;
+    }
 
-    /*********************************************************************
-    selectMultiMaps - Create and display a modal window to select number of maps
-    *********************************************************************/
-    ns.selectMultiMaps = function(){
-        if (!multiMapsModalForm){
-            var list    = [],
-                maxMaps = 0;
+    L.Map.addInitHook(function () {
+        this.fcooMapIndex = fcooMapId;
+        this.fcooMapId = 'fcooMap'+ fcooMapId;
+        fcooMapId++;
+        this.whenReady( whenReady );
+        this.on('unload', onUnload);
+    });
 
-            //Find max number of maps
-            $.each(ns.multiMaps.setupList, function(index, options){ maxMaps = Math.max(maxMaps, options.maps); });
-
-            for (var i=1; i<=maxMaps; i++)
-                list.push({id:'maps_'+i, text: ''+i});
-
-            var content = [{
-                    //Radio-group with nr of maps
-                    id       :'maps',
-                    label    : {da:'Antal kort', en:'Number of maps'},
-                    fullWidth: true,
-                    type     : 'radiobuttongroup',
-                    list     : list,
-                }];
-
-            //Add radio-button-group - each for every nr of maps
-            for (var maps=1; maps<=maxMaps; maps++){
-                list = [];
-                $.each( ns.multiMaps.setupList, function(index, options){
-                    if (options.maps == maps)
-                        list.push({id: options.id, icon: 'famm-'+options.id });
-                });
-
-                content.push({
-                    id                 : 'maps_'+maps,
-                    type               : 'radiobuttongroup',
-                    //'hide' when only one mode by making the radiogroup opacity = 0
-                    class              : list.length <= 1 ? 'opacity-0' : '',
-                    centerInParent     : true,
-                    list               : list,
-                    noBorder           : true,
-                    showWhen           : {'maps': 'maps_'+maps },
-                    freeSpaceWhenHidden: true,
-                    buttonOptions      : { extraLargeIcon: true },
-                });
-            }
-
-            //Create content to display the selected map-structure. icon="HERE_IT_IS" is used to be able to find the element
-            content.push({
-                type: 'text',
-                icon: 'HERE_IT_IS',
-                insideFormGroup: false,
-            });
-
-            multiMapsModalForm = $.bsModalForm({
-                header  : {da:'Antal kort', en:'Number of maps'},
-                static  : false,
-                keyboard: true,
-                content : content,
-                onChanging: updateCurrentMapStructureIcon,
-                onSubmit: function(data){ ns.multiMaps.set( getMultiMapId(data) ); },
-                closeWithoutWarning: true
-            });
-
-            $currentMapStructureIcon = multiMapsModalForm.$form.find('.HERE_IT_IS');
-            $currentMapStructureIcon.parent().addClass('multi-maps-current');
-        }
-
-        var data = {
-                maps: 'maps_' + ns.multiMaps.setup.maps,
-            };
-        data[data.maps] = ns.multiMaps.options.id;
-
-        updateCurrentMapStructureIcon();
-
-        multiMapsModalForm.edit( data );
+    //ns.visitAllMaps: Call method(map) for all maps
+    ns.visitAllMaps = function(method){
+        $.each(ns.mapIndex, function(index, map){
+            if (map)
+                method(map);
+        });
     };
+
+    //ns.callAllMaps: Call methodName with arg (array) for all maps
+    ns.callAllMaps = function(methodName, arg){
+        $.each(ns.mapList, function(id, map){
+            if (map && map[methodName])
+                map[methodName].apply(map, arg);
+        });
+    };
+
+
+
+    /***********************************************************
+    Default options for Leaflet.Map
+    ***********************************************************/
+    ns.mainMapOptions = {
+        //Set default minZoom and maxZoom
+        minZoom:  3,
+        maxZoom: 12,
+
+        zoomSnap: 0.25,
+
+        //Adjust zoom-speed to be a bit slower
+        wheelPxPerZoomLevel: 100,
+
+        //Set zoom by mouse wheel to keep center
+        //Both scrollWheelZoom and googleScrollWheelZoom is Boolean|String: Whether the map can be zoomed by using the mouse wheel.
+        //If passed 'center', it will zoom to the center of the view regardless of where the mouse was.
+        scrollWheelZoom      : true,    //false,
+        googleScrollWheelZoom: false,   //true,
+
+        //worldCopyJump: With this option enabled, the map tracks when you pan to another "copy" of the world and
+        //seamlessly jumps to the original one so that all overlays like markers and vector layers are still visible.
+        worldCopyJump: true,
+
+        //Hide attribution
+        attributionControl: false,
+
+        //Replace default zoom-control with BsZoomControl
+        zoomControl  : false,
+        bsZoomControl: true,
+        bsZoomOptions: {
+            position           : 'bottomright',
+            map_setView_options: L.Map.prototype._mapSync_NO_ANIMATION
+        },
+
+        //BsPosition = Show position of mouse or map center
+        bsPositionControl: true,
+        bsPositionOptions: {
+            isExtended        : true,
+            showCursorPosition: !window.bsIsTouch, //TODO Skal henter fra gemte settings
+            inclContextmenu   : false,  //Set to true when contextmenu for the map is implemented
+            selectFormat      : null,   //Await fcoo-settings with editing and saving settings
+        },
+
+        //bsScale - Scale with nm, km or both
+        bsScaleControl: true,
+        bsScaleOptions: {
+            isExtended          : true,
+            maxUnitsWidth       : 360, //Max width (default = 200)
+            maxUnitsWidthPercent: 30,  //Max width as percent of map width. 35 is set to prevent the scale from hidding buttons in centerbottom-position
+        },
+
+
+//REMOVED        //languageControl: Install two buttons to change language between Danish and English
+//REMOVED        languageControl: true,
+
+//REMOVED        //saveControl: Install saveControl
+//REMOVED        saveControl: true,
+
+//REMOVED        //legendControl: Install L.Control.Legend
+//REMOVED        legendControl: true,
+
+
+//REMOVED        //locateControl: Install leaflet.locatecontrol
+//REMOVED        locateControl: true,
+
+        //routeControl: Install L.Control.Route
+        routeControl: false,
+
+        //permalinkControl: Install L.Control.Permalink
+        permalinkControl: true,
+
+//REMOVED        //doubleRightClickZoom: Install Leaflet.DoubleRightClickZoom
+//REMOVED        doubleRightClickZoom: true,
+
+        //No map sync control on main map
+        mapSyncControl: false,
+
+        //latLngGraticule: Install leaflet-latlng-graticule. If latLngGraticule !== true => use latLngGraticule as options.type for leaflet-latlng-graticule
+        latLngGraticule       : false,//L.latLngGraticuleType.TYPE_MAJOR_LINE + L.latLngGraticuleType.TYPE_MINOR_TICK,
+        latLngGraticuleOptions: null,
+    };
+
+    /***********************************************************
+    Options for secondary maps (index 1-4)
+    ***********************************************************/
+    ns.secondaryMapOptions = $.extend({}, ns.mainMapOptions, {
+        bsZoomControl: false,
+
+        //BsPosition = Show position of mouse or map center
+        bsPositionControl: false,
+
+        //bsScale - Scale with nm, km or both
+        bsScaleControl: false,
+
+        //permalinkControl: Install L.Control.Permalink
+        permalinkControl: false,
+
+        //Add map-sync control
+        mapSyncControl: true,
+        mapSyncOptions: {active: false}
+    });
+
 
 
 

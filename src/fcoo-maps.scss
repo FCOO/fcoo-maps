@@ -18,6 +18,30 @@
 @import "../bower_components/mathsass/dist/math";
 
 
+//LEAFLET-MAP-SYNC https://github.com/fcoo/leaflet-map-sync
+@import "../bower_components/leaflet-map-sync/src/leaflet-map-sync-outline-color";
+
+//JQUERY-BOOTSTRAP https://github.com/fcoo/jquery-bootstrap
+@import "../bower_components/jquery-bootstrap/src/bootstrap-variables";
+
+//BOOTSTRAP SCSS
+@import "../bower_components/bootstrap/scss/functions";
+@import "../bower_components/bootstrap/scss/variables";
+
+//BACKGROUND-COLOR AND TEXT COLOR
+@import "../bower_components/jquery-bootstrap/src/color";
+//@import "../bower_components/jquery-bootstrap/src/mixins";
+
+
+/**********************************************************
+LEAFLET MAPS
+**********************************************************/
+
+
+
+/**********************************************************
+EDIT MULTI MAPS SETTINGS
+**********************************************************/
 //multi-maps-current = div with icon showing the current selected structure
 .multi-maps-current {
     $factor: .275;
@@ -40,5 +64,104 @@
         top     : -1px * $margin-top-portrait
     }
 }
+
+
+/**********************************************************
+EDIT SYNC MAPS SETTINGS
+**********************************************************/
+.text-multi-maps-current {color: $map-outline}
+.bg-multi-maps-current   {background-color: $map-outline}
+.text-multi-maps-main    {color: $main-map-outline}
+.bg-multi-maps-main      {background-color: $main-map-outline}
+
+
+.map-sync-zoom-offset {
+    margin: auto;
+
+    .multi-map-container {
+        .outline {
+            display: none;
+        }
+
+        &.current-map {
+            display        : flex !important;
+            align-items    : center;
+            justify-content: center;
+
+            background-color: $map-outline;
+
+            .outline {
+                display: block;
+                border: $map-outline-border-width dotted $main-map-outline;
+                width : 50%;
+                height: 50%;
+            }
+        }
+
+        &.main-map {
+            display        : flex !important;
+            align-items    : center;
+            justify-content: center;
+
+            border: 3px solid $main-map-outline !important;
+
+            .outline {
+                display: block;
+                border: $map-outline-border-width dotted $map-outline;
+                width : 50%;
+                height: 50%;
+            }
+        }
+    }
+}
+
+
+/**********************************************************
+STYLE FOR ICONS IN BUTTONS
+**********************************************************/
+
+/*
+sub-icons = a big icon with a small - normally round - icon in the right-bottom corner
+Each of the sub-icons may need a individual class to adjust size and position
+
+The structure is (BIG = the big icon, SUB = the small icon)
+<div class="container-stacked-icons">
+    <i class="fal fa-BIG fa-lg stacked-icon"></i>
+    <i class="fas fa-circle fa-circle-small-right-bottom stacked-icon"></i>
+    <i class="far fa-BIG fa-BIG-small-right-bottom stacked-icon"></i>
+</div>
+
+Different versions of sub-icons can be created using different methods in namespace fcoo.map.icon (see src/fcoo-maps-icon.js)
+
+*/
+
+.fa-circle-small-right-bottom {
+    position: relative;
+    right    : calc(-6em / 16);
+    bottom   : calc(-7em / 16);
+    font-size: 1.2em;
+    color    : $control-bg-color !important;
+    .active & {
+        //When inside a active (selected) button => use active-color
+        color: $control-active-bg-color !important;
+    }
+}
+
+
+//Individuel styles for different icons or group of icons
+.fa-cog-small-right-bottom {
+    position: relative;
+    right    : calc(-6em / 16);
+    bottom   : calc(-7em / 16);
+    font-size: 1.1em;
+}
+
+.fa-sync-small-right-bottom {
+    position: relative;
+    right    : calc(-5em / 16);
+    bottom   : calc(-7em / 16);
+    font-size: .9em;
+}
+
 
 
