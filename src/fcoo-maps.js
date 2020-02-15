@@ -134,7 +134,7 @@ $.bsButton({
 
             //Create multi-maps
             ns.multiMaps = L.multiMaps(
-                $('<div/>').appendTo(ns.main.$mainContainer), {
+                $('<div/>').prependTo(ns.main.$mainContainer), {
                 border : false,
                 maxMaps: data.multiMaps.maxMaps
             });
