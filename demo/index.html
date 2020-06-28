@@ -17,35 +17,72 @@
 	<!-- <div id="map" style="width: 800px; height: 600px"></div> -->
 
 	<script src="bower_components.js"></script>
+
+    <script src="../src/0_fcoo-maps-leaflet.js"></script>
+
+    <script src="../src/1_fcoo-maps-multi-maps.js"></script>
+    <script src="../src/1_fcoo-maps-map-sync.js"></script>
+    <script src="../src/2_fcoo-maps-map-setting-group.js"></script>
+    <script src="../src/3_fcoo-maps-global-events.js"></script>
+
+    <script src="../src/fcoo-maps-create-main.js"></script>
+
+    <script src="../src/fcoo-maps-niord.js"></script>
+    <script src="../src/fcoo-maps-format.js"></script>
+    <script src="../src/fcoo-maps-offline.js"></script>
+    <script src="../src/fcoo-maps-control-legend.js"></script>
+    <script src="../src/fcoo-maps-control-route.js"></script>
+
 	<script src="../src/fcoo-maps-icon.js"></script>
-	<script src="../src/fcoo-maps-multi-maps.js"></script>
-	<script src="../src/fcoo-maps-leaflet.js"></script>
+	<script src="../src/fcoo-maps-search-latlng.js"></script>
 	<script src="../src/fcoo-maps-search.js"></script>
-	<script src="../src/fcoo-maps-setup-file.js"></script>
+	<script src="../src/fcoo-maps-search-category.js"></script>
+	<script src="../src/fcoo-maps-search-details.js"></script>
 	<script src="../src/fcoo-maps.js"></script>
+	<script src="../src/fcoo-maps-create-menu.js"></script>
+
+
+<script src="../src/L.Control.Locate.extend.js"></script>
 
     <script>
-//        window.fcoo.LOCAL_DATA = true;
+        window.fcoo.LOCAL_DATA = true;
 
-//        window.bsIsTouch = false;
-//        window.bsIsTouch = (window.location.search =='?touch');
-
+        window.bsIsTouch = window.bsIsTouch || (window.location.search =='?touch');
 
         i18next.init();
         i18next.changeLanguage('da');
         i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
-        $(function() {
-            window.fcoo.map.readSetupFile({subDir:'setup', fileName:'ifm_test.json'} );
 
+        window.fcoo.map.createApplication({
+            setup: {subDir:'setup', fileName:'ifm_test.json'},
+            _setup: {
+                applicationName: {da:'SKIDE GODT', en:'SHIT GOOD'}
+            },
+            leftMenu: {
+                data: ['item1', 'item2'],
+                _resolve: function(data, $container){ console.log('HER', data); $container.text('Davs LEFT'); }
+            },
+            rightMenu: {
+                data: ['item1', 'item2'],
+                _resolve: function(data, $container){ console.log('HER', data); $container.text('Davs RIGHT'); }
+            },
 
-//HER            var map = L.map('map').setView([56.2, 11.5], 6);
-//HER			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//HER				maxZoom: 18,
-//HER                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors</a>'
-//HER            }).addTo(map);
+            _other: [
+                {data:{text:'Davs med dig'}, resolve: function(data){console.log(data);}, reload:1}
+            ],
+            _finally: function(){alert('Davs');}
         });
+/*
+        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.1', moment().format('HH:mm:ss'), data); });
+        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.2', moment().format('HH:mm:ss'), data); });
+        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.3', moment().format('HH:mm:ss'), data); });
+        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.4', moment().format('HH:mm:ss'), data); });
+        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.5', moment().format('HH:mm:ss'), data); });
 
-	</script>
+        window.fcoo.map.addInterval( 20, {subDir:'setup', fileName:'ifm_test.json'}, function(data){ console.log('20.1', moment().format('HH:mm:ss'), data); });
+        window.fcoo.map.addInterval( 20, {subDir:'setup', fileName:'ifm_test.json'}, function(data){ console.log('20.2', moment().format('HH:mm:ss'), data); });
+*/
+    </script>
  </body>
 </html>

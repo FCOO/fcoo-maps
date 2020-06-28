@@ -17,6 +17,8 @@
 //MATHSASS - https://github.com/terkel/mathsass
 @import "../bower_components/mathsass/dist/math";
 
+//MODERNIZR-SASS - http://github.com/FCOO/modernizr-scss
+@import "../bower_components/modernizr-scss/dist/modernizr-scss";
 
 //LEAFLET-MAP-SYNC https://github.com/fcoo/leaflet-map-sync
 @import "../bower_components/leaflet-map-sync/src/leaflet-map-sync-outline-color";
@@ -30,12 +32,84 @@
 
 //BACKGROUND-COLOR AND TEXT COLOR
 @import "../bower_components/jquery-bootstrap/src/color";
-//@import "../bower_components/jquery-bootstrap/src/mixins";
+
+//ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
+@import "../bower_components/leaflet-zoom-modernizr/src/leaflet-zoom-modernizr";
+
+//LEAFLET-BOOTSTRAP - mixin to create colors for bsMarker
+@import "../bower_components/sass-color-helpers/stylesheets/color-helpers";
+@import "../bower_components/leaflet-bootstrap-marker/src/leaflet-bootstrap-marker-mixin";
+
+//LEAFLET-POLYLINE - mixin to create colors for polyline and polygon
+@import "../bower_components/leaflet-polyline/src/leaflet-polyline-mixin";
+
+
+/**********************************************************
+marker-and-polygon-color: create color-classes for bsMarker and bsPolyline
+See https://www.w3schools.com/tags/ref_colornames.asp for color-names and code
+**********************************************************/
+@mixin marker-and-polygon-color( $name, $color, $border-color:$color){
+    @include lbm-marker-and-icon-classes( $name, $color, $border-color );
+    @include polyline-classes( $name, $color, $border-color );
+}
 
 
 /**********************************************************
 LEAFLET MAPS
 **********************************************************/
+//Standard style
+html, body {
+    height: 100%;
+}
+body {
+    padding: 0;
+    margin : 0;
+}
+
+#map {
+    height: 100%;
+}
+
+
+//Change cursor from grab/grabbing to pointer/move to look like google maps
+body {
+    .leaflet-grab {
+	    cursor: default;
+    }
+
+    &.leaflet-dragging {
+        .leaflet-grab,
+        .leaflet-grab .leaflet-interactive,
+        .leaflet-marker-draggable {
+	        cursor: move;
+	    }
+    }
+}
+
+
+//Import scss for leaflet-control-legend
+@import "fcoo-maps-control-legend";
+
+
+/****************************************************************************
+L.CONTROL.LOCATE
+Adjusted version of leaflet-icon-pulse by Filip Zavadil
+https://github.com/mapshakers/leaflet-icon-pulse
+****************************************************************************/
+$location-color: #4285F4; //= rgba(66, 133, 244) = google maps color for location icon
+
+//Overwrite css for L.Control.Locate (leaflet.locatecontrol)
+.leaflet-control-locate {
+    &.active a {
+        color: $location-color;
+    }
+}
+
+
+/****************************************************************************
+Style for edit settings for graticule
+****************************************************************************/
+@include show-and-hide-for-modernizr-test( $modernizr-test: graticule-label, $incl-no-selector: false, $incl-table-display: false);
 
 
 
@@ -69,11 +143,11 @@ EDIT MULTI MAPS SETTINGS
 /**********************************************************
 EDIT SYNC MAPS SETTINGS
 **********************************************************/
-.text-multi-maps-current {color: $map-outline}
-.bg-multi-maps-current   {background-color: $map-outline}
-.text-multi-maps-main    {color: $main-map-outline}
-.bg-multi-maps-main      {background-color: $main-map-outline}
-
+.text-multi-maps-current {color: $map-outline; }
+.bg-multi-maps-current   {background-color: $map-outline; }
+.text-multi-maps-main    {color: $main-map-outline; }
+.bg-multi-maps-main      {background-color: $main-map-outline; }
+.border-multi-maps-main  {border: 1px solid $main-map-outline !important; }
 
 .map-sync-zoom-offset {
     margin: auto;
@@ -118,44 +192,9 @@ EDIT SYNC MAPS SETTINGS
 
 /**********************************************************
 STYLE FOR ICONS IN BUTTONS
-**********************************************************/
-
-/*
-sub-icons = a big icon with a small - normally round - icon in the right-bottom corner
+Using fcoo.iconSub = function(mainIcon, subIcon, subClassPostfix, square) from fcoo-application
 Each of the sub-icons may need a individual class to adjust size and position
-
-The structure is (BIG = the big icon, SUB = the small icon)
-<div class="container-stacked-icons">
-    <i class="fal fa-BIG fa-lg stacked-icon"></i>
-    <i class="fas fa-circle fa-circle-small-right-bottom stacked-icon"></i>
-    <i class="far fa-BIG fa-BIG-small-right-bottom stacked-icon"></i>
-</div>
-
-Different versions of sub-icons can be created using different methods in namespace fcoo.map.icon (see src/fcoo-maps-icon.js)
-
-*/
-
-.fa-circle-small-right-bottom {
-    position: relative;
-    right    : calc(-6em / 16);
-    bottom   : calc(-7em / 16);
-    font-size: 1.2em;
-    color    : $control-bg-color !important;
-    .active & {
-        //When inside a active (selected) button => use active-color
-        color: $control-active-bg-color !important;
-    }
-}
-
-
-//Individuel styles for different icons or group of icons
-.fa-cog-small-right-bottom {
-    position: relative;
-    right    : calc(-6em / 16);
-    bottom   : calc(-7em / 16);
-    font-size: 1.1em;
-}
-
+**********************************************************/
 .fa-sync-small-right-bottom {
     position: relative;
     right    : calc(-5em / 16);
@@ -163,5 +202,54 @@ Different versions of sub-icons can be created using different methods in namesp
     font-size: .9em;
 }
 
+.fa-tally-small-right-bottom {
+    position: relative;
+    right    : calc(-3em / 16);
+    bottom   : calc(-7em / 16);
+    font-size: .85em;
+}
 
+
+/**********************************************************
+STYLE FOR SEARCH RESULTS
+**********************************************************/
+.search-result-row {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    .search-result-type {
+        font-size: .65625rem;
+        text-transform: capitalize;
+    }
+
+    .search-result-name {
+        white-space: normal !important;
+        font-weight: 500;
+        font-size: 1.1em;
+    }
+
+    .search-result-display {
+        white-space: normal !important;
+        font-size: .85em;
+    }
+}
+
+//Color for search result
+//marker-and-polygon-color( $name, $color, $border-color)
+$DarkGoldenRod: #B8860B;
+$Chartreuse: #7FFF00;
+
+$osm-search-result: darken(#FF6200, 5); //dark-dark-orange
+@include marker-and-polygon-color( 'osm', $osm-search-result);
+
+//@include marker-and-polygon-color( 'osm-fill', #FF620020);
+
+
+
+
+/**********************************************************
+ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
+**********************************************************/
+$lzm-incl-table-display: false;
+@include show-and-hide-for-leaflet-zoom-modernizr(3, 12);
 

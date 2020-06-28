@@ -1,0 +1,131 @@
+/***********************************************
+	fcoo-leaflet-control-legend.scss,
+
+	(c) 2017, FCOO
+
+	https://gitlab.com/fcoo/fcoo-leaflet-control-legend
+	https://gitlab.com/fcoo
+
+
+************************************************/
+//BOURBON - http://bourbon.io/ version 5
+@import "../bower_components/bourbon/core/bourbon";
+
+//MODERNIZR-MIXIN - https://github.com/danielguillan/modernizr-mixin
+@import "../bower_components/modernizr-mixin/stylesheets/modernizr";
+
+//MATHSASS - https://github.com/terkel/mathsass
+@import "../bower_components/mathsass/dist/math";
+
+
+
+
+.fcoo-legend-container {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: white;
+//    padding-top: 2px;
+	border: 1px solid black;
+    font-size: 12px;
+
+    margin: 0px;
+    margin-top   : 4px;
+    margin-bottom: 4px;
+
+
+	text-align: center;
+
+    //Overrwite leaflet styles for anchors. NB: IE don't support all: initial; all: unset;
+    a, a:hover  {
+        //all: initial;
+        //all: unset;
+
+        display: inline !important;
+
+        border: none !important;
+        border-radius: 0  !important;
+        background-position: 0% 0%;
+
+        line-height : normal !important;
+        width: auto !important;
+        height: auto !important;
+        font-size: 12px !important;
+    }
+    a[href]{
+        color: #337ab7 !important; //Default bootstrap. TODO: Must be set globally
+
+        &:focus, &:hover { //Default bootstrap. TODO: Must be set globally
+            color: #23527c;
+            text-decoration: underline;
+        }
+    }
+
+//a:not([href]) {
+
+    * { margin: 0; }
+
+    h2 {
+        font-size: 14px;
+        padding: 2px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-family: inherit;
+        font-weight: 600;
+        line-height: 1.1;
+        color: inherit;
+        border-bottom: 1px solid gray;
+
+        &.delayed {
+            background-color: rgba( 255,0,0, .25);
+        }
+
+        &.clickable { cursor: pointer; }
+        i:first-child {
+            float: left;
+            margin-left: -16px;
+            &.down { display: none; }
+        }
+        i:last-child {
+            float: right;
+            margin-right: -16px;
+            &:hover { color: red; }
+        }
+    }
+
+    img {
+        height: 40px;
+        width: 250px;
+    }
+
+    .extra {
+        border-top: 1px solid gray;
+        text-align: left;
+        > div > span {
+            display: inline-block;
+            &:first-child {
+                width: 40%;
+                text-align: right;
+                &:after { content: ':'; }
+            }
+            &:last-child {
+                padding-left: 4px;
+                text-align: left;
+            }
+        }
+        display: none;
+    }
+}
+
+
+.fcoo-no-legends-container {
+    width: 150px;
+    padding: 0;
+    text-align: center;
+    font-size: 14px;
+}
+
+
+h2.open ~ .extra {
+    display: block;
+}
+

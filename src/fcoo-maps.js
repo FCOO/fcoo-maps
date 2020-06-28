@@ -6,194 +6,247 @@
     https://github.com/FCOO/fcoo-maps
     https://github.com/FCOO
 
+
+
+To create an application call window.fcoo.map.createApplication(options: OPTIONS)
+
+createApplication will load e serie of mandatory and optional setup-json-files or setup-json-objects
+each with a 'build'-function
+After the build the settings in fcoo.appSetting and globalSetting are loaded
+
+OPTIONS: {
+    setup    : FILENAME or SETUP-OBJECT,
+    leftMenu,
+    rightMenu: {
+        fileName: FILENAME, or
+        data    : JSON-OBJECT,
+        resolve : function( data, $leftMenuContainer ) - optional. default = fcoo.map.createLeftMenu (see fcoo-maps-create-menu.js)
+    },
+    metadata: {
+        fileName: FILENAME,
+        resolve : function( data ),
+        reload  : BOOLEAN or NUMBER. If true the file will be reloaded every hour. If NUMBER the file will be reloaded every reload minutes
+    },
+    other: []{fileName, resolve, reload} Same as metadata
+
+    finally: function() - optional. Function to be called when all is ready
+}
+
+FILENAME = Path to file. Two versions:
+    1: Relative path locally e.q. "data/info.json"
+    2: Using ns.dataFilePath (See fcoo-data-files): {subDir, fileName}.
+    E.q. {subDir: "theSubDir", fileName:"theFileName.json"} => "https://app.fcoo.dk/static/theSubDir/theFileName.json"
+
+SETUP-OBJECT: See fcoo-maps-setup-files.js for details
+
 ****************************************************************************/
-(function ($, L, window/*, document, undefined*/) {
+(function ($, moment, L, window/*, document, undefined*/) {
     "use strict";
 
-    window.fcoo = window.fcoo || {};
-    var ns = window.fcoo.map = window.fcoo.map || {};
+    var ns = window.fcoo = window.fcoo || {},
+        nsMap = ns.map = ns.map || {};
 
 
-    ns.createFCOOMap = function( data ){
-        //Create main structure
-        ns.main = window.fcoo.createMain({
-            mainContainerAsHandleContainer: true,
-            topMenu             : data.topMenu,
-            leftMenu            : data.leftMenu,
-            keepLeftMenuButton  : data.keepLeftMenuButton,
-            rightMenu           : data.rightMenu,
-            keepRightMenuButton : data.keepRightMenuButton,
 
-            _bottomMenu: {  //Just DEMO
-                height : 120,
-                handleWidth: 200,
-                handleHeight: 26,
-                //handleClassName: 'testHandle',
-                toggleOnHandleClick: true,
-                hideHandleWhenOpen: true
-            },
+    function isFileName(fileNameOrData){
+        return (($.type(fileNameOrData) == 'string') || (fileNameOrData.subDir && fileNameOrData.fileName));
+    }
 
+    function getFileName( pathAndFileName ){
+        //Convert pathAndFileName: FILENAME into true path
+        pathAndFileName = pathAndFileName || '';
+        return  $.isPlainObject(pathAndFileName) ? ns.dataFilePath( pathAndFileName.subDir , pathAndFileName.fileName ) : pathAndFileName;
+    }
 
-            /*
-            When resizing the main-container:
-            - Turn zoom-history off to avoid many entries
-            - Save all maps center and zoom
-            */
-            onResizeStart: function(){
-                window.fcoo.visitAllMaps(function(map){
-                    //Disable history-list during resizing
-                    if (map.bsZoomControl)
-                        map.bsZoomControl.disableHistory();
+    var resolveList = [],
+        whenFinish = null;
 
-                    //Hide center map position marker (if any)
-                    map.$container.addClass('hide-control-position-map-center');
+    /*************************************************************************
+    createApplication
+    *************************************************************************/
+    nsMap.createApplication = function(options){
+        //Create and add a Promise for all files/data needed to load
+        var promiseList = [];
 
-                    //If map visible and sync-enabled => disable it while resizing (Not quit sure why it works....)
-                    map._enableAfterResize = map.isVisibleInMultiMaps && map._mapSync && map.options.mapSync && map.options.mapSync.enabled && !map.options.mapSync.isMainMap;
-                    if (map._enableAfterResize)
-                        map._mapSync.disable(map);
-                });
-            },
-/*
-            onResizing: function(){
-                ns.mainMap._selfSetView();
-                ns.mainMap.invalidateSize({pan:false, debounceMoveend:true});
-            },
-*/
-            //Update all maps and enable zoom-history again when main-container is resized
-            onResizeEnd: function(){
-                ns.mainMap._selfSetView();
-                ns.mainMap.invalidateSize({pan:false, debounceMoveend:true});
+        //******************************************************
+        function addPromise(opt){
+            if (!opt) return;
 
-                window.fcoo.visitAllMaps(function(map){
-                    //Show center map position marker (if any)
-                    map.$container.removeClass('hide-control-position-map-center');
+            var promise;
 
-                    map.invalidateSize({pan:false, debounceMoveend:true});
+            if (opt.fileName)
+                //File-name is given => load file
+                promise = Promise.getJSON(getFileName(opt.fileName));
+            else
+                if (opt.data)
+                    //Data is given => resolve them
+                    promise = new Promise(function(resolve/*, reject*/) {
+                        resolve(opt.data);
+                    });
+                else
+                    return;
+            promiseList.push(promise);
+            resolveList.push(opt);
+        }
+        //******************************************************
 
-                    if (map._enableAfterResize){
-                        map._enableAfterResize = false;
-                        map._mapSync.enable(map);
-                    }
+        //1. setup
+        var opt = {resolve: nsMap.createFCOOMap};
+        if (isFileName(options.setup))
+            opt.fileName = options.setup;
+        else
+            opt.data = options.setup;
+        addPromise(opt);
 
-                    if (map.bsZoomControl)
-                        map.bsZoomControl.enableHistory();
-                });
-            }
-        });
-
-        //Crerate div in header of left menu to hole settings-buttons
-        ns.main.leftMenu.$preMenu.addClass('justify-content-between');
-        ns.main.$settingButtons = $('<div/>').appendTo(ns.main.leftMenu.$preMenu);
-
-        //Update search-button
-        if (data.topMenu.search){
-            var searchFunc = function(){
-                    ns.search( ns.main.topMenuObject.searchInput.val() );
-                    ns.main.topMenuObject.searchInput.select().focus();
-                };
-            ns.main.topMenuObject.search.on('submit', searchFunc );
-            ns.main.topMenuObject.searchButton.on('click', searchFunc );
+        //2. left-menu
+        if (options.leftMenu){
+            var resolveLeft = options.leftMenu.resolve || nsMap.createLeftMenu;
+            options.leftMenu.resolve = function(data){ resolveLeft(data, nsMap.main.leftMenu.$menu); };
+            addPromise(options.leftMenu);
         }
 
+        //3. right-menu
+        if (options.rightMenu){
+            var resolveRight = options.rightMenu.resolve || nsMap.createRightMenu;
+            options.rightMenu.resolve = function(data){ resolveRight(data, nsMap.main.rightMenu.$menu); };
+            addPromise(options.rightMenu);
+        }
 
-        //Set min- and max-zoom for main-map
-        $.extend(ns.mainMapOptions, {
-            //Set default minZoom and maxZoom
-            minZoom: data.map.minZoom,
-            maxZoom: data.map.maxZoom
+        //4: Other
+        $.each(options.other || [], function(index, opt){ addPromise(opt); });
+
+        //4: Meta-data (allow both syntax)
+        addPromise(opt.metadata || opt.metaData);
+
+        //5: Finish
+        whenFinish = options.finally;
+
+        //Fetch all the promises
+        Promise.defaultPrefetch();
+        Promise.all( promiseList)
+            .then   ( promise_all_then )
+            .catch  ( nsMap.displayError )
+            .finally( promise_all_finally );
+    };
+
+    function promise_all_then( dataList ){
+        $.each(dataList, function(index, data){
+            var opt = resolveList[index];
+
+            //Call the resolve-function
+            opt.resolve(data);
+
+            //If the file/data needs to reload with some interval => adds the resolve to nsMap.addInterval after the first load
+            if (opt.reload)
+                nsMap.addInterval(
+                    opt.reload === true ? 60 : opt.reload,
+                    opt.fileName || opt.data,
+                    opt.resolve,
+                    null,
+                    true
+                );
         });
-        //ns.layerMinMaxZoom = zoom-options for any layer
-        ns.layerMinMaxZoom = {
-            minZoom: data.map.minZoom,
-            maxZoom: data.map.maxZoom
-        };
+        return true;
+    }
 
-        if (data.multiMaps && data.multiMaps.enabled){
-
-//TEST
-$.bsButton({
-    icon  : ns.settingIcon('fa-map'),
-    square: true,
-    onClick: ns.editMultiAndSyncMapOptions
-}).appendTo( ns.main.$settingButtons );
-
-
-            $.extend(ns.secondaryMapOptions, {
-                minZoom: ns.mainMapOptions.minZoom,
-                maxZoom: ns.mainMapOptions.maxZoom,
+    function promise_all_finally(){
+        //Call ns.globalSetting.load => ns.appSetting.load => whenFinish => Promise.defaultFinally
+        ns.globalSetting.load(null, function(){
+            ns.appSetting.load(null, function(){
+                if (whenFinish)
+                    whenFinish();
+                Promise.defaultFinally();
             });
+        });
+        return true;
+    }
 
-            //backgroundLayerMinMaxZoom = zoom-options for layers visible in all zooms
-            //incl outside zoom-range given in setup => allows background to be visible
-            //in secondary maps when main maps is at min or max zoom and secondary maps
-            ns.backgroundLayerMinMaxZoom = {
-                minZoom: Math.max(0, data.map.minZoom - data.multiMaps.maxZoomOffset),
-                maxZoom: data.map.maxZoom + data.multiMaps.maxZoomOffset
+    /*************************************************************************
+    **************************************************************************
+    addInterval( duration, fileNameOrData, resolve, context, wait)
+    Add a reload of fileNameOrData with resolve-function
+    Will reload every rounded duration. Eq duration = "10 minutes" => called HH:00, HH:10, HH:20,...
+    If wait == false => also call the resolve on creation
+    **************************************************************************
+    *************************************************************************/
+    var intervalList = []; //[]{lastFloorMoment: MOMENT, list: []{fileNameOrData, resolve}
+
+    nsMap.addInterval = function( durationMinutes, fileNameOrData, resolve, context, wait){
+        var first    = !intervalList[durationMinutes],
+            interval = intervalList[durationMinutes] = intervalList[durationMinutes] || {};
+
+        interval.list = interval.list || [];
+        resolve = context ? $.proxy(resolve, context) : resolve;
+        var intervalRec = {
+                fileNameOrData: fileNameOrData,
+                resolve       : resolve
             };
+        interval.list.push(intervalRec);
 
-            //Create multi-maps
-            ns.multiMaps = L.multiMaps(
-                $('<div/>').prependTo(ns.main.$mainContainer), {
-                border : false,
-                maxMaps: data.multiMaps.maxMaps
+        if (!wait)
+            execIntervalResolve(null, intervalRec);
+
+        if (first)
+            intervalTimeout(durationMinutes, true);
+    };
+
+    function intervalTimeout(durationMinutes, dontResolve){
+        var interval        = intervalList[durationMinutes],
+            nowFloorMoment  = moment().floor(durationMinutes, 'minutes'),
+            nextFloorMoment = moment(nowFloorMoment).add(durationMinutes, 'minutes');
+
+        window.setTimeout( function(){intervalTimeout(durationMinutes);}, nextFloorMoment.diff(moment()) );
+
+        //Check if we need to call resolves
+        if (!interval.lastFloorMoment || !nowFloorMoment.isSame(interval.lastFloorMoment)){
+            interval.lastFloorMoment = nowFloorMoment;
+            if (!dontResolve)
+                $.each(interval.list, execIntervalResolve);
+        }
+    }
+
+    function execIntervalResolve(dummy, intervalRec){
+        if (isFileName(intervalRec.fileNameOrData))
+            //File-name is given => load file
+            Promise.getJSON(getFileName(intervalRec.fileNameOrData), {
+                noCache: true,
+                resolve: intervalRec.resolve
             });
+        else
+            //Data is given => resolve them
+            intervalRec.resolve(intervalRec.fileNameOrData);
+    }
 
-            //Create may-sync
-            var mapSync_Options = {
-                    showOutline     : false, //HER TODO skal hentes fra gemte options
-                    showShadowCursor: false, //HER TODO skal hentes fra gemte options
-                    inclDisabled    : true, // => Show shadow-cursor and outline on disabled maps (when shadow-cursor or outline is enabled)
-                    mapIsVisible    : function( map ){
-                        //Using isVisibleInMultiMaps from multi-maps to report if a map is visible
-                        return map.isVisibleInMultiMaps;
-                    }
-                };
-            ns.mapSync = new L.MapSync(mapSync_Options);
 
-            //Create main map
-            ns.mainMap = ns.multiMaps.addMap( ns.mainMapOptions );
-            ns.mainMap.setView([55.651, 12.757], 6); //HER TODO skal hentes fra gemte options
-
-            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', ns.layerMinMaxZoom).addTo(ns.mainMap);
-            ns.mapSync.add(ns.mainMap);
-
-            for (var i=1; i<data.multiMaps.maxMaps; i++){
-                var options = $.extend({}, ns.secondaryMapOptions ),
-                    mapSyncOptions = {
-                        enabled   : false, //HER TODO skal hentes fra gemte options
-                        zoomOffset: 0      //HER TODO skal hentes fra gemte options
-                    };
-                options.mapSyncOptions.active = mapSyncOptions.enabled;
-
-                var map = ns.multiMaps.addMap( options );
-
-                map.on('showInMultiMaps', map.onShowInMultiMaps, map );
-                map.on('hideInMultiMaps', map.onHideInMultiMaps, map );
-
-                ns.mapSync.add(map, mapSyncOptions);
-
-                map.setView([56.2, 11.5], 4); //HER skal hentes fra gemte options
-
-                L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', ns.backgroundLayerMinMaxZoom).addTo(map);
-
-                map.onHideInMultiMaps();
-            }
-
-            ns.setSyncMapOptions( mapSync_Options );
-
-            ns.multiMaps.set('1'); //HER TODO skal hentes fra gemte options
+    /*************************************************************************
+    **************************************************************************
+    displayError
+    **************************************************************************
+    *************************************************************************/
+    nsMap.displayError = function(){
+        var appName = {da:'applikationen', en: 'the Application'};
+        if (nsMap.setupData && nsMap.setupData.applicationName){
+            appName.da = '<em>'+nsMap.setupData.applicationName.da + '</em>';
+            appName.en = '<em>'+nsMap.setupData.applicationName.en + '</em>';
         }
-        else {
-            //Creae single map
-            ns.mainMap = L.map(ns.main.$mainContainer.get(0), ns.mainMapOptions);
-            ns.mainMap.setView([56.2, 11.5], 6);
-            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', data.maps).addTo(ns.mainMap);
-        }
+
+        $.bsModal({
+            header  : {icon: $.bsNotyIcon.error, text: $.bsNotyNameerror},
+            type    : 'error',
+            content : $('<div/>')
+                            .addClass('text-center')
+                            ._bsAddHtml({
+                                da: 'En eller flere opsætningsfiler kunne ikke læses<br>Det betyder, at ' + appName.da + ' ikke kan vises korrekt<br>Prøv evt. at <a ref="javascript:alert()">genindlæse siden</a>',
+                                en: 'One or more settings files could not be read<br>Therefore ' + appName.da + ' will not be displayed correct<br>If possible, try to reload the page'
+                            }),
+            buttons : [{id:'fa-reload', text:{da:'Genindlæs', en:'Reload'}, onClick: function(){ window.location.reload(true); }}],
+            show    : true
+        });
+        return false;
     };
 
 
-}(jQuery, L, this, document));
+}(jQuery, window.moment, L, this, document));
 
 
 

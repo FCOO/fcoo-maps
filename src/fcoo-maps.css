@@ -8,8 +8,6 @@
 
 
 ************************************************/
-/* stylelint-disable order/properties-alphabetical-order */
-/* stylelint-enable */
 /***********************************************
 leaflet-map-sync-outline-color
 Variable with the color and style of outline
@@ -54,9 +52,176 @@ headers modal, popover, tables, buttons, list-items etc.
 "$title-" is used for headers on content - table, accordion etc.
 "$control-" is used for buttons, list-items etc.
 ************************************************************/
+/***********************************************
+    _leaflet-zoom-modernizr.scss, 
+
+    (c) 2016, FCOO
+
+    https://github.com/FCOO/leaflet-zoom-modernizr
+    https://github.com/FCOO
+
+
+************************************************/
+/***********************************************************************
+
+leaflet-bootstrap-marker-mixin.scss
+
+*************************************************************************/
+/***********************************************************************
+marker-circle-color
+Create style for bsMarkerCircle in different colors
+*************************************************************************/
+/***********************************************************************
+lbm-circle-and-icon-classes
+Create class for bsMarkerCircle named $name with color and color-border
+*************************************************************************/
+/***********************************************************************
+lbm-marker-and-icon-classes
+Create class for bsMarkerCircle named $name with color and color-border
+*************************************************************************/
+/***********************************************************************
+fa-lbm-color
+Create class for color and border-color used by L.bsMarkerAsIcon (and $.bsMarkerAsIcon)
+to create fa-icon looking like the marker
+*************************************************************************/
+/***********************************************
+    _leaflet-polyline-mixin.scss
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/leaflet-polyline
+	https://github.com/FCOO
+
+************************************************/
+/**********************************************************
+marker-and-polygon-color: create color-classes for bsMarker and bsPolyline
+See https://www.w3schools.com/tags/ref_colornames.asp for color-names and code
+**********************************************************/
 /**********************************************************
 LEAFLET MAPS
 **********************************************************/
+html, body {
+  height: 100%; }
+
+body {
+  padding: 0;
+  margin: 0; }
+
+#map {
+  height: 100%; }
+
+body .leaflet-grab {
+  cursor: default; }
+
+body.leaflet-dragging .leaflet-grab,
+body.leaflet-dragging .leaflet-grab .leaflet-interactive,
+body.leaflet-dragging .leaflet-marker-draggable {
+  cursor: move; }
+
+/***********************************************
+	fcoo-leaflet-control-legend.scss,
+
+	(c) 2017, FCOO
+
+	https://gitlab.com/fcoo/fcoo-leaflet-control-legend
+	https://gitlab.com/fcoo
+
+
+************************************************/
+.fcoo-legend-container {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: white;
+  border: 1px solid black;
+  font-size: 12px;
+  margin: 0px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: center; }
+  .fcoo-legend-container a, .fcoo-legend-container a:hover {
+    display: inline !important;
+    border: none !important;
+    border-radius: 0  !important;
+    background-position: 0% 0%;
+    line-height: normal !important;
+    width: auto !important;
+    height: auto !important;
+    font-size: 12px !important; }
+  .fcoo-legend-container a[href] {
+    color: #337ab7 !important; }
+    .fcoo-legend-container a[href]:focus, .fcoo-legend-container a[href]:hover {
+      color: #23527c;
+      text-decoration: underline; }
+  .fcoo-legend-container * {
+    margin: 0; }
+  .fcoo-legend-container h2 {
+    font-size: 14px;
+    padding: 2px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: inherit;
+    font-weight: 600;
+    line-height: 1.1;
+    color: inherit;
+    border-bottom: 1px solid gray; }
+    .fcoo-legend-container h2.delayed {
+      background-color: rgba(255, 0, 0, 0.25); }
+    .fcoo-legend-container h2.clickable {
+      cursor: pointer; }
+    .fcoo-legend-container h2 i:first-child {
+      float: left;
+      margin-left: -16px; }
+      .fcoo-legend-container h2 i:first-child.down {
+        display: none; }
+    .fcoo-legend-container h2 i:last-child {
+      float: right;
+      margin-right: -16px; }
+      .fcoo-legend-container h2 i:last-child:hover {
+        color: red; }
+  .fcoo-legend-container img {
+    height: 40px;
+    width: 250px; }
+  .fcoo-legend-container .extra {
+    border-top: 1px solid gray;
+    text-align: left;
+    display: none; }
+    .fcoo-legend-container .extra > div > span {
+      display: inline-block; }
+      .fcoo-legend-container .extra > div > span:first-child {
+        width: 40%;
+        text-align: right; }
+        .fcoo-legend-container .extra > div > span:first-child:after {
+          content: ':'; }
+      .fcoo-legend-container .extra > div > span:last-child {
+        padding-left: 4px;
+        text-align: left; }
+
+.fcoo-no-legends-container {
+  width: 150px;
+  padding: 0;
+  text-align: center;
+  font-size: 14px; }
+
+h2.open ~ .extra {
+  display: block; }
+
+/****************************************************************************
+L.CONTROL.LOCATE
+Adjusted version of leaflet-icon-pulse by Filip Zavadil
+https://github.com/mapshakers/leaflet-icon-pulse
+****************************************************************************/
+.leaflet-control-locate.active a {
+  color: #4285F4; }
+
+/****************************************************************************
+Style for edit settings for graticule
+****************************************************************************/
+.graticule-label .hide-for-graticule-label {
+  display: none !important; }
+
+.no-graticule-label .show-for-graticule-label {
+  display: none !important; }
+
 /**********************************************************
 EDIT MULTI MAPS SETTINGS
 **********************************************************/
@@ -88,6 +253,9 @@ EDIT SYNC MAPS SETTINGS
 .bg-multi-maps-main {
   background-color: #3216B0; }
 
+.border-multi-maps-main {
+  border: 1px solid #3216B0 !important; }
+
 .map-sync-zoom-offset {
   margin: auto; }
   .map-sync-zoom-offset .multi-map-container .outline {
@@ -115,38 +283,246 @@ EDIT SYNC MAPS SETTINGS
 
 /**********************************************************
 STYLE FOR ICONS IN BUTTONS
-**********************************************************/
-/*
-sub-icons = a big icon with a small - normally round - icon in the right-bottom corner
+Using fcoo.iconSub = function(mainIcon, subIcon, subClassPostfix, square) from fcoo-application
 Each of the sub-icons may need a individual class to adjust size and position
-
-The structure is (BIG = the big icon, SUB = the small icon)
-<div class="container-stacked-icons">
-    <i class="fal fa-BIG fa-lg stacked-icon"></i>
-    <i class="fas fa-circle fa-circle-small-right-bottom stacked-icon"></i>
-    <i class="far fa-BIG fa-BIG-small-right-bottom stacked-icon"></i>
-</div>
-
-Different versions of sub-icons can be created using different methods in namespace fcoo.map.icon (see src/fcoo-maps-icon.js)
-
-*/
-.fa-circle-small-right-bottom {
-  position: relative;
-  right: calc(-6em / 16);
-  bottom: calc(-7em / 16);
-  font-size: 1.2em;
-  color: #f8f9fa !important; }
-  .active .fa-circle-small-right-bottom {
-    color: #007bff !important; }
-
-.fa-cog-small-right-bottom {
-  position: relative;
-  right: calc(-6em / 16);
-  bottom: calc(-7em / 16);
-  font-size: 1.1em; }
-
+**********************************************************/
 .fa-sync-small-right-bottom {
   position: relative;
   right: calc(-5em / 16);
   bottom: calc(-7em / 16);
   font-size: .9em; }
+
+.fa-tally-small-right-bottom {
+  position: relative;
+  right: calc(-3em / 16);
+  bottom: calc(-7em / 16);
+  font-size: .85em; }
+
+/**********************************************************
+STYLE FOR SEARCH RESULTS
+**********************************************************/
+.search-result-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline; }
+  .search-result-row .search-result-type {
+    font-size: .65625rem;
+    text-transform: capitalize; }
+  .search-result-row .search-result-name {
+    white-space: normal !important;
+    font-weight: 500;
+    font-size: 1.1em; }
+  .search-result-row .search-result-display {
+    white-space: normal !important;
+    font-size: .85em; }
+
+.lbm-type-circle.lbm-color-osm {
+  background-color: #e65800;
+  color: #000; }
+  .lbm-type-circle.lbm-color-osm.lbm-transparent {
+    background-color: rgba(230, 88, 0, 0.7); }
+    .lbm-type-circle.lbm-color-osm.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(230, 88, 0, 0.9); }
+  .lbm-type-circle.lbm-color-osm.lbm-shadow, .lbm-type-circle.lbm-color-osm.leaflet-drag-target, .lbm-type-circle.lbm-color-osm.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(230, 88, 0, 0.28); }
+  .lbm-type-circle.lbm-color-osm:before {
+    box-shadow: 0 0 6px 2px #e65800; }
+
+.lbm-type-circle.lbm-border-color-osm {
+  border-color: #e65800; }
+
+.fa-lbm-color-osm {
+  color: #e65800; }
+
+.fa-lbm-border-color-osm {
+  color: #e65800; }
+
+.lpl-base.lpl-osm {
+  fill: #e65800; }
+
+.lpl-base.lpl-border-osm,
+.lpl-shadow.lpl-border-osm {
+  stroke: #e65800; }
+
+/**********************************************************
+ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
+**********************************************************/
+.leaflet-zoom-3 .hide-for-leaflet-zoom-3 {
+  display: none !important; }
+
+.no-leaflet-zoom-3 .show-for-leaflet-zoom-3 {
+  display: none !important; }
+
+.leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up {
+  display: none !important; }
+
+.no-leaflet-zoom-3-up .show-for-leaflet-zoom-3-up {
+  display: none !important; }
+
+.leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down {
+  display: none !important; }
+
+.no-leaflet-zoom-3-down .show-for-leaflet-zoom-3-down {
+  display: none !important; }
+
+.leaflet-zoom-4 .hide-for-leaflet-zoom-4 {
+  display: none !important; }
+
+.no-leaflet-zoom-4 .show-for-leaflet-zoom-4 {
+  display: none !important; }
+
+.leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up {
+  display: none !important; }
+
+.no-leaflet-zoom-4-up .show-for-leaflet-zoom-4-up {
+  display: none !important; }
+
+.leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down {
+  display: none !important; }
+
+.no-leaflet-zoom-4-down .show-for-leaflet-zoom-4-down {
+  display: none !important; }
+
+.leaflet-zoom-5 .hide-for-leaflet-zoom-5 {
+  display: none !important; }
+
+.no-leaflet-zoom-5 .show-for-leaflet-zoom-5 {
+  display: none !important; }
+
+.leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up {
+  display: none !important; }
+
+.no-leaflet-zoom-5-up .show-for-leaflet-zoom-5-up {
+  display: none !important; }
+
+.leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down {
+  display: none !important; }
+
+.no-leaflet-zoom-5-down .show-for-leaflet-zoom-5-down {
+  display: none !important; }
+
+.leaflet-zoom-6 .hide-for-leaflet-zoom-6 {
+  display: none !important; }
+
+.no-leaflet-zoom-6 .show-for-leaflet-zoom-6 {
+  display: none !important; }
+
+.leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up {
+  display: none !important; }
+
+.no-leaflet-zoom-6-up .show-for-leaflet-zoom-6-up {
+  display: none !important; }
+
+.leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down {
+  display: none !important; }
+
+.no-leaflet-zoom-6-down .show-for-leaflet-zoom-6-down {
+  display: none !important; }
+
+.leaflet-zoom-7 .hide-for-leaflet-zoom-7 {
+  display: none !important; }
+
+.no-leaflet-zoom-7 .show-for-leaflet-zoom-7 {
+  display: none !important; }
+
+.leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up {
+  display: none !important; }
+
+.no-leaflet-zoom-7-up .show-for-leaflet-zoom-7-up {
+  display: none !important; }
+
+.leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down {
+  display: none !important; }
+
+.no-leaflet-zoom-7-down .show-for-leaflet-zoom-7-down {
+  display: none !important; }
+
+.leaflet-zoom-8 .hide-for-leaflet-zoom-8 {
+  display: none !important; }
+
+.no-leaflet-zoom-8 .show-for-leaflet-zoom-8 {
+  display: none !important; }
+
+.leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up {
+  display: none !important; }
+
+.no-leaflet-zoom-8-up .show-for-leaflet-zoom-8-up {
+  display: none !important; }
+
+.leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down {
+  display: none !important; }
+
+.no-leaflet-zoom-8-down .show-for-leaflet-zoom-8-down {
+  display: none !important; }
+
+.leaflet-zoom-9 .hide-for-leaflet-zoom-9 {
+  display: none !important; }
+
+.no-leaflet-zoom-9 .show-for-leaflet-zoom-9 {
+  display: none !important; }
+
+.leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up {
+  display: none !important; }
+
+.no-leaflet-zoom-9-up .show-for-leaflet-zoom-9-up {
+  display: none !important; }
+
+.leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down {
+  display: none !important; }
+
+.no-leaflet-zoom-9-down .show-for-leaflet-zoom-9-down {
+  display: none !important; }
+
+.leaflet-zoom-10 .hide-for-leaflet-zoom-10 {
+  display: none !important; }
+
+.no-leaflet-zoom-10 .show-for-leaflet-zoom-10 {
+  display: none !important; }
+
+.leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up {
+  display: none !important; }
+
+.no-leaflet-zoom-10-up .show-for-leaflet-zoom-10-up {
+  display: none !important; }
+
+.leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down {
+  display: none !important; }
+
+.no-leaflet-zoom-10-down .show-for-leaflet-zoom-10-down {
+  display: none !important; }
+
+.leaflet-zoom-11 .hide-for-leaflet-zoom-11 {
+  display: none !important; }
+
+.no-leaflet-zoom-11 .show-for-leaflet-zoom-11 {
+  display: none !important; }
+
+.leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up {
+  display: none !important; }
+
+.no-leaflet-zoom-11-up .show-for-leaflet-zoom-11-up {
+  display: none !important; }
+
+.leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down {
+  display: none !important; }
+
+.no-leaflet-zoom-11-down .show-for-leaflet-zoom-11-down {
+  display: none !important; }
+
+.leaflet-zoom-12 .hide-for-leaflet-zoom-12 {
+  display: none !important; }
+
+.no-leaflet-zoom-12 .show-for-leaflet-zoom-12 {
+  display: none !important; }
+
+.leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up {
+  display: none !important; }
+
+.no-leaflet-zoom-12-up .show-for-leaflet-zoom-12-up {
+  display: none !important; }
+
+.leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down {
+  display: none !important; }
+
+.no-leaflet-zoom-12-down .show-for-leaflet-zoom-12-down {
+  display: none !important; }

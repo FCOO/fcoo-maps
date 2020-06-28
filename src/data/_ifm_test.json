@@ -1,12 +1,13 @@
 {
     "applicationName": {"da":"NY Dansk titel", "en":"NEW English title"},
     "topMenu": {
-        "search" : true,
+        "search"  : true,
+        "messages": "data/ifm-maps-info.json",
         "warning": {"subDir": "warnings", "fileName": "geometoc_ifm_warning.json"}
     },
     "map": {
         "minZoom": 3,
-        "maxZoom": 10
+        "maxZoom": 12
     },
     "multiMaps": {
         "enabled"      : true,
@@ -15,6 +16,7 @@
             "tablet" : 5,
             "desktop": 5
         },
-        "maxZoomOffset": 2
+        "maxZoomOffset": 2,
+        "allowDifferentTime": true
     }
 }
