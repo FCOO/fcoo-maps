@@ -28,14 +28,14 @@ Objects,methods, and events to handle time (moment)
     There are four possible modes to display and select current time/moment:
     'SCALE', 'SELECT', 'RELATIVE', or 'ANIMATION'
     ***************************************/
-    var tmScale       = nsTime.tmScale     = 1,
+    var //tmScale       = nsTime.tmScale     = 1,
         //Not used: tmSelect      = nsTime.tmSelect    = 2,
         tmRelative    = nsTime.tmRelative  = 4,
         tmAnimation   = nsTime.tmAnimation = 8,
         //Not used: tmAbsolute    = tmScale + tmSelect,
         tmAnyRelative = tmRelative + tmAnimation;
 
-    nsTime.timeMode = tmScale;
+    nsTime.timeMode = tmRelative; //tmScale;
 
     //Add timeMode to application-settings
     ns.appSetting.add({
@@ -46,7 +46,7 @@ Objects,methods, and events to handle time (moment)
             ns.events.fire('TIMEMODECHANGED', timeMode);
 //console.log('MANGLER timeMode=', timeMode);
         },
-        defaultValue: tmScale
+        defaultValue: tmRelative //tmScale
     });
     function timeModeIsRelative(){
         return !!(nsTime.timeMode & tmAnyRelative);

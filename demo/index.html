@@ -56,9 +56,7 @@
         i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
         window.fcoo.map.createApplication({
-            setup:  window.fcoo.LOCAL_DATA ?
-                        {subDir:'setup', fileName:'ifm_test.json'} :
-                        '../src/data/_ifm_test.json',
+            setup:  {subDir:'setup', fileName:'ifm_test.json'},
 
             _setup: {
                 applicationName: {da:'SKIDE GODT', en:'SHIT GOOD'}
