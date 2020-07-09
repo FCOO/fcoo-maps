@@ -1,0 +1,28 @@
+{
+    "defaults": {
+        "type": "help"
+    },
+    "messages": [
+        {
+            "id"   : "fcoo-maps-general",
+            "title": {"da":"Generelt", "en": "General"},
+            "url"  : {"subDir": "help", "fileName": "fcoo-maps-general.txt"}
+        },
+        {
+            "id"   : "fcoo-maps-multi-maps",
+            "title": {"da":"Kort - Antal, synkronisering og indstillinger", "en":"Multi Maps, Synchronizing, and Map Settings"},
+            "url"  : {"subDir": "help", "fileName": "fcoo-maps-multi-maps.txt"}
+        },
+        {
+            "id"   : "fcoo-maps-map-setting",
+            "title": {"da":"Indstillinger for de enkelt kort", "en":"Settings for each map"},
+            "url"  : {"subDir": "help", "fileName": "fcoo-maps-map-setting.txt"}
+        },
+        {
+            "id"   : "fcoo-maps-setting",
+            "title": {"da":"Generelle indstillinger", "en":"General Settings"},
+            "url"  : {"subDir": "help", "fileName": "fcoo-maps-setting.txt"}
+        }
+    ]
+
+}

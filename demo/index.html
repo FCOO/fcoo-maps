@@ -18,12 +18,15 @@
 
 	<script src="bower_components.js"></script>
 
-    <script src="../src/0_fcoo-maps-leaflet.js"></script>
+	<script src="../src/00_fcoo-maps.js"></script>
 
-    <script src="../src/1_fcoo-maps-multi-maps.js"></script>
-    <script src="../src/1_fcoo-maps-map-sync.js"></script>
-    <script src="../src/2_fcoo-maps-map-setting-group.js"></script>
-    <script src="../src/3_fcoo-maps-global-events.js"></script>
+    <script src="../src/01_fcoo-maps-time.js"></script>
+    <script src="../src/02_fcoo-maps-leaflet.js"></script>
+
+    <script src="../src/11_fcoo-maps-multi-maps.js"></script>
+    <script src="../src/12_fcoo-maps-map-sync.js"></script>
+    <script src="../src/13_fcoo-maps-map-setting-group.js"></script>
+    <script src="../src/14_fcoo-maps-global-events.js"></script>
 
     <script src="../src/fcoo-maps-create-main.js"></script>
 
@@ -38,14 +41,13 @@
 	<script src="../src/fcoo-maps-search.js"></script>
 	<script src="../src/fcoo-maps-search-category.js"></script>
 	<script src="../src/fcoo-maps-search-details.js"></script>
-	<script src="../src/fcoo-maps.js"></script>
 	<script src="../src/fcoo-maps-create-menu.js"></script>
 
 
 <script src="../src/L.Control.Locate.extend.js"></script>
 
     <script>
-        window.fcoo.LOCAL_DATA = true;
+        //window.fcoo.LOCAL_DATA = true;
 
         window.bsIsTouch = window.bsIsTouch || (window.location.search =='?touch');
 
@@ -53,9 +55,11 @@
         i18next.changeLanguage('da');
         i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
-
         window.fcoo.map.createApplication({
-            setup: {subDir:'setup', fileName:'ifm_test.json'},
+            setup:  window.fcoo.LOCAL_DATA ?
+                        {subDir:'setup', fileName:'ifm_test.json'} :
+                        '../src/data/_ifm_test.json',
+
             _setup: {
                 applicationName: {da:'SKIDE GODT', en:'SHIT GOOD'}
             },

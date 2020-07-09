@@ -1,0 +1,41 @@
+{
+    "defaults": {
+        "type": "warning"
+    },
+    "messages": [
+        {
+            "id": "error_major",
+            "date": "2020-07-05T10:00:00+02:00",
+            "publish": false,
+            "fileName": "",
+            "title": {
+                "da":"Grundet strømafbrud, har vores systemer været nede, og vi arbejder på at få dem tilbage i drift snarest muligt",
+                "en": "Due to a major power outage all our systems have been down and we are working hard to get them back in normal services"}
+        },
+        {
+            "id": "error_dmi",
+            "date": "2020-04-21T14:00:00+02:00",
+            "publish": false,
+            "fileName": "",
+            "title": {
+                "da":"Vi har i øjeblikket problemer med at hjemhente vejrprognoser fra DMI. Disse data anvendes i vores egne modeller, hvilket gør at de korte havprognoser er forsinkede",
+                "en": "At the moment we are having problems receving weather forecasts from DMI. These datasets are used in our own models, which causes the short range ocean forecasts to be delayed"}
+        },
+        {
+            "id": "error_ecmwf",
+            "date": "2020-09-19T08:40:00+01:00",
+            "publish": false,
+            "fileName": "",
+            "title": {"da":"Vi har i øjeblikket problemer med at hjemhente vejrprognoser fra ECMWF, hvorfor de mellemlange vejr- og bølgeprognoser er forsinkede. Disse data anvendes også i vores egne modeller, hvilket gør at de korte havprognoser også er forsinkede.", "en": "At the moment we are having problems receving weather forecasts from ECMWF. Therefore the medium range weather and wave forecasts are delayed. These datasets are also used in our own models, which causes the short range ocean forecasts to be delayed as well."}
+        },
+        {
+            "id": "error_20200302_njord",
+            "type": "error",
+            "date": "2020-03-02T10:00:00+01:00",
+            "publish": false,
+            "fileName": "",
+            "title": {"da":"Det er desværre ikke muligt at se Efterretninger for IFM Error: Der er noget andet galt med...", "en":"IFM Error: Something else is wrong with..."}
+        }
+    ]
+
+}

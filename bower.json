@@ -1,81 +1,81 @@
 {
-    "name": "fcoo-maps",
-    "version": "0.1.4",
-    "homepage": "https://github.com/FCOO/fcoo-maps",
-    "authors": [
-        "Niels Holt"
-    ],
-    "description": "",
-    "main": [
-        "dist/fcoo-maps.js",
-        "dist/fcoo-maps.css"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/FCOO/fcoo-maps.git"
+  "name": "fcoo-maps",
+  "version": "1.0.0",
+  "homepage": "https://github.com/FCOO/fcoo-maps",
+  "authors": [
+    "Niels Holt"
+  ],
+  "description": "",
+  "main": [
+    "dist/fcoo-maps.js",
+    "dist/fcoo-maps.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/FCOO/fcoo-maps.git"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "moduleType": [
+    "es6"
+  ],
+  "dependencies": {
+    "leaflet": "leaflet#1.4.0",
+    "leaflet-multi-maps": "FCOO/leaflet-multi-maps#^2.0.0",
+    "leaflet-map-sync": "FCOO/leaflet-map-sync#^2.0.0",
+    "fcoo-form-validation": "https://gitlab.com/FCOO/fcoo-form-validation.git#^0.9.2",
+    "fcoo-modal-form": "FCOO/fcoo-modal-form#^1.0.0",
+    "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.3.0",
+    "fcoo-application": "https://gitlab.com/FCOO/fcoo-application.git#^9.0.0",
+    "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
+    "leaflet-control-box": "fcoo/leaflet-control-box#^4.1.0",
+    "leaflet-control-fa-button": "fcoo/leaflet-control-fa-button#^2.0.0",
+    "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
+    "leaflet.locatecontrol": "domoritz/leaflet-locatecontrol#^0.71.0",
+    "leaflet-control-permalink": "fcoo/leaflet-control-permalink#^2.0.0",
+    "leaflet.edgebuffer": "TolonUK/Leaflet.EdgeBuffer#^1.0.3",
+    "fcoo-global-switches": "https://gitlab.com/FCOO/fcoo-global-switches.git#^0.1.0",
+    "jquery-mousewheel": "^3.1.13",
+    "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^2.16.0",
+    "leaflet-bootstrap-marker": "fcoo/leaflet-bootstrap-marker#^2.3.0",
+    "leaflet-polyline": "fcoo/leaflet-polyline#^2.4.2",
+    "leaflet-bootstrap-niord": "fcoo/leaflet-bootstrap-niord#^2.1.0",
+    "leaflet-bootstrap-draw": "fcoo/leaflet-bootstrap-draw#^2.0.0",
+    "leaflet-latlng-format": "fcoo/leaflet-latlng-format#^2.0.0",
+    "leaflet-latlng-graticule": "fcoo/leaflet-latlng-graticule#^1.2.0",
+    "moment-timer": "^1.3.0",
+    "pdfobject": "fcoo/PDFObject"
+  },
+  "devDependencies": {
+    "bourbon": "latest",
+    "modernizr-mixin": "latest",
+    "mathsass": "latest",
+    "Leaflet.DoubleRightClickZoom": "GhostGroup/Leaflet.DoubleRightClickZoom",
+    "modernizr-scss": "https://github.com/FCOO/modernizr-scss.git#latest"
+  },
+  "overrides": {
+    "leaflet": {
+      "main": [
+        "dist/leaflet-src.js",
+        "dist/leaflet.css"
+      ],
+      "dependencies": {
+        "fcoo-global-switches": "latest"
+      }
     },
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "moduleType": [
-        "es6"
-    ],
-    "dependencies": {
-        "leaflet": "leaflet#1.4.0",
-        "leaflet-multi-maps": "FCOO/leaflet-multi-maps#^2.0.0",
-        "leaflet-map-sync": "FCOO/leaflet-map-sync#^2.0.0",
-        "fcoo-form-validation": "https://gitlab.com/FCOO/fcoo-form-validation.git#^0.9.2",
-        "fcoo-modal-form": "FCOO/fcoo-modal-form#^1.0.0",
-        "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.3.0",
-        "fcoo-application": "https://gitlab.com/FCOO/fcoo-application.git#^9.0.0",
-        "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
-        "leaflet-control-box": "fcoo/leaflet-control-box#^4.1.0",
-        "leaflet-control-fa-button": "fcoo/leaflet-control-fa-button#^2.0.0",
-        "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
-        "leaflet.locatecontrol": "domoritz/leaflet-locatecontrol#^0.71.0",
-        "leaflet-control-permalink": "fcoo/leaflet-control-permalink#^2.0.0",
-        "leaflet.edgebuffer": "TolonUK/Leaflet.EdgeBuffer#^1.0.3",
-        "fcoo-global-switches": "https://gitlab.com/FCOO/fcoo-global-switches.git#^0.1.0",
-        "jquery-mousewheel": "^3.1.13",
-        "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^2.16.0",
-        "leaflet-bootstrap-marker": "fcoo/leaflet-bootstrap-marker#^2.3.0",
-        "leaflet-polyline": "fcoo/leaflet-polyline#^2.4.2",
-        "leaflet-bootstrap-niord": "fcoo/leaflet-bootstrap-niord#^2.1.0",
-        "leaflet-bootstrap-draw": "fcoo/leaflet-bootstrap-draw#^2.0.0",
-        "leaflet-latlng-format": "fcoo/leaflet-latlng-format#^2.0.0",
-        "leaflet-latlng-graticule": "fcoo/leaflet-latlng-graticule#^1.2.0",
-        "moment-timer": "^1.3.0",
-        "pdfobject": "fcoo/PDFObject"
-    },
-    "devDependencies": {
-        "bourbon": "latest",
-        "modernizr-mixin": "latest",
-        "mathsass": "latest",
-        "Leaflet.DoubleRightClickZoom": "GhostGroup/Leaflet.DoubleRightClickZoom",
-        "modernizr-scss": "https://github.com/FCOO/modernizr-scss.git#latest"
-    },
-    "overrides": {
-        "leaflet": {
-            "main": [
-                "dist/leaflet-src.js",
-                "dist/leaflet.css"
-            ],
-            "dependencies": {
-                "fcoo-global-switches": "latest"
-            }
-        },
-        "leaflet.locatecontrol": {
-            "main": [
-                "src/L.Control.Locate.js"
-            ]
-        }
-    },
-    "resolutions": {
-        "leaflet": "1.4.0"
+    "leaflet.locatecontrol": {
+      "main": [
+        "src/L.Control.Locate.js"
+      ]
     }
+  },
+  "resolutions": {
+    "leaflet": "1.4.0"
+  }
 }

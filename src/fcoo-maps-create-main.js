@@ -23,6 +23,11 @@ fcoo-maps-create-main.js,
                 messages : null, //null or STRING or {subDir:STRING, fileName:STRING}
                 warning  : null, //null or STRING or {subDir:STRING, fileName:STRING}
 
+                helpId: {   //id in help message-file for different default modals
+                    globalSetting  : '',  //Modal with fcoo.globalSetting
+                    mapSetting     : '',  //Modal with settings for a single map
+                    multiMapSetting: '',  //Modal with multi-maps setting
+                },
 
                 //Add button before setting-button with settings for map(s)
                 preSetting: {
@@ -75,17 +80,11 @@ fcoo-maps-create-main.js,
         data.topMenu.header = data.applicationName;
 
         //Adjust path
-        var local = ns.LOCAL_DATA;
-        ns.LOCAL_DATA = false;
         $.each(['help', 'messages', 'warning'], function(index, id){
             var topMenuPath = data.topMenu[id];
-            if (topMenuPath){
-                if ($.isPlainObject(topMenuPath))
-                    topMenuPath = ns.dataFilePath( topMenuPath.subDir , topMenuPath.fileName );
-                data.topMenu[id] = {url: topMenuPath};
-            }
+            if (topMenuPath)
+                data.topMenu[id] = {url: ns.dataFilePath( topMenuPath )};
         });
-        ns.LOCAL_DATA = local;
 
         //Adjust menu-width
         data.leftMenu  = data.leftMenuWidth  ? {width: data.leftMenuWidth}  : null;
@@ -99,6 +98,14 @@ fcoo-maps-create-main.js,
                     ns.modernizrDevice.isDesktop ? data.multiMaps.maxMaps.desktop :
                     ns.modernizrDevice.isTablet  ? data.multiMaps.maxMaps.tablet :
                     data.multiMaps.maxMaps.mobile;
+        }
+
+
+        //Add helpId to modal for globalSetting (if any)
+        if (nsMap.setupData.topMenu.helpId.globalSetting){
+            var modalOptions = ns.globalSetting.options.modalOptions = ns.globalSetting.options.modalOptions || {};
+            modalOptions.helpId = nsMap.setupData.topMenu.helpId.globalSetting;
+            modalOptions.helpButton = true;
         }
 
 /*/TEST

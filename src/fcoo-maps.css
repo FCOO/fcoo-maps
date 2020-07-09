@@ -118,6 +118,26 @@ body.leaflet-dragging .leaflet-grab .leaflet-interactive,
 body.leaflet-dragging .leaflet-marker-draggable {
   cursor: move; }
 
+/**********************************************************
+DIVERSE
+**********************************************************/
+.font-size-1-2 {
+  font-size: 1.2em; }
+
+.icon-active {
+  color: #007bff;
+  font-weight: bold; }
+
+.leaflet-control.leaflet-button-box.forced-shown {
+  visibility: visible !important;
+  opacity: 1; }
+  .leaflet-control.leaflet-button-box.forced-shown.extended a.btn.hide-for-extended {
+    display: block !important; }
+  .leaflet-control.leaflet-button-box.forced-shown a.btn i:last-child {
+    display: none; }
+  .leaflet-control.leaflet-button-box.forced-shown div.modal-dialog {
+    display: none !important; }
+
 /***********************************************
 	fcoo-leaflet-control-legend.scss,
 

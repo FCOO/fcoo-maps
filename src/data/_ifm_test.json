@@ -3,7 +3,13 @@
     "topMenu": {
         "search"  : true,
         "messages": "data/ifm-maps-info.json",
-        "warning": {"subDir": "warnings", "fileName": "geometoc_ifm_warning.json"}
+        "help"    : {"subDir": "help", "fileName": "fcoo-maps-help.json"},
+        "warning" : {"subDir": "warnings", "fileName": "geometoc_ifm_warning.json"},
+        "helpId"  : {
+            "globalSetting"  : "fcoo-maps-setting",
+            "mapSetting"     : "fcoo-maps-map-setting",
+            "multiMapSetting": "fcoo-maps-multi-maps"
+        }
     },
     "map": {
         "minZoom": 3,
