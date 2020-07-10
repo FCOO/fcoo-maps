@@ -38,6 +38,7 @@ Objects,methods, and events to handle time (moment)
     nsTime.timeMode = tmRelative; //tmScale;
 
     //Add timeMode to application-settings
+/*
     ns.appSetting.add({
         id          : 'timeMode',
         callApply   : false,
@@ -46,8 +47,9 @@ Objects,methods, and events to handle time (moment)
             ns.events.fire('TIMEMODECHANGED', timeMode);
 //console.log('MANGLER timeMode=', timeMode);
         },
-        defaultValue: tmRelative //tmScale
+        defaultValue: tmScale
     });
+*/
     function timeModeIsRelative(){
         return !!(nsTime.timeMode & tmAnyRelative);
     }
