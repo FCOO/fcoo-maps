@@ -329,10 +329,10 @@ Objects and methods to handle map-sync
             });
 
             //Calc height and width ratio of this map and main-map
-            var $thisContainer = $(_this_map.getContainer()),
-                $mainContainer = $(_this_map._mapSync.mainMap.getContainer());
-
-            this.currentAndMainMapRatio = Math.round( 100*$thisContainer.innerWidth() / $mainContainer.innerWidth() );
+            this.currentAndMainMapRatio = Math.round(
+                100 * _this_map.$container.innerWidth() /
+                      _this_map._mapSync.mainMap.$container.innerWidth()
+            );
         }
 
         //Update the content of boxes representing ths map and main map

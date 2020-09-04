@@ -34,13 +34,6 @@ Objects and methods to handle leaflet-maps
     //Set default path to leaflet icon images
     L.Icon.Default.imagePath = "images/";
 
-    //BUGFIX - in Chrome and IE on desktop leaflet L.Browser.touch will get set to true - instead using Modernizr.touchevents to remove
-    L.Map.addInitHook(function () {
-        if (window.Modernizr && window.Modernizr.touchevents === false)
-            $(this.getContainer()).removeClass('leaflet-touch');
-
-    });
-
     /***********************************************************
     List of maps
     ***********************************************************/
@@ -59,6 +52,13 @@ Objects and methods to handle leaflet-maps
     }
 
     L.Map.addInitHook(function () {
+        this.$container = $(this.getContainer());
+
+        //BUGFIX - in Chrome and IE on desktop leaflet L.Browser.touch will get set to true - instead using Modernizr.touchevents to remove
+        if (window.Modernizr && window.Modernizr.touchevents === false)
+            this.$container.removeClass('leaflet-touch');
+
+
         this.fcooMapIndex = map_index;
         this.fcooMapId = 'fcooMap'+ map_index;
         map_index++;

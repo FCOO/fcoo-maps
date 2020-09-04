@@ -9,7 +9,8 @@
 
     //Create namespaces
     var ns = window.fcoo = window.fcoo || {},
-        nsNiordOptions = window.Niord.options;
+        nsNiord = window.Niord = window.Niord || {},
+        nsNiordOptions = nsNiord.options;
 
     //Update icon with pro-versions
     $.extend(nsNiordOptions.partIcon, {
@@ -83,6 +84,40 @@
     });
 
 
-    //********************************************
+    /**************************************************
+    Set up onClickCoordinate to use common latLng-modal
+    **************************************************/
+    nsNiord.options.onClickCoordinate  = function(coord, text/*, message*/){
+        //Include text only if the current format is different from 'standard' Niord-format (= degree + decimal minutes)
+        L.latLng(coord[1], coord[0]).asModal( ns.globalSetting.get('latlng') != window.latLngFormat.LATLNGFORMAT_DMM ? {header: {text:text}} : null);
+    };
 
+    /**************************************************
+    Set up default error for Niord-data
+    **************************************************/
+    var firstError = true;
+    window.Niord.defaultPromiseOptions = {useDefaultErrorHandler: false};
+    window.Niord.defaultErrorHandler = function(){
+        if (firstError)
+            $.bsNoty({
+                type     : 'error',
+                layout   : 'topCenter',
+                closeWith: ['button'],
+                content  : [
+                    $('<div class="font-weight-bold"/>').i18n({da:'Fejl', en:'Error'}),
+                    {
+                        da: 'Der opstod en fejl under hentning af data med Navigationsadvarsler, Efterretninger for Søfarende samt Skydeområder og Skydeadvarsler fra Søfartsstyrelsen.<br>'+
+                            'Prøv at indlæse siden igen lidt senere eller se informationerne på',
+                        en: 'An error occurred while retrieving data with Navigational Warnings, Notices to Mariners, as well as Firing Areas and Warnings from the Danish Maritime Authority.<br>'+
+                            'Try to reload this page later or find the information at'
+                    },
+                    {
+                        text: {da:'Søfartsstyrelsens hjemmeside', en:'the Danish Maritime Authority webpage'},
+                        link: {da:'https://www.soefartsstyrelsen.dk', en: 'https://www.dma.dk'}
+                    }
+                ]
+            });
+        firstError = false;
+        return false;
+    };
 }(jQuery, L, this, document));

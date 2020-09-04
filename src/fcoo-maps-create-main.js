@@ -271,7 +271,6 @@ L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', nsMap.backgroun
         else {
             //Creae single map
             nsMap.mainMap = L.map(nsMap.main.$mainContainer.get(0), nsMap.mainMapOptions);
-            nsMap.mainMap.$container = $(nsMap.mainMap._container);
 
 nsMap.mainMap.setView([56.2, 11.5], 6);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', data.maps).addTo(nsMap.mainMap);

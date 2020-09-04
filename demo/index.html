@@ -28,7 +28,9 @@
     <script src="../src/13_fcoo-maps-map-setting-group.js"></script>
     <script src="../src/14_fcoo-maps-global-events.js"></script>
 
+    <script src="../src/fcoo-maps-latlng.js"></script>
     <script src="../src/fcoo-maps-create-main.js"></script>
+
 
     <script src="../src/fcoo-maps-niord.js"></script>
     <script src="../src/fcoo-maps-format.js"></script>
@@ -47,12 +49,12 @@
 <script src="../src/L.Control.Locate.extend.js"></script>
 
     <script>
-        //window.fcoo.LOCAL_DATA = true;
+        window.fcoo.LOCAL_DATA = true;
 
         window.bsIsTouch = window.bsIsTouch || (window.location.search =='?touch');
 
         i18next.init();
-        i18next.changeLanguage('da');
+        i18next.changeLanguage('en');
         i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
         window.fcoo.map.createApplication({
@@ -73,7 +75,10 @@
             _other: [
                 {data:{text:'Davs med dig'}, resolve: function(data){console.log(data);}, reload:1}
             ],
-            _finally: function(){alert('Davs');}
+            finally: function(){
+                var niord = new L.GeoJSON.Niord({domain:'fa nm fe nw'});
+                niord.addTo(window.fcoo.map.mainMap);
+            }
         });
 /*
         window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.1', moment().format('HH:mm:ss'), data); });
@@ -85,6 +90,8 @@
         window.fcoo.map.addInterval( 20, {subDir:'setup', fileName:'ifm_test.json'}, function(data){ console.log('20.1', moment().format('HH:mm:ss'), data); });
         window.fcoo.map.addInterval( 20, {subDir:'setup', fileName:'ifm_test.json'}, function(data){ console.log('20.2', moment().format('HH:mm:ss'), data); });
 */
+
+
     </script>
  </body>
 </html>

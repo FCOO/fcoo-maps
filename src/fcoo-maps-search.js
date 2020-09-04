@@ -25,8 +25,8 @@ fcoo-maps-search
         /* TEST
         text = text || '12 12 - 12 12';
         text = text || "56° 28,619'N - 006° 05,055'E";
+        text = text || 'Köln';
         */
-
         var lang = ns.globalSetting.get('language');
         if (text === null){
             showSearchModalForm(searchText);
@@ -165,6 +165,12 @@ fcoo-maps-search
 
         searchResultList = list;
 
+        //If only ONE result => show direct on map
+        if (list.length == 1){
+            list[0].showOnMainMap();
+            return;
+        }
+
         var searchAgainButton = {
                 type: 'button',
                 icon: 'fa-search',
@@ -201,24 +207,7 @@ fcoo-maps-search
                     searchResultModal.close();
                     searchResultList[selectedSearchResultIndex].showOnMainMap();
                 },
-                buttons = [];
-
-
-            if (inclDetails)
-                buttons.push({
-                    icon   : 'fa-info-circle',
-                    text   : {da:'Detaljer', en:'Details'},
-                    onClick: function(){
-                        searchResultList[selectedSearchResultIndex].showDetails();
-                    }
-                });
-            buttons.push({
-                icon   : 'fa-map-marker',
-                text   : {da:'Vis på kort', en:'Show on map'},
-                onClick: onClick
-            });
-
-            var options = {
+                options = {
                     header   : {icon: 'fa-search', text:{da:'Søgeresultater', en:'Search Results'}},
                     static   : false,
                     keyboard : true,
@@ -237,13 +226,27 @@ fcoo-maps-search
                         },
                         onDblClick: onClick
                     }],
-                    buttons : buttons,
+                    buttons : [
+                        {
+                            icon   : 'fa-info-circle',
+                            className: 'btn_search_result_detail',
+                            text   : {da:'Detaljer', en:'Details'},
+                            onClick: function(){ searchResultList[selectedSearchResultIndex].showDetails(); }
+                        }, {
+                            icon   : 'fa-map-marker',
+                            text   : {da:'Vis på kort', en:'Show on map'},
+                            onClick: onClick
+                        }
+                    ],
                     footer: {
                         text: {da:'Søgning efter positioner, byer, havområder og lign. - men ikke efter adresser', en:'Search for positions, cities, seas and the likes - but not for addresses'},
                         textClass: 'd-block text-wrap'
                     }
                 };
             searchResultModal = searchResultModal ? searchResultModal.update(options) : $.bsModal(options);
+
+            searchResultModal.bsModal.$buttons[1].toggle(inclDetails);
+
             searchResultModal.show();
         }
         else {
@@ -254,7 +257,7 @@ fcoo-maps-search
                 text     : {da:'Søgning after "'+searchText+'" gav ikke noget resultat', en:'Search for "'+searchText+'" gave no result'},
                 buttons  : [searchAgainButton],
                 closeWith: ['click', 'button'],
-                                    timeout  : 4000,
+                timeout  : 4000,
                 textAlign: 'center'
             });
         }
@@ -273,12 +276,44 @@ fcoo-maps-search
         options.include = nsMap.osm_include(options);
         options.address = options.address || {};
         options.latLng = options.latLng || L.latLng(options.lat, options.lon);
-
         this.id = '_' + (options.osm_id || options.latLng.lat+'_'+options.latLng.lng);
 
         this.update(options);
 
-        //Create BsModalContentPromise to update modal-content in modal-window and popup
+
+        this.showMarker = true;
+        this.showPoly   = false;
+        if (this.options.geojson && this.options.geojson.coordinates && (this.options.geojson.type != 'Point') && (this.options.geojson.type != 'MultiPoint')){
+            var map        = nsMap.mainMap,
+                markerSize = 14;
+            /*
+            Calculate dimentions of the polygon/line at max-zoom see if it is big enough to be visible at max-zoom eq bigger than the marker
+            If it is => hide the marker at the zoom-level where the polygon/line has approx. the same size as the marker
+            else => Only show the marker
+            */
+            var minZoom = map.getMinZoom(),
+                maxZoom = map.getMaxZoom();
+
+            this.latLngs = L.GeoJSON.coordsToLatLngs(this.options.geojson.coordinates, this.options.geojson.type == 'MultiPolygon' ? 2 : this.options.geojson.type == 'LineString' ? 0 : 1);
+
+            var bounds = L.latLngBounds(this.latLngs),
+                /* All is shown as line
+                isLine      = (options.geojson.type == 'LineString') || (options.geojson.type == 'MultiLineString'),
+                */
+                widthAtMaxZoom  = Math.abs(map.project(bounds.getNorthWest(), maxZoom).x - map.project(bounds.getNorthEast(), maxZoom).x ),
+                heightAtMaxZoom = Math.abs(map.project(bounds.getNorthWest(), maxZoom).y - map.project(bounds.getSouthWest(), maxZoom).y ),
+                maxDimAtMaxZoom = Math.max(widthAtMaxZoom, heightAtMaxZoom),
+                zoomDiff        = Math.log2(maxDimAtMaxZoom / markerSize);
+
+            this.visibleAtZoom = Math.ceil(maxZoom - zoomDiff),
+            this.showPoly      = maxDimAtMaxZoom > markerSize;
+            this.showMarker    = this.visibleAtZoom > minZoom;
+        }
+
+        //inclPositionIsDetails: true if the search-result has a single point and bo polygons OR the polygon is smaller that a given size. It is to give small cities a point but not big areas like countries etc.
+        this.inclPositionIsDetails = options.latLng && this.showMarker && (!this.showPoly || (this.visibleAtZoom >= 6 /* OR 5*/));
+
+        //Create BsModalContentPromise to update modal-content in modal-window
         this.bsModalContentPromise = new $.BsModalContentPromise({
             url             : $.proxy(this._getUrl, this),
             update          : $.proxy(this._update, this),
@@ -319,9 +354,6 @@ fcoo-maps-search
         _update: function(options){
             if (searchResultDetailModal)
                 searchResultDetailModal._bsModalPromise_Update(options);
-
-            if (this.searchResultGeoJSON)
-                this.searchResultGeoJSON.update(options);
         },
 
         _afterUpdate: function(){
@@ -334,9 +366,6 @@ fcoo-maps-search
         _reject: function(){
             if (searchResultDetailModal)
                 searchResultDetailModal._bsModalPromise_Reject();
-
-            if (this.searchResultGeoJSON)
-                this.searchResultGeoJSON._reject();
         },
 
         _getModalOptions: function(options){
@@ -350,7 +379,21 @@ fcoo-maps-search
                     text     : this.names[lang].split('&nbsp;/&nbsp;').join('<br>'),
                     textClass: 'd-block font-weight-bold text-center w-100',
                 }];
-                content = content.concat( nsMap.osm_details_list(this, {type: 'textarea', textClass: 'd-block text-center w-100'} ) );
+
+            //Add position.
+            if (this.inclPositionIsDetails)
+                content.push({
+                    label    : {da:'Position', en:'Position'},
+                    type     : 'textarea',//'textarea',
+                    vfFormat : 'latlng',
+                    vfValue  : this.options.latLng,
+                    textClass: 'd-block text-center w-100',
+                    onClick  : $.proxy(this.showLatLngModal, this)
+                });
+
+
+            //Add content from details
+            content = content.concat( nsMap.osm_details_list(this, {type: 'textarea', textClass: 'd-block text-center w-100'} ) );
 
             //Special case: Add flag
             if (this.options.extratags && this.options.extratags.flag)
@@ -502,7 +545,7 @@ fcoo-maps-search
             this.searchResultGeoJSON.searchResult = this;
             this.searchResultGeoJSON.create();
 
-            if (this.searchResultGeoJSON.poly){
+            if (this.showPoly)
                 nsMap.mainMap.fitBounds(
                     this.searchResultGeoJSON.poly.getBounds(),
                     $.extend(
@@ -510,14 +553,20 @@ fcoo-maps-search
                         nsMap.mainMap._mapSync_NO_ANIMATION
                     )
                 );
-
-                //Only open popup if the poly is hidden at current zoom-level - MANGLER
-                //MANGLER this.searchResultGeoJSON.poly.openPopup();
-            }
             else
-                nsMap.mainMap.setView(this.options.latLng, null, nsMap.mainMap._mapSync_NO_ANIMATION);
+                this.searchResultGeoJSON.centerOnMap();
+
+            //Open popup
+            this.searchResultGeoJSON.marker.openPopup();
         },
 
+
+        /**********************************************
+        //showLatLngModal - show modal with position
+        **********************************************/
+        showLatLngModal: function(){
+            nsMap.latLngAsModal(this.options.latLng, {header: this.header});
+        },
 
         /**********************************************
         //showDetails - create and show modal with detalis
@@ -528,7 +577,7 @@ fcoo-maps-search
                     $.bsModal({
                         scroll : true,
                         content: ' ',
-                        buttons: [{
+                        _buttons: [{
                             icon: 'fa-map-marker',
                             text: {da:'Vis på kort', en:'Show on map'},
                             onClick: function(){
@@ -566,38 +615,11 @@ fcoo-maps-search
 		create: function(){
             if (this.marker || this.poly) return;
 
-            var map = nsMap.mainMap,
-                options         = this.searchResult.options,
-                markerSize      = 14,
-                markerClassName = '',
-                showMarker      = true;
+            var map             = nsMap.mainMap,
+                markerClassName = '';
 
-            if (options.geojson && options.geojson.coordinates && (options.geojson.type != 'Point') && (options.geojson.type != 'MultiPoint')){
-                /*
-                Calculate dimentions of the polygon/line at max-zoom see if it is big enough to be visible at max-zoom eq bigger than the marker
-                If it is => hide the marker at the zoom-level where the polygon/line has approx. the same size as the marker
-                else => Only show the marker
-                */
-
-                var minZoom     = map.getMinZoom(),
-                    maxZoom     = map.getMaxZoom(),
-                    latLngs     = L.GeoJSON.coordsToLatLngs(options.geojson.coordinates, options.geojson.type == 'MultiPolygon' ? 2 : options.geojson.type == 'LineString' ? 0 : 1),
-                    bounds      = L.latLngBounds(latLngs),
-                    /* All is shown as line
-                    isLine      = (options.geojson.type == 'LineString') || (options.geojson.type == 'MultiLineString'),
-                    */
-
-                    widthAtMaxZoom  = Math.abs(map.project(bounds.getNorthWest(), maxZoom).x - map.project(bounds.getNorthEast(), maxZoom).x ),
-                    heightAtMaxZoom = Math.abs(map.project(bounds.getNorthWest(), maxZoom).y - map.project(bounds.getSouthWest(), maxZoom).y ),
-                    maxDimAtMaxZoom = Math.max(widthAtMaxZoom, heightAtMaxZoom),
-                    zoomDiff        = Math.log2(maxDimAtMaxZoom / markerSize),
-                    visibleAtZoom   = Math.ceil(maxZoom - zoomDiff),
-                    showPoly        = maxDimAtMaxZoom > markerSize;
-
-                showMarker = visibleAtZoom > minZoom;
-
-                if (showPoly){
-                    markerClassName = 'hide-for-leaflet-zoom-'+visibleAtZoom+'-up';
+                if (this.searchResult.showPoly){
+                    markerClassName = 'hide-for-leaflet-zoom-'+this.searchResult.visibleAtZoom+'-up';
                     var polylineOptions = {
                             fill         : false,
                             lineColorName: searchResultColor,
@@ -620,8 +642,7 @@ fcoo-maps-search
                         L.polyline(latLngs, polylineOptions ) :
                         L.polygon (latLngs, polygonOptions );
                     */
-                    this.poly = L.polyline(latLngs, polylineOptions );
-
+                    this.poly = L.polyline(this.searchResult.latLngs, polylineOptions );
 
                     this.poly.addTo(map);
                     this.poly.bindTooltip(this.searchResult.header);
@@ -629,108 +650,75 @@ fcoo-maps-search
                     this._addPopupAndContextMenu(this.poly);
 
                     //Add class to hide  on when marker is visible
-                    this.poly._addClass(null, 'hide-for-leaflet-zoom-'+(visibleAtZoom-1)+'-down');
+                    this.poly._addClass(null, 'hide-for-leaflet-zoom-'+(this.searchResult.visibleAtZoom-1)+'-down');
                 }
-            }
 
-            if (showMarker){
-                //Create the marker
-                this.marker = L.bsMarkerCircle(options.latLng, {
-                    size           : 'small',
-                    colorName      : searchResultColor,
-                    borderColorName: searchResultLineColor,
-                    transparent    : true,
-                    hover          : true,
-                    puls           : false,
-                    interactive    : true,
-                    tooltip                 : this.searchResult.header,
-                    tooltipPermanent        : false,
-                    tooltipHideWhenDragging : true,
-                    tooltipHideWhenPopupOpen: true,
-                    shadowWhenPopupOpen     : true
-                });
+            //Create the marker - is allways created to be used for initial popup
+            this.marker = L.bsMarkerCircle(this.searchResult.options.latLng, {
+                size           : 'small',
+                colorName      : searchResultColor,
+                borderColorName: searchResultLineColor,
+                transparent    : true,
+                hover          : true,
+                puls           : false,
+                interactive    : true,
+                tooltip                 : this.searchResult.header,
+                tooltipPermanent        : false,
+                tooltipHideWhenDragging : true,
+                tooltipHideWhenPopupOpen: true,
+                shadowWhenPopupOpen     : true
+            });
 
-                this._addPopupAndContextMenu(this.marker);
-                this.marker.addClass(markerClassName);
-                this.marker.addTo(map);
-            }
+            this._addPopupAndContextMenu(this.marker);
+            this.marker.addClass(markerClassName);
+            this.marker.addTo(map);
         },
 
         /**********************************************
         _addPopupAndContextMenu
         **********************************************/
         _addPopupAndContextMenu: function( obj ){
-            if (!this.contextMenuList){
-                var expandOnMap = $.proxy(this.expandOnMap, this),
-                    removeFromMap = $.proxy(this.removeFromMap, this);
-                this.buttonList = [];
-                this.contextMenuList = [
-                    this.searchResult.header,
-                    {id: 'center', icon: 'fa-crosshairs', text:{da:'Centrér', en:'Center'}, onClick: $.proxy(this.centerOnMap, this)}
-                ];
-                if (this.poly){
-                    this.contextMenuList.push({ id: 'expand', icon: 'fa-expand', text:{da:'Udvid', en:'Expand'}, onClick: expandOnMap });
-                    this.buttonList.push(     {               icon: 'fa-expand', text:{da:'Udvid', en:'Expand'}, onClick: expandOnMap });
-                }
-                this.contextMenuList.push({id: 'remove', lineBefore: true, icon: 'fa-trash-alt', text:{da:'Fjern', en:'Remove'}, onClick: removeFromMap});
-                this.buttonList.push(     {                                icon: 'fa-trash-alt', text:{da:'Fjern', en:'Remove'}, onClick: removeFromMap});
+            var _this = this,
+                menuList = [];
+
+            function addMenuItem(icon, text, methodName, lineBefore){
+                menuList.push({icon: icon, text: text, onClick: $.proxy(_this[methodName], _this), lineBefore: lineBefore});
             }
 
-            //Add contextmenu
-            obj
-                .setContextmenuWidth(100)
-                .addContextmenuItems(this.contextMenuList);
+            if (!this.searchResult.options.isPosition)
+                addMenuItem('fa-info-circle', {da:'Detaljer', en:'Details'}, 'showDetails');
 
+            if (this.searchResult.inclPositionIsDetails)
+                addMenuItem('fa-map-marker', {da:'Position', en:'Position'}, 'showLatLngModal');
 
-            //Add popup
-            if (!this.searchResult.options.isPosition){
-                var bsModalContentPromise = this.searchResult.bsModalContentPromise;
-                obj.bindPopup({
-                    onChange   : $.proxy(bsModalContentPromise.update, bsModalContentPromise),
-                    header     : this.searchResult.header,
-                    width      : 260,
-                    maxHeight  : 200,
-                    scroll     : true,
-                    content    : ' ',
-                    buttons    : this.buttonList.length ? this.buttonList : null,
-                    /* Mulighed senere. Pt virker et ikke med bsModalContentPromise
-                    minimized: {
-                        content: {
-                            type: 'textbox',
-                            icon: this.searchResult.header.icon,
-                            text: this.searchResult.header.text
-                        },
-                        showHeaderOnClick: true
-                    },
-                    isMinimized: true,
-                    */
-                    closeButton: true,
-                });
-            }
-        },
+            addMenuItem('fa-crosshairs', {da:'Centrér', en:'Center'}, 'centerOnMap');
 
-        _reject: function(){
-            if (this.marker)
-                this.marker._bsModalPromise_Reject();
             if (this.poly)
-                this.poly._bsModalPromise_Reject();
-        },
+                addMenuItem('fa-expand', {da:'Udvid', en:'Expand'}, 'expandOnMap');
 
-        update: function(options){
-            if (this.marker)
-                this.marker._bsModalPromise_Update(options);
-            if (this.poly)
-                this.poly._bsModalPromise_Update(options);
+            addMenuItem('fa-trash-alt', {da:'Fjern', en:'Remove'}, 'removeFromMap', true);
+
+            obj.bindPopup({
+                width  : 105,
+                header : this.searchResult.header,
+                content: {type:'menu', fullWidth: true, list: menuList},
+            });
+
+            return this;
         },
 
         centerOnMap: function(){
-            //this.setView();
             this._closePopup();
-            nsMap.mainMap.setView(this.searchResult.options.latLng);
+            nsMap.mainMap.setView(this.searchResult.options.latLng, nsMap.mainMap.getZoom(), nsMap.mainMap._mapSync_NO_ANIMATION);
         },
         expandOnMap: function(){
             this._closePopup();
             nsMap.mainMap.fitBounds(this.poly.getBounds());
+        },
+
+        showLatLngModal: function(){
+            this._closePopup();
+            this.searchResult.showLatLngModal();
         },
 
         showDetails: function(){
