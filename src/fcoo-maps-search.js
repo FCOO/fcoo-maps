@@ -618,40 +618,40 @@ fcoo-maps-search
             var map             = nsMap.mainMap,
                 markerClassName = '';
 
-                if (this.searchResult.showPoly){
-                    markerClassName = 'hide-for-leaflet-zoom-'+this.searchResult.visibleAtZoom+'-up';
-                    var polylineOptions = {
-                            fill         : false,
-                            lineColorName: searchResultColor,
-                            weight       : 5,
-                            border       : true,
-                            shadow       : true,
-                            hover        : true,
-                            transparent  : true,
+            if (this.searchResult.showPoly){
+                markerClassName = 'hide-for-leaflet-zoom-'+this.searchResult.visibleAtZoom+'-up';
+                var polylineOptions = {
+                        fill         : false,
+                        lineColorName: searchResultColor,
+                        weight       : 5,
+                        border       : true,
+                        shadow       : true,
+                        hover        : true,
+                        transparent  : true,
 
-                            tooltipHideWhenPopupOpen: true,
-                            shadowWhenPopupOpen     : true,
-                            shadowWhenInteractive   : true,
+                        tooltipHideWhenPopupOpen: true,
+                        shadowWhenPopupOpen     : true,
+                        shadowWhenInteractive   : true,
 
-                            addInteractive     : true,
-                            interactive        : true,
-                        };
-                    /* All are shown as line
-                    var polygonOptions = $.extend({}, polylineOptions, {colorName: 'transparent', fill: true});
-                    this.poly = isLine ?
-                        L.polyline(latLngs, polylineOptions ) :
-                        L.polygon (latLngs, polygonOptions );
-                    */
-                    this.poly = L.polyline(this.searchResult.latLngs, polylineOptions );
+                        addInteractive     : true,
+                        interactive        : true,
+                    };
+                /* All are shown as line
+                var polygonOptions = $.extend({}, polylineOptions, {colorName: 'transparent', fill: true});
+                this.poly = isLine ?
+                    L.polyline(latLngs, polylineOptions ) :
+                    L.polygon (latLngs, polygonOptions );
+                */
+                this.poly = L.polyline(this.searchResult.latLngs, polylineOptions );
 
-                    this.poly.addTo(map);
-                    this.poly.bindTooltip(this.searchResult.header);
+                this.poly.addTo(map);
+                this.poly.bindTooltip(this.searchResult.header);
 
-                    this._addPopupAndContextMenu(this.poly);
+                this._addPopupAndContextMenu(this.poly);
 
-                    //Add class to hide  on when marker is visible
-                    this.poly._addClass(null, 'hide-for-leaflet-zoom-'+(this.searchResult.visibleAtZoom-1)+'-down');
-                }
+                //Add class to hide  on when marker is visible
+                this.poly._addClass(null, 'hide-for-leaflet-zoom-'+(this.searchResult.visibleAtZoom-1)+'-down');
+            }
 
             //Create the marker - is allways created to be used for initial popup
             this.marker = L.bsMarkerCircle(this.searchResult.options.latLng, {
@@ -670,7 +670,10 @@ fcoo-maps-search
             });
 
             this._addPopupAndContextMenu(this.marker);
-            this.marker.addClass(markerClassName);
+            if (this.searchResult.showMarker)
+                this.marker.addClass(markerClassName);
+            else
+                this.marker.setOpacity(0);
             this.marker.addTo(map);
         },
 
