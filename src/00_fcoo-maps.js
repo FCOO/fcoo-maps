@@ -53,9 +53,15 @@ SETUP-OBJECT: See fcoo-maps-setup-files.js for details
         ns.events.on(finallyGlobalEventName, callback, context, options);
     };
 
-    function isFileName(fileNameOrData){
+
+    //Overwrite intervals.isFileName and window.intervals.getFileName to use FCOO filename conventions
+    window.intervals.isFileName = function(fileNameOrData){
         return (($.type(fileNameOrData) == 'string') || (fileNameOrData.subDir && fileNameOrData.fileName));
-    }
+    };
+
+    window.intervals.getFileName = function(fileName){
+        return ns.dataFilePath(fileName);
+    };
 
     var resolveList = [],
         whenFinish = null;
@@ -91,7 +97,7 @@ SETUP-OBJECT: See fcoo-maps-setup-files.js for details
 
         //1. setup
         var opt = {resolve: nsMap.createFCOOMap};
-        if (isFileName(options.setup))
+        if (window.intervals.isFileName(options.setup))
             opt.fileName = options.setup;
         else
             opt.data = options.setup;
@@ -135,14 +141,15 @@ SETUP-OBJECT: See fcoo-maps-setup-files.js for details
             //Call the resolve-function
             opt.resolve(data);
 
-            //If the file/data needs to reload with some interval => adds the resolve to nsMap.addInterval after the first load
+            //If the file/data needs to reload with some interval => adds the resolve to windows.intervals.addInterval after the first load
             if (opt.reload)
-                nsMap.addInterval(
-                    opt.reload === true ? 60 : opt.reload,
-                    opt.fileName || opt.data,
-                    opt.resolve,
-                    null,
-                    true
+                window.intervals.addInterval({
+                    duration: opt.reload === true ? 60 : opt.reload,
+                    fileName: dataopt.fileName,
+                    data    : opt.data,
+                    resolve : opt.resolve,
+                    reject  : null,
+                    wait    : true
                 );
         });
         return true;
