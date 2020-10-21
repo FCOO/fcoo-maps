@@ -89,12 +89,12 @@ body {
 /**********************************************************
 DIVERSE
 **********************************************************/
-.font-size-1-2 { font-size: 1.2em }
+.font-size-0-65 { font-size: 0.65em !important; }
+.font-size-1-2  { font-size: 1.2em !important; }
 
 //Special class for icons with 'selected'-look
 .icon-active {
     color      : $list-group-active-bg;
-    font-weight: bold;
     //text-shadow: 0px 0px 2px $list-group-active-bg;
 }
 
@@ -117,8 +117,8 @@ DIVERSE
 
 
 
-//Import scss for leaflet-control-legend
-@import "fcoo-maps-control-legend";
+//HER//Import scss for leaflet-control-legend
+//HER@import "fcoo-maps-control-legend";
 
 
 /****************************************************************************

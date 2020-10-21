@@ -31,7 +31,7 @@ fcoo-maps-create-main.js,
 
                 //Add button before setting-button with settings for map(s)
                 preSetting: {
-                    icon   : ns.mapSettingIcon,
+                    icon   : nsMap.mapSettingIcon,
                     onClick: function(){
                                  if (nsMap.hasMultiMaps)
                                      nsMap.showMapSettingMain();
@@ -63,7 +63,7 @@ fcoo-maps-create-main.js,
                 enabled      : true,
                 maxMaps      : 5, //OR {mobile, tablet, desktop}
                 maxZoomOffset: 2,
-                allowDifferentTime: false, //If true the different maps can have differnet time - relative to the main map eq. +2h
+                allowDifferentTime: true, //If true the different maps can have differnet time - relative to the main map eq. +2h
             }
         };
 
@@ -141,7 +141,7 @@ data.leftMenuButtons.save = function(){ alert('save'); }
             - Turn zoom-history off to avoid many entries
             - Save all maps center and zoom
             */
-            onResizeStart: function(){
+            XXonResizeStart: function(){
                 nsMap.visitAllMaps(function(map){
                     //Disable history-list during resizing
                     if (map.bsZoomControl && map.bsZoomControl.options.historyEnabled){
@@ -160,7 +160,7 @@ data.leftMenuButtons.save = function(){ alert('save'); }
             },
 
             //Update all maps and enable zoom-history again when main-container is resized
-            onResizeEnd: function(){
+            XXonResizeEnd: function(){
                 nsMap.mainMap._selfSetView();
                 nsMap.mainMap.invalidateSize({pan:false, debounceMoveend:true});
 
