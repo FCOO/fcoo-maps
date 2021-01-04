@@ -176,9 +176,10 @@ options = {
                     .appendTo($contentContainer);
 
                 var infoBoxOptions = {
-                        id       : this.options.id,
-                        index    : this.options.index,
-                        className: 'bsp-color-info-outer input-group-sm',
+                        id           : this.options.id,
+                        index        : this.options.index,
+                        className    : 'bsp-color-info-outer input-group-sm',
+                        alwaysVisible: true,
                         before   : {
                             className   : 'h-100',
                             useTouchSize: false,
