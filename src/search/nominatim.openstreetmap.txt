@@ -1,0 +1,23 @@
+*** ZOOM ***
+0 Continent / Sea
+1
+2
+3 Country
+4
+5 State
+6 Region
+7
+8 County
+9
+10 City
+11
+12 Town / Village
+13
+14 Suburb
+15
+16 Street
+17
+18 Building
+19
+20
+21

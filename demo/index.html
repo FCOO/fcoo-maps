@@ -14,47 +14,49 @@
 </head>
 
 <body>
-            <script src="bower_components.js"></script>
+    <script src="bower_components.js"></script>
 
-            <script src="../src/00_fcoo-maps_initialize.js"></script>
-
-    <script src="../src/fcoo-maps-map-setting-group.js"></script>
-
-            <script src="../src/leaflet/fcoo-maps-leaflet.js"></script>
-
-    <script src="../src/fcoo-maps-map-sync.js"></script>
-
-    <script src="../src/fcoo-maps-multi-maps.js"></script>
-
-            <script src="../src/time/fcoo-maps-time.js"></script>
-
+    <script src="../src/00_fcoo-maps_initialize.js"></script>
     <script src="../src/fcoo-maps.js"></script>
 
-    <script src="../src/fcoo-maps-create-main.js"></script>
+    <script src="../src/controls/control-route.js"></script>
+    <script src="../src/controls/global-events.js"></script>
+    <script src="../src/controls/L.Control.Locate.extend.js"></script>
+
+    <script src="../src/latlng/latlng-modal.js"></script>
+    <script src="../src/latlng/latlng-format.js"></script>
+
+    <script src="../src/layer/layer_color.js"></script>
+    <!-- <script src="../src/layer/layer_external.js"></script> -->
+    <script src="../src/layer/layer_wms.js"></script>
+    <script src="../src/layer/layer_z-index.js"></script>
+
+    <script src="../src/layer/map-layer_00.js"></script>
+    <script src="../src/layer/map-layer_10_wms.js"></script>
+    <script src="../src/layer/map-layer_background.js"></script>
+
+    <script src="../src/layer/map-layer_navigation_and_safety.js"></script>
+    <script src="../src/layer/map-layer_niord.js"></script>
+    <script src="../src/layer/map-layer_pilot-boarding-positions.js"></script>
 
 
-    <script src="../src/fcoo-maps-niord.js"></script>
-            <script src="../src/controls/control-route.js"></script>
-            <script src="../src/controls/global-events.js"></script>
+    <script src="../src/leaflet/leaflet.js"></script>
+    <script src="../src/leaflet/offline.js"></script>
+    <script src="../src/leaflet/tile-filter.js"></script>
 
-            <script src="../src/latlng/latlng-modal.js"></script>
-            <script src="../src/latlng/latlng-format.js"></script>
+    <script src="../src/map/map-sync.js"></script>
+    <script src="../src/map/multi-maps.js"></script>
 
-            <script src="../src/leaflet/fcoo-maps-offline.js"></script>
+    <script src="../src/menu/menu.js"></script>
 
+    <script src="../src/search/search-latlng.js"></script>
+	<script src="../src/search/search.js"></script>
+	<script src="../src/search/search-category.js"></script>
+	<script src="../src/search/search-details.js"></script>
 
-            <script src="../src/search/search-latlng.js"></script>
-	        <script src="../src/search/search.js"></script>
-	        <script src="../src/search/search-category.js"></script>
-	        <script src="../src/search/search-details.js"></script>
+    <script src="../src/setting/map-setting-group.js"></script>
 
-
-    <script src="../src/fcoo-maps-create-menu.js"></script>
-
-    <script src="../src/fcoo-maps-wms.js"></script>
-
-            <script src="../src/controls/L.Control.Locate.extend.js"></script>
-
+    <script src="../src/time/time.js"></script>
 
 <!--
 <script src="../dist/fcoo-maps.js"></script>
@@ -70,18 +72,22 @@
         i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
 
-
-//HER$(function() {
-
         window.fcoo.map.createApplication({
             _setup:  {subDir:'setup', fileName:'ifm_test.json'},
 
             setup: {
-                applicationName: {da:'SKIDE GODT', en:'SHIT GOOD'}
+                applicationName: {da:'Overskriften', en:'The Header'}
             },
             leftMenu: {
                 data: ['item1', 'item2'],
-                _resolve: function(data, $container){ console.log('HER', data); $container.text('Davs LEFT'); }
+                resolve: function(data, $container){ 
+                    //console.log('HER', data); 
+                    $container.text('Davs LEFT'); 
+
+                    //Check if any NAVIGATION_* layer are needed and call
+                    fcoo.map.createNavigationAndSafety(100 /*= index of menu-group with navigation and safety MANGLER*/);
+
+                }
             },
             rightMenu: {
                 data: ['item1', 'item2'],
@@ -91,9 +97,14 @@
             _other: [
                 {data:{text:'Davs med dig'}, resolve: function(data){console.log(data);}, reload:1}
             ],
-            finally: function(){
-//HER                var niord = new L.GeoJSON.Niord({domain:'fa nm fe nw'});
-//HER                niord.addTo(window.fcoo.map.mainMap);
+            finally: function(){ 
+                var count = 3; 
+                $.each(fcoo.map.mapLayers, function(id){
+                    var ml = fcoo.map.createMapLayer(id).addTo([0]);//.removeFrom(0);//.addTo(0) 
+                    if (count > 0)
+                        ml.addTo(1);
+                    count--;
+                });
             }
         });
 /*
@@ -107,7 +118,36 @@
         window.fcoo.map.addInterval( 20, {subDir:'setup', fileName:'ifm_test.json'}, function(data){ console.log('20.2', moment().format('HH:mm:ss'), data); });
 */
 
-//HER}); //End of initialize/ready
+
+/*
+        fcoo.map.TestLayer = function(options){
+            options.maxZoom = 10;
+            fcoo.map.MapLayer.call(this, options);
+        };
+        fcoo.map.TestLayer.prototype = Object.create(fcoo.map.MLayer.prototype);
+        $.extend(fcoo.map.TestLayer.prototype, {
+            createLayer: function(){
+                return L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+                    maxZoom: this.options.maxZoom,
+	                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                });
+            }
+        });
+
+        fcoo.map.TestLayer2 = function(options){
+            options = options || {};
+            options.maxZoom = 10;
+            fcoo.map.MLayer.call(this, options);
+        };
+        fcoo.map.TestLayer2.prototype = Object.create(fcoo.map.MLayer.prototype);
+        $.extend(fcoo.map.TestLayer2.prototype, {
+            createLayer: function(){
+                return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
+                });
+            }
+        });
+*/
 
     </script>
  </body>

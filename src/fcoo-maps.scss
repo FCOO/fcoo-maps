@@ -23,15 +23,20 @@
 //LEAFLET-MAP-SYNC https://github.com/fcoo/leaflet-map-sync
 @import "../bower_components/leaflet-map-sync/src/leaflet-map-sync-outline-color";
 
-//JQUERY-BOOTSTRAP https://github.com/fcoo/jquery-bootstrap
-@import "../bower_components/jquery-bootstrap/src/bootstrap-variables";
-
-//BOOTSTRAP SCSS
+//BOOTSTRAP
 @import "../bower_components/bootstrap/scss/functions";
 @import "../bower_components/bootstrap/scss/variables";
+@import "../bower_components/bootstrap/scss/mixins";
 
-//BACKGROUND-COLOR AND TEXT COLOR
+//HER//MODERNIZR-SCSS - https://github.com/fcoo/modernizr-scss
+//HER@import "../bower_components/modernizr-scss/dist/modernizr-scss";
+
+//JQUERY-BOOTSTRAP - https://github.com/fcoo/jquery-bootstrap
+@import "../bower_components/jquery-bootstrap/src/bootstrap-variables";
 @import "../bower_components/jquery-bootstrap/src/color";
+@import "../bower_components/jquery-bootstrap/src/variables";
+@import "../bower_components/jquery-bootstrap/src/mixins";
+
 
 //ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
 @import "../bower_components/leaflet-zoom-modernizr/src/leaflet-zoom-modernizr";
@@ -90,6 +95,7 @@ body {
 DIVERSE
 **********************************************************/
 .font-size-0-65 { font-size: 0.65em !important; }
+.font-size-0-75 { font-size: 0.75em !important; }
 .font-size-1-2  { font-size: 1.2em !important; }
 
 //Special class for icons with 'selected'-look
@@ -98,7 +104,7 @@ DIVERSE
     //text-shadow: 0px 0px 2px $list-group-active-bg;
 }
 
-//Special css for L.Control.BsMapSyncInfoControl when show==false and some info needs to be shown anyway
+//Special css for L.Control.BsTimeInfoControl when show==false and some info needs to be shown anyway
 .leaflet-control.leaflet-button-box.forced-shown {
     visibility: visible !important;
     opacity   : 1;
@@ -113,6 +119,13 @@ DIVERSE
 
     //The extende modal is allways hidden
     div.modal-dialog { display: none !important; }
+}
+
+//Special css for the red diamond inside the icon for layer with Pilot Boarding Positions
+.fa-pilot-boarding-position-diamond {
+    position: relative;
+    bottom  : 1px;
+    &:before { font-size: calc(9em / 12) }
 }
 
 
@@ -221,6 +234,29 @@ EDIT SYNC MAPS SETTINGS
 
 
 /**********************************************************
+EDIT BACKGROUND MAP SETTINGS
+**********************************************************/
+$imgWidth: 220px;
+$imgHeight: 50px;
+.background-image-container {
+    margin: auto;
+    width : $imgWidth;
+    height: $imgHeight;
+    img {
+        width : $imgWidth;
+        height: $imgHeight;
+        &:not(:first-child){
+            margin-top: -$imgHeight;
+        }
+        &.coastline {
+            border    : 1px solid black;
+            position: relative;
+            z-index : 10;
+        }
+    }
+}
+
+/**********************************************************
 STYLE FOR ICONS IN BUTTONS
 Using fcoo.iconSub = function(mainIcon, subIcon, subClassPostfix, square) from fcoo-application
 Each of the sub-icons may need a individual class to adjust size and position
@@ -272,14 +308,61 @@ $Chartreuse: #7FFF00;
 $osm-search-result: darken(#FF6200, 5); //dark-dark-orange
 @include marker-and-polygon-color( 'osm', $osm-search-result);
 
-//@include marker-and-polygon-color( 'osm-fill', #FF620020);
 
-
+$navigation-layer: #E5238C; //"pink" navigation-lines
+.fa-navigation {
+    color: $navigation-layer;
+}
 
 
 /**********************************************************
 ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
 **********************************************************/
 $lzm-incl-table-display: false;
+//$lzm-incl-no-selector: true;
+$lzm-display-value: initial !important;
 @include show-and-hide-for-leaflet-zoom-modernizr(3, 12);
 
+
+/**********************************************************
+InfoBox in bsPositionControl: (bsp = bsPosition)
+
+Style to show/hide contents and icons
+when the cursor/map-center is over land or over water or
+when loading or not visible
+**********************************************************/
+.no-bsPosition-on-land .show-for-bsPosition-on-land,
+.no-bsPosition-on-water .show-for-bsPosition-on-water {
+    display: none !important;
+}
+
+.bsp-color-info-outer {
+    height : 4em;
+    display: flex;
+    padding: 0;
+    *.header {
+        color: initial;
+        }
+    //color-info-container = inner container with info on current position (cursor or map-center)
+    .bsp-color-info-outer-container {
+        height: 100%;
+        width : 100%;
+
+        .bsp-color-info-header {
+            flex-shrink: 0;
+            flex-grow  : 0;
+            @include header-variant-sm($xs-padding: true);
+            @include header-colors();
+            text-align: center;
+            border    : none;
+        }
+    }
+}
+
+//Modernizr-test for bsl-working = same as in bsLegendControl
+@include show-and-hide-for-modernizr-test(
+    $modernizr-test    : 'bsl-working',
+    $incl-no-selector  : true,
+    $display-value     : '',
+    $incl-table-display: false
+);

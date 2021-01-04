@@ -3,7 +3,7 @@
     "topMenu": {
         "search"  : true,
         "messages": "data/ifm-maps-info.json",
-        "help"    : {"subDir": "help", "fileName": "fcoo-maps-help.json"},
+        "help"    : {"subDir": "help",     "fileName": "fcoo-maps-help.json"},
         "warning" : {"subDir": "warnings", "fileName": "geometoc_ifm_warning.json"},
         "helpId"  : {
             "globalSetting"  : "fcoo-maps-setting",

@@ -9,6 +9,7 @@ Methods to adjust and display latLng-values
         nsMap = ns.map = ns.map || {};
 
     //latLngAsModal(latLng) - Display a modal with latLng in different formats
+    //Two different versions tryed: 1: With selectbox, 2: With selectlist
     var latLngModal,
         copyToClipboardFormat,
         latLngFormats,
@@ -18,10 +19,16 @@ Methods to adjust and display latLng-values
         options = options || {};
         var modalOptions = {
                 header: options.header || {
-                    icon: 'fa-map-marker',
-                    text: {da:'Position', en:'Position'}
+                    icon: ['fa-map-marker-alt', 'fa-arrow-alt-right','fa-copy'],
+                    text: {da:'Kopier position til udklipsholder', en:'Copy Position to Clipboard'}
                 },
                 content: [],
+                //version 2:
+                buttons: [{
+                    id  : 'btn_copy_to_clipboard',
+                    icon: 'fa-copy',
+                    text: {da:'Kopier til udklipsholder', en:'Copy to Clipboard'},
+                }],
                 show: false
             };
 
@@ -34,6 +41,7 @@ Methods to adjust and display latLng-values
         //Box with position in current format
         modalOptions.fixedContent = {
             type     : 'textbox',
+            label    : {icon:'fa-map-marker-alt', text: {da:'Position', en:'Position'}},
             text     : (options.text ? options.text+'<br>' : '') + '<b>'+latLng.format()+'</b>',
             textStyle:'center',
             center   : true
@@ -60,19 +68,21 @@ Methods to adjust and display latLng-values
         window.latLngFormat.setTempFormat(saveCurrentFormatId);
 
         modalOptions.content.push({
-            type      : 'select',
-            label     : {icon: 'fa-copy', text: {da:'Kopier til udklipsholder', en:'Copy to Clipboard'}},
+            //type      : 'selectlist', //version 1
+            type      : 'selectlist',   //version 2
+            //label     : {icon: 'fa-copy', text: {da:'Kopier til udklipsholder', en:'Copy to Clipboard'}}, //version 1
             fullWidth : true,
             center    : true,
-            size      : 4,
+            //size      : 4,    //version 1
             items     : formatItems,
             selectedId: copyToClipboardFormat,
             onChange  : function(id){ copyToClipboardFormat = id; },
-            after: {
-                id:'btn_copy_to_clipboard',
-                type: 'button',
-                icon: 'fa-copy',
-            }
+            //version 1
+            //after: {
+            //    id  : 'btn_copy_to_clipboard',
+            //    type: 'button',
+            //    icon: 'fa-copy',
+            //}
         });
 
         if (latLngModal)

@@ -25,6 +25,10 @@
 	        user-select: none;
 	  -webkit-user-drag: none;
 	}
+/* Prevents IE11 from highlighting tiles in blue */
+.leaflet-tile::selection {
+	background: transparent;
+}
 /* Safari renders non-retina tile on retina better with this, but Chrome is worse */
 .leaflet-safari .leaflet-tile {
 	image-rendering: -webkit-optimize-contrast;
@@ -237,7 +241,8 @@
 
 .leaflet-marker-icon.leaflet-interactive,
 .leaflet-image-layer.leaflet-interactive,
-.leaflet-pane > svg path.leaflet-interactive {
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
 	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
 	pointer-events: auto;
 	}
@@ -527,7 +532,7 @@
 	}
 
 .leaflet-oldie .leaflet-popup-content-wrapper {
-	zoom: 1;
+	-ms-zoom: 1;
 	}
 .leaflet-oldie .leaflet-popup-tip {
 	width: 24px;
@@ -21500,7 +21505,8 @@ fcoo-app-background = background-color = application background-color
     content: "\e900"; }
 
 .icon-fcoo-app-logo {
-  color: {APPLICATION_FAVICONCOLOR} !important; }
+  color: {APPLICATION_FAVICONCOLOR} !important;
+  color: white  !important; }
 
 .fcoo-color, .fcoo-app-color, .top-menu-container .top-menu {
   color: white; }
@@ -22267,6 +22273,219 @@ This is fixed by overwriting the last size with "inherit"
   color: #f0ad4e; }
 
 /***********************************************
+    leaflet-polyline.scss
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/leaflet-polyline
+	https://github.com/FCOO
+
+************************************************/
+/***********************************************
+    _leaflet-polyline-mixin.scss
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/leaflet-polyline
+	https://github.com/FCOO
+
+************************************************/
+.lpl-base {
+  stroke-opacity: 1;
+  fill-opacity: 1;
+  fill: none; }
+  .lpl-base.lpl-popup-open {
+    stroke-opacity: 1;
+    fill-opacity: 1; }
+    .lpl-base.lpl-popup-open.lpl-transparent {
+      stroke-opacity: .9;
+      fill-opacity: .8; }
+  .lpl-base:not(.lpl-popup-open).lpl-only-show-on-hover {
+    stroke-opacity: 0;
+    fill-opacity: 0; }
+  .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover) {
+    stroke-opacity: .7;
+    fill-opacity: .35; }
+    .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover).lpl-hover {
+      stroke-opacity: .9;
+      fill-opacity: .7; }
+
+.lpl-border {
+  stroke: white;
+  stroke-opacity: 0;
+  fill: none; }
+  .lpl-border.lpl-show:not(.lpl-only-show-on-hover), .lpl-border.lpl-show.lpl-popup-open {
+    stroke-opacity: .5; }
+
+.lpl-shadow {
+  stroke: white;
+  stroke-opacity: 0;
+  fill: none; }
+  .lpl-shadow.lpl-show, .lpl-shadow.lpl-hover {
+    stroke-opacity: .28; }
+
+.lpl-interactive {
+  stroke: transparent;
+  fill: none; }
+  .lpl-interactive.lpl-fill {
+    fill: transparent; }
+
+.lpl-base.lpl-pink {
+  fill: pink; }
+
+.lpl-base.lpl-border-pink,
+.lpl-shadow.lpl-border-pink {
+  stroke: pink; }
+
+.lpl-base.lpl-purple {
+  fill: purple; }
+
+.lpl-base.lpl-border-purple,
+.lpl-shadow.lpl-border-purple {
+  stroke: purple; }
+
+.lpl-base.lpl-red {
+  fill: red; }
+
+.lpl-base.lpl-border-red,
+.lpl-shadow.lpl-border-red {
+  stroke: red; }
+
+.lpl-base.lpl-orange {
+  fill: orange; }
+
+.lpl-base.lpl-border-orange,
+.lpl-shadow.lpl-border-orange {
+  stroke: orange; }
+
+.lpl-base.lpl-yellow {
+  fill: yellow; }
+
+.lpl-base.lpl-border-yellow,
+.lpl-shadow.lpl-border-yellow {
+  stroke: yellow; }
+
+.lpl-base.lpl-green {
+  fill: green; }
+
+.lpl-base.lpl-border-green,
+.lpl-shadow.lpl-border-green {
+  stroke: green; }
+
+.lpl-base.lpl-cyan {
+  fill: cyan; }
+
+.lpl-base.lpl-border-cyan,
+.lpl-shadow.lpl-border-cyan {
+  stroke: cyan; }
+
+.lpl-base.lpl-blue {
+  fill: blue; }
+
+.lpl-base.lpl-border-blue,
+.lpl-shadow.lpl-border-blue {
+  stroke: blue; }
+
+.lpl-base.lpl-brown {
+  fill: brown; }
+
+.lpl-base.lpl-border-brown,
+.lpl-shadow.lpl-border-brown {
+  stroke: brown; }
+
+.lpl-base.lpl-white {
+  fill: white; }
+
+.lpl-base.lpl-border-white,
+.lpl-shadow.lpl-border-white {
+  stroke: white; }
+
+.lpl-base.lpl-grey {
+  fill: grey; }
+
+.lpl-base.lpl-border-grey,
+.lpl-shadow.lpl-border-grey {
+  stroke: grey; }
+
+.lpl-base.lpl-black {
+  fill: black; }
+
+.lpl-base.lpl-border-black,
+.lpl-shadow.lpl-border-black {
+  stroke: black; }
+
+.lpl-base.lpl-none {
+  fill: none; }
+
+.lpl-base.lpl-border-none,
+.lpl-shadow.lpl-border-none {
+  stroke: none; }
+
+/***********************************************
+	fcoo-metoc-parameter-model-domain.scss,
+
+	(c) 2020, FCOO
+
+	https://github.com/FCOO/fcoo-metoc-model-domain
+	https://github.com/FCOO
+
+
+************************************************/
+.text-pink {
+  color: pink !important; }
+
+.text-purple {
+  color: purple !important; }
+
+.text-red {
+  color: red !important; }
+
+.text-orange {
+  color: orange !important; }
+
+.text-yellow {
+  color: yellow !important; }
+
+.text-green {
+  color: green !important; }
+
+.text-cyan {
+  color: cyan !important; }
+
+.text-blue {
+  color: blue !important; }
+
+.text-brown {
+  color: brown !important; }
+
+.text-white {
+  color: white !important; }
+
+.text-grey {
+  color: grey !important; }
+
+.text-black {
+  color: black !important; }
+
+.text-darkblue {
+  color: darkblue !important; }
+
+.mdg-extra-width .card-block .card-block, .mdg-mega-width .card-block .card-block {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+  .mdg-extra-width .card-block .card-block .form-group, .mdg-mega-width .card-block .card-block .form-group {
+    display: inline-block;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 100%; }
+    .mdg-extra-width .card-block .card-block .form-group.info-box, .mdg-mega-width .card-block .card-block .form-group.info-box {
+      width: 33%; }
+
+.mdg-extra-width .card-block .card-block .form-group.info-box .container-icon-and-text {
+  height: 4em !important; }
+
+/***********************************************
 leaflet-bootstrap-marker.scss
 
 lbm-type-TYPE lbm-color-COLOR [lbm-border-color-COLOR] [lbm-transparent] [lbm-puls] [lbm-hover]
@@ -22280,8 +22499,6 @@ lbm-puls          : Has a pulsing ring
 lbm-transparent   : Inner color get opacity: 0.7
 lbm-hover         : When hover: get shadow and opacity: 0.9 for ibm-transparent
 ************************************************/
-/* stylelint-disable order/properties-alphabetical-order */
-/* stylelint-enable */
 /***********************************************
 
 leaflet-bootstrap-marker-colors.scss
@@ -24176,10 +24393,10 @@ leaflet-bootstrap-control.scss
 .leaflet-container:not(.has-control-attribution-bs) .leaflet-control-container .leaflet-bottom .leaflet-control {
   margin-bottom: 10px; }
 
-.leaflet-container.has-control-attribution-bs .leaflet-control-container .leaflet-bottom.leaflet-left .leaflet-control:nth-last-child(2) {
+.leaflet-container.has-control-attribution-bs .leaflet-control-container .leaflet-bottom.has-control-attribution-bs .leaflet-control:nth-last-child(2) {
   margin-bottom: 2px; }
 
-.leaflet-container.has-control-attribution-bs .leaflet-control-container .leaflet-bottom.leaflet-right .leaflet-control:last-child {
+.leaflet-container.has-control-attribution-bs .leaflet-control-container .leaflet-bottom:not(.has-control-attribution-bs) .leaflet-control:last-child {
   margin-bottom: 13px; }
 
 /***********************************************
@@ -24189,6 +24406,7 @@ leaflet-bootstrap-control-attribution.scss
   font-size: 11px;
   line-height: 1;
   height: 11px;
+  margin: 0 !important;
   cursor: default;
   background: rgba(255, 255, 255, 0.5); }
   .mouse-hover .leaflet-control-container .leaflet-control-attribution.leaflet-control-attribution-bs:hover {
@@ -24220,16 +24438,16 @@ leaflet-bootstrap-control-scale.scss
 .leaflet-button-box-scale {
   margin-bottom: 0 !important; }
 
-.leaflet-container:not(.has-control-attribution-bs) .leaflet-button-box-scale {
+.leaflet-bottom:not(.has-control-attribution-bs) .leaflet-button-box-scale {
   min-height: calc(2.25rem + 10px); }
 
-.leaflet-container:not(.has-control-attribution-bs) .leaflet-button-box-scale-sm {
+.leaflet-bottom:not(.has-control-attribution-bs) .leaflet-button-box-scale-sm {
   min-height: calc(1.84375rem + 10px); }
 
-.leaflet-container.has-control-attribution-bs .leaflet-button-box-scale {
+.leaflet-bottom.has-control-attribution-bs .leaflet-button-box-scale {
   min-height: calc(2.25rem + 13px); }
 
-.leaflet-container.has-control-attribution-bs .leaflet-button-box-scale-sm {
+.leaflet-bottom.has-control-attribution-bs .leaflet-button-box-scale-sm {
   min-height: calc(1.84375rem + 13px); }
 
 .leaflet-bootstrap-control-scale {
@@ -24305,6 +24523,16 @@ leaflet-bootstrap-control-scale.scss
     .leaflet-control-singlescale .leaflet-control-singlescale-inner .division.hidden .label {
       opacity: 0; }
 
+/********************************************************************************
+L.Control.Reticle
+Leaflet control representning a reticle at map center
+
+Modified version of leaflet-reticle
+https://github.com/rwev/leaflet-reticle by https://github.com/rwev
+********************************************************************************/
+.leaflet-zoom-anim .icon-reticle {
+  display: none !important; }
+
 /***********************************************
 leaflet-bootstrap-control-zoom.scss
 ************************************************/
@@ -24344,6 +24572,18 @@ Overwrite style for bootstrap-slider
   display: none !important; }
 
 /***********************************************
+leaflet-bootstrap-control-legend.scss
+************************************************/
+.modal-header.bsl-working .hide-for-bsl-working {
+  display: none !important; }
+
+.modal-header.no-bsl-working .show-for-bsl-working {
+  display: none !important; }
+
+.no-margin-left {
+  margin-left: 0 !important; }
+
+/***********************************************
 leaflet-bootstrap-contextmenu.scss
 ************************************************/
 .leaflet-popup-contextmenu .modal-content {
@@ -24368,27 +24608,27 @@ leaflet-bootstrap-control-position.scss
   width: initial;
   margin: 0;
   padding: 0; }
-  .leaflet-control-container .input-group .position {
+  .leaflet-control-container .input-group .bsPosition-content {
     border: 1px solid #ced4da;
     outline: none !important;
     display: flex;
     align-items: center;
-    text-align: right;
+    text-align: center;
     line-height: 1;
     padding: 0 0.25rem;
     padding-top: 1px;
     font-size: 13px; }
-    .leaflet-control-container .input-group .position:active, .leaflet-control-container .input-group .position.active {
+    .leaflet-control-container .input-group .bsPosition-content:active, .leaflet-control-container .input-group .bsPosition-content.active {
       border-color: #b8c1ca; }
-    .leaflet-control-container .input-group .position:focus, .leaflet-control-container .input-group .position.focus {
+    .leaflet-control-container .input-group .bsPosition-content:focus, .leaflet-control-container .input-group .bsPosition-content.focus {
       border-color: #80bdff; }
-    .leaflet-control-container .input-group .position.disabled:not(.show-as-normal), .leaflet-control-container .input-group .position:disabled:not(.show-as-normal) {
+    .leaflet-control-container .input-group .bsPosition-content.disabled:not(.show-as-normal), .leaflet-control-container .input-group .bsPosition-content:disabled:not(.show-as-normal) {
       border-color: #ced4da; }
-    .leaflet-control-container .input-group .position.focus:not(:disabled):not(.disabled):not(.no-hover), .leaflet-control-container .input-group .position:focus:not(:disabled):not(.disabled):not(.no-hover),
-    .mouse-hover .leaflet-control-container .input-group .position:hover:not(:disabled):not(.disabled):not(.no-hover) {
+    .leaflet-control-container .input-group .bsPosition-content.focus:not(:disabled):not(.disabled):not(.no-hover), .leaflet-control-container .input-group .bsPosition-content:focus:not(:disabled):not(.disabled):not(.no-hover),
+    .mouse-hover .leaflet-control-container .input-group .bsPosition-content:hover:not(:disabled):not(.disabled):not(.no-hover) {
       position: relative;
       z-index: 4; }
-    .mouse-hover .leaflet-control-container .input-group .position:hover:not(:focus):not(:disabled):not(.disabled):not(.no-hover) {
+    .mouse-hover .leaflet-control-container .input-group .bsPosition-content:hover:not(:focus):not(:disabled):not(.disabled):not(.no-hover) {
       border-color: #8C959D; }
 
 .control-position-cursor .hide-for-control-position-cursor {
@@ -24415,6 +24655,11 @@ leaflet-bootstrap-control-position.scss
 .no-control-position-map-center .hide-for-no-control-position-map-center {
   display: none !important; }
 
+.control-position-cursor .no-cursor-on-map .hide-for-no-cursor-on-map {
+  color: transparent; }
+  .control-position-cursor .no-cursor-on-map .hide-for-no-cursor-on-map > *:not(.show-for-no-cursor-on-map) {
+    visibility: hidden !important; }
+
 /***********************************************
 	leaflet-marker-vessel.scss, 
 
@@ -24425,155 +24670,6 @@ leaflet-bootstrap-control-position.scss
 
 
 ************************************************/
-
-/***********************************************
-    leaflet-polyline.scss
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/leaflet-polyline
-	https://github.com/FCOO
-
-************************************************/
-/***********************************************
-    _leaflet-polyline-mixin.scss
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/leaflet-polyline
-	https://github.com/FCOO
-
-************************************************/
-.lpl-base {
-  stroke-opacity: 1;
-  fill-opacity: 1;
-  fill: none; }
-  .lpl-base.lpl-popup-open {
-    stroke-opacity: 1;
-    fill-opacity: 1; }
-    .lpl-base.lpl-popup-open.lpl-transparent {
-      stroke-opacity: .9;
-      fill-opacity: .8; }
-  .lpl-base:not(.lpl-popup-open).lpl-only-show-on-hover {
-    stroke-opacity: 0;
-    fill-opacity: 0; }
-  .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover) {
-    stroke-opacity: .7;
-    fill-opacity: .35; }
-    .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover).lpl-hover {
-      stroke-opacity: .9;
-      fill-opacity: .7; }
-
-.lpl-border {
-  stroke: white;
-  stroke-opacity: 0;
-  fill: none; }
-  .lpl-border.lpl-show:not(.lpl-only-show-on-hover), .lpl-border.lpl-show.lpl-popup-open {
-    stroke-opacity: .5; }
-
-.lpl-shadow {
-  stroke: white;
-  stroke-opacity: 0;
-  fill: none; }
-  .lpl-shadow.lpl-show, .lpl-shadow.lpl-hover {
-    stroke-opacity: .28; }
-
-.lpl-interactive {
-  stroke: transparent;
-  fill: none; }
-  .lpl-interactive.lpl-fill {
-    fill: transparent; }
-
-.lpl-base.lpl-pink {
-  fill: pink; }
-
-.lpl-base.lpl-border-pink,
-.lpl-shadow.lpl-border-pink {
-  stroke: pink; }
-
-.lpl-base.lpl-purple {
-  fill: purple; }
-
-.lpl-base.lpl-border-purple,
-.lpl-shadow.lpl-border-purple {
-  stroke: purple; }
-
-.lpl-base.lpl-red {
-  fill: red; }
-
-.lpl-base.lpl-border-red,
-.lpl-shadow.lpl-border-red {
-  stroke: red; }
-
-.lpl-base.lpl-orange {
-  fill: orange; }
-
-.lpl-base.lpl-border-orange,
-.lpl-shadow.lpl-border-orange {
-  stroke: orange; }
-
-.lpl-base.lpl-yellow {
-  fill: yellow; }
-
-.lpl-base.lpl-border-yellow,
-.lpl-shadow.lpl-border-yellow {
-  stroke: yellow; }
-
-.lpl-base.lpl-green {
-  fill: green; }
-
-.lpl-base.lpl-border-green,
-.lpl-shadow.lpl-border-green {
-  stroke: green; }
-
-.lpl-base.lpl-cyan {
-  fill: cyan; }
-
-.lpl-base.lpl-border-cyan,
-.lpl-shadow.lpl-border-cyan {
-  stroke: cyan; }
-
-.lpl-base.lpl-blue {
-  fill: blue; }
-
-.lpl-base.lpl-border-blue,
-.lpl-shadow.lpl-border-blue {
-  stroke: blue; }
-
-.lpl-base.lpl-brown {
-  fill: brown; }
-
-.lpl-base.lpl-border-brown,
-.lpl-shadow.lpl-border-brown {
-  stroke: brown; }
-
-.lpl-base.lpl-white {
-  fill: white; }
-
-.lpl-base.lpl-border-white,
-.lpl-shadow.lpl-border-white {
-  stroke: white; }
-
-.lpl-base.lpl-grey {
-  fill: grey; }
-
-.lpl-base.lpl-border-grey,
-.lpl-shadow.lpl-border-grey {
-  stroke: grey; }
-
-.lpl-base.lpl-black {
-  fill: black; }
-
-.lpl-base.lpl-border-black,
-.lpl-shadow.lpl-border-black {
-  stroke: black; }
-
-.lpl-base.lpl-none {
-  fill: none; }
-
-.lpl-base.lpl-border-none,
-.lpl-shadow.lpl-border-none {
-  stroke: none; }
 
 /***********************************************
 	leaflet-bootstrap-draw.scss,
@@ -24838,8 +24934,6 @@ leaflet-control-box.scss, Create Leaflet Control in a box with optional icons an
 
 
 ************************************************/
-/* stylelint-disable order/properties-alphabetical-order */
-/* stylelint-enable */
 .leaflet-left.leaflet-top,
 .leaflet-right.leaflet-top {
   height: 100%; }

@@ -24,13 +24,22 @@ Create and set different global variables and methods
         return ns.iconSub('fa-map', subIcon, subClassPostfix);
     };
 
+    nsMap.mapSettingIconWithStatus = function(fontSizeClass){
+        return [nsMap.mapSettingIcon, ns.iconSub('fa-map', 'fa-sync icon-active font-weight-bold ' + fontSizeClass)];
+    };
+    
+    nsMap.updateMapSettingIconWithStatus = function($parent, inSync){
+        var icons = $parent.children('.container-stacked-icons').addClass('fa-no-margin');
+        $(icons[0]).toggle( !inSync);
+        $(icons[1]).toggle(!!inSync);
+    };
+    
     //Icon and header for legend
     nsMap.mapLegendIcon = 'fa-list';  //TODO fa-th-list when forecast@mouse-position is implemented
     nsMap.mapLegendHeader = {
         icon: nsMap.mapLegendIcon,
         text: {da:'Signaturforklaring', en:'Legend'}
     };
-
 
 
     /***********************************************************
