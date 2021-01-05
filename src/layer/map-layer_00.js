@@ -433,11 +433,12 @@ options = {
                 bsPositionControl = map.bsPositionControl,
                 infoBox = this.info[mapIndex].infoBox;
 
-            if (show)
-                bsPositionControl.addInfoBox(infoBox);
-            else
-                bsPositionControl.removeInfoBox(infoBox);
-
+            if (infoBox){
+                if (show)
+                    bsPositionControl.addInfoBox(infoBox);
+                else
+                    bsPositionControl.removeInfoBox(infoBox);
+            }
             return this;
         },
     };
