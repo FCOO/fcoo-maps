@@ -218,7 +218,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         - setControlValue: function(map, options) to set the value for the map/control
         *****************************************************************************/
         addMapSetting: function(options){
-            var control = this.map[options.controlId];
+            var control = this.control = this.map[options.controlId];
             if (!control)
                 return;
 
@@ -240,6 +240,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 defaultValue  : control.getState(),
                 getValue      : $.proxy(control.getState, control),
                 applyFunc     : $.proxy(control.setState, control),
+//                applyFunc     : $.proxy(this._applyFunc, this)
             });
 
             this.add(options);
@@ -269,18 +270,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             this.addModalContent(accordionId, adjustModalContent(options.modalContent), options.modalFooter);
         },
 
-        getEditData: function(){
-            var editData = {};
-            $.each(this.settings, function(controlId, setting){
-                var settingData = setting.getValue();
-                if (settingData)
-                    $.each(settingData, function(id, value){
-                        editData[controlId+'_'+id] = value;
-                    });
-            });
-            return editData;
-        },
-
         //_editDataToData: Convert data from {controlId_id: value}xN => { controlId: {id: value}xN }
         _editDataToData: function( editData ){
             var data = {};
@@ -294,17 +283,28 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             return data;
         },
 
-        onChanging: function(newEditData){
-            var newData = this._editDataToData(newEditData);
+        onChanging: function(editData){
+            $.each(editData, function(id, value){
+                if (value == 'NOT_CHANGED')
+                    delete editData[id];
+            });
+
+            var data = this._editDataToData(editData);
+
             $.each(this.settings, function(settingId, setting){
                 if (setting.options._onChanging)
-                    setting.options._onChanging(newData[settingId], setting.group.modalForm.$form);
+                    setting.options._onChanging(data[settingId], setting.group.modalForm.$form);
             });
         },
 
-        //Overwrite onSubmit to convert data from {controlId_id: value}xN => { controlId: {id: value}xN } and save the data in ns.globalSetting
+        //Overwrite onSubmit to convert data from {controlId_id: value}xN => { controlId: {id: value}xN }, remove unchanged values, and save the data in ns.globalSetting
         onSubmit: function(SettingGroup_onSubmit){
             return function(editData){
+                $.each(editData, function(id, value){
+                    if (value == 'NOT_CHANGED')
+                        delete editData[id];
+                });
+
                 var data = this._editDataToData(editData);
 
                 this.options.simpleMode = true;
@@ -312,19 +312,28 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 this.options.simpleMode = false;
 
                 this.saveParent(data);
-
             };
         }(ns.SettingGroup.prototype.onSubmit),
 
         //saveParent - Save data in 'parent' = appSetting
-        saveParent: function(data){
+        saveParent: function(data, dontSaveParent){
+            if (this.isSavingParent)
+                return;
+            this.isSavingParent = true;
+
             this.set(data);
-            ns.appSetting.set(this.map.fcooMapId, this.data);
-            ns.appSetting.save();
+            if (!dontSaveParent){
+                ns.appSetting.set(this.map.fcooMapId, this.data);
+                ns.appSetting.save();
+            }
+            this.isSavingParent = false;
         }
     });
 
     function onChangingViaControl(state){
+        if (this.group.isSavingParent)
+            return;
+
         //Check if the new state is different from the current one
         var _this = this,
             isDifferent = false;
@@ -340,6 +349,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             //Save the changes to appSetting via it parent-SettingGroup = MapSettingGroup
             var data = {};
             data[this.options.id] = this.value;
+
             this.group.saveParent(data);
         }
     }
@@ -438,39 +448,78 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     settingGroup.modalForm.$bsModal.find('.card[data-user-id="'+msgHeader.accordionId+'"]').removeClass('d-none');
                 } : null;
 
-        //If options.applyToAll and msgHeader => save current settings for all maps
-        if (options.applyToAll && msgHeader)
-            nsMap.visitAllMaps(function(map){
-                var mapSettingGroup = getMapSettingGroup(map);
-                mapSettingGroup.originalData = $.extend({}, mapSettingGroup.data);
+        //If it is one accordion applyed to all maps (options.applyToAll and msgHeader) => save current settings for all maps and get common data from all maps as data for main (dataToEdit)
+        if (options.applyToAll && msgHeader){
+            var dataToEdit = $.extend(true, {}, mapSettingGroup.data);
+
+            //Backup main-maps data
+            mapSettingGroup.backupData = $.extend(true, {}, mapSettingGroup.data);
+
+            nsMap.visitAllVisibleMaps(function(map){
+                var nextMapSettingGroup = getMapSettingGroup(map),
+                    mapData = $.extend(true, {}, nextMapSettingGroup.data);
+
+                $.each(mapData, function(groupId, groupData){
+                    $.each(groupData, function(id, value){
+                        //If any boolean-value are different on different maps => mark the checkbox as semi-selected (value = STRING)
+                        if ((typeof value == 'boolean') && dataToEdit[groupId] && (typeof dataToEdit[groupId][id] == 'boolean') && (value != dataToEdit[groupId][id]))
+                            dataToEdit[groupId][id] = 'NOT_CHANGED';
+                    });
+                });
             });
+            mapSettingGroup.data = dataToEdit;
+        }
+
 
         //If options.applyToAll => the settings is applied to all maps
-        if (options.applyToAll)
+        if (options.applyToAll){
+
             mapSettingGroup.options.onSubmit = function(data){
-                nsMap.visitAllMaps(function(map){
-                    var mapSettingGroup = getMapSettingGroup(map),
+                //Reset main-map setting to remove any "NOT_CHANGED" values
+                mapSettingGroup.data         = $.extend(true, {}, mapSettingGroup.backupData);
+                mapSettingGroup.originalData = $.extend(true, {}, mapSettingGroup.backupData);
+
+                //Set common setting for all maps
+                nsMap.visitAllVisibleMaps(function(map){
+                    var nextMapSettingGroup = getMapSettingGroup(map),
                         mapData = $.extend({}, data);
 
-                    if (mapSettingGroup && (map.fcooMapIndex != mapIndex)){
+                    if (nextMapSettingGroup){
                         //If msgHeader is given => only set data from the settings with the same accordionId
                         if (msgHeader)
-                            $.each(mapSettingGroup.settings, function(id, setting){
+                            $.each(nextMapSettingGroup.settings, function(id, setting){
                                 if (setting.options.accordionId != msgHeader.accordionId)
-                                    mapData[id] = mapSettingGroup.data[id];
+                                    mapData[id] = nextMapSettingGroup.data[id];
                             });
-                        mapSettingGroup.saveParent(mapData);
+                        nextMapSettingGroup.saveParent(mapData, true);
                     }
                 });
             };
-        else
+
+            mapSettingGroup.options.onClose = function(){
+                mapSettingGroup.data = mapSettingGroup.backupData;
+            };
+
+        }
+        else {
             mapSettingGroup.options.onSubmit = null;
+            mapSettingGroup.options.onClose = null;
+        }
 
         //Reset all accordions to be visible
         if (mapSettingGroup.modalForm)
             mapSettingGroup.modalForm.$bsModal.find('.card').removeClass('d-none');
 
-        mapSettingGroup.edit( msgHeader ? msgHeader.accordionId : null, mapSettingGroup.getEditData(), preEdit );
+
+        //Convert mapSettingGroup.data into 1-dim record
+        var editData = {};
+        $.each(mapSettingGroup.data, function(groupId, groupData){
+            $.each(groupData, function(id, value){
+                editData[groupId+'_'+id] = value;
+            });
+        });
+
+        mapSettingGroup.edit( msgHeader ? msgHeader.accordionId : null, editData, preEdit );
     };
 
     /*****************************************************************************
@@ -538,7 +587,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             content.push({
                 id      : 'msmf_common_options',
                 type    : 'inputgroup',
-                label   : {da: 'Sæt Indstillinger for alle kort', en:'Set Settings for all maps'},
+                label   : {da: 'Sæt Indstillinger for alle synlige kort', en:'Set Settings for all visible maps'},
                 content : {
                     type           : 'buttongroup',
                     vertical       : true,
@@ -621,12 +670,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 allowContent: true,
                 class       : 'w-100 d-flex',
                 onClick     : nsMap.editMultiMapsAndSyncMapsSetting,
-                /* Måske
-                onClick     : function(){
-                    mapSettingMainModal.close();
-                    nsMap.editMultiMapsAndSyncMapsSetting();
-                }
-                */
             });
 
 
@@ -654,12 +697,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     else
                         editAllMapSettings();
                 },
-                /* Måske
-                onClick     : function(){
-                    mapSettingMainModal.close();
-                    editAllMapSettings();
-                }
-                */
             });
 
 

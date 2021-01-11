@@ -71,6 +71,14 @@ Objects and methods to handle leaflet-maps
         });
     };
 
+    //nsMap.visitAllVisibleMaps: Call method(map) for all visible maps
+    nsMap.visitAllVisibleMaps = function(method){
+        $.each(nsMap.mapIndex, function(index, map){
+            if (map && map.isVisibleInMultiMaps)
+                method(map);
+        });
+    };
+
     //nsMap.callAllMaps: Call methodName with arg (array) for all maps
     nsMap.callAllMaps = function(methodName, arg){
         $.each(nsMap.mapList, function(id, map){
@@ -78,6 +86,14 @@ Objects and methods to handle leaflet-maps
                 map[methodName].apply(map, arg);
         });
     };
+    //nsMap.callAllVisibleMaps: Call methodName with arg (array) for all visible maps
+    nsMap.callAllVisibleMaps = function(methodName, arg){
+        $.each(nsMap.mapList, function(id, map){
+            if (map && map[methodName] && map.isVisibleInMultiMaps)
+                map[methodName].apply(map, arg);
+        });
+    };
+
 
 
     /***********************************************************

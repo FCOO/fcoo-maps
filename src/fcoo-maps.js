@@ -379,10 +379,6 @@ nsMap.mainMap.setView([55.651, 12.757], 6); //HER TODO skal hentes fra gemte opt
 
 map.setView([56.2, 11.5], 4); //HER TODO skal hentes fra gemte options
 
-//HER                map.on('click', function(event){
-//HER                    console.log(layer.getColor(event.latlng) );
-//HER                });
-
                 map.onHideInMultiMaps();
             }
         }

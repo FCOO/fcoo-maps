@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "homepage": "https://github.com/FCOO/fcoo-maps",
   "authors": [
     "Niels Holt"
@@ -37,8 +37,6 @@
     "leaflet-multi-maps": "FCOO/leaflet-multi-maps#^2.0.0",
     "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.3.0",
     "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
-    "leaflet-control-box": "fcoo/leaflet-control-box#^4.1.0",
-    "leaflet-control-fa-button": "fcoo/leaflet-control-fa-button#^2.0.0",
     "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
     "leaflet.locatecontrol": "domoritz/leaflet-locatecontrol#^0.71.0",
     "leaflet-control-permalink": "fcoo/leaflet-control-permalink#^2.0.0",
@@ -52,7 +50,6 @@
     "leaflet-latlng-graticule": "fcoo/leaflet-latlng-graticule#^1.2.0",
     "jquery-mousewheel": "^3.1.13",
     "moment-timer": "^1.3.0",
-    "pdfobject": "fcoo/PDFObject",
     "clipboard": "zenorocha/clipboard.js#^2.0.6",
     "intervals": "fcoo/intervals.js#^1.0.0"
   },
