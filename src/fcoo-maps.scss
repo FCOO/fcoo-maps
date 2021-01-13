@@ -100,6 +100,18 @@ DIVERSE
 
 .font-size-1-2rem  { font-size: 1.2rem !important; }
 
+//margins
+.no-margin        { margin       : 0 !important; }
+.no-margin-left   { margin-left  : 0 !important; }
+.no-margin-right  { margin-right : 0 !important; }
+.no-margin-top    { margin-top   : 0 !important; }
+.no-margin-bottom { margin-bottom: 0 !important; }
+
+.no-margin-children {
+    * { margin: 0 !important; }
+}
+
+
 //Special class for icons with 'selected'-look
 .icon-active {
     color      : $list-group-active-bg;

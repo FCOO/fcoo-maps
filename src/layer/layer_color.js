@@ -56,7 +56,6 @@ that includes current position, and use this other map to get the color
             true     => update with last position - e.q. when time change
         ***********************************************************/
         _onColorPosition: function(latLng){
-
             if (nsMap.hasMultiMaps && !this.isVisibleInMultiMaps) return;
 
             var _this = this;

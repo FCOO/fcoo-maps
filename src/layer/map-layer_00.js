@@ -88,7 +88,7 @@ options = {
 
         this.id = this.options.id || 'layer'+this.index;
 
-        this.info = []; //[] of {map, layer, legend, infoBox, colorInfoLayer, loading, timeout}
+        this.info = []; //[] of {map, layer, legend, infoBox, colorInfoLayer, loading, timeout, updateColorInfoOnWorkingOff}
 
         this.showAndHideClasses = '';
         this.inversShowAndHideClasses = '';
@@ -278,8 +278,8 @@ options = {
             if (this.hasColorInfo){
                 this.toggleColorInfo(mapIndex, ciOptions.show);
 
-                //Fire 'zoomend' on map to update color-info
-                map.fire('zoomend');
+                //Fire 'zoomend' on map to update color-info when the layer is loaded (in workingOff)
+                info.updateColorInfoOnWorkingOff = true;
             }
 
             //If it is a radio-group layer => remove all other layers with same radioGroup
@@ -289,11 +289,8 @@ options = {
                         mapLayer.removeFrom(mapOrIndex);
                 });
 
-
             if (this.options.onAdd)
                 this.options.onAdd(map, layer);
-
-
 
             return this;
         },
@@ -309,14 +306,14 @@ options = {
         //callAllLegends: Call methodName with arg (array) for all legend
         callAllLegends: function( methodName, arg, onlyIndex ){
             $.each(this.info, function(index, info){
-                if (info.legend && ((onlyIndex == undefined) || (index == onlyIndex)))
+                if (info && info.legend && ((onlyIndex == undefined) || (index == onlyIndex)))
                     info.legend[methodName].apply(info.legend, arg);
             });
         },
         //callAllInfoBox: Call this.methodName with arg (array) for all infoBox (colorInfo)
         callAllInfoBox: function( methodName, arg, onlyIndex ){
             $.each(this.info, function(index, info){
-                if (info.infoBox && ((onlyIndex == undefined) || (index == onlyIndex))){
+                if (info && info.infoBox && ((onlyIndex == undefined) || (index == onlyIndex))){
                     info.infoBox[methodName].apply(info.infoBox, arg);
                 }
             });
@@ -424,6 +421,18 @@ options = {
         workingOff: function(mapIndex){
             this.callAllLegends( 'workingOff', null, mapIndex );
             this.callAllInfoBox( 'workingOff', null, mapIndex );
+
+            var info = this.info[mapIndex];
+            if (info && info.updateColorInfoOnWorkingOff){
+                info.updateColorInfoOnWorkingOff = false;
+
+                //Fire 'zoomend' on map to update color-info when the layer is loaded
+                var map = getMap(mapIndex);
+                map.lastColorLatLngStr = 'NOT';
+                map.fire('zoomend');
+//HER                window.setTimeout(function(){ map.fire('zoomend'); }, 1000 );
+            }
+
         },
 
 
@@ -614,7 +623,7 @@ options = {
     *****************************************************************************
     ****************************************************************************/
     $.extend(L.Control.BsInfoBox.prototype, {
-        workingToggle: function(on){ return this.$container.modernizrToggle('bsl-working', on); },
+        workingToggle: function(on){return this.$container.modernizrToggle('bsl-working', on);},
         workingOn    : function(){ return this.workingToggle(true ); },
         workingOff   : function(){ return this.workingToggle(false); },
 

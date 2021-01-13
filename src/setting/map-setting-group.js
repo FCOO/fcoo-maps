@@ -631,7 +631,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         $.each(content, function(index, text){
             content[index] = {
                 text     : text,
-                textClass: typeof text == 'string' ? '' : 'text-nowrap'
+                textClass: typeof text == 'string' ? 'no-margin' : 'text-nowrap'
             };
         });
         content.unshift('<br>');
@@ -642,7 +642,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         $result.push(
             $('<div/>')
-                .addClass('flex-grow-1')
+                .addClass('flex-grow-1 no-margin-children')
                 .height('5em')
                 ._bsAddHtml(content)
         );
