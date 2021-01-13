@@ -61,6 +61,7 @@
 <!-- <script src="../dist/fcoo-maps.js"></script> -->
 
     <script>
+    var leftMenuContainer;
         //window.fcoo.LOCAL_DATA = true;
         window.fcoo.DEMO_VERSION = true;
 
@@ -80,11 +81,12 @@
             leftMenu: {
                 data: ['item1', 'item2'],
                 resolve: function(data, $container){ 
-                    //console.log('HER', data); 
-                    $container.text('Davs LEFT'); 
-
                     //Check if any NAVIGATION_* layer are needed and call
                     fcoo.map.createNavigationAndSafety(100 /*= index of menu-group with navigation and safety MANGLER*/);
+
+leftMenuContainer = $container;        
+
+
 
                 }
             },
@@ -97,13 +99,21 @@
                 {data:{text:'Davs med dig'}, resolve: function(data){console.log(data);}, reload:1}
             ],
             finally: function(){ 
-                var count = 3; 
-                $.each(fcoo.map.mapLayers, function(id){
-                    var ml = fcoo.map.createMapLayer(id).addTo([0]);//.removeFrom(0);//.addTo(0) 
-                    if (count > 0)
-                        ml.addTo(1);
-                    count--;
-                });
+                    $.each(fcoo.map.mapLayers, function(id, mapLayer){
+                        $('<div/>')._bsAddHtml({
+                            icon: mapLayer.options.icon,
+                            text: mapLayer.options.text,
+                            onClick: $.proxy(mapLayer.selectMaps, mapLayer)
+                        }).appendTo(leftMenuContainer);
+                    });
+
+//HER                var count = 3; 
+//HER                $.each(fcoo.map.mapLayers, function(id, mapLayer){
+//HER                    mapLayer.addTo([0]);
+//HER                    if (count > 0)
+//HER                        mapLayer.addTo(1);
+//HER                    count--;
+//HER                });
             }
         });
 /*

@@ -361,7 +361,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     L.Control.BsSetting = L.Control.BsButton.extend({
         options: {
             position       : "topcenter",
-            icon           : nsMap.mapSettingIconWithStatus('font-size-0-65'),
+            icon           : nsMap.mapSettingIconWithStatus('font-size-0-65em'),
             bigIcon        : true,
             semiTransparent: true,
         },
@@ -551,7 +551,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                             update: function( index, map, $container ){
                                 $container.empty();
                                 var $button = $.bsButton({
-                                        icon   : nsMap.mapSettingIconWithStatus('font-size-0-75'),
+                                        icon   : nsMap.mapSettingIconWithStatus('font-size-0-75em'),
                                         square : true,
                                         class  : 'w-100 h-100 ' + (index ? '' : 'border-multi-maps-main'),
                                         onClick: function(){
@@ -637,7 +637,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         content.unshift('<br>');
         content.unshift({
             text     : header,
-            textClass: 'font-weight-bold font-size-1-2'
+            textClass: 'font-weight-bold font-size-1-2em'
         });
 
         $result.push(

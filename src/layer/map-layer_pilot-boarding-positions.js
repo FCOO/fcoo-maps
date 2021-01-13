@@ -169,15 +169,17 @@ Create GEOJSON-layer to read and display pilot points
     MapLayer_PilotBoardingPositions = The fcoo.map.Layer for pilot points
     ***********************************************************/
     function MapLayer_PilotBoardingPositions(options) {
-        var icon = $.bsMarkerAsIcon('text-white', 'text-danger');
+        var icon = $.bsMarkerAsIcon('text-white', 'text-danger')[0];
         icon.push('fas fa-diamond text-danger fa-pilot-boarding-position-diamond');
 
         nsMap.MapLayer.call(this,
             $.extend({
-                icon: icon,
+                icon: [icon],
                 text: {da:'Lodsmødesteder', en:'Pilot Boarding Positions'},
                 createMarkerPane: true,
                 minZoom: 6,
+
+radioGroup: 'TEST',
             }, options)
         );
     }

@@ -107,6 +107,13 @@ options = {
     nsMap.MapLayer = MapLayer;
 
     nsMap.MapLayer.prototype = {
+        /*********************************************************
+        isAddedTo(mapOrIndex) - return true if the MapLayer is added to the mal
+        *********************************************************/
+        isAddedToMap: function(mapOrIndex){
+            var mapIndex = getMap(mapOrIndex).fcooMapIndex;
+            return !!this.info[mapIndex] && !!this.info[mapIndex].map;
+        },
 
         /*********************************************************
         addTo
@@ -122,7 +129,7 @@ options = {
                 mapIndex = map.fcooMapIndex;
 
             //Check if layer allready added
-            if (this.info[mapIndex])
+            if (this.isAddedToMap(mapIndex))
                 return this;
 
             var info = this.info[mapIndex] = {};
@@ -275,9 +282,20 @@ options = {
                 map.fire('zoomend');
             }
 
+            //If it is a radio-group layer => remove all other layers with same radioGroup
+            if (this.options.radioGroup)
+                $.each(nsMap.mapLayers, function(id, mapLayer){
+                    if ((mapLayer.options.radioGroup == _this.options.radioGroup) && (mapLayer.id != _this.id))
+                        mapLayer.removeFrom(mapOrIndex);
+                });
+
 
             if (this.options.onAdd)
                 this.options.onAdd(map, layer);
+
+
+
+            return this;
         },
 
         /*********************************************************
@@ -304,6 +322,51 @@ options = {
             });
         },
 
+
+        /*********************************************************
+        Methods to remove MapLayer from a map
+        *********************************************************/
+        removeViaLegend: function(legend){
+            this.wasRemovedViaLegend = true;
+            this.removeFrom( legend.parent._map );
+        },
+
+        removeFrom: function(mapOrIndex){
+            var _this = this;
+            if ($.isArray(mapOrIndex)){
+                $.each(mapOrIndex, function(index, _map){ _this.removeFrom(_map); });
+                return this;
+            }
+
+            var map = getMap(mapOrIndex),
+                mapIndex = map.fcooMapIndex;
+
+            //Check if layer is already removed
+            if (!this.isAddedToMap(mapIndex))
+                return this;
+
+            var info  = this.info[mapIndex];
+
+
+            //Remove legned (if any) and use legend.onRemove to do the removing
+            if (!this.wasRemovedViaLegend && map.bsLegendControl){
+                map.bsLegendControl.removeLegend(info.legend);
+                return this;
+            }
+
+            this.wasRemovedViaLegend = false;
+
+            this.hideColorInfo(map);
+
+            //Remove this from map
+            info.map = null;
+            info.layer.removeFrom(map);
+
+            if (this.options.onRemove)
+                this.options.onRemove(map, info.layer);
+
+            return this;
+        },
 
         /*******************************************************
         _onColor(options) = Called when the color at the cursor position/map center is changed
@@ -363,47 +426,6 @@ options = {
             this.callAllInfoBox( 'workingOff', null, mapIndex );
         },
 
-        /*********************************************************
-        Methods to remove the MapLayer from a map
-        *********************************************************/
-        removeViaLegend: function(legend){
-            this.wasRemovedViaLegend = true;
-            this.removeFrom( legend.parent._map );
-        },
-
-        removeFrom: function(map){
-            var _this = this;
-            if ($.isArray(map)){
-                $.each(map, function(index, _map){ _this.removeFrom(_map); });
-                return _this;
-            }
-
-            map = getMap(map);
-            var mapIndex = map.fcooMapIndex,
-                info  = this.info[mapIndex],
-                layer = info ? info.layer : null;
-
-            //Check if layer allready removed
-            if (!info || !layer || !info.map)
-                return this;
-
-            //Remove legned (if any) and use legend.onRemove to do the removing
-            if (!this.wasRemovedViaLegend && map.bsLegendControl){
-                map.bsLegendControl.removeLegend(info.legend[mapIndex]);
-                return this;
-            }
-            this.wasRemovedViaLegend = false;
-
-            this.hideColorInfo(map);
-
-            //Remove this from map
-            info.map = null;
-            layer.removeFrom(map);
-
-            if (this.options.onRemove)
-                this.options.onRemove(map, layer);
-
-        },
 
         /*********************************************************
         createLayer: function(layerOptions)
@@ -441,7 +463,125 @@ options = {
             }
             return this;
         },
+
+
+
+
+        /******************************************************************
+        selectMaps
+        Show modal window with checkbox or radio for each map
+        Select/unseelct the layer in all visible maps
+        *******************************************************************/
+        selectMaps: function(){
+            //If only one map is vissible => simple toggle
+            if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
+                if (this.isAddedToMap(0))
+                    this.removeFrom(0);
+                else
+                    this.addTo(0);
+                return this;
+            }
+
+            var _this = this,
+                maxMaps = nsMap.setupData.multiMaps.maxMaps,
+                checkboxType = this.options.radioGroup ? 'radio' : 'checkbox',
+                selectedOnMap = [],
+                buttonList = [],
+                $checkbox = $.bsCheckbox({
+                    text: {da:'Vis på alle synlige kort', en:'Show on all visible maps'},
+                    type: checkboxType,
+                    onChange: function(id, selected){
+                        $.each(buttonList, function(index, $button){
+                            selectedOnMap[index] = selected;
+                            $button._cbxSet(selected, true);
+                        });
+                        updateCheckbox();
+                    }
+                });
+
+            //Get current selected state from all maps
+            for (var i=0; i<maxMaps; i++)
+                selectedOnMap[i] = this.isAddedToMap(i);
+
+            //updateCheckbox: Update common checkbox when single map is selected/unselected
+            function updateCheckbox(){
+                var allSelected = true, semiSelected = false;
+                $.each(buttonList, function(index/*, button*/){
+                    if (!selectedOnMap[index])
+                        allSelected = false;
+                    if (selectedOnMap[index] != selectedOnMap[0])
+                        semiSelected = true;
+                });
+
+                $checkbox.find('input')
+                    ._cbxSet(allSelected || semiSelected, true)
+                    .prop('checked', allSelected || semiSelected)
+                    .toggleClass('semi-selected', semiSelected);
+            }
+
+            function miniMapContent($contentContainer){
+                var $div =
+                        $('<div/>')
+                            .windowRatio(1.2*120, 1.2*180)
+                            .addClass('mx-auto')
+                            .css('margin', '5px')
+                            .appendTo($contentContainer);
+
+                //Append a mini-multi-map to the container
+                L.multiMaps($div, {
+                    id    : nsMap.multiMaps.setup.id,
+                    local : true,
+                    border: false,
+                    update: function( index, map, $container ){
+                        $container.empty();
+
+                        //Create checkbox- or radio-button inside the mini-map
+                        buttonList[index] =
+                            $.bsStandardCheckboxButton({
+                                square  : true,
+                                selected: selectedOnMap[index],
+                                type    : checkboxType,
+                                onChange: function(id, selected){
+                                    selectedOnMap[index] = selected;
+                                    updateCheckbox();
+                                }
+                            })
+                            .addClass('font-size-1-2rem w-100 h-100 ' + (index ? '' : 'border-multi-maps-main'))
+                            .appendTo( $container );
+                    }
+                });
+            }
+
+            //Delete last used modal-form
+            this.modalForm = null;
+            if (mapLayerModalForm){
+                mapLayerModalForm.$bsModal.close();
+                mapLayerModalForm.$bsModal.modal('dispose');
+            }
+
+            mapLayerModalForm = this.modalForm = $.bsModalForm({
+                width     : 240,
+                header    : {icon: this.options.icon, text:  this.options.text},
+                static    : false,
+                keyboard  : true,
+                closeWithoutWarning: true,
+
+                content   : [$checkbox, miniMapContent],
+                onSubmit  : function(){
+                                nsMap.visitAllVisibleMaps( function(map){
+                                    if (selectedOnMap[map.fcooMapIndex])
+                                        _this.addTo(map);
+                                    else
+                                        _this.removeFrom(map);
+                                });
+                            }
+            });
+
+            updateCheckbox();
+            this.modalForm.edit({});
+        }
     };
+    var mapLayerModalForm = null;
 
     /****************************************************************************
     *****************************************************************************
@@ -449,7 +589,7 @@ options = {
 
     Create methods
         fcoo.map._addMapLayers: Add a record to fcoo.maps.mapLayers
-        fcoo.map.createMapLayer: function(id) create the actual Leaflet-layer
+        fcoo.map.getMapLayer: function(id) return the MapLayer with id
 
     The id of the different layes can be used in setup-files to set witch
     layers to show in a given application
@@ -460,15 +600,11 @@ options = {
 
     nsMap._addMapLayer = function(id, Constructor, options){
         id = id.toUpperCase();
-        mapLayers[id] = {
-            Constructor: Constructor,
-            options    : $.extend({id: id}, options || {})
-        };
+        mapLayers[id] = new Constructor( $.extend({id: id}, options || {}) );
     };
 
-    nsMap.createMapLayer = function(id){
-        var mapLayer = mapLayers[id.toUpperCase()];
-        return mapLayer ? new mapLayer.Constructor( mapLayer.options ) : null;
+    nsMap.getMapLayer = function(id){
+        return mapLayers[id.toUpperCase()];
     };
 
     /****************************************************************************

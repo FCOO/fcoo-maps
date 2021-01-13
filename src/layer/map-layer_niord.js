@@ -188,6 +188,7 @@
         text         : 'niord:fa-fe_plural',
 
 //TEST START
+radioGroup: 'TEST',
 colorInfo: {
     show: true,
     icon: 'far fa-home',
