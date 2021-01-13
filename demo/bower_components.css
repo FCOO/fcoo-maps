@@ -17807,134 +17807,67 @@ div.checkbox, div.radio {
   margin-bottom: 0; }
   div.checkbox:not(:last-child), div.radio:not(:last-child) {
     margin-bottom: 0.5rem; }
-  div.checkbox input[type="checkbox"],
-  div.checkbox input[type="radio"], div.radio input[type="checkbox"],
-  div.radio input[type="radio"] {
+  div.checkbox input, div.radio input {
     opacity: 0;
     z-index: 1;
     position: absolute;
     left: -100px; }
-    div.checkbox input[type="checkbox"] + label,
-    div.checkbox input[type="radio"] + label, div.radio input[type="checkbox"] + label,
-    div.radio input[type="radio"] + label {
+    div.checkbox input + label, div.radio input + label {
       position: relative;
       display: inline;
       height: 100%;
       padding: 0;
       margin-bottom: 0; }
-      div.checkbox input[type="checkbox"] + label::before, div.checkbox input[type="checkbox"] + label::after,
-      div.checkbox input[type="radio"] + label::before,
-      div.checkbox input[type="radio"] + label::after, div.radio input[type="checkbox"] + label::before, div.radio input[type="checkbox"] + label::after,
-      div.radio input[type="radio"] + label::before,
-      div.radio input[type="radio"] + label::after {
+      div.checkbox input + label::before, div.radio input + label::before {
         display: inline-block;
         position: absolute;
         left: 0;
         text-align: center;
         content: ""; }
-      div.checkbox input[type="checkbox"] + label::before,
-      div.checkbox input[type="radio"] + label::before, div.radio input[type="checkbox"] + label::before,
-      div.radio input[type="radio"] + label::before {
+      div.checkbox input + label::before, div.radio input + label::before {
         border: 1px solid #ced4da;
         background-color: #f8f9fa;
         transition: border 0.15s ease-in-out, color 0.15s ease-in-out; }
         @media (prefers-reduced-motion: reduce) {
-          div.checkbox input[type="checkbox"] + label::before,
-          div.checkbox input[type="radio"] + label::before, div.radio input[type="checkbox"] + label::before,
-          div.radio input[type="radio"] + label::before {
+          div.checkbox input + label::before, div.radio input + label::before {
             transition: none; } }
-    div.checkbox input[type="checkbox"]:focus + label::before,
-    div.checkbox input[type="radio"]:focus + label::before, div.radio input[type="checkbox"]:focus + label::before,
-    div.radio input[type="radio"]:focus + label::before {
+    div.checkbox input:focus + label::before, div.radio input:focus + label::before {
       border-color: #80bdff !important;
       outline: none !important; }
-    div.checkbox input[type="checkbox"]:not(:checked) + label::before,
-    div.checkbox input[type="radio"]:not(:checked) + label::before, div.radio input[type="checkbox"]:not(:checked) + label::before,
-    div.radio input[type="radio"]:not(:checked) + label::before {
+    div.checkbox input:not(:checked) + label::before, div.radio input:not(:checked) + label::before {
       background-color: #f8f9fa; }
-    div.checkbox input[type="checkbox"]:not(:checked):not(:disabled):hover + label::before,
-    div.checkbox input[type="radio"]:not(:checked):not(:disabled):hover + label::before, div.radio input[type="checkbox"]:not(:checked):not(:disabled):hover + label::before,
-    div.radio input[type="radio"]:not(:checked):not(:disabled):hover + label::before {
+    div.checkbox input:not(:checked):not(:disabled):hover + label::before, div.radio input:not(:checked):not(:disabled):hover + label::before {
       text-decoration: none;
       background-color: #e9ecef;
       border-color: #8C959D; }
-    div.checkbox input[type="checkbox"]:checked + label::before,
-    div.checkbox input[type="radio"]:checked + label::before, div.radio input[type="checkbox"]:checked + label::before,
-    div.radio input[type="radio"]:checked + label::before {
+    div.checkbox input:checked + label::before, div.radio input:checked + label::before {
       background-color: #007bff; }
-    div.checkbox input[type="checkbox"]:checked + label::after,
-    div.checkbox input[type="radio"]:checked + label::after, div.radio input[type="checkbox"]:checked + label::after,
-    div.radio input[type="radio"]:checked + label::after {
-      color: #fff; }
-    div.checkbox input[type="checkbox"][type="checkbox"]:checked:hover + label::before,
-    div.checkbox input[type="radio"][type="checkbox"]:checked:hover + label::before, div.radio input[type="checkbox"][type="checkbox"]:checked:hover + label::before,
-    div.radio input[type="radio"][type="checkbox"]:checked:hover + label::before {
+    div.checkbox input:checked:hover + label::before, div.radio input:checked:hover + label::before {
       background-color: #006fe6; }
-    div.checkbox input[type="checkbox"][type="checkbox"].semi-selected:checked + label::before,
-    div.checkbox input[type="radio"][type="checkbox"].semi-selected:checked + label::before, div.radio input[type="checkbox"][type="checkbox"].semi-selected:checked + label::before,
-    div.radio input[type="radio"][type="checkbox"].semi-selected:checked + label::before {
+    div.checkbox input.semi-selected:checked + label::before, div.radio input.semi-selected:checked + label::before {
       background-color: #fd7e14; }
-    div.checkbox input[type="checkbox"][type="checkbox"].semi-selected:checked + label::after,
-    div.checkbox input[type="radio"][type="checkbox"].semi-selected:checked + label::after, div.radio input[type="checkbox"][type="checkbox"].semi-selected:checked + label::after,
-    div.radio input[type="radio"][type="checkbox"].semi-selected:checked + label::after {
-      color: #fff; }
-    div.checkbox input[type="checkbox"][type="checkbox"].semi-selected:checked:hover + label::before,
-    div.checkbox input[type="radio"][type="checkbox"].semi-selected:checked:hover + label::before, div.radio input[type="checkbox"][type="checkbox"].semi-selected:checked:hover + label::before,
-    div.radio input[type="radio"][type="checkbox"].semi-selected:checked:hover + label::before {
+    div.checkbox input.semi-selected:checked:hover + label::before, div.radio input.semi-selected:checked:hover + label::before {
       background-color: #f57102; }
-    div.checkbox input[type="checkbox"]:disabled + label,
-    div.checkbox input[type="radio"]:disabled + label, div.radio input[type="checkbox"]:disabled + label,
-    div.radio input[type="radio"]:disabled + label {
+    div.checkbox input:disabled + label, div.radio input:disabled + label {
       color: #6c757d !important;
       cursor: not-allowed !important;
       background-color: #fff !important; }
-      div.checkbox input[type="checkbox"]:disabled + label::before,
-      div.checkbox input[type="radio"]:disabled + label::before, div.radio input[type="checkbox"]:disabled + label::before,
-      div.radio input[type="radio"]:disabled + label::before {
+      div.checkbox input:disabled + label::before, div.radio input:disabled + label::before {
         background-color: #fff !important;
         cursor: not-allowed !important; }
-      div.checkbox input[type="checkbox"]:disabled + label::after,
-      div.checkbox input[type="radio"]:disabled + label::after, div.radio input[type="checkbox"]:disabled + label::after,
-      div.radio input[type="radio"]:disabled + label::after {
-        color: #6c757d !important;
-        cursor: not-allowed !important; }
+    div.checkbox input + label i, div.radio input + label i {
+      line-height: 1;
+      text-align: center;
+      color: transparent;
+      position: absolute;
+      left: 0px; }
+    div.checkbox input:not(:checked):not(:disabled):hover + label i, div.radio input:not(:checked):not(:disabled):hover + label i {
+      color: #cccccc; }
+    div.checkbox input:checked + label i, div.radio input:checked + label i {
+      color: #fff; }
 
-/* Special styles for div.checkbox */
-div.checkbox input[type="checkbox"] + label i,
-div.checkbox input[type="radio"] + label i {
-  line-height: 1;
-  text-align: center;
-  color: transparent;
-  position: absolute;
-  left: 0px; }
-
-div.checkbox input[type="checkbox"]:not(:checked):not(:disabled):not(:focus):hover + label i,
-div.checkbox input[type="radio"]:not(:checked):not(:disabled):not(:focus):hover + label i {
-  color: #cccccc; }
-
-div.checkbox input[type="checkbox"]:checked + label i,
-div.checkbox input[type="radio"]:checked + label i {
-  color: #fff; }
-
-/* Special styles for div.radio */
-div.radio input[type="checkbox"] + label::before,
-div.radio input[type="radio"] + label::before {
+div.radio input + label::before {
   border-radius: 50%; }
-
-div.radio input[type="checkbox"] + label::after,
-div.radio input[type="radio"] + label::after {
-  border-radius: 50%;
-  border-style: solid;
-  border-color: transparent;
-  background-clip: padding-box; }
-
-div.radio input[type="checkbox"]:not(:checked):not(:disabled):not(:focus):hover + label::after,
-div.radio input[type="radio"]:not(:checked):not(:disabled):not(:focus):hover + label::after {
-  background-color: #cccccc; }
-
-div.radio input[type="checkbox"]:checked + label::after,
-div.radio input[type="radio"]:checked + label::after {
-  background-color: #fff; }
 
 /***************************************************************************
 @mixin checkbox-radio-size-variant
@@ -17942,111 +17875,55 @@ div.radio input[type="radio"]:checked + label::after {
 div.checkbox, div.radio {
   height: 2rem;
   font-size: 1rem; }
-  div.checkbox input[type="checkbox"] + label,
-  div.checkbox input[type="radio"] + label, div.radio input[type="checkbox"] + label,
-  div.radio input[type="radio"] + label {
+  div.checkbox input + label, div.radio input + label {
     padding-left: 1.45rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     font-size: 1rem; }
-    div.checkbox input[type="checkbox"] + label::before,
-    div.checkbox input[type="radio"] + label::before, div.radio input[type="checkbox"] + label::before,
-    div.radio input[type="radio"] + label::before {
+    div.checkbox input + label::before, div.radio input + label::before {
       margin-top: 0.15rem;
       width: 1.2rem;
       height: 1.2rem; }
-    div.checkbox input[type="checkbox"] + label::after,
-    div.checkbox input[type="radio"] + label::after, div.radio input[type="checkbox"] + label::after,
-    div.radio input[type="radio"] + label::after {
-      margin-top: 0.15rem;
-      width: 1.2rem;
-      height: 1.2rem; }
-    div.checkbox input[type="checkbox"] + label i,
-    div.checkbox input[type="radio"] + label i, div.radio input[type="checkbox"] + label i,
-    div.radio input[type="radio"] + label i {
+    div.checkbox input + label i, div.radio input + label i {
       font-size: 0.8rem;
       width: 0.8rem;
       height: 0.8rem;
       margin-top: 0.35rem;
       margin-left: 0.2rem; }
 
-/* Special styles for div.checkbox */
-div.checkbox input[type="checkbox"] + label::before,
-div.checkbox input[type="radio"] + label::before {
+div.checkbox input label::before {
   border-radius: 0.25rem; }
 
-div.checkbox input[type="checkbox"] + label::after,
-div.checkbox input[type="radio"] + label::after {
-  font-size: 0.96rem;
-  line-height: 1.25; }
-
-/* Special styles for div.radio */
-div.radio input[type="checkbox"] + label::after,
-div.radio input[type="radio"] + label::after {
-  border-width: 0.3rem; }
+div.radio input + label i {
+  font-size: 0.4rem;
+  margin-top: 0.55rem; }
 
 div.checkbox-sm, div.radio-sm {
   height: 1.46875rem;
   font-size: 0.8125rem; }
-  div.checkbox-sm input[type="checkbox"] + label,
-  div.checkbox-sm input[type="radio"] + label, div.radio-sm input[type="checkbox"] + label,
-  div.radio-sm input[type="radio"] + label {
+  div.checkbox-sm input + label, div.radio-sm input + label {
     padding-left: 1.1625rem;
     padding-top: 0.125rem;
     padding-bottom: 0.125rem;
     font-size: 0.8125rem; }
-    div.checkbox-sm input[type="checkbox"] + label::before,
-    div.checkbox-sm input[type="radio"] + label::before, div.radio-sm input[type="checkbox"] + label::before,
-    div.radio-sm input[type="radio"] + label::before {
+    div.checkbox-sm input + label::before, div.radio-sm input + label::before {
       margin-top: 0.121875rem;
       width: 0.975rem;
       height: 0.975rem; }
-    div.checkbox-sm input[type="checkbox"] + label::after,
-    div.checkbox-sm input[type="radio"] + label::after, div.radio-sm input[type="checkbox"] + label::after,
-    div.radio-sm input[type="radio"] + label::after {
-      margin-top: 0.121875rem;
-      width: 0.975rem;
-      height: 0.975rem; }
-    div.checkbox-sm input[type="checkbox"] + label i,
-    div.checkbox-sm input[type="radio"] + label i, div.radio-sm input[type="checkbox"] + label i,
-    div.radio-sm input[type="radio"] + label i {
+    div.checkbox-sm input + label i, div.radio-sm input + label i {
       font-size: 0.65rem;
       width: 0.65rem;
       height: 0.65rem;
       margin-top: 0.284375rem;
       margin-left: 0.1625rem; }
 
-/* Special styles for div.checkbox */
-div.checkbox-sm input[type="checkbox"] + label::before,
-div.checkbox-sm input[type="radio"] + label::before {
+div.checkbox-sm input label::before {
   border-radius: 0.1875rem; }
 
-div.checkbox-sm input[type="checkbox"] + label::after,
-div.checkbox-sm input[type="radio"] + label::after {
-  font-size: 0.78rem;
-  line-height: 1.25; }
+div.radio-sm input + label i {
+  font-size: 0.325rem;
+  margin-top: 0.446875rem; }
 
-/* Special styles for div.radio */
-div.radio-sm input[type="checkbox"] + label::after,
-div.radio-sm input[type="radio"] + label::after {
-  border-width: 0.24375rem; }
-
-/***************************************************************************
-checkbox-group(-sm | -lg) and radio-group(-sm | -lg)
-***************************************************************************/
-/*REMOVED - Only ONE size
-.checkbox-group-sm > .checkbox,
-.radio-group-sm > .checkbox { @extend .checkbox-sm; }
-
-.checkbox-group-lg > .checkbox,
-.radio-group-lg > .checkbox { @extend .checkbox-lg; }
-
-.checkbox-group-sm > .radio,
-.radio-group-sm > .radio { @extend .radio-sm; }
-
-.checkbox-group-lg > .radio,
-.radio-group-lg > .radio { @extend .radio-lg; }
-*/
 /***************************************************************************
 checkbox-inline, radio-inline,
 checkbox-group-horizontal, radio-group-horizontal
