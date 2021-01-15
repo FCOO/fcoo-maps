@@ -67,7 +67,7 @@ Objects and methods to handle leaflet-maps
     nsMap.visitAllMaps = function(method){
         $.each(nsMap.mapIndex, function(index, map){
             if (map)
-                method(map);
+                method(map, index);
         });
     };
 
@@ -75,7 +75,7 @@ Objects and methods to handle leaflet-maps
     nsMap.visitAllVisibleMaps = function(method){
         $.each(nsMap.mapIndex, function(index, map){
             if (map && map.isVisibleInMultiMaps)
-                method(map);
+                method(map, index);
         });
     };
 

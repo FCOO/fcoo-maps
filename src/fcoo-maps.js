@@ -383,7 +383,7 @@ map.setView([56.2, 11.5], 4); //HER TODO skal hentes fra gemte options
             }
         }
         else {
-            //Creae single map
+            //Create single map
             nsMap.mainMap = L.map(nsMap.main.$mainContainer.get(0), nsMap.mainMapOptions);
 
 nsMap.mainMap.setView([56.2, 11.5], 6);  //HER TODO skal hentes fra gemte options
