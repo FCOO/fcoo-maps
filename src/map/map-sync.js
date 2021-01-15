@@ -46,7 +46,7 @@ Objects and methods to handle map-sync
         if (options.enabled)
             mapSync.setZoomOffset( this, getOffset(options.zoomOffset) );
 
-        this.options.mapSync.timeOffset = getOffset(options.timeOffset || '_0'); //MANGLER
+        this.options.mapSync.timeOffset = getOffset(options.timeOffset || '_0'); //TODO
 
         if (this.bsTimeInfoControl)
             this.bsTimeInfoControl.onChange();
@@ -67,6 +67,7 @@ Objects and methods to handle map-sync
 
                 } : {};
         },
+
         setState: function(options){
             this._map._setMapSyncOptions( options );
         }

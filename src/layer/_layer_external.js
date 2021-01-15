@@ -47,7 +47,7 @@
         };
 
 
-    //Load external-options from setup-file MANGLER
+    //Load external-options from setup-file TODO
     ns.promiseList.append({
         _fileName: {subDir:"layers", fileName:"external.json"},
         data     : defaultOptions,

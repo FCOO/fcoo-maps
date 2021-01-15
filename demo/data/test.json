@@ -1,0 +1,26 @@
+{
+    "defaults": {
+        "type": "info",
+        "becomeRead": "P1Y"
+    },
+    "messages": [
+        {
+            "id": "test_0",
+            "date": "2021-01-25",
+            "title": {"da":"Vises ALTID", "en":"ALWAYS shown"},
+            "showAlways": true
+        },
+        {
+            "id": "test_1",
+            "date": "2021-01-25",
+            "title": {"da":"Vises EN gang", "en":"Shown ONCE"},
+            "showOnce": true
+        },
+        {
+            "id": "test_2",
+            "date": "2021-01-25",
+            "title": {"da":"Vises HVER 10. MINUT", "en":"Shown EVERY 10 MINUTES"},
+            "showAfter": "PT10M"
+        }
+    ]
+}

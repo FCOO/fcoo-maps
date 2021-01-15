@@ -178,11 +178,12 @@ coast-lines, and name of cites and places
                     this.positionState = newPositionState;
 
                     //Set background-color of the position containers
+                    var showLandSeaColor = this._map.bsPositionControl && this._map.bsPositionControl.options.showLandSeaColor;
                     this.$colorInfoBoxContent.css(
                         'background-color',
-                        !true /*MANGLER: Læs fra mapSettings*/ || (newPositionState == 'OUT') ? 'initial' :
-                            newPositionState == 'LAND' ? this.backgroundColor.land.color :
-                                this.backgroundColor.water.color
+                            !showLandSeaColor || (newPositionState == 'OUT') ?
+                            'initial' :
+                            newPositionState == 'LAND' ? this.backgroundColor.land.color : this.backgroundColor.water.color
                     );
 
                     //Update modernizr classes to show/hide info-boxes only visible over land or water

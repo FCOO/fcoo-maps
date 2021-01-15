@@ -49,7 +49,7 @@
 
 
             topMenu: {
-                search   : false,                                   //true if use search
+                search   : true,                                    //true if use search
                 nominatim: 'https://nominatim.openstreetmap.org',   //Path to OpenStreetMap Nominatin-service
                 /*
                 Path to messages-files. Two versions:
@@ -57,8 +57,9 @@
                 2: Using ns.dataFilePath (See fcoo-data-files): {subDir, fileName}.
                    E.q. {subDir: "theSubDir", fileName:"fileName.json"} => "https://app.fcoo.dk/static/theSubDir/fileName.json"
                 */
+
                 help     : null, //null or STRING or {subDir:STRING, fileName:STRING}
-                messages : null, //null or STRING or {subDir:STRING, fileName:STRING}
+                messages : "data/test.json", //null, //null or STRING or {subDir:STRING, fileName:STRING}
                 warning  : null, //null or STRING or {subDir:STRING, fileName:STRING}
 
                 helpId: {   //id in help message-file for different default modals
@@ -264,8 +265,10 @@ data.leftMenuButtons.save = function(){ alert('save'); };
             //Update all maps and enable zoom-history again when main-container is resized
             onResizeEnd: function(){
 
-                nsMap.mainMap._selfSetView();
-                nsMap.mainMap.invalidateSize({pan:false, debounceMoveend:true});
+                if (nsMap.mainMap){
+                    nsMap.mainMap._selfSetView();
+                    nsMap.mainMap.invalidateSize({pan:false, debounceMoveend:true});
+                }
 
                 nsMap.visitAllMaps(function(map){
                     //Show center map position marker (if any)
@@ -362,8 +365,7 @@ data.leftMenuButtons.save = function(){ alert('save'); };
 
             //Create main map
             nsMap.mainMap = nsMap.multiMaps.addMap( nsMap.mainMapOptions );
-
-nsMap.mainMap.setView([55.651, 12.757], 6); //HER TODO skal hentes fra gemte options
+            nsMap.mainMap.setView(nsMap.defaultCenterZoom.center, nsMap.defaultCenterZoom.zoom);
 
 
             nsMap.mapSync.add(nsMap.mainMap);
@@ -377,21 +379,18 @@ nsMap.mainMap.setView([55.651, 12.757], 6); //HER TODO skal hentes fra gemte opt
 
                 nsMap.mapSync.add(map, {enabled: false});
 
-map.setView([56.2, 11.5], 4); //HER TODO skal hentes fra gemte options
+                map.setView(nsMap.defaultCenterZoom.center, nsMap.defaultCenterZoom.zoom);
 
                 map.onHideInMultiMaps();
             }
         }
         else {
-            //Creae single map
+            //Create single map
             nsMap.mainMap = L.map(nsMap.main.$mainContainer.get(0), nsMap.mainMapOptions);
-
-nsMap.mainMap.setView([56.2, 11.5], 6);  //HER TODO skal hentes fra gemte options
+            nsMap.mainMap.setView(nsMap.defaultCenterZoom.center, nsMap.defaultCenterZoom.zoom);
 
         }
     }
-
-
 
 }(jQuery, window.moment, L, this, document));
 

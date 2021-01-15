@@ -90,6 +90,7 @@ options = {
 
         this.info = []; //[] of {map, layer, legend, infoBox, colorInfoLayer, loading, timeout, updateColorInfoOnWorkingOff}
 
+
         this.showAndHideClasses = '';
         this.inversShowAndHideClasses = '';
         var minZoom = this.options.minZoom || this.options.layerOptions.minZoom || 0;
@@ -103,16 +104,55 @@ options = {
             this.showAndHideClasses       += ' show-for-leaflet-zoom-'+maxZoom+'-down';
             this.inversShowAndHideClasses += ' hide-for-leaflet-zoom-'+maxZoom+'-down';
         }
+
+        ns.appSetting.add({
+            id          : this.id,
+            callApply   : true,
+            applyFunc   : $.proxy(this.applySetting, this),
+            defaultValue: {}
+        });
+
     }
+
     nsMap.MapLayer = MapLayer;
 
     nsMap.MapLayer.prototype = {
         /*********************************************************
-        isAddedTo(mapOrIndex) - return true if the MapLayer is added to the mal
+        isAddedTo(mapOrIndex) - return true if the MapLayer is added to the map
         *********************************************************/
         isAddedToMap: function(mapOrIndex){
             var mapIndex = getMap(mapOrIndex).fcooMapIndex;
             return !!this.info[mapIndex] && !!this.info[mapIndex].map;
+        },
+
+        /*********************************************************
+        applySetting and saveSetting
+        *********************************************************/
+        applySetting: function(data){
+            var _this = this;
+            nsMap.visitAllMaps( function(map, index){
+                var setting = data[index] || {};
+                if (setting.show)
+                    _this.addTo(map);
+                else
+                    _this.removeFrom(map);
+
+                //colorInfo - TODO
+            });
+        },
+
+        saveSetting: function(){
+            var _this = this,
+                data = {};
+            $.each(this.info, function(index/*, info*/){
+                data[index] = {
+                    show     : _this.isAddedToMap(index)
+                    //colorInfo - TODO
+                };
+            });
+            ns.appSetting.set(this.id, data);
+            ns.appSetting.save();
+            return this;
         },
 
         /*********************************************************
@@ -278,7 +318,7 @@ options = {
             if (this.hasColorInfo){
                 this.toggleColorInfo(mapIndex, ciOptions.show);
 
-                //Fire 'zoomend' on map to update color-info when the layer is loaded (in workingOff)
+                //Call map._onColorPosition update color-info when the layer is loaded (in workingOff)
                 info.updateColorInfoOnWorkingOff = true;
             }
 
@@ -291,6 +331,8 @@ options = {
 
             if (this.options.onAdd)
                 this.options.onAdd(map, layer);
+
+            this.saveSetting();
 
             return this;
         },
@@ -362,6 +404,8 @@ options = {
             if (this.options.onRemove)
                 this.options.onRemove(map, info.layer);
 
+            this.saveSetting();
+
             return this;
         },
 
@@ -426,11 +470,8 @@ options = {
             if (info && info.updateColorInfoOnWorkingOff){
                 info.updateColorInfoOnWorkingOff = false;
 
-                //Fire 'zoomend' on map to update color-info when the layer is loaded
-                var map = getMap(mapIndex);
-                map.lastColorLatLngStr = 'NOT';
-                map.fire('zoomend');
-//HER                window.setTimeout(function(){ map.fire('zoomend'); }, 1000 );
+                //Call map._onColorPosition update color-info when the layer is loaded
+                getMap(mapIndex)._onColorPosition(true);
             }
 
         },

@@ -46,7 +46,7 @@ Objects,methods, and events to handle time (moment)
         applyFunc   : function( timeMode ){
             nsTime.timeMode = timeMode;
             ns.events.fire('TIMEMODECHANGED', timeMode);
-//console.log('MANGLER timeMode=', timeMode);
+//console.log('TODO timeMode=', timeMode);
         },
         defaultValue: tmScale
     });
@@ -142,7 +142,7 @@ Objects,methods, and events to handle time (moment)
         ns.appSetting.data['currentAnimation'] = nsTime.currentAnimation;
         ns.appSetting.save();
 
-        //TODO - MANGLER: Update whatever need to be updated
+        //TODO: Update whatever need to be updated
     };
 
     //Add currentRelative and currentAnimation to application-settings

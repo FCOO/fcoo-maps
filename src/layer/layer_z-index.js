@@ -77,7 +77,7 @@ via the layers id in fcoo.map.zIndex[id]
 
     };
 
-//sæt window.L_GEOPOLYLINE_ZINDEX = 100; i relation til de andre ting MANGLER
+//sæt window.L_GEOPOLYLINE_ZINDEX = 100; i relation til de andre ting TODO
 
 
 }(jQuery, this, document));

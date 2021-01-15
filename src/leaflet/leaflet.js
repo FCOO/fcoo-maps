@@ -67,7 +67,7 @@ Objects and methods to handle leaflet-maps
     nsMap.visitAllMaps = function(method){
         $.each(nsMap.mapIndex, function(index, map){
             if (map)
-                method(map);
+                method(map, index);
         });
     };
 
@@ -75,7 +75,7 @@ Objects and methods to handle leaflet-maps
     nsMap.visitAllVisibleMaps = function(method){
         $.each(nsMap.mapIndex, function(index, map){
             if (map && map.isVisibleInMultiMaps)
-                method(map);
+                method(map, index);
         });
     };
 
@@ -135,9 +135,19 @@ Objects and methods to handle leaflet-maps
         scrollWheelZoom      : true,
         googleScrollWheelZoom: false,   //googleScrollWheelZoom not included
 
-        //Set default bounding to prevent panning round - MANGLER: ER der brug for denne??
+        //Set default bounding to prevent panning round - TODO: ER der brug for denne??
         maxBounds: L.latLngBounds([-90, -230],    //southWest
-                                  [+90, +230])    //northEast
+                                  [+90, +230]),    //northEast
+
+        /*
+        maxBoundsViscosity:
+        If maxBounds is set, this option will control how solid the bounds are when dragging the map around.
+        The default value of 0.0 allows the user to drag outside the bounds at normal speed,
+        higher values will slow down map dragging outside bounds, and 1.0 makes the bounds fully solid,
+        preventing the user from dragging outside the bounds.
+        */
+        maxBoundsViscosity: 1.0, //TODO 1.0 is a test to see if it fix map-sync issues
+
     });
 
 
@@ -191,9 +201,14 @@ Objects and methods to handle leaflet-maps
             },
             isExtended        : true,
             showCursorPosition: !window.bsIsTouch,
+            showLandSeaColor  : true,
 
             inclContextmenu   : false,  //Set to true when contextmenu for the map is implemented
             selectFormat      : function(){ ns.globalSetting.edit(ns.events.LATLNGFORMATCHANGED); },
+            popupList: [
+                //Add options showLandSeaColor to bsPositionControl
+                {id:'showLandSeaColor', type:'checkbox', selected: true, text: {da:'Vis land/hav farver', en:'Show land/sea colours'}}
+            ]
         },
 
         //bsScale - Scale with nm, km or both
@@ -214,8 +229,8 @@ Objects and methods to handle leaflet-maps
                 noVerticalPadding   : true,
                 noHorizontalPadding : false,
 
-width : 250,    //MANGLER TODO
-maxHeight: 300, //MANGLER TODO
+width : 250,    //TODO
+maxHeight: 300, //TODO
 
             }
         },
@@ -227,7 +242,7 @@ maxHeight: 300, //MANGLER TODO
         routeControl: false,
 
         //permalinkControl: Install L.Control.Permalink
-        permalinkControl: true,
+        permalinkControl: false, //TODO test to see if map-center-zoom is working true,
 
         doubleClickZoom: true, //Default Leaflet
 
@@ -341,13 +356,13 @@ maxHeight: 300, //MANGLER TODO
     });
     L.Map.addInitHook(function () {
 
-//MANGLER: Skal checke for om localStorage kan tilgås. Hvis ikke => ingen installation
+//TODO: Skal checke for om localStorage kan tilgås. Hvis ikke => ingen installation
         if (this.options.permalinkControl){
             this.permalinkControl = new L.Control.Permalink({
                 useLocation    : !ns.standalone,
                 useLocalStorage: ns.standalone,
                 localStorageId : ns.localStorageTempKey,
-                postfix        : this.options.mapIndex || ''
+                postfix        : this.fcooMapIndex || ''
             });
 
             //Add the control when the map is ready

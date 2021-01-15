@@ -144,7 +144,7 @@
             createPane      : true,
             createMarkerPane: true,
             minZoom         : 6,
-/* MANGLER: Legend skal have to knapper:
+/* TODO: Legend skal have to knapper:
      1: Show all => Liste med tilsvarende niord-messages
      2: Publications/Publikationer => window.Niord.publications.show();
 */

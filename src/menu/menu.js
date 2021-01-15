@@ -13,11 +13,11 @@ menu.js
 
 
     nsMap.createLeftMenu = function(/* data, $leftMenuContainer */){
-        //TODO MANGLER
+        //TODO
     };
 
     nsMap.createRightMenu = function(/* data, $leftMenuContainer */){
-        //TODO MANGLER
+        //TODO
     };
 
 
