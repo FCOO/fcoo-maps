@@ -179,13 +179,14 @@ options = {
             if (map.bsLegendControl && !this.options.noLegend){
                 var legend = info.legend = info.legend ||
                     new L.BsLegend({
-                            index    : this.index,
-                            icon     : this.options.icon,
-                            text     : this.options.text || null,
-                            content  : this.options.content,
-                            onInfo   : this.options.onInfo,
-                            onWarning: this.options.onWarning,
-                            onRemove : $.proxy(this.removeViaLegend, this),
+                            index       : this.index,
+                            icon        : this.options.icon,
+                            text        : this.options.text || null,
+                            content     : this.options.content,
+                            buttonList  : this.options.buttonList || this.options.buttons,
+                            onInfo      : this.options.onInfo,
+                            onWarning   : this.options.onWarning,
+                            onRemove    : $.proxy(this.removeViaLegend, this),
                             normalIconClass: this.showAndHideClasses,
                             hiddenIconClass: this.inversShowAndHideClasses,
 

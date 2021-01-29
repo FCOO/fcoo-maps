@@ -129,6 +129,13 @@
         'fa-fe_plural': {da:'Skydeområder og -advarsler',   en:'Firing Areas and Warnings'}
     });
 
+    //Use same buttons in legends
+    var niordOptions = window.Niord.options,
+        niordLegendButtonList = [
+            {icon: 'fa-th-list',                      text: {da:'Vis alle', en:'Show all'}, onClick: function(){ window.Niord.messages.asModal();  }},
+            {icon: niordOptions.partIcon.PUBLICATION, text: 'niord:PUBLICATION',            onClick: function(){ window.Niord.publications.show(); }}
+        ];
+
     /**************************************************
     MapLayer_Niord = Extended MapLayer with Niord-data
     **************************************************/
@@ -144,12 +151,7 @@
             createPane      : true,
             createMarkerPane: true,
             minZoom         : 6,
-/* TODO: Legend skal have to knapper:
-     1: Show all => Liste med tilsvarende niord-messages
-     2: Publications/Publikationer => window.Niord.publications.show();
-*/
-
-
+            buttonList      : niordLegendButtonList
         });
         nsMap.MapLayer.call(this, options);
     }
@@ -186,6 +188,9 @@
         backgroundWMS: 'firing-areas-dk_latest',
         icon         : L.bsMarkerAsIcon('niord-fe', 'niord-fe', {faClassName: 'fa-triangle',    extraClassName:'fa-rotate-90'}),
         text         : 'niord:fa-fe_plural',
+
+buttonList      : niordLegendButtonList,
+
 
 //TEST START
 radioGroup: 'TEST',
