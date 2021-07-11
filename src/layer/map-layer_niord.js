@@ -40,7 +40,7 @@
         date        : 'date',           //"24. Dec 2018" in selected timezone
         date_weekday: 'date_weekday',   //"Monday 24. Dec 2018" in selected timezone
         date_long   : 'date_long',      //"24. December 2018" in selected timezone
-        latLng      : ''  //A la N12&deg;34'56" E12&deg;34'56"
+        latLng      : ''                //A la N12&deg;34'56" E12&deg;34'56"
     };
 
 

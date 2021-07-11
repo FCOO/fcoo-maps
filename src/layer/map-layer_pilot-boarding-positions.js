@@ -58,7 +58,8 @@ Create GEOJSON-layer to read and display pilot points
             });
 
             //Create header-icon to look like the marker
-            var headerIcon = L.bsMarkerAsIcon(bsMarkerOptions.colorName, bsMarkerOptions.borderColorName);
+//HER            var headerIcon = L.bsMarkerAsIcon(bsMarkerOptions.colorName, bsMarkerOptions.borderColorName);
+            var headerIcon = L.bsMarkerAsIcon(bsMarkerOptions);
             headerIcon.push('fas fa-diamond fa-inside-circle text-danger');
 
             marker.bindPopup({
