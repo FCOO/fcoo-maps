@@ -51,6 +51,9 @@ related issues in map sync
 
                 //Update the options showShadowCursor and showOutline for map-sync (See map/map-sync.js)
                 nsMap.setMapSyncCursorAndShadowOptions( options );
+
+                //Update menu-items in layerMenu (if any)
+                nsMap.mapLayer_updateMenuItem();
             }
         },
         defaultValue: {
@@ -72,7 +75,7 @@ related issues in map sync
     nsMap.editMultiMapsAndSyncMapsSetting = function(){
         if (!mapSettingModalForm){
             var list    = [],
-                maxMaps = nsMap.setupData.multiMaps.maxMaps;
+                maxMaps = nsMap.setupOptions.multiMaps.maxMaps;
 
             for (var i=1; i<=maxMaps; i++)
                 list.push({id:'maps_'+i, text: ''+i});
@@ -166,7 +169,7 @@ related issues in map sync
                 static    : false,
                 keyboard  : true,
                 content   : content,
-                helpId    : nsMap.setupData.topMenu.helpId.multiMapSetting,
+                helpId    : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
                 helpButton: true,
                 footer    : [{da:'Klik på', en:'Click on'}, {icon: nsMap.mapSettingIcon}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
 

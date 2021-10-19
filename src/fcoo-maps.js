@@ -14,20 +14,82 @@
         nsMap = ns.map = ns.map || {};
 
     /****************************************************************************
-    To create an application call window.fcoo.map.createApplication(options: OPTIONS)
+    To create an application call window.fcoo.map.createApplication(setup, layerMenu, excludeLayerMenu)
+    setup            = SETUP or FILENAME = filename with SETUP
+    layerMenu        = LAYERMENU or FILENAME = filename with LAYERMENU
+    excludeLayerMenu = []ID or FILENAME =   filename with []ID. []ID = array of menu-ids not to be included even if they are in layerMenu
+    If layerMenu is not provider SETUP must contain .layerMenu: STRING / LAYERMENU
 
-    createApplication will load e serie of mandatory and optional setup-json-files or setup-json-objects
-    each with a 'build'-function
-    After the build the settings in fcoo.appSetting and globalSetting are loaded
+    FILENAME = Path to file. Two versions:
+        1: Relative path locally e.q. "data/info.json"
+        2: Using ns.dataFilePath (See fcoo-data-files): {subDir, fileName}.
+        E.q. {subDir: "theSubDir", fileName:"theFileName.json"} => "https://app.fcoo.dk/static/theSubDir/theFileName.json"
 
-    OPTIONS: {
-        setup    : FILENAME or SETUP-OBJECT,
-        leftMenu,
-        rightMenu: {
+
+    SETUP = {
+        applicationName: {da:STRING, en:STRING},
+
+        topMenu: {
+            See description in fcoo/fcoo-application and in nsMap.default_setup below
+        }
+
+        layerMenu: LAYERMENU. See below
+        layerMenuOptions: {
+            inclBar    : true,
+            barCloseAll: true,
+            inclBar    : BOOLEAN, if true a bar top-right with buttons from items with options.addToBar = true and favorites (optional) and close-all (if barCloseAll=true)
+            barCloseAll: BOOLEAN, if true a top-bar button is added that closes all open submenus
+            favorites  : Nothing or false. Nothing = default saving, false: no favorites
+        }
+
+        leftMenu/rightMenu: true or false or {
+            width: 300,
+            buttons: As leftMenuButtons and rightMenuButtons in fcoo-aapplication = {
+                preButtons  = []buttonOptions or buttonOptions or null //Individuel button(s) placed before the standard buttons
+                save        = onClick or buttonOptions, //Standard save-button
+                load        = onClick or buttonOptions, //Standard load-button
+                bookmark    = onClick or buttonOptions, //Standard bootmark-button
+                share       = onClick or buttonOptions, //Standard share-button
+                user        = onClick or buttonOptions, //Standard user-button
+                setting     = onClick or buttonOptions, //Standard setting-button
+                postButtons = []buttonOptions or buttonOptions or null //Individuel button(s) placed after the standard buttons
+            }
+
+            isLayerMenu   : true    //True => the layer-menu is created in this side
+
+            if isLayerMenu: false:
             fileName: FILENAME, or
-            data    : JSON-OBJECT,
-            resolve : function( data, $leftMenuContainer ) - optional. default = fcoo.map.createLeftMenu (see menu/menu.js)
+            data    : JSON-OBJECT, or
+            content : A JSON-OBJECT with content as in fcoo/jquery-bootstrap
+
+            create or resolve : function( data, $container ) - function to create the menus content in $container. Only if fileName or data is given (and isLayerMenu: false)
+
         },
+
+        keepLeftMenuButton  : false, //Keeps the left menu-button even if leftMenu is null
+        keepRightMenuButton : false, //Keeps the right menu-button even if rightMenu is null
+
+
+        ** maps and multi-maps **
+        //Default map
+        map: {
+            minZoom:  3,
+            maxZoom: 12,
+        },
+
+        //Multi maps
+        multiMaps: {
+            enabled           : true,
+            maxMaps           : 5, //OR {mobile:INTEGER, tablet:INTEGER, desktop:INTEGER}
+            maxZoomOffset     : 2
+        }
+
+
+        ** Standard setup/options in setup-files or as objects **
+        ** The following ids are fixed and the corresponding resolve-methods are given in the default-oin the
+
+
+        ** Setup-files or objects used by the specific application **
         metadata: {
             fileName: FILENAME,
             resolve : function( data ),
@@ -36,15 +98,41 @@
         other: []{fileName, resolve, reload} Same as metadata
 
         finally: function() - optional. Function to be called when all is ready
+
+
+        //A list of setup-files or objects are used
+
+
     }
 
-    FILENAME = Path to file. Two versions:
-        1: Relative path locally e.q. "data/info.json"
-        2: Using ns.dataFilePath (See fcoo-data-files): {subDir, fileName}.
-        E.q. {subDir: "theSubDir", fileName:"theFileName.json"} => "https://app.fcoo.dk/static/theSubDir/theFileName.json"
+    layerMenu contains the menu-structure with all the alliable layers.
+    All layers and there menus are build using the methods and default options descripted in src/layer
+    LAYERMENU = []LAYERITEM
+    LAYERITEM = {ID: BOOLEAN}           - false : Do not include, true: Include with default options (=LAYEROPTIONS) given in the packages that build the layer, or
+    LAYERITEM = {ID: FILENAME}          - Include with the options (=LAYEROPTIONS) given in FILENAME pared with the default options, or
+    LAYERITEM = {ID: (=LAYEROPTIONS)}   - Include with (=LAYEROPTIONS) pared with the default options, or
+    LAYERITEM = MMENUITEMOPTIONS        = Options for a menu-item without layer-toggle. See fcoo/jquery-bootstrap-mmenu for details.
+
+    LAYEROPTIONS are individual for the different layers but they can also contain info on sub-menuitems. The creation of a layer can include reading a setup-file
+    Eash layer-builder methods must also return options for the mmenu needed for the layer
+
+    The layer-menu are build either in the left- (default) or right-side menu
+
+
+    createApplication(...) will
+        1: "Load" (*) setup and proccess the options
+        2: "Load" standard setup/options for differnet parts of the application
+        3: "Load" content for left- and/or right-menu
+        4: "Load" layerMenu and create the layers and the options for the mmenu
+        5: "Load" the added layers via there build-method
+        6: Create the main structure and the left and/or right menu
+        7: "Load" options.other and options.metaData (if any)
+        8: Load settings in fcoo.appSetting and globalSetting and call options.finally (if any)
+
+    *) "Load" can be loading from a file or using given or default options
 
     ****************************************************************************/
-    var default_setup = {
+    nsMap.default_setup = {
             applicationName: {da:'Dansk titel', en:'English title'},
 
 
@@ -59,7 +147,7 @@
                 */
 
                 help     : null, //null or STRING or {subDir:STRING, fileName:STRING}
-                messages : "data/test.json", //null, //null or STRING or {subDir:STRING, fileName:STRING}
+                messages : null, //null or STRING or {subDir:STRING, fileName:STRING}
                 warning  : null, //null or STRING or {subDir:STRING, fileName:STRING}
 
                 helpId: {   //id in help message-file for different default modals
@@ -81,14 +169,27 @@
                 setting: false,
             },
 
-            leftMenuWidth      : 300,   //Width of left-menu
-            leftMenuButtons    : {
-                setting: function(){ ns.globalSetting.edit(); }
+            layerMenuOptions: {
+                inclBar    : true,
+                barCloseAll: true
             },
-            keepLeftMenuButton : false, //Set to true if leftMenuWidth == 0 to keep menu-button
-            rightMenuWidth     : 300,   //Set to 0 to aviod right-side menu
-            rightMenuButtons   : {},
-            keepRightMenuButton: false, //Set to true if rightMenuWidth == 0 to keep menu-button
+
+
+            leftMenu: {
+                width  : 300,   //Width of left-menu
+                buttons: {
+                    setting: function(){ ns.globalSetting.edit(); }
+                },
+                isLayerMenu: true,
+
+                content    : '',
+                resolve    : null
+            },
+            keepLeftMenuButton: false,
+
+            rightMenu          : false,
+            keeprightMenuButton: false,
+
 
             //Default map
             map: {
@@ -99,145 +200,286 @@
             //Multi maps
             multiMaps: {
                 enabled      : true,
-                maxMaps      : 5, //OR {mobile, tablet, desktop}
-                maxZoomOffset: 2,
-                allowDifferentTime: true, //If true the different maps can have differnet time - relative to the main map eq. +2h
+                maxMaps      : 5,
+                maxZoomOffset: 2
+            },
+
+
+            //Standard setup/options
+            standard: {
+                wms: {subDir:"layers", fileName:"wms.json"} //Standard options for WMS-layers - see src/layer/layer_wms.js
+                //time: {subDir, fileName} - options for time-dimention See github/fcoo/fcoo-maps-time
             }
         };
+
+
+
+    /*************************************************************************
+    options2promiseOptions(fileNameOrData, resolve, wait)
+    Return a promise-options based on fileNameOrData
+    *************************************************************************/
+    function options2promiseOptions(fileNameOrData, resolve = null, wait = false){
+        var result = {
+                resolve: resolve,
+                wait   : wait
+            };
+        if (window.intervals.isFileName(fileNameOrData))
+            result.fileName = ns.dataFilePath(fileNameOrData);
+        else
+            result.data = fileNameOrData;
+        return result;
+    }
+
+
+    /*************************************************************************
+    setOptions(options, defaultOptions)
+    If any id:value in options is id:true and a corresponding id:{...} exists
+    in defaultOptions => Replace true with {...}
+    *************************************************************************/
+    function setOptions(options, defaultOptions){
+        if (!defaultOptions || !$.isPlainObject(defaultOptions)  || !$.isPlainObject(options))
+            return options;
+
+        options = $.extend(true, {}, defaultOptions, options);
+        $.each(options, function(indexOrId, value){
+            if ((value === true) && defaultOptions[indexOrId])
+                options[indexOrId] = defaultOptions[indexOrId];
+        });
+        return options;
+    }
 
     /*************************************************************************
     createApplication
     *************************************************************************/
     var whenFinish = null;
-    nsMap.createApplication = function(options){
-        //Add all setup-files needed to fcoo.promiseList
 
-        //1. setup
-        var opt = {
-                resolve : createFCOOMap,
-                wait    : true
-            };
-        if (window.intervals.isFileName(options.setup))
-            opt.fileName = options.setup;
+    nsMap.createApplication = function(options, layerMenu = null, excludeLayerMenu = null){
+        //1: "Load" setup and proccess the options
+        nsMap.layerMenu = layerMenu;
+        nsMap.excludeLayerMenu = excludeLayerMenu;
+
+
+        var promiseOptions = options2promiseOptions(options);
+        if (promiseOptions.fileName)
+            Promise.getJSON(promiseOptions.fileName, {}, resolve_setup);
         else
-            opt.data = options.setup;
-        ns.promiseList.append(opt);
+            resolve_setup(promiseOptions.data);
+    };
 
-        //2. left-menu
-        if (options.leftMenu){
-            var resolveLeft = options.leftMenu.resolve || nsMap.createLeftMenu;
-            options.leftMenu.resolve = function(data){ resolveLeft(data, nsMap.main.leftMenu.$menu); };
-            options.leftMenu.wait = true;
-            ns.promiseList.append(options.leftMenu);
-        }
 
-        //3. right-menu
-        if (options.rightMenu){
-            var resolveRight = options.rightMenu.resolve || nsMap.createRightMenu;
-            options.rightMenu.resolve = function(data){ resolveRight(data, nsMap.main.rightMenu.$menu); };
-            options.rightMenu.wait = true;
-            ns.promiseList.append(options.rightMenu);
-        }
+    /******************************************************************
+    resolve_setup(options)
+    ******************************************************************/
+    function resolve_setup(options){
+        //Adjust options
+        nsMap.setupOptions = options = setOptions(options, nsMap.default_setup);
 
-        //4: Other
-        $.each(options.other || [], function(index, opt){
-            ns.promiseList.append(opt);
+        nsMap.setupOptions.bottomMenu = nsMap.setupOptions.bottomMenu || nsMap.BOTTOM_MENU;
+
+        //Add header to top-menu
+        options.topMenu.header = options.applicationName;
+
+        //Adjust path
+        $.each(['help', 'messages', 'warning'], function(index, id){
+            var topMenuPath = options.topMenu[id];
+            if (topMenuPath)
+                options.topMenu[id] = {url: ns.dataFilePath( topMenuPath )};
         });
 
-        //4: Meta-data (allow both syntax)
-        ns.promiseList.append(opt.metadata || opt.metaData);
+        //Add helpId to modal for globalSetting (if any)
+        if (nsMap.setupOptions.topMenu.helpId.globalSetting){
+            var modalOptions = ns.globalSetting.options.modalOptions = ns.globalSetting.options.modalOptions || {};
+            modalOptions.helpId = nsMap.setupOptions.topMenu.helpId.globalSetting;
+            modalOptions.helpButton = true;
+        }
 
-        //5: Finish
+        //Get multi-maps and max-maps
+        nsMap.hasMultiMaps = options.multiMaps && options.multiMaps.enabled;
+        if (nsMap.hasMultiMaps){
+            //Get max-maps
+            if ($.isPlainObject(options.multiMaps.maxMaps))
+                options.multiMaps.maxMaps =
+                    ns.modernizrDevice.isDesktop ? options.multiMaps.maxMaps.desktop :
+                    ns.modernizrDevice.isTablet  ? options.multiMaps.maxMaps.tablet :
+                    options.multiMaps.maxMaps.mobile;
+        }
+
+        //2: "Load" standard setup/options for differnet parts of the application. Check if there are any resolve-function assigned in nsMap.standard
+        $.each(options.standard, function(id, fileNameOrData){
+            if (nsMap.standard[id])
+                ns.promiseList.append( options2promiseOptions(fileNameOrData, nsMap.standard[id]) );
+        });
+
+        //3: "Load" content for left- and/or right-menu. If the menu isn't the layer-menu its content is loaded last to have the $-container ready
+        $.each(['left', 'right'], function(index, prefix){
+            var menuId = prefix+'Menu',
+                menuOptions = options[menuId];
+            if (!menuOptions) return;
+
+            if (menuOptions.isLayerMenu){
+                //Set the options for mmenu
+                menuOptions.menuOptions =
+                    $.extend({}, options.layerMenuOptions || {}, {list: []});
+
+                //Set ref to the list. Menu-items are added in resolve_layerMenu
+                options.layerMenuPrefix = prefix;
+            }
+
+            else {
+                /*  menuOptions contains:
+                      fileName: FILENAME, or
+                      data    : JSON-OBJECT, or
+                      content : A JSON-OBJECT with content as in fcoo/jquery-bootstrap
+                      create or resolve : function( data, $container ) - function to create the menus content in $container. Only if fileName or data is given
+
+                    Create the resolve-function */
+                var resolve, menuResolve;
+                if (menuOptions.content)
+                    resolve = function( content ){
+                        nsMap.main[menuId].$menu._bsAddHtml( content );
+                    };
+                else {
+                    menuResolve = menuOptions.resolve || menuOptions.create;
+                    resolve = function( data ){
+                        menuResolve( data, nsMap.main[menuId].$menu );
+                    };
+                }
+
+                ns.promiseList.appendLast({
+                    fileName: menuOptions.fileName,
+                    data    : menuOptions.data || menuOptions.content,
+                    resolve : resolve
+                });
+            }
+        });
+
+        //4: "Load" layerMenu and create the layers and the options for the mmenu
+        nsMap.layerMenu = nsMap.layerMenu || options.layerMenu;
+        nsMap.excludeLayerMenu = nsMap.excludeLayerMenu || options.excludeLayerMenu;
+
+        if (nsMap.layerMenu){
+            if (nsMap.excludeLayerMenu)
+                //"Load" list of layer-menus to exclude
+                ns.promiseList.append( options2promiseOptions( nsMap.excludeLayerMenu, function( options ){ nsMap.excludeLayerMenu = options; }/* HER, true*/) );
+
+            //5: "Load" the added layers via there build-method
+            ns.promiseList.append( options2promiseOptions( nsMap.layerMenu, resolve_layerMenu, true ) );
+        }
+
+
+        //6: Create the main structure and the left and/or right menu. Is excecuded after the layer-menus and before lft/rigth menu creation
+        ns.promiseList.prependLast({
+            data   : 'none',
+            resolve: createFCOOMap
+        });
+
+
+        //7: Load files in options.other and options.metaData (if any)
+        $.each(options.other || [], function(index, otherOptions){
+            ns.promiseList.appendLast(otherOptions);
+        });
+        ns.promiseList.appendLast(options.metadata || options.metaData);
+
+
+        //8: Load settings in fcoo.appSetting and globalSetting and call options.finally (if any)
+        ns.promiseList.options.finally = promise_all_finally;
         whenFinish = options.finally;
-
-       ns.promiseList.options.finally = promise_all_finally;
 
         //Load all setup-files
         Promise.defaultPrefetch();
         ns.promiseList_getAll();
-    };
+    }
 
-    function promise_all_finally(){
-        //Call ns.globalSetting.load => ns.appSetting.load => whenFinish => Promise.defaultFinally
-        ns.globalSetting.load(null, function(){
-            ns.appSetting.load(null, function(){
-                if (whenFinish)
-                    whenFinish();
-                ns.events.fire(ns.events.CREATEAPPLICATIONFINALLY);
-                Promise.defaultFinally();
-            });
+
+    /******************************************************************
+    resolve_layerMenu(options)
+    5: "Load" the added layers via there build-method
+    ******************************************************************/
+    function resolve_layerMenu(menuList){
+        //Append menu-items in menuList to the list with item for the layer-menu
+        var layerMenuOptions = nsMap.setupOptions[nsMap.setupOptions.layerMenuPrefix+'Menu'].menuOptions;
+
+        $.each(menuList, function(index, menuItem){
+            layerMenuOptions.list.push(menuItem);
         });
-        return true;
+
+        /*********************************************
+        Convert menu-items on the form "MENU_ID" or {"MENU_ID": true/false/options} => {id: "MENU_ID", options: true/false/options}
+        *********************************************/
+        function convertList(list){
+            $.each(list, function(index, menuItem){
+                if ($.type(menuItem) == 'string'){
+                    list[index] = {
+                        id            : menuItem,
+                        isMapLayerMenu: true,
+                        options       : true
+                    };
+                }
+                else {
+                    //If the menuItem only contains ONE element its assumed that it is {"MENU_ID": true/false/options}
+                    var id, keys = Object.keys(menuItem);
+                    if (keys.length == 1){
+                        id = keys[0];
+                        list[index] = {
+                            id            : id,
+                            isMapLayerMenu: true,
+                            options       : menuItem[id]
+                        };
+                    }
+                }
+                if (list[index].list)
+                    list[index].list = convertList(list[index].list);
+            });
+
+            //Remove any items that are listed in nsMap.excludeLayerMenu
+            var newList = [];
+            for( var i=0; i<list.length; i++){
+                if ((list[i].options !== false) && !nsMap.excludeLayerMenu.includes(list[i].id))
+                    newList.push( $.extend(true, {}, list[i]) );
+            }
+            return newList;
+        }
+        //*********************************************
+
+        nsMap.excludeLayerMenu = nsMap.excludeLayerMenu || [];
+        layerMenuOptions.list = convertList( layerMenuOptions.list );
+
+
+        /*********************************************
+        nsMap.createMapLayer contains {MAPLAYER_ID: CREATE_MAPLAYER_AND_MENU_FUNCTION} See fcoo-maps/src/map-layer_00.js for description
+
+        nsMap.createMapLayerAndMenu(list) will create the mapLayer and replase/add menu-item-options to list
+
+        Eq. list[3] = {id: 'NAVIGATION_WARNING', isMapLayerMenu: true}
+        Some mapLayer "creator" has set nsMap.createMapLayer['NAVIGATION_WARNING'] = function(options, addMenu){...}
+        This function is called to create the mapLayer and set the new menu-item-options (via addMenu-function)
+        The code for nsMap.createMapLayerAndMenu is in src/layer/map-layer_00.js
+        *********************************************/
+        nsMap.createMapLayerAndMenu(layerMenuOptions.list);
+
     }
 
     /*************************************************************************
-    createFCOOMap(data)
-
+    createFCOOMap()
+    6: Create the main structure and the left and/or right menu
     *************************************************************************/
-    function createFCOOMap( data ){
-        //Adjust data
-        nsMap.setupData = data = $.extend(true, {}, default_setup, data );
-        nsMap.hasMultiMaps = nsMap.setupData.multiMaps && nsMap.setupData.multiMaps.enabled;
-
-        //Add header to top-menu
-        data.topMenu.header = data.applicationName;
-
-        //Adjust path
-        $.each(['help', 'messages', 'warning'], function(index, id){
-            var topMenuPath = data.topMenu[id];
-            if (topMenuPath)
-                data.topMenu[id] = {url: ns.dataFilePath( topMenuPath )};
-        });
-
-        //Adjust menu-width
-        data.leftMenu  = data.leftMenuWidth  ? {width: data.leftMenuWidth}  : null;
-        data.rightMenu = data.rightMenuWidth ? {width: data.rightMenuWidth} : null;
-
-        //Get max-maps
-        if (nsMap.hasMultiMaps){
-            //Get max-maps
-            if ($.isPlainObject(data.multiMaps.maxMaps))
-                data.multiMaps.maxMaps =
-                    ns.modernizrDevice.isDesktop ? data.multiMaps.maxMaps.desktop :
-                    ns.modernizrDevice.isTablet  ? data.multiMaps.maxMaps.tablet :
-                    data.multiMaps.maxMaps.mobile;
-        }
-
-
-        //Add helpId to modal for globalSetting (if any)
-        if (nsMap.setupData.topMenu.helpId.globalSetting){
-            var modalOptions = ns.globalSetting.options.modalOptions = ns.globalSetting.options.modalOptions || {};
-            modalOptions.helpId = nsMap.setupData.topMenu.helpId.globalSetting;
-            modalOptions.helpButton = true;
-        }
-
-//*/TEST
-data.leftMenuButtons.bookmark = function(){ alert('bookmark'); };
-data.leftMenuButtons.share = function(){ alert('share'); };
-data.leftMenuButtons.load = function(){ alert('load'); };
-data.leftMenuButtons.save = function(){ alert('save'); };
-//*/
+    function createFCOOMap(){
+        var setupOptions = nsMap.setupOptions;
 
         //Create main structure
         nsMap.main = ns.createMain({
             mainContainerAsHandleContainer: true,
-            topMenu             : data.topMenu,
-            leftMenu            : data.leftMenu,
-            keepLeftMenuButton  : data.keepLeftMenuButton,
-            leftMenuButtons     : data.leftMenuButtons,
-            rightMenu           : data.rightMenu,
-            keepRightMenuButton : data.keepRightMenuButton,
-            rightMenuButtons    : data.rightMenuButtons,
 
-            _bottomMenu: {  //Just DEMO
-                height : 120,
-                handleWidth: 200,
-                handleHeight: 26,
-                //handleClassName: 'testHandle',
-                toggleOnHandleClick: true,
-                hideHandleWhenOpen: true
-            },
+            //top-, left-, right-, and bottom-menus
+            topMenu            : setupOptions.topMenu,
 
+            leftMenu           : setupOptions.leftMenu,
+            keepLeftMenuButton : setupOptions.keepLeftMenuButton,
+
+            rightMenu          : setupOptions.rightMenu,
+            keepRightMenuButton: setupOptions.keepRightMenuButton,
+
+            bottomMenu         : setupOptions.bottomMenu,
 
             /*
             When resizing the main-container:
@@ -290,8 +532,24 @@ data.leftMenuButtons.save = function(){ alert('save'); };
         });
 
 
+        //Link layerMenu items and the mapLayer
+        function link(menuItem){
+            if (menuItem.options.mapLayerId){
+                menuItem.mapLayer = nsMap.getMapLayer(menuItem.options.mapLayerId);
+                menuItem.mapLayer.menuItem = menuItem;
+            }
+            var subItem = menuItem.first;
+            while (subItem){
+                link(subItem);
+                subItem = subItem.next;
+            }
+        }
+
+        if (nsMap.setupOptions.layerMenuPrefix)
+            link( nsMap.main[nsMap.setupOptions.layerMenuPrefix+'Menu'].mmenu );
+
         //Update search-button
-        if (data.topMenu.search){
+        if (setupOptions.topMenu.search){
             var topMenuSearchInput = nsMap.main.topMenuObject.searchInput,
                 submitSearch = function(){
                     topMenuSearchInput.select().focus();
@@ -312,46 +570,47 @@ data.leftMenuButtons.save = function(){ alert('save'); };
         //Set min- and max-zoom for main-map
         $.extend(nsMap.mainMapOptions, {
             //Set default minZoom and maxZoom
-            minZoom: data.map.minZoom,
-            maxZoom: data.map.maxZoom
+            minZoom: setupOptions.map.minZoom,
+            maxZoom: setupOptions.map.maxZoom
         });
 
         //zoomModernizrOptions = options for leaflet-zoom-modernizr
         $.extend(nsMap.mainMapOptions.zoomModernizrOptions, {
             //Set default minZoom and maxZoom
-            minZoom: data.map.minZoom,
-            maxZoom: data.map.maxZoom
+            minZoom: setupOptions.map.minZoom,
+            maxZoom: setupOptions.map.maxZoom
         });
 
         //nsMap.layerMinMaxZoom = zoom-options for any layer
         nsMap.layerMinMaxZoom = {
-            minZoom: data.map.minZoom,
-            maxZoom: data.map.maxZoom
+            minZoom: setupOptions.map.minZoom,
+            maxZoom: setupOptions.map.maxZoom
         };
 
         if (nsMap.hasMultiMaps){
+
             $.extend(nsMap.secondaryMapOptions, {
                 minZoom: nsMap.mainMapOptions.minZoom,
                 maxZoom: nsMap.mainMapOptions.maxZoom,
             });
             $.extend(nsMap.secondaryMapOptions.zoomModernizrOptions, {
-                minZoom: data.map.minZoom,
-                maxZoom: data.map.maxZoom
+                minZoom: setupOptions.map.minZoom,
+                maxZoom: setupOptions.map.maxZoom
             });
 
             //backgroundLayerMinMaxZoom = zoom-options for layers visible in all zooms
             //incl outside zoom-range given in setup => allows background to be visible
             //in secondary maps when main maps is at min or max zoom and secondary maps
             nsMap.backgroundLayerMinMaxZoom = {
-                minZoom: Math.max(0, data.map.minZoom - data.multiMaps.maxZoomOffset),
-                maxZoom: data.map.maxZoom + data.multiMaps.maxZoomOffset
+                minZoom: Math.max(0, setupOptions.map.minZoom - setupOptions.multiMaps.maxZoomOffset),
+                maxZoom: setupOptions.map.maxZoom + setupOptions.multiMaps.maxZoomOffset
             };
 
             //Create multi-maps
             nsMap.multiMaps = L.multiMaps(
                 $('<div/>').prependTo(nsMap.main.$mainContainer), {
                 border : false,
-                maxMaps: data.multiMaps.maxMaps
+                maxMaps: setupOptions.multiMaps.maxMaps
             });
 
             //Create may-sync
@@ -371,7 +630,7 @@ data.leftMenuButtons.save = function(){ alert('save'); };
             nsMap.mapSync.add(nsMap.mainMap);
 
 
-            for (var i=1; i<data.multiMaps.maxMaps; i++){
+            for (var i=1; i<setupOptions.multiMaps.maxMaps; i++){
                 var map = nsMap.multiMaps.addMap( $.extend({}, nsMap.secondaryMapOptions ) );
 
                 map.on('showInMultiMaps', map.onShowInMultiMaps, map );
@@ -390,6 +649,23 @@ data.leftMenuButtons.save = function(){ alert('save'); };
             nsMap.mainMap.setView(nsMap.defaultCenterZoom.center, nsMap.defaultCenterZoom.zoom);
 
         }
+    }
+
+    /******************************************************************
+    promise_all_finally()
+    8: Load settings in fcoo.appSetting and globalSetting
+    ******************************************************************/
+    function promise_all_finally(){
+        //Call ns.globalSetting.load => ns.appSetting.load => whenFinish => Promise.defaultFinally
+        ns.globalSetting.load(null, function(){
+            ns.appSetting.load(null, function(){
+                if (whenFinish)
+                    whenFinish();
+                ns.events.fire(ns.events.CREATEAPPLICATIONFINALLY);
+                Promise.defaultFinally();
+            });
+       });
+        return true;
     }
 
 }(jQuery, window.moment, L, this, document));

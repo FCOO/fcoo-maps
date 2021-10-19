@@ -92,7 +92,7 @@ search.js
             if (lang != 'en')
                 params['accept-language'] = lang + ',en';
             $.workingOn();
-            Promise.getJSON( nsMap.setupData.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
+            Promise.getJSON( nsMap.setupOptions.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
         }
     };
 
@@ -342,7 +342,7 @@ search.js
             if (lang != 'en')
                 params['accept-language'] = lang + ',en';
 
-            return nsMap.setupData.topMenu.nominatim + '/lookup' + L.Util.getParamString(params);
+            return nsMap.setupOptions.topMenu.nominatim + '/lookup' + L.Util.getParamString(params);
         },
 
         _needToUpdate: function(){

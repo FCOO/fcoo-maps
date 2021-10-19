@@ -14,6 +14,14 @@ leaflet-map-sync-outline-color
 Variable with the color and style of outline
 ************************************************/
 /************************************************************
+INCLUDE-JQUERY-BOOTSTRAP-VARIABLES
+USED IN FOR OTHER PACKAGES TO INCLUDE ALL SCSS-FILES NEEDED
+TO HAVE ACCESS TO ALL BOOTSTRAP AND FCOO/JQUERY-BOOTSTRAP SCSS-VARIABLES
+************************************************************/
+/***********************************************
+JQUERY-BOOTSTRAP: Set and adjust bootstrap default values
+************************************************/
+/************************************************************
 BOOTSTRAP-VARIABLES
 ************************************************************/
 /***********************************************
@@ -59,6 +67,12 @@ Adjust dropdown-menu
 /************************************************************
 Adjust modal
 ************************************************************/
+/***********************************************
+BOOTSTRAP: scss variables
+************************************************/
+/***********************************************
+JQUERY-BOOTSTRAP: Background-color and text color and Variables
+************************************************/
 /************************************************************
 COLOR
 
@@ -276,16 +290,6 @@ DIVERSE
 
 .icon-active {
   color: #007bff; }
-
-.leaflet-control.leaflet-button-box.forced-shown {
-  visibility: visible !important;
-  opacity: 1; }
-  .leaflet-control.leaflet-button-box.forced-shown.extended a.btn.hide-for-extended {
-    display: block !important; }
-  .leaflet-control.leaflet-button-box.forced-shown a.btn i:last-child {
-    display: none; }
-  .leaflet-control.leaflet-button-box.forced-shown div.modal-dialog {
-    display: none !important; }
 
 .fa-pilot-boarding-position-diamond {
   position: relative;

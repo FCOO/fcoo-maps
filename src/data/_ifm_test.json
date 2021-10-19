@@ -22,7 +22,6 @@
             "tablet" : 5,
             "desktop": 5
         },
-        "maxZoomOffset": 2,
-        "allowDifferentTime": true
+        "maxZoomOffset": 2
     }
 }

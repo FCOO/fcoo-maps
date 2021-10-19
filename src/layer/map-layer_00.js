@@ -77,6 +77,108 @@ options = {
 
     var maxLayerIndex = 0;
 
+
+
+
+    /***********************************************************
+    nsMap.createMapLayer = {MAPLAYER_ID: CREATE_MAPLAYER_AND_MENU_FUNCTION}
+    MAPLAYER_ID:
+    CREATE_MAPLAYER_AND_MENU_FUNCTION: function(options, addMenu: function(menuItem or []menuItem)
+    Each mapLayer must add a CREATE_MAPLAYER_AND_MENU_FUNCTION-function to nsMap.createMapLayer:
+
+        nsMap.createMapLayer[ID] = function(options, addMenu){
+
+            //Somewhere inside the function or inside a response call
+            //addMenu({id:ID, icon:..., text:..., type:...}, or
+            //addMenu(this.menuItemOptions())
+        };
+
+
+    nsMap.createMapLayerAndMenu(list) will create the mapLayer and replace/add menu-item-options to list
+
+    Eq. list[3] = {id: 'NAVIGATION_WARNING', isMapLayerMenu: true}
+    Some mapLayer "creator" has set nsMap.createMapLayer['NAVIGATION_WARNING'] = function(options, addMenu){...}
+    This function is called to create the mapLayer and set the new menu-item-options (via addMenu-function)
+    The code for nsMap.createMapLayerAndMenu is in src/layer/map-layer_00.js
+
+    Javascrip notes:
+        array.splice(index, 1)        = remove array[index]
+        array.splice(index, 0, item)  = insert item at array[index]
+        array.splice(index, 1, item)  = replace array[index] with item
+
+    ***********************************************************/
+    nsMap.createMapLayer = nsMap.createMapLayer || {};
+
+    var mapLayerAdded, mapLayerMenulist,
+        replaceMenuItems = {};
+
+
+    nsMap.createMapLayerAndMenu = function(menuList){
+        mapLayerAdded    = false,
+        mapLayerMenulist = menuList;
+
+        _createMapLayerAndMenu(mapLayerMenulist);
+
+        //Add promise to check and finish the creation of the mapLayer-menu
+        ns.promiseList.append({
+            data   : 'NONE',
+            resolve: _finishMapLayerAndMenu,
+            wait   : true
+        });
+    };
+
+
+    function _createMapLayerAndMenu(menuList){
+        $.each(menuList, function(index, menuOptions){
+            var createMapLayerFunc = menuOptions.isMapLayerMenu ? nsMap.createMapLayer[menuOptions.id] : null;
+
+            if (createMapLayerFunc)
+                createMapLayerFunc( menuOptions.options || {}, function(menuItemOrList){ _addMenu(menuItemOrList, menuList, menuOptions.id); } );
+
+            if (menuOptions.list)
+                _createMapLayerAndMenu(menuOptions.list);
+        });
+    }
+
+    function _addMenu(menuItemOrList, parentList, id){
+        //Append menuItemOrList to replaceMenuItems to be replaced in _updateMenuList
+        replaceMenuItems[id] = $.isArray(menuItemOrList) ? menuItemOrList : [menuItemOrList];
+    }
+
+
+    function _finishMapLayerAndMenu(){
+        //If any MapLayer was added => Check again since some MapLayer may have just added new MapLayer-constructor to nsMap.createMapLayer
+        if (mapLayerAdded)
+            nsMap.createMapLayerAndMenu(mapLayerMenulist);
+        else
+            //Remove any empty menu-items
+            _updateMenuList(mapLayerMenulist);
+    }
+
+    function _updateMenuList(menuList){
+        var index, menuOptions;
+        if (!menuList) return;
+
+        //Replace menu-item from replaceMenuItems
+        for (index=menuList.length-1; index>=0; index--){
+            menuOptions = menuList[index];
+            if (menuOptions && menuOptions.id && replaceMenuItems[menuOptions.id])
+                menuList.splice(index, 1, ...replaceMenuItems[menuOptions.id]);
+        }
+
+        for (index=menuList.length-1; index>=0; index--){
+            menuOptions = menuList[index];
+
+            if (menuOptions && menuOptions.list)
+                _updateMenuList(menuOptions.list);
+
+            if (menuOptions && !menuOptions.isMapLayerMenu && ((menuOptions.list && menuOptions.list.length) || menuOptions.type))
+                /* Keep menu-item*/;
+            else
+                menuList.splice(index, 1);
+        }
+    }
+
     /***********************************************************
     MapLayer
     ***********************************************************/
@@ -330,6 +432,10 @@ options = {
                         mapLayer.removeFrom(mapOrIndex);
                 });
 
+
+            //Update checkbox/radio in menuItem
+            this.updateMenuItem();
+
             if (this.options.onAdd)
                 this.options.onAdd(map, layer);
 
@@ -401,6 +507,9 @@ options = {
             //Remove this from map
             info.map = null;
             info.layer.removeFrom(map);
+
+            //Update checkbox/radio in menuItem
+            this.updateMenuItem();
 
             if (this.options.onRemove)
                 this.options.onRemove(map, info.layer);
@@ -484,7 +593,6 @@ options = {
         *********************************************************/
         createLayer: function(/*layerOptions*/){
 
-
         },
 
 
@@ -516,7 +624,47 @@ options = {
         },
 
 
+        /******************************************************************
+        menuItemOptions
+        Return options for this layer as MenuItem in Mmenu
+        *******************************************************************/
+        menuItemOptions: function(){
+            return {
+                id        : this.id,
+                icon      : this.options.icon,
+                text      : this.options.text,
+                type      : this.options.radioGroup ? 'radio' : 'check',
+                mapLayerId: this.id,
+                onClick   : $.proxy(this.selectMaps, this)
+            };
+        },
 
+        /******************************************************************
+        updateMenuItem
+        Update the menu-item checkbox/radio (false, 'semi' or true)
+        *******************************************************************/
+        updateMenuItem: function(){
+            if (!this.menuItem) return;
+
+            if (nsMap.hasMultiMaps){
+                var _this       = this,
+                    maps        = nsMap.multiMaps.setup.maps,
+                    addedToMaps = 0;
+
+                $.each(nsMap.multiMaps.mapList, function(index, map){
+                    if (map.isVisibleInMultiMaps && _this.isAddedToMap(index))
+                        addedToMaps++;
+                });
+
+                this.menuItem.setState(
+                    addedToMaps == 0 ? false :
+                    addedToMaps == maps ? true :
+                    'semi'
+               );
+            }
+            else
+                this.menuItem.setState(!!this.isAddedToMap(0));
+        },
 
         /******************************************************************
         selectMaps
@@ -534,7 +682,7 @@ options = {
             }
 
             var _this = this,
-                maxMaps = nsMap.setupData.multiMaps.maxMaps,
+                maxMaps = nsMap.setupOptions.multiMaps.maxMaps,
                 checkboxType = this.options.radioGroup ? 'radio' : 'checkbox',
                 selectedOnMap = [],
                 buttonList = [],
@@ -652,10 +800,18 @@ options = {
     nsMap._addMapLayer = function(id, Constructor, options){
         id = id.toUpperCase();
         mapLayers[id] = new Constructor( $.extend({id: id}, options || {}) );
+        return mapLayers[id];
     };
 
     nsMap.getMapLayer = function(id){
         return mapLayers[id.toUpperCase()];
+    };
+
+
+    nsMap.mapLayer_updateMenuItem = function(){
+        $.each(mapLayers, function(id, mapLayer){
+            mapLayer.updateMenuItem();
+        });
     };
 
     /****************************************************************************

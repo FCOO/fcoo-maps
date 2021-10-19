@@ -54,8 +54,21 @@ Create and set different global variables and methods
 
 
     /***********************************************************
-    LEAFLET
+    STANDARD OPTIONS
+    nsMap.standard = {ID: function(options)}
+    Is a set of response-methods for standard-options
+    The methods are added in the src-files for the different type
+    of settings (eq. src/layers/layer_wms.js)
+    The ID must correspond with the IDs in default_setup in src/fcoo-maps.js
     ***********************************************************/
+    nsMap.standard = {};
+
+
+    /***********************************************************
+    GLOBAL SETTINGS
+    Globale variables used to add/remove some parts of the application
+    ***********************************************************/
+    nsMap.BOTTOM_MENU = null;   //Options for the buttom-menu. Used to set content from other packages not using a setup-file
 
 }(jQuery, window.moment, L, this, document));
 

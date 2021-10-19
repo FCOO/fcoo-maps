@@ -11,6 +11,7 @@
 
   <link  href="bower_components.css" rel="stylesheet">
   <link  href="../src/fcoo-maps.css" rel="stylesheet">
+  <link  href="../src/fcoo-maps-time/fcoo-maps-time.css" rel="stylesheet">
 </head>
 
 <body>
@@ -18,7 +19,6 @@
 
     <script src="../src/00_fcoo-maps_initialize.js"></script>
     <script src="../src/fcoo-maps.js"></script>
-    <!-- <script src="../src/OLD/fcoo-maps.js"></script> -->
 
     <script src="../src/controls/control-route.js"></script>
     <script src="../src/controls/global-events.js"></script>
@@ -35,21 +35,17 @@
     <script src="../src/layer/map-layer_00.js"></script>
     <script src="../src/layer/map-layer_10_wms.js"></script>
     <script src="../src/layer/map-layer_background.js"></script>
-
-    <script src="../src/layer/map-layer_navigation_and_safety.js"></script>
-    <script src="../src/layer/map-layer_niord.js"></script>
-    <script src="../src/layer/map-layer_pilot-boarding-positions.js"></script>
-
+    <script src="../src/layer/tile-filter.js"></script>
 
     <script src="../src/leaflet/leaflet.js"></script>
     <script src="../src/leaflet/offline.js"></script>
-    <script src="../src/leaflet/tile-filter.js"></script>
+    <script src="../src/leaflet/rightclick-zoom.js"></script>
 
     <script src="../src/map/map-center-zoom.js"></script>
     <script src="../src/map/map-sync.js"></script>
     <script src="../src/map/multi-maps.js"></script>
 
-    <script src="../src/menu/menu.js"></script>
+    <!-- <script src="../src/menu/menu.js"></script> -->
 
     <script src="../src/search/search-latlng.js"></script>
     <script src="../src/search/search.js"></script>
@@ -58,111 +54,184 @@
 
     <script src="../src/setting/map-setting-group.js"></script>
 
-    <script src="../src/time/time.js"></script>
- 
 <!-- <script src="../dist/fcoo-maps.js"></script> -->
+ 
+    <!-- fcoo-map-LAYER contain src-files that will be a separat package later  -->
+    <script src="../src/fcoo-maps-LAYER/fcoo-maps-niord.js"></script>
+    <script src="../src/fcoo-maps-LAYER/fcoo-maps-navigation-and-safety.js"></script>
+    <script src="../src/fcoo-maps-LAYER/fcoo-maps-pilot-boarding-positions.js"></script>
+
+
+    <!-- fcoo-map-time contain the src-files for fcoo-maps-time that will be created as a separat package later  -->
+    <script src="../src/fcoo-maps-time/bottom-menu.js"></script>
+    <script src="../src/fcoo-maps-time/fcoo-maps-time.js"></script>
+    <script src="../src/fcoo-maps-time/map-layer-time.js"></script>
+    <script src="../src/fcoo-maps-time/L.Control.BsTimeInfoControl.js"></script>
 
     <script>
-    var leftMenuContainer;
         //window.fcoo.LOCAL_DATA = true;
         window.fcoo.DEMO_VERSION = true;
 
-        window.bsIsTouch = window.bsIsTouch || (window.location.search =='?touch');
+//        window.bsIsTouch = window.bsIsTouch || (window.location.search =='?touch');
 
-        i18next.init();
-        i18next.changeLanguage('en');
-        i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
-
-
-        window.fcoo.map.createApplication({
-            _setup:  {subDir:'setup', fileName:'ifm_test.json'},
-
-            setup: {
-                applicationName: {da:'Overskriften', en:'The Header'}
-            },
-            topMenu: {
-                messages : "data/ifm-maps-info.json", //null or STRING or {subDir:STRING, fileName:STRING}
-            },
-
-            leftMenu: {
-                data: ['item1', 'item2'],
-                resolve: function(data, $container){ 
-                    //Check if any NAVIGATION_* layer are needed and call
-                    fcoo.map.createNavigationAndSafety(100 /*= index of menu-group with navigation and safety MANGLER*/);
-
-leftMenuContainer = $container;        
+//        i18next.init();
+//        i18next.changeLanguage('en');
+//        i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
 
+//        window.fcoo.map.createApplication({subDir:'setup', fileName:'ifm_test.json'});
 
+
+        window.fcoo.map.createApplication(
+            //options
+            {
+
+                applicationName: {da:'Overskriften', en:'The Header'},
+
+                topMenu: {
+                    messages : "data/ifm-maps-info.json", //null or STRING or {subDir:STRING, fileName:STRING}
+                },
+
+                leftMenu: {
+                    isLayerMenu: true,
+                    width: 350,                        
+                    buttons: {
+                        bookmark: function(){ alert('bookmark'); },
+                        share   : function(){ alert('share');    },
+                        load    : function(){ alert('load');     },
+                        save    : function(){ alert('save');     }
+                    }
+
+                },
+                _rightMenu: { 
+                    content: [{icon:'fa-home', text:{da:'Dette er content', en:'This is content'}},{icon:'fa-car', text:{da:'Dette er content2', en:'This is content2'}}],
+                    _data: ['item1', 'item2'],
+                    _resolve: function(data, $container){}
+                },
+                _keepRightMenuButton: true,
+
+                _bottomMenu: {  //Just DEMO
+                    height : 120,
+                    handleWidth: 200,
+                    handleHeight: 26,
+                    //handleClassName: 'testHandle',
+                    toggleOnHandleClick: true,
+                    hideHandleWhenOpen: true,
+                    content: [{icon:'fa-home', text:{da:'Dette er content', en:'This is content'}},{icon:'fa-car', text:{da:'Dette er content2', en:'This is content2'}}],
+                },
+
+                _other: [{
+                    data:{text:'Davs med dig'}, 
+                    resolve: function(data){
+                        console.log('other:'+data.text);
+                    }, 
+                    reload:1
+                }],
+
+                finally: function(){ 
+
+//HER                    setTimeout(function(){
+//HER                        fcoo.map.time.setCurrentRelative(300);
+//HER                    }, 3000);
+
+//HER                    setTimeout(function(){
+//HER                        fcoo.map.time.setCurrentRelative(-13);
+//HER                    }, 10000);
+                    return;
+                    if (!fcoo.map.MapLayer_Time) return;
+
+                    fcoo.map._addMapLayer('DETTE_ER_EN_TEST', fcoo.map.MapLayer_Time, {
+                        text:' Dette er en test', icon: 'fa-clock',
+                        layerOptions: {
+                            dataset: 'DMI/HARMONIE/DMI_NEA_MAPS_v005C.nc',
+                            layers : 'windspeed', //'UGRD:VGRD',
+                            styles : {
+                                plot_method: 'contourf',
+                                legend: 'Wind_ms_BGYRP_11colors_1.1'
+                            }
+                        }
+                    })
+                    .addTo([0,1])
+//HER                    .workingOn(0);
+                    //.selectMaps();
                 }
             },
-            rightMenu: {
-                data: ['item1', 'item2'],
-                _resolve: function(data, $container){ console.log('HER', data); $container.text('Davs RIGHT'); }
-            },
 
-            _other: [
-                {data:{text:'Davs med dig'}, resolve: function(data){console.log(data);}, reload:1}
+            //layerMenu
+            //"data/test_menu.json",                
+            /*
+                    "Navigation and Safety" : "Navigation og Sikkerhed",
+                    "Harbors and Bridges"   : "Havne og Broer",
+                    "Harbors"               : "Havne",
+                    "Towns, Hamlets, and Stations": "Byer, Bygder of Stationer",
+Impacts
+    ....
+
+Målinger
+    Vandstand
+    Strøm
+
+
+Satellit og Radar
+    ...
+
+Navigation og Sikkerhed
+    Navigationsadvarsler og Efterretninger
+        ...
+    Områder, Grænser og Zoner
+        Landegrænser
+        EEZ
+        Ruter (DK)
+        VTS-meldelinier (DK)
+        Fiskerizoner (GL)
+        SAR (GL)
+    
+NAVN MANGLER
+
+            
+            
+            */
+
+            [
+                {text: {da: "Prognoser", en: "Forecasts"}, list:[
+                    "FORECAST"
+                ]},
+
+
+                {text: {da: "Impacts", en: "Impacts"}, list:[
+                    "IMPACTS"
+                ]},
+
+                {text: {da: "Målinger", en: "Measurements"}, list:[
+                    "OBSERVATION"
+                ]},
+
+                {text: {da: "Satellit og Radar", en: "Satellite and Radar"}, list:[
+                    "SATELLITE_AND_RADAR"
+                ]},
+
+
+                {text: {da: "Navigation og Sikkerhed", en: "Navigation and Safety"}, list:[
+                    'NAVIGATION_NIORD',
+                    'NAVIGATION_AND_SAFETY',
+                    'NAVIGATION_PILOT_BOARDING_POSITIONS'
+                ]},
+
+                {text: {da: "NAVN MANGLER: Byer, havne, mv.", en: "NAME MISSING: Cities, Ports, Harbors etc."}, list:[
+                    "HARBORS_DK",
+                    "BRIDGES_DK",
+                    "TOWNS_GL"
+                ]},
+
             ],
-            finally: function(){ 
-                    $.each(fcoo.map.mapLayers, function(id, mapLayer){
-                        $('<div/>')._bsAddHtml({
-                            icon: mapLayer.options.icon,
-                            text: mapLayer.options.text,
-                            onClick: $.proxy(mapLayer.selectMaps, mapLayer)
-                        }).appendTo(leftMenuContainer);
-                    });
+            
+            //excludeLayerMenu
+            []
+            //'data/test_exclude.json' 
+            //['NAVIGATION']
 
-//HER                var count = 3; 
-//HER                $.each(fcoo.map.mapLayers, function(id, mapLayer){
-//HER                    mapLayer.addTo([0]);
-//HER                    if (count > 0)
-//HER                        mapLayer.addTo(1);
-//HER                    count--;
-//HER                });
-            }
-        });
-/*
-        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.1', moment().format('HH:mm:ss'), data); });
-        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.2', moment().format('HH:mm:ss'), data); });
-        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.3', moment().format('HH:mm:ss'), data); });
-        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.4', moment().format('HH:mm:ss'), data); });
-        window.fcoo.map.addInterval( 6, {niels:'holt'}, function(data){ console.log('6.5', moment().format('HH:mm:ss'), data); });
+        );  //end of window.fcoo.map.createApplication
 
-        window.fcoo.map.addInterval( 20, {subDir:'setup', fileName:'ifm_test.json'}, function(data){ console.log('20.1', moment().format('HH:mm:ss'), data); });
-        window.fcoo.map.addInterval( 20, {subDir:'setup', fileName:'ifm_test.json'}, function(data){ console.log('20.2', moment().format('HH:mm:ss'), data); });
-*/
-
-
-/*
-        fcoo.map.TestLayer = function(options){
-            options.maxZoom = 10;
-            fcoo.map.MapLayer.call(this, options);
-        };
-        fcoo.map.TestLayer.prototype = Object.create(fcoo.map.MLayer.prototype);
-        $.extend(fcoo.map.TestLayer.prototype, {
-            createLayer: function(){
-                return L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-                    maxZoom: this.options.maxZoom,
-	                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-                });
-            }
-        });
-
-        fcoo.map.TestLayer2 = function(options){
-            options = options || {};
-            options.maxZoom = 10;
-            fcoo.map.MLayer.call(this, options);
-        };
-        fcoo.map.TestLayer2.prototype = Object.create(fcoo.map.MLayer.prototype);
-        $.extend(fcoo.map.TestLayer2.prototype, {
-            createLayer: function(){
-                return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
-                });
-            }
-        });
-*/
     </script>
  </body>
 </html>

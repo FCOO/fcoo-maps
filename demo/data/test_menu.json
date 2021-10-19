@@ -1,0 +1,11 @@
+[
+    {"OBSERVATION": true},            
+    {"text": {"da": "
+    "NAVIGATION",
+    {"id": "MED_UNDERMENU", "text": {"da": "Undermenu", "en": "Sub menu"}, 
+     "list":[
+        {"text": { "da":"Undermenu 1", "en": "Sub menu 1"}},
+        {"text": { "da":"Undermenu 2", "en": "Sub menu 2"}},
+        {"text": { "da":"Undermenu 3", "en": "Sub menu 3"}}
+    ]}
+]

@@ -97,8 +97,7 @@
         bbox=1252344.2714243277,7514065.628545967,1878516.407136492,8140237.764258131
     */
 
-
-    var defaultOptions = {
+    var defaultWMSOptions = {
             defaultOptions: {
                 protocol    : 'https:',
                 tileSize    : 512,
@@ -127,52 +126,70 @@
             dynamicUrl: "{protocol}//{s}.fcoo.dk/webmap/v2/data/{dataset}.wms",
             dynamicOptions: {
                 updateInterval: 50,
+                transparent   : 'TRUE',
                 version       : '1.3.0'
             }
         };
 
 
-    function adjustOptions( options, defaultOptions = options ){
-        var optionsStr = window.JSON.stringify(options);
-
-        $.each(defaultOptions, function(id, content){
+    //adjustString - Replaces "{ID}" in str with the value at options.ID
+    function adjustString( str, options ){
+        $.each(options, function(id, content){
             if (    (typeof content == 'string') ||
                     (typeof content == 'number') ||
                     (typeof content == 'boolean')
                 )
-                optionsStr = optionsStr.split('{'+id+'}').join(content);
+                str = str.split('{'+id+'}').join(content);
         });
+
+        return str;
+    }
+
+
+    //adjustOptions - Replaces {ID} with the value at options.ID
+    function adjustOptions( options, defaultOptions = options ){
+        var optionsStr = adjustString(window.JSON.stringify(options), defaultOptions);
         return $.extend(true, {}, options, window.JSON.parse(optionsStr) );
     }
 
-    //Load wms-options from setup-file
-    ns.promiseList.append({
-        fileName: {subDir:"layers", fileName:"wms.json"},
-        _data     : defaultOptions,
-        resolve  : function(options){
-            options.defaultOptions = adjustOptions( options.defaultOptions );
+    //Response for loading wms-options from setup-file
+    nsMap.standard.wms = function(options){
 
-            //crs can be a ref to a Leaflet-object
-            var crs = options.defaultOptions.crs,
-                crsResolve = new Function('crs','return eval(crs);');
-            try{
-                options.defaultOptions.crs = crsResolve(options.defaultOptions.crs);
-            }
-            catch (error){
-                options.defaultOptions.crs = crs;
-            }
+        options = $.extend(true, {}, defaultWMSOptions, options);
 
+        options.defaultOptions = adjustOptions( options.defaultOptions );
 
-            nsMap.wmsStatic = {
-                url    : adjustOptions( options, options.defaultOptions ).staticUrl,
-                options: $.extend(true, {}, options.defaultOptions, options.staticOptions )
-            };
-            nsMap.wmsDynamic = {
-                url    : adjustOptions( options, options.defaultOptions ).dynamicUrl,
-                options: $.extend(true, {}, options.defaultOptions, options.dynamicOptions )
-            };
+        //Convert errorTileUrl: {subDir:STRING, fileName:STRING} => STRING (path)
+        function convert_errorTileUrl(options){
+            if ($.isPlainObject(options))
+                $.each(options, function(id, value){
+                    if (id == 'errorTileUrl')
+                        options[id] = ns.path.dataFileName(value);
+                    else
+                        convert_errorTileUrl(value);
+                });
         }
-    });
+        convert_errorTileUrl(options);
+
+        //crs can be a ref to a Leaflet-object
+        var crs = options.defaultOptions.crs,
+            crsResolve = new Function('crs','return eval(crs);');
+        try{
+            options.defaultOptions.crs = crsResolve(options.defaultOptions.crs);
+        }
+        catch (error){
+            options.defaultOptions.crs = crs;
+        }
+
+        nsMap.wmsStatic = {
+            url    : adjustOptions( options, options.defaultOptions ).staticUrl,
+            options: $.extend(true, {}, options.defaultOptions, options.staticOptions )
+        };
+        nsMap.wmsDynamic = {
+            url    : adjustOptions( options, options.defaultOptions ).dynamicUrl,
+            options: $.extend(true, {}, options.defaultOptions, options.dynamicOptions )
+        };
+    };
 
 
     /***********************************************************
@@ -198,11 +215,33 @@
         options =   $.extend(true, {
                         service         : "WMS",
                         request         : "GetMap",
-                        url             : url,
-                        LayerConstructor: LayerConstructor
                     }, defaultOptions, options );
 
-        return new options.LayerConstructor(options.url, options );
+
+        //Convert layers: []STRING => STRING,STRING and styles = {ID: VALUE} => ID:VALUE;ID:VALUE
+        function convertToStr(id, separator){
+            if ($.isArray(options[id]))
+                options[id] = options[id].join(separator);
+            else
+                if ($.isPlainObject(options[id])){
+                    var list = [];
+                    $.each(options[id], function(id, value){
+                        list.push(id+'='+value);
+                    });
+                    options[id] = list.join(separator);
+                }
+        }
+
+        convertToStr('layers', ',');
+        convertToStr('styles', ';');
+
+        //Remove none-wms-options from options
+        options = $.extend(true, {}, options);
+        $.each(['protocol', 'dataset'], function(index, id){
+            delete options[id];
+        });
+
+        return new LayerConstructor(url, options );
     };
 
 
@@ -214,19 +253,14 @@
     };
 
 
+    /***********************************************************
+    layer_dynamic - Creates a L.TileLayer.WMS (layer_wms) with options for dynamic layers
+    ***********************************************************/
+    nsMap.layer_dynamic = function(options, defaultOptions = nsMap.wmsDynamic.options, url = nsMap.wmsDynamic.url, LayerConstructor){
+        //Adjust url to include eq. dataset
+        url = adjustString(url, options);
 
-
-
-
-/*
-From ifm-maps/src/fcoo-leaflet-tilelayer-wms.js
-
-        getLayer: function (options) {
-            var o = this.getLayerOptions(options),
-                layer = new L.TileLayer.WMS.Pydap(o.dataset, o.wmsParams, o.legendParams, o.options);
-            return layer;
-        },
-*/
-
+        return nsMap.layer_wms(options, defaultOptions, url, LayerConstructor);
+    };
 
 }(jQuery, L, this, document));

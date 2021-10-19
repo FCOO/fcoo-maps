@@ -46,10 +46,12 @@ Objects and methods to handle map-sync
         if (options.enabled)
             mapSync.setZoomOffset( this, getOffset(options.zoomOffset) );
 
+/*
         this.options.mapSync.timeOffset = getOffset(options.timeOffset || '_0'); //TODO
 
         if (this.bsTimeInfoControl)
             this.bsTimeInfoControl.onChange();
+*/
     };
 
 
@@ -59,13 +61,10 @@ Objects and methods to handle map-sync
     *********************************************************************/
     L.Control.MapSyncControl = L.Control.extend({
         getState: function(){
-            return this._map.options.mapSync ?
-                {
-                    enabled   : this._map.options.mapSync.enabled,
-                    timeOffset: 'timeOffset_' + (this._map.options.mapSync.timeOffset || 0),
-                    zoomOffset: 'zoomOffset_' + this._map.options.mapSync.zoomOffset
-
-                } : {};
+            return this._map.options.mapSync ? {
+                       enabled   : this._map.options.mapSync.enabled,
+                       zoomOffset: 'zoomOffset_' + this._map.options.mapSync.zoomOffset
+                   } : {};
         },
 
         setState: function(options){
@@ -89,34 +88,8 @@ Objects and methods to handle map-sync
     mapSettingGroup_mapSyncOptions
     Return the options used in mapSetting regarding mapSync
     *********************************************************************/
-    nsMap.mapSettingGroup_mapSyncOptions = function(header){
+    nsMap.mapSettingGroup_mapSyncOptions = function(accordionId, header){
         var content = [];
-
-        if (nsMap.setupData.multiMaps.allowDifferentTime){
-            //Select with zoom-offset
-            var timeItems = [];
-            $.each([-24,-12,-6,-3,-2,-1,0,1,2,3,6,12,24], function(index, offset){
-                var text = (offset > 0 ? ' + ' : ' - ') + Math.abs(offset),
-                    isOneHour = (Math.abs(offset) == 1);
-                if (offset)
-                    text = {da: 'Hovedkort' + text + (isOneHour ? ' time' : ' timer'), en: 'Main map' + text + (isOneHour ? ' hour' : ' hours')};
-                else
-                    text = {da: 'Samme som hovedkort', en:'Same as main map'};
-
-                timeItems.push({
-                    id  : 'timeOffset_'+offset,
-                    text: text
-                });
-            });
-            content.push({
-                id      : 'timeOffset',
-                //label   : {da:'Tidsforskel ift. hovedkort', en:'Time different comp. to main map'},
-                label   : {da:'Tidspunkt', en:'Time'},
-                type    : 'select',
-                items   : timeItems
-            });
-        }
-
         //Checkbox with "Sync with main map"
         content.push({
             id  :'enabled',
@@ -126,7 +99,7 @@ Objects and methods to handle map-sync
 
         //Select with zoom-offset
         var zoomItems = [],
-            maxZoomOffset = nsMap.setupData.multiMaps.maxZoomOffset;
+            maxZoomOffset = nsMap.setupOptions.multiMaps.maxZoomOffset;
         for (var zoomOffset = -1*maxZoomOffset; zoomOffset <= maxZoomOffset; zoomOffset++){
             var text = '';
             if (zoomOffset < 0)
@@ -153,7 +126,7 @@ Objects and methods to handle map-sync
 
         return {
             controlId   : 'mapSyncControl',
-            accordionId : header.accordionId,
+            accordionId : accordionId,
             id          : ['enabled', 'zoomOffset'],
             header      : header,
             modalContent: content,

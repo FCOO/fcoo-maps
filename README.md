@@ -3,7 +3,13 @@
 
 
 ## Description
-Base for all FCOO maps-applications
+Base for all FCOO maps-applications.
+
+If the application has time-depend layers include [`fcoo-maps-time`](https://github.com/FCOO/fcoo-maps-time.git) instead (`fcoo-maps-time` includes `fcoo-maps`).
+
+The different layers are in separate packages named `fcoo-maps-LAYER-NAME`
+
+Each layer using `fcoo-maps` or [`fcoo-maps-time`](https://github.com/FCOO/fcoo-maps-time.git)  
 
 ## Installation
 ### bower

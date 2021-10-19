@@ -135,6 +135,11 @@ Objects and methods to handle leaflet-maps
         scrollWheelZoom      : true,
         googleScrollWheelZoom: false,   //googleScrollWheelZoom not included
 
+
+        //Allow double right click to zoom out - see src/leaflet/rightclick-zoom.js
+        doubleRightClickZoom: true,
+
+
         //Set default bounding to prevent panning round - TODO: ER der brug for denne??
         maxBounds: L.latLngBounds([-90, -230],    //southWest
                                   [+90, +230]),    //northEast
@@ -194,7 +199,7 @@ Objects and methods to handle leaflet-maps
         //BsPosition = Show position of mouse or map center
         bsPositionControl: true,
         bsPositionOptions: {
-            position          : "bottomright",
+            position       : "bottomright",
             semiTransparent: true,
             content: {
                 semiTransparent: false
@@ -224,6 +229,7 @@ Objects and methods to handle leaflet-maps
         //bsLegendControl: Install L.Control.BsLegend
         bsLegendControl: true,
         bsLegendOptions: {
+            position: 'topright',
             content: {
                 header: nsMap.mapLegendHeader,
                 noVerticalPadding   : true,
@@ -256,12 +262,12 @@ maxHeight: 300, //TODO
 
         //L.Control.Setting
         bsSettingControl: true,
+        bsSettingOptions: {
+            position: 'topcenter'
+        },
 
         //No map sync control on main map
         mapSyncControl: false,
-
-        //Control with current time
-        timeInfoControl: true
 
     };
 
