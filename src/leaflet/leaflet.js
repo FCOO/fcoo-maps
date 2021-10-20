@@ -241,14 +241,8 @@ maxHeight: 300, //TODO
             }
         },
 
-        //locateControl: Install leaflet.locatecontrol
-        locateControl: true,
-
         //routeControl: Install L.Control.Route
         routeControl: false,
-
-        //permalinkControl: Install L.Control.Permalink
-        permalinkControl: false, //TODO test to see if map-center-zoom is working true,
 
         doubleClickZoom: true, //Default Leaflet
 
@@ -299,15 +293,8 @@ maxHeight: 300, //TODO
         //legendControl: Install L.Control.Legend
         legendControl: false,
 
-        //locateControl: Install leaflet.locatecontrol
-        locateControl: false,
-
         //routeControl: Install L.Control.Route
         routeControl: false,
-
-
-        //permalinkControl: Install L.Control.Permalink
-        permalinkControl: false,
 
         //latLngGraticule: Default hidden and no label
         latLngGraticule       : true,
@@ -328,21 +315,6 @@ maxHeight: 300, //TODO
     ************************************************************
     ***********************************************************/
 
-    //locateControl: Install leaflet.locatecontrol
-    L.Map.mergeOptions({
-        locateControl: false
-    });
-    L.Map.addInitHook(function () {
-        //Remove old hash-tags not used anymore
-        window.Url.updateHashParam('locate');
-        window.Url.updateHashParam('follow');
-
-        if (this.options.locateControl){
-            this.locateControl = new L.Control.Locate();
-            this.addControl(this.locateControl);
-        }
-    });
-
     //********************************************
     //routeControl: Install L.Control.Route
     L.Map.mergeOptions({
@@ -352,30 +324,6 @@ maxHeight: 300, //TODO
         if (this.options.routeControl){
             this.routeControl = new L.Control.Route();
             this.addControl(this.routeControl);
-        }
-    });
-
-    //********************************************
-    //permalinkControl: Install L.Control.Permalink
-    L.Map.mergeOptions({
-        permalinkControl: true
-    });
-    L.Map.addInitHook(function () {
-
-//TODO: Skal checke for om localStorage kan tilgås. Hvis ikke => ingen installation
-        if (this.options.permalinkControl){
-            this.permalinkControl = new L.Control.Permalink({
-                useLocation    : !ns.standalone,
-                useLocalStorage: ns.standalone,
-                localStorageId : ns.localStorageTempKey,
-                postfix        : this.fcooMapIndex || ''
-            });
-
-            //Add the control when the map is ready
-            this.whenReady(function(){
-                this.addControl(this.permalinkControl);
-                L.DomUtil.addClass( this.permalinkControl.getContainer(), 'hide-for-print' );
-            }, this);
         }
     });
 
