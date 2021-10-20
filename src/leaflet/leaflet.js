@@ -247,9 +247,10 @@ maxHeight: 300, //TODO
         //routeControl: Install L.Control.Route
         routeControl: false,
 
+/* permalinkControl removed
         //permalinkControl: Install L.Control.Permalink
         permalinkControl: false, //TODO test to see if map-center-zoom is working true,
-
+*/
         doubleClickZoom: true, //Default Leaflet
 
         //latLngGraticule: Install leaflet-latlng-graticule
@@ -306,8 +307,10 @@ maxHeight: 300, //TODO
         routeControl: false,
 
 
+/* permalinkControl removed
         //permalinkControl: Install L.Control.Permalink
         permalinkControl: false,
+*/
 
         //latLngGraticule: Default hidden and no label
         latLngGraticule       : true,
@@ -355,6 +358,7 @@ maxHeight: 300, //TODO
         }
     });
 
+/* permalinkControl removed
     //********************************************
     //permalinkControl: Install L.Control.Permalink
     L.Map.mergeOptions({
@@ -378,6 +382,7 @@ maxHeight: 300, //TODO
             }, this);
         }
     });
+*/
 
     //********************************************
     //Install leaflet-latlng-graticule.
