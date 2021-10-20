@@ -25,6 +25,10 @@
 	        user-select: none;
 	  -webkit-user-drag: none;
 	}
+/* Prevents IE11 from highlighting tiles in blue */
+.leaflet-tile::selection {
+	background: transparent;
+}
 /* Safari renders non-retina tile on retina better with this, but Chrome is worse */
 .leaflet-safari .leaflet-tile {
 	image-rendering: -webkit-optimize-contrast;
@@ -45,8 +49,10 @@
 .leaflet-container .leaflet-marker-pane img,
 .leaflet-container .leaflet-shadow-pane img,
 .leaflet-container .leaflet-tile-pane img,
-.leaflet-container img.leaflet-image-layer {
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {
 	max-width: none !important;
+	max-height: none !important;
 	}
 
 .leaflet-container.leaflet-touch-zoom {
@@ -55,10 +61,19 @@
 	}
 .leaflet-container.leaflet-touch-drag {
 	-ms-touch-action: pinch-zoom;
-	}
+	/* Fallback for FF which doesn't support pinch-zoom */
+	touch-action: none;
+	touch-action: pinch-zoom;
+}
 .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
 	-ms-touch-action: none;
 	touch-action: none;
+}
+.leaflet-container {
+	-webkit-tap-highlight-color: transparent;
+}
+.leaflet-container a {
+	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
 }
 .leaflet-tile {
 	filter: inherit;
@@ -158,7 +173,6 @@
 	opacity: 0;
 	-webkit-transition: opacity 0.2s linear;
 	   -moz-transition: opacity 0.2s linear;
-	     -o-transition: opacity 0.2s linear;
 	        transition: opacity 0.2s linear;
 	}
 .leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
@@ -175,14 +189,12 @@
 .leaflet-zoom-anim .leaflet-zoom-animated {
 	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
 	   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
-	     -o-transition:      -o-transform 0.25s cubic-bezier(0,0,0.25,1);
 	        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);
 	}
 .leaflet-zoom-anim .leaflet-tile,
 .leaflet-pan-anim .leaflet-tile {
 	-webkit-transition: none;
 	   -moz-transition: none;
-	     -o-transition: none;
 	        transition: none;
 	}
 
@@ -199,6 +211,7 @@
 .leaflet-grab {
 	cursor: -webkit-grab;
 	cursor:    -moz-grab;
+	cursor:         grab;
 	}
 .leaflet-crosshair,
 .leaflet-crosshair .leaflet-interactive {
@@ -214,6 +227,7 @@
 	cursor: move;
 	cursor: -webkit-grabbing;
 	cursor:    -moz-grabbing;
+	cursor:         grabbing;
 	}
 
 /* marker & overlays interactivity */
@@ -227,7 +241,8 @@
 
 .leaflet-marker-icon.leaflet-interactive,
 .leaflet-image-layer.leaflet-interactive,
-.leaflet-pane > svg path.leaflet-interactive {
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
 	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
 	pointer-events: auto;
 	}
@@ -303,7 +318,14 @@
 	height: 30px;
 	line-height: 30px;
 	}
-
+.leaflet-touch .leaflet-bar a:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	}
+.leaflet-touch .leaflet-bar a:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	}
 
 /* zoom control */
 
@@ -312,15 +334,9 @@
 	font: bold 18px 'Lucida Console', Monaco, monospace;
 	text-indent: 1px;
 	}
-.leaflet-control-zoom-out {
-	font-size: 20px;
-	}
 
-.leaflet-touch .leaflet-control-zoom-in {
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
 	font-size: 22px;
-	}
-.leaflet-touch .leaflet-control-zoom-out {
-	font-size: 24px;
 	}
 
 
@@ -359,6 +375,7 @@
 	}
 .leaflet-control-layers-scrollbar {
 	overflow-y: scroll;
+	overflow-x: hidden;
 	padding-right: 5px;
 	}
 .leaflet-control-layers-selector {
@@ -482,7 +499,6 @@
 	-webkit-transform: rotate(45deg);
 	   -moz-transform: rotate(45deg);
 	    -ms-transform: rotate(45deg);
-	     -o-transform: rotate(45deg);
 	        transform: rotate(45deg);
 	}
 .leaflet-popup-content-wrapper,
@@ -516,7 +532,7 @@
 	}
 
 .leaflet-oldie .leaflet-popup-content-wrapper {
-	zoom: 1;
+	-ms-zoom: 1;
 	}
 .leaflet-oldie .leaflet-popup-tip {
 	width: 24px;
@@ -27213,229 +27229,6 @@ leaflet-bootstrap-control-position.scss
   display: none; }
 
 /***********************************************
-	jquery-bootstrap-niord.scss,
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/jquery-bootstrap-niord
-	https://github.com/FCOO
-
-
-************************************************/
-.niord-modal-content p, .niord-modal-content ul {
-  margin: 0; }
-
-.niord-modal-content table {
-  word-break: normal; }
-  .niord-modal-content table tr th {
-    vertical-align: bottom; }
-  .niord-modal-content table tr td {
-    vertical-align: top; }
-  .niord-modal-content table:not([class]) td {
-    border: 1px solid #999;
-    padding: 3px; }
-
-.niord-modal-content hr {
-  margin-top: 3px;
-  margin-bottom: 3px;
-  border-color: #afb4ba; }
-
-.niord-modal-content .display-anchor-as-block a {
-  display: block; }
-
-.parent-list-container {
-  padding-top: 3px; }
-
-.table.time-period thead tr th:first-child {
-  padding-left: 7px;
-  box-shadow: inset 4px 0px 0px 0px #dee2e6; }
-
-.table.time-period thead tr th:last-child {
-  padding-right: 7px;
-  box-shadow: inset -4px 0px 0px 0px #dee2e6; }
-
-.table.time-period tbody tr.start-before-now.end-after-now td {
-  background-color: lightgreen; }
-
-.table.time-period tbody tr.first-after-now {
-  border-top: 4px solid lightgreen; }
-
-.table.time-period tbody tr td:first-child:not(:empty) {
-  padding-left: 7px; }
-
-.table.time-period tbody tr td:last-child:not(:empty) {
-  padding-right: 7px; }
-
-.table.time-period tbody tr.start-before-now td:first-child {
-  box-shadow: inset 4px 0px 0px 0px #7ABAE1; }
-
-.table.time-period tbody tr.start-after-now td:first-child {
-  box-shadow: inset 4px 0px 0px 0px #4D72B8; }
-
-.table.time-period tbody tr.end-before-now td:last-child {
-  box-shadow: inset -4px 0px 0px 0px #7ABAE1; }
-
-.table.time-period tbody tr.end-after-now td:last-child {
-  box-shadow: inset -4px 0px 0px 0px #4D72B8; }
-
-table.hide-first-column tr td:first-child {
-  display: none; }
-
-/***********************************************
-	leaflet-bootstrap-niord.scss,
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/leaflet-bootstrap-niord
-	https://github.com/FCOO
-
-
-************************************************/
-/***********************************************************************
-
-leaflet-bootstrap-marker-mixin.scss
-
-*************************************************************************/
-/***********************************************************************
-marker-circle-color
-Create style for bsMarkerCircle in different colors
-*************************************************************************/
-/***********************************************************************
-lbm-circle-and-icon-classes
-Create class for bsMarkerCircle named $name with color and color-border
-*************************************************************************/
-/***********************************************************************
-lbm-marker-and-icon-classes
-Create class for bsMarkerCircle named $name with color and color-border
-*************************************************************************/
-/***********************************************************************
-fa-lbm-color
-Create class for color and border-color used by L.bsMarkerAsIcon (and $.bsMarkerAsIcon)
-to create fa-icon looking like the marker
-*************************************************************************/
-/***********************************************
-    _leaflet-polyline-mixin.scss
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/leaflet-polyline
-	https://github.com/FCOO
-
-************************************************/
-/* Create the style for the four different domains */
-.lbm-type-circle.lbm-color-niord-fa {
-  background-color: white;
-  color: #000; }
-  .lbm-type-circle.lbm-color-niord-fa.lbm-transparent {
-    background-color: rgba(255, 255, 255, 0.7); }
-    .lbm-type-circle.lbm-color-niord-fa.lbm-transparent.lbm-hover:hover {
-      background-color: rgba(255, 255, 255, 0.9); }
-  .lbm-type-circle.lbm-color-niord-fa.lbm-shadow, .lbm-type-circle.lbm-color-niord-fa.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-fa.lbm-hover:hover {
-    box-shadow: 0px 0px 0px 5px rgba(255, 255, 255, 0.28); }
-  .lbm-type-circle.lbm-color-niord-fa:before {
-    box-shadow: 0 0 6px 2px white; }
-
-.lbm-type-circle.lbm-border-color-niord-fa {
-  border-color: #7c0043; }
-
-.fa-lbm-color-niord-fa {
-  color: white; }
-
-.fa-lbm-border-color-niord-fa {
-  color: #7c0043; }
-
-.lpl-base.lpl-niord-fa {
-  fill: white; }
-
-.lpl-base.lpl-border-niord-fa,
-.lpl-shadow.lpl-border-niord-fa {
-  stroke: #7c0043; }
-
-.lbm-type-circle.lbm-color-niord-nm {
-  background-color: white;
-  color: #000; }
-  .lbm-type-circle.lbm-color-niord-nm.lbm-transparent {
-    background-color: rgba(255, 255, 255, 0.7); }
-    .lbm-type-circle.lbm-color-niord-nm.lbm-transparent.lbm-hover:hover {
-      background-color: rgba(255, 255, 255, 0.9); }
-  .lbm-type-circle.lbm-color-niord-nm.lbm-shadow, .lbm-type-circle.lbm-color-niord-nm.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-nm.lbm-hover:hover {
-    box-shadow: 0px 0px 0px 5px rgba(255, 255, 255, 0.28); }
-  .lbm-type-circle.lbm-color-niord-nm:before {
-    box-shadow: 0 0 6px 2px white; }
-
-.lbm-type-circle.lbm-border-color-niord-nm {
-  border-color: #7c0043; }
-
-.fa-lbm-color-niord-nm {
-  color: white; }
-
-.fa-lbm-border-color-niord-nm {
-  color: #7c0043; }
-
-.lpl-base.lpl-niord-nm {
-  fill: white; }
-
-.lpl-base.lpl-border-niord-nm,
-.lpl-shadow.lpl-border-niord-nm {
-  stroke: #7c0043; }
-
-.lbm-type-circle.lbm-color-niord-nw {
-  background-color: #e2007a;
-  color: #fff; }
-  .lbm-type-circle.lbm-color-niord-nw.lbm-transparent {
-    background-color: rgba(226, 0, 122, 0.7); }
-    .lbm-type-circle.lbm-color-niord-nw.lbm-transparent.lbm-hover:hover {
-      background-color: rgba(226, 0, 122, 0.9); }
-  .lbm-type-circle.lbm-color-niord-nw.lbm-shadow, .lbm-type-circle.lbm-color-niord-nw.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-nw.lbm-hover:hover {
-    box-shadow: 0px 0px 0px 5px rgba(226, 0, 122, 0.28); }
-  .lbm-type-circle.lbm-color-niord-nw:before {
-    box-shadow: 0 0 6px 2px #e2007a; }
-
-.lbm-type-circle.lbm-border-color-niord-nw {
-  border-color: #7c0043; }
-
-.fa-lbm-color-niord-nw {
-  color: #e2007a; }
-
-.fa-lbm-border-color-niord-nw {
-  color: #7c0043; }
-
-.lpl-base.lpl-niord-nw {
-  fill: #e2007a; }
-
-.lpl-base.lpl-border-niord-nw,
-.lpl-shadow.lpl-border-niord-nw {
-  stroke: #7c0043; }
-
-.lbm-type-circle.lbm-color-niord-fe {
-  background-color: #e2007a;
-  color: #fff; }
-  .lbm-type-circle.lbm-color-niord-fe.lbm-transparent {
-    background-color: rgba(226, 0, 122, 0.7); }
-    .lbm-type-circle.lbm-color-niord-fe.lbm-transparent.lbm-hover:hover {
-      background-color: rgba(226, 0, 122, 0.9); }
-  .lbm-type-circle.lbm-color-niord-fe.lbm-shadow, .lbm-type-circle.lbm-color-niord-fe.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-fe.lbm-hover:hover {
-    box-shadow: 0px 0px 0px 5px rgba(226, 0, 122, 0.28); }
-  .lbm-type-circle.lbm-color-niord-fe:before {
-    box-shadow: 0 0 6px 2px #e2007a; }
-
-.lbm-type-circle.lbm-border-color-niord-fe {
-  border-color: #7c0043; }
-
-.fa-lbm-color-niord-fe {
-  color: #e2007a; }
-
-.fa-lbm-border-color-niord-fe {
-  color: #7c0043; }
-
-.lpl-base.lpl-niord-fe {
-  fill: #e2007a; }
-
-.lpl-base.lpl-border-niord-fe,
-.lpl-shadow.lpl-border-niord-fe {
-  stroke: #7c0043; }
-
-/***********************************************
 leaflet-map-sync.scss, Sync two or more maps with regard to center, zoom and pan
 
     (c) 2015, FCOO
@@ -28368,305 +28161,3 @@ Copyed from _iconmoon/style.css
 
 .famm-3-1-p:before, html.portrait .famm-3-1:before {
   content: ""; }
-
-/* 
- * Leaflet TimeDimension v1.1.1 - 2019-11-05 
- * 
- * Copyright 2019 Biel Frontera (ICTS SOCIB) 
- * datacenter@socib.es 
- * http://www.socib.es/ 
- * 
- * Licensed under the MIT license. 
- * 
- * Demos: 
- * http://apps.socib.es/Leaflet.TimeDimension/ 
- * 
- * Source: 
- * git://github.com/socib/Leaflet.TimeDimension.git 
- * 
- */
-@font-face {
-    font-family: 'Glyphicons Halflings';
-    src: url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.eot');
-    src: url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.woff') format('woff'), url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
-}
-.leaflet-bar-timecontrol{
-     background-color: #fff;
-     color: black;
-}
-.leaflet-bar-timecontrol * {
-    box-sizing: border-box;
-}
-.leaflet-bar-timecontrol .leaflet-control-timecontrol {
-    float: left;
-    height: 26px;
-    line-height: 26px;
-    border: solid #a5a5a5;
-    background-color: #fff;
-    border-width: 0 1px 0 0;
-}
-.leaflet-bar-timecontrol .leaflet-control-timecontrol:first-child {
-    border-radius: 4px 0 0 4px;
-}
-.leaflet-bar-timecontrol .leaflet-control-timecontrol:last-child {
-    border-radius: 0 4px 4px 0;
-}
-.leaflet-bar-timecontrol .leaflet-control-timecontrol:before {
-    font-family: "Glyphicons Halflings";
-    display: block;
-}
-.leaflet-bar-timecontrol .timecontrol-slider {
-    position: relative;
-    width: auto;
-    cursor: auto;
-}
-.leaflet-bar-timecontrol a.timecontrol-date,
-.leaflet-bar-timecontrol a.timecontrol-date:hover {
-    position: relative;
-    min-width: 150px;
-    width: auto;
-    padding: 0 10px 0 20px;
-    white-space: nowrap;
-}
-.leaflet-bar-timecontrol a.timecontrol-date.utc,
-.leaflet-bar-timecontrol a.timecontrol-date.utc:hover {
-    min-width: 185px;
-}
-.leaflet-bar-timecontrol a.timecontrol-date.loading,
-.leaflet-bar-timecontrol a.timecontrol-date.loading:hover {
-    background-color: #ffefa4;
-}
-.leaflet-bar-timecontrol .timecontrol-dateslider .slider {
-    width: 200px;
-}
-.leaflet-bar-timecontrol .timecontrol-speed {
-    white-space: nowrap;
-    cursor: auto;
-}
-.leaflet-bar-timecontrol .timecontrol-speed .slider {
-    width: 55px;
-    display: inline-block;
-}
-.leaflet-bar-timecontrol .timecontrol-speed .speed {
-    width: 55px;
-    display: inline-block;
-    float: left;
-    text-align: right;
-}
-.leaflet-bar-timecontrol .timecontrol-play,
-.leaflet-bar-timecontrol .timecontrol-play:hover {
-    position: relative;
-}
-.leaflet-bar-timecontrol .timecontrol-play span {
-    font-size: 10px;
-}
-.leaflet-bar-timecontrol a.timecontrol-play.loading {
-    background-color: #ffefa4;
-}
-
-/**
-* Slider/Knobs styles
-*/
-
-.timecontrol-slider .slider {
-    position: relative;
-    height: 12px;
-    margin: 6px;
-    border: 1px solid #a5a5a5;
-    cursor: pointer;
-}
-.timecontrol-slider .slider.has-limits {
-    margin-left: 15px;
-    margin-right: 15px;
-    background-color: #ddd;
-}
-.timecontrol-slider .slider.has-limits .range {
-    position: absolute;
-    height: 10px;
-    background-color: #fff;
-    /*opacity: 0.5;*/
-}
-.timecontrol-slider .knob {
-    position: absolute;
-    width: 8px;
-    height: 22px;
-    background-color: #ddd;
-    border-radius: 2px;
-    border: 1px solid #a5a5a5;
-    /*use margins because on ie,leaflet will use top/left for positionning*/
-    margin-top: -6px;
-    margin-left: -4px;
-    cursor: ew-resize;
-    cursor: -webkit-grab;
-    cursor: -moz-grab;
-}
-.timecontrol-slider .knob:after {
-    /** Big transparent block on top of the knob for easier grabbing on touch device*/
-    content: ' ';
-    display: block;
-    position: absolute;
-    width: 20px;
-    top:-5px;
-    height: 32px;
-    left: -7px;
-   /* opacity: 0.5;
-    background: red;*/
-    
-}
-.timecontrol-slider .knob.upper,
-.timecontrol-slider .knob.lower {
-    width: 11px;
-    height: 20px;
-    border: none;
-    background-color: transparent;
-}
-.timecontrol-slider .knob.upper {
-    margin-top: -5px;
-    margin-left: -1px;
-}
-.timecontrol-slider .knob.lower {
-    margin-top: -5px;
-    margin-left: -10px;
-}
-.timecontrol-slider .knob.lower:after {
-    right:0px;
-    left: initial;
-}
-.timecontrol-slider .knob.upper:after {
-    left:0px;
-}
-.timecontrol-slider .knob.upper:before,
-.timecontrol-slider .knob.lower:before {
-    display: block;
-    content: '';
-    position: relative;
-    top: 2px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-}
-.timecontrol-slider .knob.upper:before {
-    border-width: 16px 0 0 10px;
-    border-color: transparent transparent transparent #a5a5a5;
-}
-.timecontrol-slider .knob.lower:before {
-    border-width: 0 0 16px 10px;
-    border-color: transparent transparent #a5a5a5;
-}
-
-.timecontrol-slider .slider.dragging,
-.timecontrol-slider .dragging .knob,
-.timecontrol-slider .knob.leaflet-drag-target {
-    cursor: ew-resize;
-    cursor: grabbing;
-    cursor: -webkit-grabbing;
-    cursor: -moz-grabbing;
-}
-
-/**
-* Icons definitions
-*/
-
-@-webkit-keyframes icon-rotation {
-    from {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    to {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-@keyframes icon-rotation {
-    from {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    to {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-.timecontrol-loop.looped,
-.timecontrol-loop.looped:hover {
-    background-color: #ddd;
-    color: #094F8E;
-}
-
-.timecontrol-backward:before,
-.timecontrol-forward:before,
-.timecontrol-stop:before,
-.timecontrol-play:before,
-.timecontrol-loop:before {    
-    width: 100%;
-    text-align: center;
-}
-
-.timecontrol-play:before {
-    position: absolute;
-    content: "\e072";
-}
-/*.timecontrol-play.play:before {
-    content: "\e072";
-}*/
-.timecontrol-play.reverse:before {
-    content: "\e072";
-    -ms-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-}
-.timecontrol-play.pause:before {
-    content: "\e073";
-}
-.timecontrol-play.reverse.pause:before {
-    -ms-transform: none;
-    -webkit-transform: none;
-    transform: none;
-}
-
-a.timecontrol-play.loading:before {
-    content: "\e031";
-    opacity: 0.2;
-    -webkit-animation: icon-rotation 6s infinite linear;
-    animation: icon-rotation 6s infinite linear;
-}
-.timecontrol-date.loading:before {
-    content: "\e031";
-    left: 5px;
-    position: absolute;
-    -webkit-animation: icon-rotation 6s infinite linear;
-    animation: icon-rotation 6s infinite linear;
-}
-.timecontrol-speed:before {
-    content: "\e141";
-    position: absolute;
-    left: 7px;
-}
-.timecontrol-stop:before {
-    content: "\e074";
-}
-.timecontrol-forward:before {
-    content: "\e075";
-}
-.timecontrol-backward:before {
-    content: "\e071";
-}
-.timecontrol-loop:before {
-    content: "\e030";
-}
-
-@media (max-width: 767px){
-    .leaflet-bar-timecontrol .timecontrol-date,
-    .leaflet-bar-timecontrol .timecontrol-slider{
-        clear: both;
-        float: none;
-        border-right: none;
-    }
-}
-.leaflet-touch .leaflet-bar-timecontrol .leaflet-control-timecontrol{
-     height: 30px;
-    line-height: 30px;
-}
-.leaflet-touch .timecontrol-slider .slider{
-    margin-top: 10px;
-}

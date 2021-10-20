@@ -14,6 +14,12 @@
 </head>
 
 <body>
+    <script>
+        window.fcoo = window.fcoo || {};
+        window.fcoo.DEMO_VERSION = true;
+        //OR window.fcoo.LOCAL_DATA = true;
+    </script>
+
     <script src="bower_components.js"></script>
 
     <script src="../src/00_fcoo-maps_initialize.js"></script>
@@ -193,6 +199,9 @@ NAVN MANGLER
                     "SATELLITE_AND_RADAR"
                 ]},
 
+                {text: {da: "Tidevandstabeller", en: " Tide tables"}, list:[
+                    "TIDE_TABLES"
+                ]},
 
                 {text: {da: "Navigation og Sikkerhed", en: "Navigation and Safety"}, list:[
                     'NAVIGATION_NIORD',
@@ -200,7 +209,7 @@ NAVN MANGLER
                     'NAVIGATION_PILOT_BOARDING_POSITIONS'
                 ]},
 
-                {text: {da: "NAVN MANGLER: Byer, havne, mv.", en: "NAME MISSING: Cities, Ports, Harbors etc."}, list:[
+                {text: {da: "NAVN MANGLER: Byer, Havne, Broer mv.", en: "NAME MISSING: Cities, Ports, Harbors, Bridges etc."}, list:[
                     "HARBORS_DK",
                     "BRIDGES_DK",
                     "TOWNS_GL"
