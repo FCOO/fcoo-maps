@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps",
-  "version": "1.8.8",
+  "version": "1.8.9",
   "homepage": "https://github.com/FCOO/fcoo-maps",
   "authors": [
     "Niels Holt"
@@ -27,6 +27,7 @@
   ],
   "dependencies": {
     "leaflet-map-sync": "FCOO/leaflet-map-sync#^2.0.0",
+    "fcoo-maps-colors": "FCOO/fcoo-maps-colors#latest",
     "fcoo-application": "https://gitlab.com/FCOO/fcoo-application.git#^12.0.0",
     "fcoo-metoc-parameter-model-domain": "FCOO/fcoo-metoc-parameter-model-domain#^4.0.0",
     "fcoo-form-validation": "https://gitlab.com/FCOO/fcoo-form-validation.git#^0.9.2",
@@ -49,9 +50,6 @@
     "clipboard": "zenorocha/clipboard.js#^2.0.6"
   },
   "devDependencies": {
-    "bourbon": "latest",
-    "modernizr-mixin": "latest",
-    "mathsass": "latest",
     "modernizr-scss": "https://github.com/FCOO/modernizr-scss.git#latest"
   },
   "overrides": {

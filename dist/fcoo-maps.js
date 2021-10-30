@@ -5761,7 +5761,7 @@ search.js
     *************************************************************************/
     var searchResultGeoJSONList = {},
         searchResultLineColor = 'black',
-        searchResultColor     = 'osm';
+        searchResultColor     = 'search-result'; //original = 'osm';
 
     function SearchResultGeoJSON(searchResult){
         this.searchResult = searchResult;

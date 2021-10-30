@@ -199,41 +199,6 @@ All elements in modal-windows get same margin-bottom
 
 
 ************************************************/
-/***********************************************************************
-
-leaflet-bootstrap-marker-mixin.scss
-
-*************************************************************************/
-/***********************************************************************
-marker-circle-color
-Create style for bsMarkerCircle in different colors
-*************************************************************************/
-/***********************************************************************
-lbm-circle-and-icon-classes
-Create class for bsMarkerCircle named $name with color and color-border
-*************************************************************************/
-/***********************************************************************
-lbm-marker-and-icon-classes
-Create class for bsMarkerCircle named $name with color and color-border
-*************************************************************************/
-/***********************************************************************
-fa-lbm-color
-Create class for color and border-color used by L.bsMarkerAsIcon (and $.bsMarkerAsIcon)
-to create fa-icon looking like the marker
-*************************************************************************/
-/***********************************************
-    _leaflet-polyline-mixin.scss
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/leaflet-polyline
-	https://github.com/FCOO
-
-************************************************/
-/**********************************************************
-marker-and-polygon-color: create color-classes for bsMarker and bsPolyline
-See https://www.w3schools.com/tags/ref_colornames.asp for color-names and code
-**********************************************************/
 /**********************************************************
 LEAFLET MAPS
 **********************************************************/
@@ -290,20 +255,6 @@ DIVERSE
 
 .icon-active {
   color: #007bff; }
-
-.fa-pilot-boarding-position-diamond {
-  position: relative;
-  bottom: 1px; }
-  .fa-pilot-boarding-position-diamond:before {
-    font-size: calc(9em / 12); }
-
-/****************************************************************************
-L.CONTROL.LOCATE
-Adjusted version of leaflet-icon-pulse by Filip Zavadil
-https://github.com/mapshakers/leaflet-icon-pulse
-****************************************************************************/
-.leaflet-control-locate.active a {
-  color: #4285F4; }
 
 /****************************************************************************
 Style for edit settings for graticule
@@ -424,37 +375,6 @@ STYLE FOR SEARCH RESULTS
   .search-result-row .search-result-display {
     white-space: normal !important;
     font-size: .85em; }
-
-.lbm-type-circle.lbm-color-osm {
-  background-color: #e65800;
-  color: #000; }
-  .lbm-type-circle.lbm-color-osm.lbm-transparent {
-    background-color: rgba(230, 88, 0, 0.7); }
-    .lbm-type-circle.lbm-color-osm.lbm-transparent.lbm-hover:hover {
-      background-color: rgba(230, 88, 0, 0.9); }
-  .lbm-type-circle.lbm-color-osm.lbm-shadow, .lbm-type-circle.lbm-color-osm.leaflet-drag-target, .lbm-type-circle.lbm-color-osm.lbm-hover:hover {
-    box-shadow: 0px 0px 0px 5px rgba(230, 88, 0, 0.28); }
-  .lbm-type-circle.lbm-color-osm:before {
-    box-shadow: 0 0 6px 2px #e65800; }
-
-.lbm-type-circle.lbm-border-color-osm {
-  border-color: #e65800; }
-
-.fa-lbm-color-osm {
-  color: #e65800; }
-
-.fa-lbm-border-color-osm {
-  color: #e65800; }
-
-.lpl-base.lpl-osm {
-  fill: #e65800; }
-
-.lpl-base.lpl-border-osm,
-.lpl-shadow.lpl-border-osm {
-  stroke: #e65800; }
-
-.fa-navigation {
-  color: #E5238C; }
 
 /**********************************************************
 ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr

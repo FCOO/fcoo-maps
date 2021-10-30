@@ -8,44 +8,17 @@
 
 
 ************************************************/
-//BOURBON - http://bourbon.io/
-@import "../bower_components/bourbon/core/bourbon";
-
-//MODERNIZR-MIXIN - https://github.com/danielguillan/modernizr-mixin
-@import "../bower_components/modernizr-mixin/stylesheets/modernizr";
-
-//MATHSASS - https://github.com/terkel/mathsass
-@import "../bower_components/mathsass/dist/math";
-
 //MODERNIZR-SASS - http://github.com/FCOO/modernizr-scss
 @import "../bower_components/modernizr-scss/dist/modernizr-scss";
 
 //LEAFLET-MAP-SYNC https://github.com/fcoo/leaflet-map-sync
 @import "../bower_components/leaflet-map-sync/src/leaflet-map-sync-outline-color";
 
-
 //JQUERY-BOOTSTRAP VARIABLES AND MIXINS
 @import "../bower_components/jquery-bootstrap/src/include-jquery-bootstrap-variables";
 
 //ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
 @import "../bower_components/leaflet-zoom-modernizr/src/leaflet-zoom-modernizr";
-
-//LEAFLET-BOOTSTRAP - mixin to create colors for bsMarker
-@import "../bower_components/sass-color-helpers/stylesheets/color-helpers";
-@import "../bower_components/leaflet-bootstrap-marker/src/leaflet-bootstrap-marker-mixin";
-
-//LEAFLET-POLYLINE - mixin to create colors for polyline and polygon
-@import "../bower_components/leaflet-polyline/src/leaflet-polyline-mixin";
-
-/**********************************************************
-marker-and-polygon-color: create color-classes for bsMarker and bsPolyline
-See https://www.w3schools.com/tags/ref_colornames.asp for color-names and code
-**********************************************************/
-@mixin marker-and-polygon-color( $name, $color, $border-color:$color){
-    @include lbm-marker-and-icon-classes( $name, $color, $border-color );
-    @include polyline-classes( $name, $color, $border-color );
-}
-
 
 /**********************************************************
 LEAFLET MAPS
@@ -107,39 +80,14 @@ DIVERSE
     //text-shadow: 0px 0px 2px $list-group-active-bg;
 }
 
-//Special css for the red diamond inside the icon for layer with Pilot Boarding Positions
-.fa-pilot-boarding-position-diamond {
-    position: relative;
-    bottom  : 1px;
-    &:before { font-size: calc(9em / 12) }
-}
-
-
-
 //HER//Import scss for leaflet-control-legend
 //HER@import "fcoo-maps-control-legend";
-
-
-/****************************************************************************
-L.CONTROL.LOCATE
-Adjusted version of leaflet-icon-pulse by Filip Zavadil
-https://github.com/mapshakers/leaflet-icon-pulse
-****************************************************************************/
-$location-color: #4285F4; //= rgba(66, 133, 244) = google maps color for location icon
-
-//Overwrite css for L.Control.Locate (leaflet.locatecontrol)
-.leaflet-control-locate {
-    &.active a {
-        color: $location-color;
-    }
-}
 
 
 /****************************************************************************
 Style for edit settings for graticule
 ****************************************************************************/
 @include show-and-hide-for-modernizr-test( $modernizr-test: graticule-label, $incl-no-selector: false, $incl-table-display: false);
-
 
 
 /**********************************************************
@@ -284,20 +232,6 @@ STYLE FOR SEARCH RESULTS
         white-space: normal !important;
         font-size: .85em;
     }
-}
-
-//Color for search result
-//marker-and-polygon-color( $name, $color, $border-color)
-$DarkGoldenRod: #B8860B;
-$Chartreuse: #7FFF00;
-
-$osm-search-result: darken(#FF6200, 5); //dark-dark-orange
-@include marker-and-polygon-color( 'osm', $osm-search-result);
-
-
-$navigation-layer: #E5238C; //"pink" navigation-lines
-.fa-navigation {
-    color: $navigation-layer;
 }
 
 

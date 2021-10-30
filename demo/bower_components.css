@@ -24784,6 +24784,322 @@ This is fixed by overwriting the last size with "inherit"
   color: #f0ad4e; }
 
 /***********************************************
+	fcoo-maps-colors.scss,
+
+	(c) 2021, FCOO
+
+	https://github.com/FCOO/fcoo-maps-colors
+	https://github.com/FCOO
+
+
+************************************************/
+/*********************************
+IMPORT UTILITIES
+*********************************/
+/***********************************************************************
+
+leaflet-bootstrap-marker-mixin.scss
+
+*************************************************************************/
+/***********************************************************************
+marker-circle-color
+Create style for bsMarkerCircle in different colors
+*************************************************************************/
+/***********************************************************************
+lbm-circle-and-icon-classes
+Create class for bsMarkerCircle named $name with color and color-border
+*************************************************************************/
+/***********************************************************************
+lbm-marker-and-icon-classes
+Create class for bsMarkerCircle named $name with color and color-border
+*************************************************************************/
+/***********************************************************************
+fa-lbm-color
+Create class for color and border-color used by L.bsMarkerAsIcon (and $.bsMarkerAsIcon)
+to create fa-icon looking like the marker
+*************************************************************************/
+/***********************************************
+    _leaflet-polyline-mixin.scss
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/leaflet-polyline
+	https://github.com/FCOO
+
+************************************************/
+/*********************************
+FCOO-COLORS
+*********************************/
+/***********************************************
+	fcoo-colors-mixin.scss,
+
+	(c) 2021, FCOO
+
+	https://github.com/FCOO/fcoo-colors
+	https://github.com/FCOO
+
+
+************************************************/
+/*********************************
+FCOO-MAPS-COLORS-VARIABLES and FCOO-MAPS-COLORS-MIXIN
+scss-variable with all colors and mixins
+*********************************/
+/***********************************************
+fcoo-maps-colors-variables
+
+Create all scss-variable with colors for different fcoo-maps layers
+
+************************************************/
+/****************************************************************************
+SEARCH RESULT
+Color for search result
+****************************************************************************/
+/*Previous used colors:
+$DarkGoldenRod: #B8860B;
+$Chartreuse: #7FFF00;
+$osm-search-result: darken(#FF6200, 5); //dark-dark-orange
+*/
+/**********************************************************
+OBSERVATIONS
+**********************************************************/
+/**********************************************************
+NAVIGATION AND NIORD
+**********************************************************/
+/****************************************************************************
+LOCATION
+****************************************************************************/
+/***********************************************
+
+fcoo-maps-colors-mixin
+
+************************************************/
+/**********************************************************
+marker-and-polygon-color
+create color-classes for bsMarker and bsPolyline
+**********************************************************/
+/*********************************
+Style for search results in fcoo-maps
+*********************************/
+.lbm-type-circle.lbm-color-search-result {
+  background-color: #EC640C;
+  color: #000; }
+  .lbm-type-circle.lbm-color-search-result.lbm-transparent {
+    background-color: rgba(236, 100, 12, 0.7); }
+    .lbm-type-circle.lbm-color-search-result.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(236, 100, 12, 0.9); }
+  .lbm-type-circle.lbm-color-search-result.lbm-shadow, .lbm-type-circle.lbm-color-search-result.leaflet-drag-target, .lbm-type-circle.lbm-color-search-result.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(236, 100, 12, 0.28); }
+  .lbm-type-circle.lbm-color-search-result:before {
+    box-shadow: 0 0 6px 2px #EC640C; }
+
+.lbm-type-circle.lbm-border-color-search-result {
+  border-color: #EC640C; }
+
+.fa-lbm-color-search-result {
+  color: #EC640C; }
+
+.fa-lbm-border-color-search-result {
+  color: #EC640C; }
+
+.lpl-base.lpl-search-result {
+  fill: #EC640C; }
+
+.lpl-base.lpl-border-search-result,
+.lpl-shadow.lpl-border-search-result {
+  stroke: #EC640C; }
+
+/*********************************
+FCOO-MAPS-COLORS-OBSERVATIONS
+Style for fcoo/fcoo-maps-observations
+*********************************/
+/***********************************************
+_fcoo-maps-colors-observations.scss
+
+Style for fcoo/fcoo-maps-observations
+
+************************************************/
+.lbm-type-circle.lbm-color-observations {
+  background-color: #EFB920;
+  color: #000; }
+  .lbm-type-circle.lbm-color-observations.lbm-transparent {
+    background-color: rgba(239, 185, 32, 0.7); }
+    .lbm-type-circle.lbm-color-observations.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(239, 185, 32, 0.9); }
+  .lbm-type-circle.lbm-color-observations.lbm-shadow, .lbm-type-circle.lbm-color-observations.leaflet-drag-target, .lbm-type-circle.lbm-color-observations.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(239, 185, 32, 0.28); }
+  .lbm-type-circle.lbm-color-observations:before {
+    box-shadow: 0 0 6px 2px #EFB920; }
+
+.lbm-type-circle.lbm-border-color-observations {
+  border-color: #EFB920; }
+
+.fa-lbm-color-observations {
+  color: #EFB920; }
+
+.fa-lbm-border-color-observations {
+  color: #EFB920; }
+
+/*********************************
+FCOO-MAPS-COLORS-NIORD-AND-NAVIGATION
+Style for fcoo/fcoo-maps-niord and navigation layers
+*********************************/
+/***********************************************
+_fcoo-maps-colors-niord-and-navigation.scss
+
+Style for fcoo/fcoo-maps-niord / fcoo/jquery-bootstrap-niord
+
+Create the style for the four different domains
+************************************************/
+.lbm-type-circle.lbm-color-niord-fa {
+  background-color: white;
+  color: #000; }
+  .lbm-type-circle.lbm-color-niord-fa.lbm-transparent {
+    background-color: rgba(255, 255, 255, 0.7); }
+    .lbm-type-circle.lbm-color-niord-fa.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(255, 255, 255, 0.9); }
+  .lbm-type-circle.lbm-color-niord-fa.lbm-shadow, .lbm-type-circle.lbm-color-niord-fa.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-fa.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(255, 255, 255, 0.28); }
+  .lbm-type-circle.lbm-color-niord-fa:before {
+    box-shadow: 0 0 6px 2px white; }
+
+.lbm-type-circle.lbm-border-color-niord-fa {
+  border-color: #7c0043; }
+
+.fa-lbm-color-niord-fa {
+  color: white; }
+
+.fa-lbm-border-color-niord-fa {
+  color: #7c0043; }
+
+.lpl-base.lpl-niord-fa {
+  fill: white; }
+
+.lpl-base.lpl-border-niord-fa,
+.lpl-shadow.lpl-border-niord-fa {
+  stroke: #7c0043; }
+
+.lbm-type-circle.lbm-color-niord-nm {
+  background-color: white;
+  color: #000; }
+  .lbm-type-circle.lbm-color-niord-nm.lbm-transparent {
+    background-color: rgba(255, 255, 255, 0.7); }
+    .lbm-type-circle.lbm-color-niord-nm.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(255, 255, 255, 0.9); }
+  .lbm-type-circle.lbm-color-niord-nm.lbm-shadow, .lbm-type-circle.lbm-color-niord-nm.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-nm.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(255, 255, 255, 0.28); }
+  .lbm-type-circle.lbm-color-niord-nm:before {
+    box-shadow: 0 0 6px 2px white; }
+
+.lbm-type-circle.lbm-border-color-niord-nm {
+  border-color: #7c0043; }
+
+.fa-lbm-color-niord-nm {
+  color: white; }
+
+.fa-lbm-border-color-niord-nm {
+  color: #7c0043; }
+
+.lpl-base.lpl-niord-nm {
+  fill: white; }
+
+.lpl-base.lpl-border-niord-nm,
+.lpl-shadow.lpl-border-niord-nm {
+  stroke: #7c0043; }
+
+.lbm-type-circle.lbm-color-niord-nw {
+  background-color: #E2007A;
+  color: #fff; }
+  .lbm-type-circle.lbm-color-niord-nw.lbm-transparent {
+    background-color: rgba(226, 0, 122, 0.7); }
+    .lbm-type-circle.lbm-color-niord-nw.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(226, 0, 122, 0.9); }
+  .lbm-type-circle.lbm-color-niord-nw.lbm-shadow, .lbm-type-circle.lbm-color-niord-nw.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-nw.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(226, 0, 122, 0.28); }
+  .lbm-type-circle.lbm-color-niord-nw:before {
+    box-shadow: 0 0 6px 2px #E2007A; }
+
+.lbm-type-circle.lbm-border-color-niord-nw {
+  border-color: #7c0043; }
+
+.fa-lbm-color-niord-nw {
+  color: #E2007A; }
+
+.fa-lbm-border-color-niord-nw {
+  color: #7c0043; }
+
+.lpl-base.lpl-niord-nw {
+  fill: #E2007A; }
+
+.lpl-base.lpl-border-niord-nw,
+.lpl-shadow.lpl-border-niord-nw {
+  stroke: #7c0043; }
+
+.lbm-type-circle.lbm-color-niord-fe {
+  background-color: #E2007A;
+  color: #fff; }
+  .lbm-type-circle.lbm-color-niord-fe.lbm-transparent {
+    background-color: rgba(226, 0, 122, 0.7); }
+    .lbm-type-circle.lbm-color-niord-fe.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(226, 0, 122, 0.9); }
+  .lbm-type-circle.lbm-color-niord-fe.lbm-shadow, .lbm-type-circle.lbm-color-niord-fe.leaflet-drag-target, .lbm-type-circle.lbm-color-niord-fe.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(226, 0, 122, 0.28); }
+  .lbm-type-circle.lbm-color-niord-fe:before {
+    box-shadow: 0 0 6px 2px #E2007A; }
+
+.lbm-type-circle.lbm-border-color-niord-fe {
+  border-color: #7c0043; }
+
+.fa-lbm-color-niord-fe {
+  color: #E2007A; }
+
+.fa-lbm-border-color-niord-fe {
+  color: #7c0043; }
+
+.lpl-base.lpl-niord-fe {
+  fill: #E2007A; }
+
+.lpl-base.lpl-border-niord-fe,
+.lpl-shadow.lpl-border-niord-fe {
+  stroke: #7c0043; }
+
+.fa-navigation {
+  color: #E5238C; }
+
+/*********************************
+STANDARD USER COLORS
+*********************************/
+.lpl-base.lpl-dette-er-et-navn {
+  fill: green; }
+
+.lpl-base.lpl-border-dette-er-et-navn,
+.lpl-shadow.lpl-border-dette-er-et-navn {
+  stroke: red; }
+
+.lbm-type-circle.lbm-color-dette-er-et-navn {
+  background-color: green;
+  color: #fff; }
+  .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-transparent {
+    background-color: rgba(0, 128, 0, 0.7); }
+    .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-transparent.lbm-hover:hover {
+      background-color: rgba(0, 128, 0, 0.9); }
+  .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-shadow, .lbm-type-circle.lbm-color-dette-er-et-navn.leaflet-drag-target, .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-hover:hover {
+    box-shadow: 0px 0px 0px 5px rgba(0, 128, 0, 0.28); }
+  .lbm-type-circle.lbm-color-dette-er-et-navn:before {
+    box-shadow: 0 0 6px 2px green; }
+
+.lbm-type-circle.lbm-border-color-dette-er-et-navn {
+  border-color: red; }
+
+.fa-lbm-color-dette-er-et-navn {
+  color: green; }
+
+.fa-lbm-border-color-dette-er-et-navn {
+  color: red; }
+
+.niels {
+  font-family: 0 1 2 3 4 5 6 7 8; }
+
+/***********************************************
     leaflet-polyline.scss
 
 	(c) 2018, FCOO
@@ -25010,12 +25326,6 @@ lbm-puls          : Has a pulsing ring
 lbm-transparent   : Inner color get opacity: 0.7
 lbm-hover         : When hover: get shadow and opacity: 0.9 for ibm-transparent
 ************************************************/
-/***********************************************
-
-leaflet-bootstrap-marker-colors.scss
-List of avaible color-name and values
-
-************************************************/
 /***********************************************************************
 
 leaflet-bootstrap-marker-mixin.scss
@@ -25038,6 +25348,29 @@ fa-lbm-color
 Create class for color and border-color used by L.bsMarkerAsIcon (and $.bsMarkerAsIcon)
 to create fa-icon looking like the marker
 *************************************************************************/
+/***********************************************
+leaflet-bootstrap-marker.scss
+
+lbm-type-TYPE lbm-color-COLOR [lbm-border-color-COLOR] [lbm-transparent] [lbm-puls] [lbm-hover]
+
+lbm-type-TYPE     : Sets the different type of bsMarker
+lbm-[COLOR]       : Sets inner color to [COLOR]
+lbm-border-[COLOR]: border-color = [COLOR]
+
+lbm-shadow        : Shadow in same color as inner color
+lbm-puls          : Has a pulsing ring
+lbm-transparent   : Inner color get opacity: 0.7
+lbm-hover         : When hover: get shadow and opacity: 0.9 for ibm-transparent
+************************************************/
+/***********************************************
+
+leaflet-bootstrap-marker-colors.scss
+List of avaible color-name and values
+
+************************************************/
+/***********************************************
+leaflet-bootstrap-marker-base.scss
+************************************************/
 .fa-lbm-color-pink {
   color: pink; }
 
@@ -25442,7 +25775,7 @@ https://github.com/mapshakers/leaflet-icon-pulse
 
 .lbm-type-circle {
   opacity: 1;
-  border: 2px solid black;
+  border: 1px solid black;
   box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.5);
   background-color: #fff;
   color: #000;
@@ -25477,7 +25810,7 @@ https://github.com/mapshakers/leaflet-icon-pulse
     animation: pulsate 1s ease-out;
     animation-iteration-count: infinite; }
   .lbm-type-circle .inner {
-    font-size: calc(.7em - 4px); }
+    font-size: calc(.7em - 2px); }
 
 .lbm-type-circle.lbm-color-pink {
   background-color: pink;
