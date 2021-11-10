@@ -190,7 +190,7 @@ MARGIN-BOTTOM FOR ELEMENTS IN MODAL
 All elements in modal-windows get same margin-bottom
 ************************************************************/
 /***********************************************
-    _leaflet-zoom-modernizr.scss, 
+    _leaflet-zoom-modernizr.scss,
 
     (c) 2016, FCOO
 
@@ -379,365 +379,305 @@ STYLE FOR SEARCH RESULTS
 /**********************************************************
 ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
 **********************************************************/
-.leaflet-zoom-3 .show-for-leaflet-zoom-3 {
-  display: initial !important; }
-
 .leaflet-zoom-3 .hide-for-leaflet-zoom-3 {
   display: none !important; }
-
-.no-leaflet-zoom-3 .hide-for-leaflet-zoom-3 {
-  display: initial !important; }
 
 .no-leaflet-zoom-3 .show-for-leaflet-zoom-3 {
   display: none !important; }
 
-.leaflet-zoom-3-up .show-for-leaflet-zoom-3-up {
-  display: initial !important; }
-
 .leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up {
   display: none !important; }
-
-.no-leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-3-up .show-for-leaflet-zoom-3-up {
   display: none !important; }
 
-.leaflet-zoom-3-down .show-for-leaflet-zoom-3-down {
-  display: initial !important; }
-
 .leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down {
   display: none !important; }
-
-.no-leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-3-down .show-for-leaflet-zoom-3-down {
   display: none !important; }
 
-.leaflet-zoom-4 .show-for-leaflet-zoom-4 {
-  display: initial !important; }
-
 .leaflet-zoom-4 .hide-for-leaflet-zoom-4 {
   display: none !important; }
-
-.no-leaflet-zoom-4 .hide-for-leaflet-zoom-4 {
-  display: initial !important; }
 
 .no-leaflet-zoom-4 .show-for-leaflet-zoom-4 {
   display: none !important; }
 
-.leaflet-zoom-4-up .show-for-leaflet-zoom-4-up {
-  display: initial !important; }
-
 .leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up {
   display: none !important; }
-
-.no-leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-4-up .show-for-leaflet-zoom-4-up {
   display: none !important; }
 
-.leaflet-zoom-4-down .show-for-leaflet-zoom-4-down {
-  display: initial !important; }
-
 .leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down {
   display: none !important; }
-
-.no-leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-4-down .show-for-leaflet-zoom-4-down {
   display: none !important; }
 
-.leaflet-zoom-5 .show-for-leaflet-zoom-5 {
-  display: initial !important; }
-
 .leaflet-zoom-5 .hide-for-leaflet-zoom-5 {
   display: none !important; }
-
-.no-leaflet-zoom-5 .hide-for-leaflet-zoom-5 {
-  display: initial !important; }
 
 .no-leaflet-zoom-5 .show-for-leaflet-zoom-5 {
   display: none !important; }
 
-.leaflet-zoom-5-up .show-for-leaflet-zoom-5-up {
-  display: initial !important; }
-
 .leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up {
   display: none !important; }
-
-.no-leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-5-up .show-for-leaflet-zoom-5-up {
   display: none !important; }
 
-.leaflet-zoom-5-down .show-for-leaflet-zoom-5-down {
-  display: initial !important; }
-
 .leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down {
   display: none !important; }
-
-.no-leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-5-down .show-for-leaflet-zoom-5-down {
   display: none !important; }
 
-.leaflet-zoom-6 .show-for-leaflet-zoom-6 {
-  display: initial !important; }
-
 .leaflet-zoom-6 .hide-for-leaflet-zoom-6 {
   display: none !important; }
-
-.no-leaflet-zoom-6 .hide-for-leaflet-zoom-6 {
-  display: initial !important; }
 
 .no-leaflet-zoom-6 .show-for-leaflet-zoom-6 {
   display: none !important; }
 
-.leaflet-zoom-6-up .show-for-leaflet-zoom-6-up {
-  display: initial !important; }
-
 .leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up {
   display: none !important; }
-
-.no-leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-6-up .show-for-leaflet-zoom-6-up {
   display: none !important; }
 
-.leaflet-zoom-6-down .show-for-leaflet-zoom-6-down {
-  display: initial !important; }
-
 .leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down {
   display: none !important; }
-
-.no-leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-6-down .show-for-leaflet-zoom-6-down {
   display: none !important; }
 
-.leaflet-zoom-7 .show-for-leaflet-zoom-7 {
-  display: initial !important; }
-
 .leaflet-zoom-7 .hide-for-leaflet-zoom-7 {
   display: none !important; }
-
-.no-leaflet-zoom-7 .hide-for-leaflet-zoom-7 {
-  display: initial !important; }
 
 .no-leaflet-zoom-7 .show-for-leaflet-zoom-7 {
   display: none !important; }
 
-.leaflet-zoom-7-up .show-for-leaflet-zoom-7-up {
-  display: initial !important; }
-
 .leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up {
   display: none !important; }
-
-.no-leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-7-up .show-for-leaflet-zoom-7-up {
   display: none !important; }
 
-.leaflet-zoom-7-down .show-for-leaflet-zoom-7-down {
-  display: initial !important; }
-
 .leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down {
   display: none !important; }
-
-.no-leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-7-down .show-for-leaflet-zoom-7-down {
   display: none !important; }
 
-.leaflet-zoom-8 .show-for-leaflet-zoom-8 {
-  display: initial !important; }
-
 .leaflet-zoom-8 .hide-for-leaflet-zoom-8 {
   display: none !important; }
-
-.no-leaflet-zoom-8 .hide-for-leaflet-zoom-8 {
-  display: initial !important; }
 
 .no-leaflet-zoom-8 .show-for-leaflet-zoom-8 {
   display: none !important; }
 
-.leaflet-zoom-8-up .show-for-leaflet-zoom-8-up {
-  display: initial !important; }
-
 .leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up {
   display: none !important; }
-
-.no-leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-8-up .show-for-leaflet-zoom-8-up {
   display: none !important; }
 
-.leaflet-zoom-8-down .show-for-leaflet-zoom-8-down {
-  display: initial !important; }
-
 .leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down {
   display: none !important; }
-
-.no-leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-8-down .show-for-leaflet-zoom-8-down {
   display: none !important; }
 
-.leaflet-zoom-9 .show-for-leaflet-zoom-9 {
-  display: initial !important; }
-
 .leaflet-zoom-9 .hide-for-leaflet-zoom-9 {
   display: none !important; }
-
-.no-leaflet-zoom-9 .hide-for-leaflet-zoom-9 {
-  display: initial !important; }
 
 .no-leaflet-zoom-9 .show-for-leaflet-zoom-9 {
   display: none !important; }
 
-.leaflet-zoom-9-up .show-for-leaflet-zoom-9-up {
-  display: initial !important; }
-
 .leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up {
   display: none !important; }
-
-.no-leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-9-up .show-for-leaflet-zoom-9-up {
   display: none !important; }
 
-.leaflet-zoom-9-down .show-for-leaflet-zoom-9-down {
-  display: initial !important; }
-
 .leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down {
   display: none !important; }
-
-.no-leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-9-down .show-for-leaflet-zoom-9-down {
   display: none !important; }
 
-.leaflet-zoom-10 .show-for-leaflet-zoom-10 {
-  display: initial !important; }
-
 .leaflet-zoom-10 .hide-for-leaflet-zoom-10 {
   display: none !important; }
-
-.no-leaflet-zoom-10 .hide-for-leaflet-zoom-10 {
-  display: initial !important; }
 
 .no-leaflet-zoom-10 .show-for-leaflet-zoom-10 {
   display: none !important; }
 
-.leaflet-zoom-10-up .show-for-leaflet-zoom-10-up {
-  display: initial !important; }
-
 .leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up {
   display: none !important; }
-
-.no-leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-10-up .show-for-leaflet-zoom-10-up {
   display: none !important; }
 
-.leaflet-zoom-10-down .show-for-leaflet-zoom-10-down {
-  display: initial !important; }
-
 .leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down {
   display: none !important; }
-
-.no-leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-10-down .show-for-leaflet-zoom-10-down {
   display: none !important; }
 
-.leaflet-zoom-11 .show-for-leaflet-zoom-11 {
-  display: initial !important; }
-
 .leaflet-zoom-11 .hide-for-leaflet-zoom-11 {
   display: none !important; }
-
-.no-leaflet-zoom-11 .hide-for-leaflet-zoom-11 {
-  display: initial !important; }
 
 .no-leaflet-zoom-11 .show-for-leaflet-zoom-11 {
   display: none !important; }
 
-.leaflet-zoom-11-up .show-for-leaflet-zoom-11-up {
-  display: initial !important; }
-
 .leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up {
   display: none !important; }
-
-.no-leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-11-up .show-for-leaflet-zoom-11-up {
   display: none !important; }
 
-.leaflet-zoom-11-down .show-for-leaflet-zoom-11-down {
-  display: initial !important; }
-
 .leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down {
   display: none !important; }
-
-.no-leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down {
-  display: initial !important; }
 
 .no-leaflet-zoom-11-down .show-for-leaflet-zoom-11-down {
   display: none !important; }
 
-.leaflet-zoom-12 .show-for-leaflet-zoom-12 {
-  display: initial !important; }
-
 .leaflet-zoom-12 .hide-for-leaflet-zoom-12 {
   display: none !important; }
-
-.no-leaflet-zoom-12 .hide-for-leaflet-zoom-12 {
-  display: initial !important; }
 
 .no-leaflet-zoom-12 .show-for-leaflet-zoom-12 {
   display: none !important; }
 
-.leaflet-zoom-12-up .show-for-leaflet-zoom-12-up {
-  display: initial !important; }
-
 .leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up {
   display: none !important; }
-
-.no-leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up {
-  display: initial !important; }
 
 .no-leaflet-zoom-12-up .show-for-leaflet-zoom-12-up {
   display: none !important; }
 
-.leaflet-zoom-12-down .show-for-leaflet-zoom-12-down {
-  display: initial !important; }
-
 .leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down {
   display: none !important; }
 
-.no-leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down {
-  display: initial !important; }
-
 .no-leaflet-zoom-12-down .show-for-leaflet-zoom-12-down {
   display: none !important; }
+
+.leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-3-up .show-for-leaflet-zoom-3-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-3-down .show-for-leaflet-zoom-3-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-4-up .show-for-leaflet-zoom-4-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-4-down .show-for-leaflet-zoom-4-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-5-up .show-for-leaflet-zoom-5-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-5-down .show-for-leaflet-zoom-5-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-6-up .show-for-leaflet-zoom-6-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-6-down .show-for-leaflet-zoom-6-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-7-up .show-for-leaflet-zoom-7-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-7-down .show-for-leaflet-zoom-7-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-8-up .show-for-leaflet-zoom-8-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-8-down .show-for-leaflet-zoom-8-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-9-up .show-for-leaflet-zoom-9-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-9-down .show-for-leaflet-zoom-9-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-10-up .show-for-leaflet-zoom-10-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-10-down .show-for-leaflet-zoom-10-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-11-up .show-for-leaflet-zoom-11-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-11-down .show-for-leaflet-zoom-11-down-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-12-up .show-for-leaflet-zoom-12-up-visibility {
+  visibility: hidden !important; }
+
+.leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down-visibility {
+  visibility: hidden !important; }
+
+.no-leaflet-zoom-12-down .show-for-leaflet-zoom-12-down-visibility {
+  visibility: hidden !important; }
 
 /**********************************************************
 InfoBox in bsPositionControl: (bsp = bsPosition)

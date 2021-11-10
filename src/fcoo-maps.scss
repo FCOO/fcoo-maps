@@ -238,10 +238,29 @@ STYLE FOR SEARCH RESULTS
 /**********************************************************
 ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
 **********************************************************/
+$leaflet-min-zoom:  3;
+$leaflet-max-zoom: 12;
+
 $lzm-incl-table-display: false;
 //$lzm-incl-no-selector: true;
 $lzm-display-value: initial !important;
-@include show-and-hide-for-leaflet-zoom-modernizr(3, 12);
+@include show-and-hide-for-leaflet-zoom-modernizr();
+
+//Create special version to set element visibility: visible/hidden for zoom-levels
+@include show-and-hide-for-leaflet-zoom-modernizr(
+    $min-zoom                   : $leaflet-min-zoom,
+    $max-zoom                   : $leaflet-max-zoom,
+    $modernizr-test-postfix-list: '-up' '-down',
+
+    $incl-no-selector           : false,
+    $incl-table-display         : false,
+
+    $display-attr               : 'visibility',
+    $no-display-value           : 'hidden',
+
+    $class-postfix              : '-visibility'
+);
+
 
 
 /**********************************************************

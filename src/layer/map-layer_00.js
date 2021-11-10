@@ -20,6 +20,9 @@ options = {
 
     layerOptions    : {},       //Specific options for the Layer. Can include options marked (*)
 
+    //Legend
+    buttonList: []bsButton-options + onlyShowWhenLayer: BOOLEAN. When true the button is only visible when the layer is visible
+
     //colorInfo = options for showing info on the postion of the cursor/map center
     colorInfo: {
         icon     : STRING       //If the MapLayer also have a legend the icon from the legend is used
@@ -279,21 +282,31 @@ options = {
 
             //Create and add legend
             if (map.bsLegendControl && !this.options.noLegend){
-                var legend = info.legend = info.legend ||
-                    new L.BsLegend({
-                            index       : this.index,
-                            icon        : this.options.icon,
-                            text        : this.options.text || null,
-                            content     : this.options.content,
-                            buttonList  : this.options.buttonList || this.options.buttons,
-                            onInfo      : this.options.onInfo,
-                            onWarning   : this.options.onWarning,
-                            onRemove    : $.proxy(this.removeViaLegend, this),
-                            normalIconClass: this.showAndHideClasses,
-                            hiddenIconClass: this.inversShowAndHideClasses,
 
+                if (!info.legend){
+                    var buttonList = this.options.buttonList || this.options.buttons;
+
+                    //If a button has onlyShowWhenLayer = true => the button is only visible if the layer is visible/shown
+                    $.each(buttonList, function(dummy, buttonOptions){
+                        if (buttonOptions.onlyShowWhenLayer)
+                            buttonOptions.class = (buttonOptions.class || '') + ' ' + _this.showAndHideClasses + '-visibility';
                     });
-                map.bsLegendControl.addLegend( legend );
+
+                    info.legend = new L.BsLegend({
+                        index       : this.index,
+                        icon        : this.options.icon,
+                        text        : this.options.text || null,
+                        content     : this.options.content,
+                        buttonList  : buttonList,
+                        onInfo      : this.options.onInfo,
+                        onWarning   : this.options.onWarning,
+                        onRemove    : $.proxy(this.removeViaLegend, this),
+                        normalIconClass: this.showAndHideClasses,
+                        hiddenIconClass: this.inversShowAndHideClasses,
+                    });
+                }
+
+                map.bsLegendControl.addLegend( info.legend );
                 this.hasLegend = true;
             }
 
