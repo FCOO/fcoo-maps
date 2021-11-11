@@ -2389,6 +2389,11 @@ options = {
             this.inversShowAndHideClasses += ' hide-for-leaflet-zoom-'+maxZoom+'-down';
         }
 
+
+        //Sets popupContainerClassName - used by fcoo/leaflet-bootstrap to add class to popups container => Open popups will be hidden when the layer is hidden and visa versa
+        this.popupContainerClassName = this.showAndHideClasses;
+
+
         ns.appSetting.add({
             id          : this.id,
             callApply   : true,
