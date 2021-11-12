@@ -1878,9 +1878,11 @@ Objects and methods to handle leaflet-maps
         doubleRightClickZoom: true,
 
 
+/* Removed to test if it will fix map-sync issues
         //Set default bounding to prevent panning round - TODO: ER der brug for denne??
         maxBounds: L.latLngBounds([-90, -230],    //southWest
                                   [+90, +230]),    //northEast
+*/
 
         /*
         maxBoundsViscosity:
@@ -1889,7 +1891,7 @@ Objects and methods to handle leaflet-maps
         higher values will slow down map dragging outside bounds, and 1.0 makes the bounds fully solid,
         preventing the user from dragging outside the bounds.
         */
-        maxBoundsViscosity: 1.0, //TODO 1.0 is a test to see if it fix map-sync issues
+        //maxBoundsViscosity: 1.0, //1.0 was a test to see if it fix map-sync issues - but it did not :-(
 
     });
 
@@ -2001,6 +2003,9 @@ maxHeight: 300, //TODO
         //No map sync control on main map
         mapSyncControl: false,
 
+
+        //Set popup container class when a popup is opende - See src/leaflet/popup-container-class.js and src/mapLayer/map-layer_00.js for details
+        setPopupContainerClass: true
     };
 
     /***********************************************************
@@ -2228,7 +2233,72 @@ options = {
 ****************************************************************************/
 (function ($, L, window, document, undefined) {
     "use strict";
+/*
+<script>
+    L.Map.addInitHook(function(){
+        this.on('popupopen', function( event ){
+            console.log('popupopen', findLayer(event.popup));
 
+        });
+    });
+
+function findLayer( layer ){
+    if (!layer)
+        return '';
+    if (layer.options && layer.options.NIELS)
+        return layer.options.NIELS;
+
+    var result = '';
+    $.each(layer._groups, function(index, _layer){
+        result = result || findLayer( _layer );
+    });
+
+    $.each(['_source', '_parentPolyline'], function(index, id){
+        result = result || findLayer( layer[id] );
+    });
+
+    return result;
+}
+
+L.LayerGroup.include({
+    addLayer: function (layer) {
+        var id = this.getLayerId(layer);
+        this._layers[id] = layer;
+        if (this._map) {
+            this._map.addLayer(layer);
+        }
+
+        // Add this group to the layer's known groups
+        layer._groups.push(this);
+
+        return this;
+    },
+
+    removeLayer: function (layer) {
+        var id = layer in this._layers ? layer : this.getLayerId(layer);
+        if (this._map && this._layers[id]) {
+            this._map.removeLayer(this._layers[id]);
+        }
+        delete this._layers[id];
+
+        // Remove this group from the layer's known groups
+        layer._groups.splice(layer._groups.indexOf(this), 1);
+
+        return this;
+    }
+});
+
+// Make sure to init a property in L.Layer
+L.Layer.addInitHook(function(){
+    this._groups = [];
+});
+
+    L.Map.mergeOptions({
+        doubleRightClickZoom: true
+    });
+
+</script>
+*/
     //Create namespaces
     var ns = window.fcoo = window.fcoo || {},
         nsMap = ns.map = ns.map || {},
@@ -2388,11 +2458,6 @@ options = {
             this.showAndHideClasses       += ' show-for-leaflet-zoom-'+maxZoom+'-down';
             this.inversShowAndHideClasses += ' hide-for-leaflet-zoom-'+maxZoom+'-down';
         }
-
-
-        //Sets popupContainerClassName - used by fcoo/leaflet-bootstrap to add class to popups container => Open popups will be hidden when the layer is hidden and visa versa
-        this.popupContainerClassName = this.showAndHideClasses;
-
 
         ns.appSetting.add({
             id          : this.id,
@@ -2587,6 +2652,10 @@ options = {
                 }
 
                 info.layer = this.createLayer(this.options.layerOptions);
+
+
+                //Sets options._popupContainerClass = this.showAndHideClasses to hide open popups when the layer is hidden and visa versa
+                info.layer.options._popupContainerClass = this.showAndHideClasses;
             }
             var layer = info.layer;
 
@@ -4621,6 +4690,127 @@ offline.js
 
 
 
+
+;
+/****************************************************************************
+parent-layer.js
+
+Implement L.Layer._parentLayerList = []L.LayerGroup = The 'parent' L.Layer(Group) the L.Layer belong to
+
+Based on https://stackoverflow.com/questions/40884232/how-to-get-name-id-of-featuregroup-when-layer-is-clicked
+****************************************************************************/
+(function ($, L/*, window, document, undefined*/) {
+    "use strict";
+
+    L.Layer.addInitHook(function(){
+        this._parentLayerList = [];
+    });
+
+
+    L.LayerGroup.include({
+        addLayer: function(_addLayer){
+            return function(layer){
+                this._parentLayerList.push(layer);
+                return _addLayer.apply(this, arguments);
+            };
+        }(L.LayerGroup.prototype.addLayer),
+
+        removeLayer: function(_removeLayer){
+            return function(layer){
+                layer._parentLayerList.splice(layer._parentLayerList.indexOf(this), 1);
+                return _removeLayer.apply(this, arguments);
+            };
+        }(L.LayerGroup.prototype.removeLayer)
+    });
+
+/* ORIGINAL CODE
+L.LayerGroup.include({
+    addLayer: function (layer) {
+        var id = this.getLayerId(layer);
+        this._layers[id] = layer;
+        if (this._map) {
+            this._map.addLayer(layer);
+        }
+
+        // Add this group to the layer's known groups
+        layer._groups.push(this);
+
+        return this;
+    },
+
+    removeLayer: function (layer) {
+        var id = layer in this._layers ? layer : this.getLayerId(layer);
+        if (this._map && this._layers[id]) {
+            this._map.removeLayer(this._layers[id]);
+        }
+        delete this._layers[id];
+
+        // Remove this group from the layer's known groups
+        layer._groups.splice(layer._groups.indexOf(this), 1);
+
+        return this;
+    }
+});
+
+// Make sure to init a property in L.Layer
+L.Layer.addInitHook(function(){
+    this._groups = [];
+});
+
+*/
+}(jQuery, L, this, document));
+
+;
+/****************************************************************************
+popup-container-class
+
+A special feature that add classes to a popup's container if the popup's 'owner'
+or any of its 'parent' layer has options._popupContainerClass
+
+****************************************************************************/
+(function ($, L/*, window, document, undefined*/) {
+    "use strict";
+
+    L.Map.mergeOptions({
+        setPopupContainerClass: false
+    });
+
+    L.Map.addInitHook(function () {
+        if (this.options.setPopupContainerClass)
+            this.on('popupopen', setPopupContainerClass);
+    });
+
+    function setPopupContainerClass(event){
+        var popup = event.popup,
+            popupContainerClass = findOptions(popup, '_popupContainerClass');
+
+        popup.$container.addClass(popupContainerClass);
+    }
+
+    //function findOptions( layer, optionsId )
+    //Loop trough all 'parent' layers and return the first found
+    //value of options[optionsId] (if any)
+    function findOptions( layer, optionsId ){
+        if (!layer)
+            return '';
+
+        if (layer.options && layer.options[optionsId])
+            return layer.options[optionsId];
+
+        var result = '';
+        $.each(layer._parentLayerList, function(index, _layer){
+            result = result || findOptions( _layer, optionsId );
+        });
+
+        //Special case when layer is a element on the map (Popup, Polygon etc.)
+        $.each(['_source', '_parentPolyline'], function(index, id){
+            result = result || findOptions( layer[id], optionsId );
+        });
+
+        return result;
+    }
+
+}(jQuery, L, this, document));
 
 ;
 /****************************************************************************

@@ -49,7 +49,72 @@ options = {
 ****************************************************************************/
 (function ($, L, window, document, undefined) {
     "use strict";
+/*
+<script>
+    L.Map.addInitHook(function(){
+        this.on('popupopen', function( event ){
+            console.log('popupopen', findLayer(event.popup));
 
+        });
+    });
+
+function findLayer( layer ){
+    if (!layer)
+        return '';
+    if (layer.options && layer.options.NIELS)
+        return layer.options.NIELS;
+
+    var result = '';
+    $.each(layer._groups, function(index, _layer){
+        result = result || findLayer( _layer );
+    });
+
+    $.each(['_source', '_parentPolyline'], function(index, id){
+        result = result || findLayer( layer[id] );
+    });
+
+    return result;
+}
+
+L.LayerGroup.include({
+    addLayer: function (layer) {
+        var id = this.getLayerId(layer);
+        this._layers[id] = layer;
+        if (this._map) {
+            this._map.addLayer(layer);
+        }
+
+        // Add this group to the layer's known groups
+        layer._groups.push(this);
+
+        return this;
+    },
+
+    removeLayer: function (layer) {
+        var id = layer in this._layers ? layer : this.getLayerId(layer);
+        if (this._map && this._layers[id]) {
+            this._map.removeLayer(this._layers[id]);
+        }
+        delete this._layers[id];
+
+        // Remove this group from the layer's known groups
+        layer._groups.splice(layer._groups.indexOf(this), 1);
+
+        return this;
+    }
+});
+
+// Make sure to init a property in L.Layer
+L.Layer.addInitHook(function(){
+    this._groups = [];
+});
+
+    L.Map.mergeOptions({
+        doubleRightClickZoom: true
+    });
+
+</script>
+*/
     //Create namespaces
     var ns = window.fcoo = window.fcoo || {},
         nsMap = ns.map = ns.map || {},
@@ -209,11 +274,6 @@ options = {
             this.showAndHideClasses       += ' show-for-leaflet-zoom-'+maxZoom+'-down';
             this.inversShowAndHideClasses += ' hide-for-leaflet-zoom-'+maxZoom+'-down';
         }
-
-
-        //Sets popupContainerClassName - used by fcoo/leaflet-bootstrap to add class to popups container => Open popups will be hidden when the layer is hidden and visa versa
-        this.popupContainerClassName = this.showAndHideClasses;
-
 
         ns.appSetting.add({
             id          : this.id,
@@ -408,6 +468,10 @@ options = {
                 }
 
                 info.layer = this.createLayer(this.options.layerOptions);
+
+
+                //Sets options._popupContainerClass = this.showAndHideClasses to hide open popups when the layer is hidden and visa versa
+                info.layer.options._popupContainerClass = this.showAndHideClasses;
             }
             var layer = info.layer;
 

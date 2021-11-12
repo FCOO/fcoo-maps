@@ -140,9 +140,11 @@ Objects and methods to handle leaflet-maps
         doubleRightClickZoom: true,
 
 
+/* Removed to test if it will fix map-sync issues
         //Set default bounding to prevent panning round - TODO: ER der brug for denne??
         maxBounds: L.latLngBounds([-90, -230],    //southWest
                                   [+90, +230]),    //northEast
+*/
 
         /*
         maxBoundsViscosity:
@@ -151,7 +153,7 @@ Objects and methods to handle leaflet-maps
         higher values will slow down map dragging outside bounds, and 1.0 makes the bounds fully solid,
         preventing the user from dragging outside the bounds.
         */
-        maxBoundsViscosity: 1.0, //TODO 1.0 is a test to see if it fix map-sync issues
+        //maxBoundsViscosity: 1.0, //1.0 was a test to see if it fix map-sync issues - but it did not :-(
 
     });
 
@@ -263,6 +265,9 @@ maxHeight: 300, //TODO
         //No map sync control on main map
         mapSyncControl: false,
 
+
+        //Set popup container class when a popup is opende - See src/leaflet/popup-container-class.js and src/mapLayer/map-layer_00.js for details
+        setPopupContainerClass: true
     };
 
     /***********************************************************
