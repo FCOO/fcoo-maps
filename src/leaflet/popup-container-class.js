@@ -21,7 +21,7 @@ or any of its 'parent' layer has options._popupContainerClass
         var popup = event.popup,
             popupContainerClass = findOptions(popup, '_popupContainerClass');
 
-        popup.$container.addClass(popupContainerClass);
+        $(popup._container).addClass(popupContainerClass);
     }
 
     //function findOptions( layer, optionsId )
