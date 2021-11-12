@@ -16,7 +16,7 @@ Based on https://stackoverflow.com/questions/40884232/how-to-get-name-id-of-feat
     L.LayerGroup.include({
         addLayer: function(_addLayer){
             return function(layer){
-                this._parentLayerList.push(layer);
+                layer._parentLayerList.push(this);
                 return _addLayer.apply(this, arguments);
             };
         }(L.LayerGroup.prototype.addLayer),
