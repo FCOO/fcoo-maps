@@ -361,8 +361,13 @@ L.Layer.addInitHook(function(){
                         index       : this.index,
                         icon        : this.options.icon,
                         text        : this.options.text || null,
-                        content     : this.options.content,
+
+                        content            : this.options.content,
+                        noVerticalPadding  : this.options.noVerticalPadding,
+                        noHorizontalPadding: this.options.noHorizontalPadding,
+
                         buttonList  : buttonList,
+
                         onInfo      : this.options.onInfo,
                         onWarning   : this.options.onWarning,
                         onRemove    : $.proxy(this.removeViaLegend, this),

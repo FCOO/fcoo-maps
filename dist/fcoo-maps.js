@@ -1878,11 +1878,11 @@ Objects and methods to handle leaflet-maps
         doubleRightClickZoom: true,
 
 
-/* Removed to test if it will fix map-sync issues
-        //Set default bounding to prevent panning round - TODO: ER der brug for denne??
-        maxBounds: L.latLngBounds([-90, -230],    //southWest
-                                  [+90, +230]),    //northEast
-*/
+        /* *** For map-sync to work no bounds are set ***
+        //Set default bounding to prevent panning round
+        maxBounds: L.latLngBounds([-90, -230],  //southWest
+                                  [+90, +230]), //northEast
+        */
 
         /*
         maxBoundsViscosity:
@@ -1891,7 +1891,7 @@ Objects and methods to handle leaflet-maps
         higher values will slow down map dragging outside bounds, and 1.0 makes the bounds fully solid,
         preventing the user from dragging outside the bounds.
         */
-        //maxBoundsViscosity: 1.0, //1.0 was a test to see if it fix map-sync issues - but it did not :-(
+        //maxBoundsViscosity: 0.0,
 
     });
 
@@ -2545,8 +2545,13 @@ L.Layer.addInitHook(function(){
                         index       : this.index,
                         icon        : this.options.icon,
                         text        : this.options.text || null,
-                        content     : this.options.content,
+
+                        content            : this.options.content,
+                        noVerticalPadding  : this.options.noVerticalPadding,
+                        noHorizontalPadding: this.options.noHorizontalPadding,
+
                         buttonList  : buttonList,
+
                         onInfo      : this.options.onInfo,
                         onWarning   : this.options.onWarning,
                         onRemove    : $.proxy(this.removeViaLegend, this),

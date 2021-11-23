@@ -24867,6 +24867,9 @@ Create all scss-variable with colors for different fcoo-maps layers
 
 ************************************************/
 /****************************************************************************
+COMMON
+****************************************************************************/
+/****************************************************************************
 TIME
 Color to mark a time, button etc. as past, now or future
 ****************************************************************************/
@@ -25151,250 +25154,6 @@ Style for fcoo/fcoo-maps-havnelods
 
 .fa-lbm-border-color-harbor-gl {
   color: #60AA14; }
-
-/*********************************
-STANDARD USER COLORS
-*********************************/
-.lpl-base.lpl-dette-er-et-navn {
-  fill: green; }
-
-.lpl-base.lpl-border-dette-er-et-navn,
-.lpl-shadow.lpl-border-dette-er-et-navn {
-  stroke: red; }
-
-.lbm-type-circle.lbm-color-dette-er-et-navn {
-  background-color: green;
-  color: #fff; }
-  .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-transparent {
-    background-color: rgba(0, 128, 0, 0.7); }
-    .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-transparent.lbm-hover:hover {
-      background-color: rgba(0, 128, 0, 0.9); }
-  .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-shadow, .lbm-type-circle.lbm-color-dette-er-et-navn.leaflet-drag-target, .lbm-type-circle.lbm-color-dette-er-et-navn.lbm-hover:hover {
-    box-shadow: 0px 0px 0px 5px rgba(0, 128, 0, 0.28); }
-  .lbm-type-circle.lbm-color-dette-er-et-navn:before {
-    box-shadow: 0 0 6px 2px green; }
-
-.lbm-type-circle.lbm-border-color-dette-er-et-navn {
-  border-color: red; }
-
-.fa-lbm-color-dette-er-et-navn {
-  color: green; }
-
-.fa-lbm-border-color-dette-er-et-navn {
-  color: red; }
-
-/***********************************************
-    leaflet-polyline.scss
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/leaflet-polyline
-	https://github.com/FCOO
-
-************************************************/
-/***********************************************
-    _leaflet-polyline-mixin.scss
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/leaflet-polyline
-	https://github.com/FCOO
-
-************************************************/
-.lpl-base {
-  stroke-opacity: 1;
-  fill-opacity: 1;
-  fill: none; }
-  .lpl-base.lpl-popup-open {
-    stroke-opacity: 1;
-    fill-opacity: 1; }
-    .lpl-base.lpl-popup-open.lpl-transparent {
-      stroke-opacity: .9;
-      fill-opacity: .8; }
-  .lpl-base:not(.lpl-popup-open).lpl-only-show-on-hover {
-    stroke-opacity: 0;
-    fill-opacity: 0; }
-  .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover) {
-    stroke-opacity: .7;
-    fill-opacity: .35; }
-    .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover).lpl-hover {
-      stroke-opacity: .9;
-      fill-opacity: .7; }
-
-.lpl-border {
-  stroke: white;
-  stroke-opacity: 0;
-  fill: none; }
-  .lpl-border.lpl-show:not(.lpl-only-show-on-hover), .lpl-border.lpl-show.lpl-popup-open {
-    stroke-opacity: .5; }
-
-.lpl-shadow {
-  stroke: white;
-  stroke-opacity: 0;
-  fill: none; }
-  .lpl-shadow.lpl-show, .lpl-shadow.lpl-hover {
-    stroke-opacity: .28; }
-
-.lpl-interactive {
-  stroke: transparent;
-  fill: none; }
-  .lpl-interactive.lpl-fill {
-    fill: transparent; }
-
-.lpl-base.lpl-pink {
-  fill: pink; }
-
-.lpl-base.lpl-border-pink,
-.lpl-shadow.lpl-border-pink {
-  stroke: pink; }
-
-.lpl-base.lpl-purple {
-  fill: purple; }
-
-.lpl-base.lpl-border-purple,
-.lpl-shadow.lpl-border-purple {
-  stroke: purple; }
-
-.lpl-base.lpl-red {
-  fill: red; }
-
-.lpl-base.lpl-border-red,
-.lpl-shadow.lpl-border-red {
-  stroke: red; }
-
-.lpl-base.lpl-orange {
-  fill: orange; }
-
-.lpl-base.lpl-border-orange,
-.lpl-shadow.lpl-border-orange {
-  stroke: orange; }
-
-.lpl-base.lpl-yellow {
-  fill: yellow; }
-
-.lpl-base.lpl-border-yellow,
-.lpl-shadow.lpl-border-yellow {
-  stroke: yellow; }
-
-.lpl-base.lpl-green {
-  fill: green; }
-
-.lpl-base.lpl-border-green,
-.lpl-shadow.lpl-border-green {
-  stroke: green; }
-
-.lpl-base.lpl-cyan {
-  fill: cyan; }
-
-.lpl-base.lpl-border-cyan,
-.lpl-shadow.lpl-border-cyan {
-  stroke: cyan; }
-
-.lpl-base.lpl-blue {
-  fill: blue; }
-
-.lpl-base.lpl-border-blue,
-.lpl-shadow.lpl-border-blue {
-  stroke: blue; }
-
-.lpl-base.lpl-brown {
-  fill: brown; }
-
-.lpl-base.lpl-border-brown,
-.lpl-shadow.lpl-border-brown {
-  stroke: brown; }
-
-.lpl-base.lpl-white {
-  fill: white; }
-
-.lpl-base.lpl-border-white,
-.lpl-shadow.lpl-border-white {
-  stroke: white; }
-
-.lpl-base.lpl-grey {
-  fill: grey; }
-
-.lpl-base.lpl-border-grey,
-.lpl-shadow.lpl-border-grey {
-  stroke: grey; }
-
-.lpl-base.lpl-black {
-  fill: black; }
-
-.lpl-base.lpl-border-black,
-.lpl-shadow.lpl-border-black {
-  stroke: black; }
-
-.lpl-base.lpl-none {
-  fill: none; }
-
-.lpl-base.lpl-border-none,
-.lpl-shadow.lpl-border-none {
-  stroke: none; }
-
-/***********************************************
-	fcoo-metoc-parameter-model-domain.scss,
-
-	(c) 2020, FCOO
-
-	https://github.com/FCOO/fcoo-metoc-model-domain
-	https://github.com/FCOO
-
-
-************************************************/
-.text-pink {
-  color: pink !important; }
-
-.text-purple {
-  color: purple !important; }
-
-.text-red {
-  color: red !important; }
-
-.text-orange {
-  color: orange !important; }
-
-.text-yellow {
-  color: yellow !important; }
-
-.text-green {
-  color: green !important; }
-
-.text-cyan {
-  color: cyan !important; }
-
-.text-blue {
-  color: blue !important; }
-
-.text-brown {
-  color: brown !important; }
-
-.text-white {
-  color: white !important; }
-
-.text-grey {
-  color: grey !important; }
-
-.text-black {
-  color: black !important; }
-
-.text-darkblue {
-  color: darkblue !important; }
-
-.mdg-extra-width .card-block .card-block, .mdg-mega-width .card-block .card-block {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between; }
-  .mdg-extra-width .card-block .card-block .form-group, .mdg-mega-width .card-block .card-block .form-group {
-    display: inline-block;
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: 100%; }
-    .mdg-extra-width .card-block .card-block .form-group.info-box, .mdg-mega-width .card-block .card-block .form-group.info-box {
-      width: 33%; }
-
-.mdg-extra-width .card-block .card-block .form-group.info-box .container-icon-and-text {
-  height: 4em !important; }
 
 /***********************************************
 leaflet-bootstrap-marker.scss
@@ -27546,6 +27305,9 @@ leaflet-bootstrap-control-legend.scss
 .no-margin-left {
   margin-left: 0 !important; }
 
+.fa-map-margin-right {
+  margin-right: 0.4rem; }
+
 /***********************************************
 leaflet-bootstrap-contextmenu.scss
 ************************************************/
@@ -27633,6 +27395,155 @@ leaflet-bootstrap-control-position.scss
 
 
 ************************************************/
+
+/***********************************************
+    leaflet-polyline.scss
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/leaflet-polyline
+	https://github.com/FCOO
+
+************************************************/
+/***********************************************
+    _leaflet-polyline-mixin.scss
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/leaflet-polyline
+	https://github.com/FCOO
+
+************************************************/
+.lpl-base {
+  stroke-opacity: 1;
+  fill-opacity: 1;
+  fill: none; }
+  .lpl-base.lpl-popup-open {
+    stroke-opacity: 1;
+    fill-opacity: 1; }
+    .lpl-base.lpl-popup-open.lpl-transparent {
+      stroke-opacity: .9;
+      fill-opacity: .8; }
+  .lpl-base:not(.lpl-popup-open).lpl-only-show-on-hover {
+    stroke-opacity: 0;
+    fill-opacity: 0; }
+  .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover) {
+    stroke-opacity: .7;
+    fill-opacity: .35; }
+    .lpl-base:not(.lpl-popup-open).lpl-transparent:not(.lpl-only-show-on-hover).lpl-hover {
+      stroke-opacity: .9;
+      fill-opacity: .7; }
+
+.lpl-border {
+  stroke: white;
+  stroke-opacity: 0;
+  fill: none; }
+  .lpl-border.lpl-show:not(.lpl-only-show-on-hover), .lpl-border.lpl-show.lpl-popup-open {
+    stroke-opacity: .5; }
+
+.lpl-shadow {
+  stroke: white;
+  stroke-opacity: 0;
+  fill: none; }
+  .lpl-shadow.lpl-show, .lpl-shadow.lpl-hover {
+    stroke-opacity: .28; }
+
+.lpl-interactive {
+  stroke: transparent;
+  fill: none; }
+  .lpl-interactive.lpl-fill {
+    fill: transparent; }
+
+.lpl-base.lpl-pink {
+  fill: pink; }
+
+.lpl-base.lpl-border-pink,
+.lpl-shadow.lpl-border-pink {
+  stroke: pink; }
+
+.lpl-base.lpl-purple {
+  fill: purple; }
+
+.lpl-base.lpl-border-purple,
+.lpl-shadow.lpl-border-purple {
+  stroke: purple; }
+
+.lpl-base.lpl-red {
+  fill: red; }
+
+.lpl-base.lpl-border-red,
+.lpl-shadow.lpl-border-red {
+  stroke: red; }
+
+.lpl-base.lpl-orange {
+  fill: orange; }
+
+.lpl-base.lpl-border-orange,
+.lpl-shadow.lpl-border-orange {
+  stroke: orange; }
+
+.lpl-base.lpl-yellow {
+  fill: yellow; }
+
+.lpl-base.lpl-border-yellow,
+.lpl-shadow.lpl-border-yellow {
+  stroke: yellow; }
+
+.lpl-base.lpl-green {
+  fill: green; }
+
+.lpl-base.lpl-border-green,
+.lpl-shadow.lpl-border-green {
+  stroke: green; }
+
+.lpl-base.lpl-cyan {
+  fill: cyan; }
+
+.lpl-base.lpl-border-cyan,
+.lpl-shadow.lpl-border-cyan {
+  stroke: cyan; }
+
+.lpl-base.lpl-blue {
+  fill: blue; }
+
+.lpl-base.lpl-border-blue,
+.lpl-shadow.lpl-border-blue {
+  stroke: blue; }
+
+.lpl-base.lpl-brown {
+  fill: brown; }
+
+.lpl-base.lpl-border-brown,
+.lpl-shadow.lpl-border-brown {
+  stroke: brown; }
+
+.lpl-base.lpl-white {
+  fill: white; }
+
+.lpl-base.lpl-border-white,
+.lpl-shadow.lpl-border-white {
+  stroke: white; }
+
+.lpl-base.lpl-grey {
+  fill: grey; }
+
+.lpl-base.lpl-border-grey,
+.lpl-shadow.lpl-border-grey {
+  stroke: grey; }
+
+.lpl-base.lpl-black {
+  fill: black; }
+
+.lpl-base.lpl-border-black,
+.lpl-shadow.lpl-border-black {
+  stroke: black; }
+
+.lpl-base.lpl-none {
+  fill: none; }
+
+.lpl-base.lpl-border-none,
+.lpl-shadow.lpl-border-none {
+  stroke: none; }
 
 /***********************************************
 	leaflet-bootstrap-draw.scss,
