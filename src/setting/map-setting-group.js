@@ -1,5 +1,5 @@
 /****************************************************************************
-1_fcoo-maps-map-setting-group.js,
+map-setting-group.js,
 Create mapSettingGroup = setting-group for each maps with settings for the map
 ****************************************************************************/
 (function ($, L, window/*, document, undefined*/) {
@@ -297,6 +297,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             dontSave     : true,    //<-- MUST be true!!
             modalHeader  : nsMap.mapSettingHeader,
             modalOptions : {
+                static             : false,
+                closeWithoutWarning: true,
+
                 helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
                 helpButton: true
             },

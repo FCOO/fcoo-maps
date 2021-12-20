@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /***********************************************
 	fcoo-maps.scss,
 
@@ -39,16 +38,28 @@ in integer px from rem
 /*Not used. No lg-buttons
 $input-btn-padding-y-lg: .75rem;
 $input-btn-padding-x-lg: $input-btn-padding-y-lg;
-*/
-/* VERSION 1.x
-//$font-size-sm = .875rem; // = 14px
-$font-size-sm: rem(13px); //<= TODO MANGLER. Skal muligvis sættes til 14px og så skal padding for buttons rettes tilsvarrende
 
-$input-btn-padding-y-sm: rem(4px);
-$input-btn-padding-x-sm: $input-btn-padding-y-sm;
+Syntax and relations:
+In Bootstrap
+    $input-btn-padding(-x|-y)[-sm|-lg]
+    $btn-padding(-x|-y)[-sm|-lg] = $input-btn-padding(-x|-y)[-sm|-lg]
+
+
+
+In jquery-bootstrap
+    $input-btn-padding-x-sm = 3px
+    $input-btn-padding-y-sm = 4px
+
+    xs-versions added
+    $input-btn-padding-x-xs = 2px
+    $input-btn-padding-y-xs = 3px
+
 */
 /************************************************************
-Including "size" xs as in Bootstrap 3
+Including "size" xs as in Bootstrap 4
+************************************************************/
+/************************************************************
+Add line-heights for xs
 ************************************************************/
 /************************************************************
 Border-colors
@@ -61,6 +72,9 @@ releative to container (rem -> em)
 $font-size-base         : 1rem !default;
 $spacer                 : 1rem !default;
 */
+/************************************************************
+Set margin for buttons in block
+************************************************************/
 /************************************************************
 Adjust dropdown-menu
 ************************************************************/
@@ -1002,11 +1016,23 @@ when loading or not visible
     .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header {
       flex-shrink: 0;
       flex-grow: 0;
-      font-weight: 400;
+      /*
+    $padding-x: $input-btn-padding-x;
+    $padding-y: $input-btn-padding-y;
+    @if $size == "sm" {
+        $padding-x: $input-btn-padding-x-sm;
+        $padding-y: $input-btn-padding-y-sm;
+    }
+    @if $size == "xs" {
+        $padding-x: $input-btn-padding-x-xs;
+        $padding-y: $input-btn-padding-y-xs;
+    }
+*/
       display: flex;
       align-items: center;
       cursor: default;
-      padding: 0.125rem 0.125rem;
+      font-weight: 400;
+      padding: 0.1875rem 0.25rem;
       font-size: 0.75rem;
       line-height: 1.5;
       border-radius: inherit;
