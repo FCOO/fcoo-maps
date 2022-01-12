@@ -212,12 +212,13 @@ search.js
                     static   : false,
                     keyboard : true,
                     flexWidth: true,
-                    content : [{
+                    fixedContent: {
                         type : 'text',
                         label: {da:'Søgte efter', en:'Searched for'},
                         text : searchText,
                         after: searchAgainButton
-                    },{
+                    },
+                    content : {
                         type  : 'selectlist',
                         list  : selectlistItems,
                         onChange: function(id){
@@ -225,7 +226,7 @@ search.js
                             selectedSearchResultId = searchResultList[selectedSearchResultIndex].id;
                         },
                         onDblClick: onClick
-                    }],
+                    },
                     buttons : [
                         {
                             icon   : 'fa-info-circle',

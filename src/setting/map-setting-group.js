@@ -94,6 +94,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             header   : {icon: 'fa-ruler-horizontal', text: {da: 'Længdeskala (in situ)', en:'Length Scale (in situ)'} },
             position : ''
         },
+
         //Position (L.Control.BsPosition@leaflet-latlng)
         'bsPositionControl': {
             header   : window.bsIsTouch ?
@@ -102,6 +103,14 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             position : ''
         }
     };
+
+    //Add Compass (L.Control.bsControlCompass) if mobile device
+    if (ns.modernizrDevice.isMobile)
+        nsMap.bsControls['bsCompassControl'] = {
+            header: {icon: 'fa-compass', text: {da: 'Kompas', en:'Compass'} },
+            position : ''
+        };
+
 
     //Get the position from main-map settings in nsMap.mainMapOptions
     $.each(nsMap.bsControls, function(controlId, options){
@@ -263,7 +272,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             var showWhen = {};
             showWhen[controlId+'_show'] = true;
             */
-
             _this.addMapSettingWithControl({
                 controlId      : options.controlId,
                 id             : 'show',
@@ -719,7 +727,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 header    : nsMap.mapSettingHeader,
                 helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
                 helpButton: true,
-
                 static    : false,
                 keyboard  : true,
                 content   : content,
@@ -825,6 +832,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 header     : nsMap.mapSettingHeader,
                 closeButton: true,
                 helpId     : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
+                scroll     : false,
                 helpButton : true,
                 content    : {
                     type          : 'buttongroup',

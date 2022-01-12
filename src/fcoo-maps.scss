@@ -264,6 +264,7 @@ $lzm-display-value: initial !important;
 
 
 /**********************************************************
+POSITION-CONTROL
 InfoBox in bsPositionControl: (bsp = bsPosition)
 
 Style to show/hide contents and icons
@@ -305,3 +306,56 @@ when loading or not visible
     $display-value     : '',
     $incl-table-display: false
 );
+
+
+/**********************************************************
+COMPASS-CONTROL
+Style for icons in bsCompassControl
+Adjusted for new icons set in src/leaflet/leaflet.js
+**********************************************************/
+@media screen and (orientation: landscape) {
+    .lb-compass-btn {
+
+        i.compass-device-landscape {
+            transform: rotate(90deg) translateX(-.2em) scale(0.4) !important;
+
+            html.orientation-secondary & {
+                transform: rotate(-90deg) translateX(.1em) scale(0.4) !important;
+            }
+        }
+
+        i.compass-arrow {
+            transform: rotate(90deg) translateY(-.45em) scale(.7) !important;
+
+            html.orientation-secondary & {
+                transform: rotate(-90deg) translateY(-.45em) scale(.7) !important;
+            }
+        }
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .lb-compass-btn {
+
+        i.compass-device-portrait {
+            transform: rotate(0deg) translateY(-.05em) scale(0.5) !important;
+            html.orientation-secondary & {
+                transform: rotate(180deg) translateY(.25em) scale(0.5) !important;
+            }
+        }
+
+        i.compass-arrow {
+            transform: rotate(0deg) translateY(-0.5em) scale(.7) !important;
+            html.orientation-secondary & {
+                transform: rotate(180deg) translateY(-0.5em) scale(.7) !important;
+            }
+        }
+
+    }
+}
+
+
+.no-device-orientation .lb-compass-btn .no-device-orientation-slash {
+    //color: black;
+    transform: translateX(-.1em) scaleX(.75);
+}

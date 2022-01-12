@@ -132,6 +132,7 @@ Font-sizes for labels are same siae as header but incl a xxs-size
 CONTENT
 Unifies padding and font-size for content of modal, accordion, popup etc.
 Using same font-size and vertical/horizontal padding as buttons
+NOTE: For sm and xs y-padding = x-padding
 ************************************************************/
 /************************************************************
 MARGIN-BOTTOM
@@ -994,6 +995,7 @@ ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
   visibility: hidden !important; }
 
 /**********************************************************
+POSITION-CONTROL
 InfoBox in bsPositionControl: (bsp = bsPosition)
 
 Style to show/hide contents and icons
@@ -1062,3 +1064,31 @@ when loading or not visible
 
 .no-bsl-working .hide-for-no-bsl-working {
   display: none !important; }
+
+/**********************************************************
+COMPASS-CONTROL
+Style for icons in bsCompassControl
+Adjusted for new icons set in src/leaflet/leaflet.js
+**********************************************************/
+@media screen and (orientation: landscape) {
+  .lb-compass-btn i.compass-device-landscape {
+    transform: rotate(90deg) translateX(-0.2em) scale(0.4) !important; }
+    html.orientation-secondary .lb-compass-btn i.compass-device-landscape {
+      transform: rotate(-90deg) translateX(0.1em) scale(0.4) !important; }
+  .lb-compass-btn i.compass-arrow {
+    transform: rotate(90deg) translateY(-0.45em) scale(0.7) !important; }
+    html.orientation-secondary .lb-compass-btn i.compass-arrow {
+      transform: rotate(-90deg) translateY(-0.45em) scale(0.7) !important; } }
+
+@media screen and (orientation: portrait) {
+  .lb-compass-btn i.compass-device-portrait {
+    transform: rotate(0deg) translateY(-0.05em) scale(0.5) !important; }
+    html.orientation-secondary .lb-compass-btn i.compass-device-portrait {
+      transform: rotate(180deg) translateY(0.25em) scale(0.5) !important; }
+  .lb-compass-btn i.compass-arrow {
+    transform: rotate(0deg) translateY(-0.5em) scale(0.7) !important; }
+    html.orientation-secondary .lb-compass-btn i.compass-arrow {
+      transform: rotate(180deg) translateY(-0.5em) scale(0.7) !important; } }
+
+.no-device-orientation .lb-compass-btn .no-device-orientation-slash {
+  transform: translateX(-0.1em) scaleX(0.75); }

@@ -1929,7 +1929,12 @@ Objects and methods to handle leaflet-maps
         bsZoomControl: true,
         bsZoomOptions: {
             position           : 'topleft',
-            map_setView_options: L.Map.prototype._mapSync_NO_ANIMATION
+            map_setView_options: L.Map.prototype._mapSync_NO_ANIMATION,
+
+            icon       : 'fas fa-plus-minus',
+            text       : '',
+            bigIcon    : false
+
         },
 
         //Add zoom-modernizr (leaflet-zoom-modernizr)
@@ -1974,12 +1979,44 @@ Objects and methods to handle leaflet-maps
                 header: nsMap.mapLegendHeader,
                 noVerticalPadding   : true,
                 noHorizontalPadding : false,
-
 width : 250,    //TODO
-maxHeight: 300, //TODO
-
             }
         },
+
+
+        //bsCompassControl = Show device orientation
+        bsCompassControl: ns.modernizrDevice.isMobile,
+        bsCompassOptions: {
+            position: 'topcenter',
+            icons: {
+                //Original = device   : 'compass-device fa-mobile',
+                device   : 'compass-device fa-mobile-screen-button',
+
+                //Original = landscape: 'compass-device-landscape fa-image text-light',
+                landscape: 'compass-device-landscape fa-mountains',
+
+                //Original = portrait : 'compass-device-portrait fa-portrait text-light',
+                portrait : 'compass-device-portrait fa-user',
+
+                //Original = arrow    : 'compass-arrow fa-caret-up'
+                arrow    : 'compass-arrow fa-caret-up'
+            },
+            //Original = iconCompass: 'fa-arrow-alt-circle-up',
+            iconCompass: 'fa-arrow-alt-circle-up', //'fa-compass lb-compass-adjust', or adjusted version of 'fa-circle-location-arrow'
+
+
+            selectFormat: function(){ ns.globalSetting.edit(ns.events.UNITCHANGED); },
+
+            adjustOrientationElement: function( $element/*, control */){
+                $element.vfFormat('direction');
+            },
+            setOrientationNumber: function( orientation, $element/*, control */){
+                $element.vfValue(orientation);
+            }
+        },
+
+
+
 
         //routeControl: Install L.Control.Route
         routeControl: false,
@@ -2035,6 +2072,9 @@ maxHeight: 300, //TODO
 
         //legendControl: Install L.Control.Legend
         legendControl: false,
+
+        //bsCompassControl: Show device orientation
+        bsCompassControl: false,
 
         //routeControl: Install L.Control.Route
         routeControl: false,
@@ -3507,6 +3547,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             header   : {icon: 'fa-ruler-horizontal', text: {da: 'Længdeskala (in situ)', en:'Length Scale (in situ)'} },
             position : ''
         },
+
         //Position (L.Control.BsPosition@leaflet-latlng)
         'bsPositionControl': {
             header   : window.bsIsTouch ?
@@ -3515,6 +3556,14 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             position : ''
         }
     };
+
+    //Add Compass (L.Control.bsControlCompass) if mobile device
+    if (ns.modernizrDevice.isMobile)
+        nsMap.bsControls['bsCompassControl'] = {
+            header: {icon: 'fa-compass', text: {da: 'Kompas', en:'Compass'} },
+            position : ''
+        };
+
 
     //Get the position from main-map settings in nsMap.mainMapOptions
     $.each(nsMap.bsControls, function(controlId, options){
@@ -3676,7 +3725,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             var showWhen = {};
             showWhen[controlId+'_show'] = true;
             */
-
             _this.addMapSettingWithControl({
                 controlId      : options.controlId,
                 id             : 'show',
@@ -4132,7 +4180,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 header    : nsMap.mapSettingHeader,
                 helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
                 helpButton: true,
-
                 static    : false,
                 keyboard  : true,
                 content   : content,
@@ -4238,6 +4285,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 header     : nsMap.mapSettingHeader,
                 closeButton: true,
                 helpId     : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
+                scroll     : false,
                 helpButton : true,
                 content    : {
                     type          : 'buttongroup',
@@ -5588,12 +5636,13 @@ search.js
                     static   : false,
                     keyboard : true,
                     flexWidth: true,
-                    content : [{
+                    fixedContent: {
                         type : 'text',
                         label: {da:'Søgte efter', en:'Searched for'},
                         text : searchText,
                         after: searchAgainButton
-                    },{
+                    },
+                    content : {
                         type  : 'selectlist',
                         list  : selectlistItems,
                         onChange: function(id){
@@ -5601,7 +5650,7 @@ search.js
                             selectedSearchResultId = searchResultList[selectedSearchResultIndex].id;
                         },
                         onDblClick: onClick
-                    }],
+                    },
                     buttons : [
                         {
                             icon   : 'fa-info-circle',
