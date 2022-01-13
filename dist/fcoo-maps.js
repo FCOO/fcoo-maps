@@ -2008,10 +2008,19 @@ width : 250,    //TODO
             selectFormat: function(){ ns.globalSetting.edit(ns.events.UNITCHANGED); },
 
             adjustOrientationElement: function( $element/*, control */){
-                $element.vfFormat('direction');
+                //Add two elements with direction as text and as number
+                $element.addClass('flex-column');
+                if (!$element.children().length){
+                    $('<div/>')
+                        .vfFormat('direction_text')
+                        .appendTo($element);
+                    $('<div/>')
+                        .vfFormat('direction')
+                        .appendTo($element);
+                }
             },
             setOrientationNumber: function( orientation, $element/*, control */){
-                $element.vfValue(orientation);
+                $element.children().vfValue(orientation);
             }
         },
 
