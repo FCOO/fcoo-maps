@@ -24425,7 +24425,7 @@ div.btn, div.list-group-item {
     -webkit-box-shadow: none !important;
     box-shadow: none !important; }
   .btn.btn-standard.transparent {
-    background: none;
+    background: none !important;
     color: #515961;
     background: rgba(0, 0, 0, 0) linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0)) repeat-x;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -24515,7 +24515,6 @@ div.btn, div.list-group-item {
       color: rgba(212, 212, 212, 0.65);
       background: rgba(0, 0, 0, 0) linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0)) repeat-x; }
   .btn.btn-standard.semi-transparent {
-    background: none !important;
     color: #515961;
     background: rgba(248, 249, 250, 0.5); }
     .mouse-hover .hover .btn.btn-standard.semi-transparent:not(:active):not(:disabled):not(.disabled),
@@ -33307,6 +33306,12 @@ Font-family for four icons used in leaflet-bootstrap
 
 .fa-lb-contextmenu:before {
   content: "\ead6"; }
+
+/***********************************************
+Scale icons
+************************************************/
+.fa-scale-x-08 {
+  transform: scaleX(0.8); }
 
 /***********************************************
 leaflet-bootstrap-popup.scss,

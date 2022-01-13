@@ -2076,14 +2076,14 @@ width : 250,    //TODO
 
         //bsScale - default hidden
         bsScaleControl: true,
-        bsScaleOptions: { show : false },
+        bsScaleOptions: { show: false },
 
 
-        //legendControl: Install L.Control.Legend
-        legendControl: false,
+        //bsLegendControl - default hidden
+        bsLegendOptions: { show: false },
 
-        //bsCompassControl: Show device orientation
-        bsCompassControl: false,
+        //bsCompassControl  - default hidden
+        bsCompassOptions: { show: false },
 
         //routeControl: Install L.Control.Route
         routeControl: false,
