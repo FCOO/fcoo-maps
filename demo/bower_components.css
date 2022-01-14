@@ -25806,15 +25806,29 @@ body.modal-open .modal {
 .modal-dialog .modal-body-with-vertical-padding {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem; }
+  .modal-dialog .modal-body-with-vertical-padding.modal-body-with-horizontal-padding {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem; }
 
 .modal-dialog.modal-dialog-sm .modal-body-with-vertical-padding {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem; }
+  .modal-dialog.modal-dialog-sm .modal-body-with-vertical-padding.modal-body-with-horizontal-padding {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem; }
 
 .modal-dialog.modal-dialog-xs .modal-body-with-vertical-padding {
   padding-top: 0.1875rem;
   padding-bottom: 0.1875rem; }
+  .modal-dialog.modal-dialog-xs .modal-body-with-vertical-padding.modal-body-with-horizontal-padding {
+    padding-left: 0.1875rem;
+    padding-right: 0.1875rem; }
 
+/*
+@include content-padding-horizontal();
+@include content-padding-horizontal-sm();
+@include content-padding-horizontal-xs();
+*/
 .modal-content .modal-body-fixed.no-vertical-padding,
 .modal-content .modal-body.no-vertical-padding {
   padding-top: 0 !important;
@@ -30274,6 +30288,7 @@ Font-sizes for labels are same siae as header but incl a xxs-size
 CONTENT
 Unifies padding and font-size for content of modal, accordion, popup etc.
 Using same font-size and vertical/horizontal padding as buttons
+NOTE: For sm and xs y-padding = x-padding
 ************************************************************/
 /************************************************************
 MARGIN-BOTTOM

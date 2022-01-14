@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps",
-  "version": "1.12.2",
+  "version": "1.12.3",
   "homepage": "https://github.com/FCOO/fcoo-maps",
   "authors": [
     "Niels Holt"
@@ -28,7 +28,7 @@
   "dependencies": {
     "leaflet-map-sync": "FCOO/leaflet-map-sync#^2.0.0",
     "fcoo-maps-colors": "FCOO/fcoo-maps-colors#latest",
-    "fcoo-application": "https://gitlab.com/FCOO/fcoo-application.git#^13.0.0",
+    "fcoo-application": "FCOO/fcoo-application#^13.0.0",
     "fcoo-global-switches": "https://gitlab.com/FCOO/fcoo-global-switches.git#^0.1.0",
     "leaflet": "latest",
     "leaflet-bugfix": "fcoo/leaflet-bugfix#^2.0.2",
