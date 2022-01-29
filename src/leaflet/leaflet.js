@@ -165,7 +165,6 @@ Objects and methods to handle leaflet-maps
         //Marking main map
         isMainMap: true,
 
-
         //Animation Options
 //        zoomAnimation	        :       , //Boolean	true    Whether the map zoom animation is enabled. By default it's enabled in all browsers that support CSS3 Transitions except Android.
 //        zoomAnimationThreshold	:       , //Number	4	    Won't animate zoom if the zoom difference exceeds this value.

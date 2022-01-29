@@ -359,7 +359,7 @@ L.Layer.addInitHook(function(){
 
                     info.legend = new L.BsLegend({
                         index       : this.index,
-                        icon        : this.options.icon,
+                        icon        : this.options.legendIcon || this.options.icon,
                         text        : this.options.text || null,
 
                         content            : this.options.content,
