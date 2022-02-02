@@ -1,7 +1,7 @@
 {
   "name": "fcoo-maps",
-  "version": "1.13.0",
-  "homepage": "https://github.com/FCOO/fcoo-maps",
+  "version": "1.13.1",
+  "homepage": "https://github.com/fcoo/fcoo-maps",
   "authors": [
     "Niels Holt"
   ],
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/FCOO/fcoo-maps.git"
+    "url": "git://github.com/fcoo/fcoo-maps.git"
   },
   "license": "MIT",
   "ignore": [
@@ -26,13 +26,13 @@
     "es6"
   ],
   "dependencies": {
-    "leaflet-map-sync": "FCOO/leaflet-map-sync#^2.0.0",
-    "fcoo-maps-colors": "FCOO/fcoo-maps-colors#latest",
-    "fcoo-application": "FCOO/fcoo-application#^13.0.0",
-    "fcoo-global-switches": "https://gitlab.com/FCOO/fcoo-global-switches.git#^0.1.0",
+    "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.0.0",
+    "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
+    "fcoo-application": "fcoo/fcoo-application#^13.0.0",
+    "fcoo-global-switches": "fcoo/fcoo-global-switches#^0.1.0",
     "leaflet": "latest",
     "leaflet-bugfix": "fcoo/leaflet-bugfix#^2.0.2",
-    "leaflet-multi-maps": "FCOO/leaflet-multi-maps#^2.0.0",
+    "leaflet-multi-maps": "fcoo/leaflet-multi-maps#^2.0.0",
     "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.5.1",
     "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
     "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
@@ -47,7 +47,7 @@
     "clipboard": "zenorocha/clipboard.js#^2.0.6"
   },
   "devDependencies": {
-    "modernizr-scss": "https://github.com/FCOO/modernizr-scss.git#latest"
+    "modernizr-scss": "https://github.com/fcoo/modernizr-scss.git#latest"
   },
   "overrides": {
     "leaflet.locatecontrol": {
