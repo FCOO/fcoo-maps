@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps",
-  "version": "1.13.1",
+  "version": "1.13.2",
   "homepage": "https://github.com/fcoo/fcoo-maps",
   "authors": [
     "Niels Holt"
@@ -26,11 +26,10 @@
     "es6"
   ],
   "dependencies": {
-    "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.0.0",
-    "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
     "fcoo-application": "fcoo/fcoo-application#^13.0.0",
-    "leaflet": "latest",
-    "leaflet-bugfix": "fcoo/leaflet-bugfix#^2.0.2",
+    "leaflet-bower-bugfix-switches": "fcoo/leaflet-bower-bugfix-switches#~1.0.1",
+    "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
+    "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.0.0",
     "leaflet-multi-maps": "fcoo/leaflet-multi-maps#^2.0.0",
     "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.5.1",
     "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
@@ -56,6 +55,6 @@
     }
   },
   "resolutions": {
-    "fcoo-fontawesome": "6.0.0-beta2"
+    "leaflet-bugfix": "3.0.0"
   }
 }

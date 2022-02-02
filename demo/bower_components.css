@@ -1,3 +1,268 @@
+/***********************************************
+    fcoo-modernizr-mediaquery-device.scss,
+
+    (c) 2016, FCOO
+
+    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
+    https://github.com/FCOO
+
+
+************************************************/
+/***********************************************
+    _fcoo-modernizr-mediaquery-variables.scss,
+
+    (c) 2016, FCOO
+
+    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
+    https://github.com/FCOO
+
+************************************************/
+/***********************************************
+    modernizr-mediaquery.scss, 
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-mediaquery
+    https://github.com/FCOO
+
+************************************************/
+/***********************************************
+    modernizr-mediaquery-variables.scss, 
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-mediaquery
+    https://github.com/FCOO
+
+    Variables and functions to create modernizr-mediaquery.css
+
+************************************************/
+/***********************************************
+    _modernizr-mediaquery-orientation_print.scss, 
+
+    (c) 2015, FCOO
+
+    https://github.com/FCOO/modernizr-mediaquery
+    https://github.com/FCOO
+
+    Media-query for orientation and print
+
+************************************************/
+.show-for-landscape {
+  display: block !important; }
+
+.hide-for-landscape {
+  display: none !important; }
+
+.hide-for-portrait {
+  display: block !important; }
+
+.show-for-portrait {
+  display: none !important; }
+
+@media screen and (orientation: landscape) {
+  .show-for-landscape {
+    display: block !important; }
+  .hide-for-landscape {
+    display: none !important; }
+  .hide-for-portrait {
+    display: block !important; }
+  .show-for-portrait {
+    display: none !important; } }
+
+@media screen and (orientation: portrait) {
+  .hide-for-landscape {
+    display: block !important; }
+  .show-for-landscape {
+    display: none !important; }
+  .show-for-portrait {
+    display: block !important; }
+  .hide-for-portrait {
+    display: none !important; } }
+
+.show-for-print {
+  display: none !important; }
+
+@media print {
+  .show-for-print {
+    display: block !important; }
+  .hide-for-print {
+    display: none !important; } }
+
+@media only screen {
+  html.mini .hide-for-mini {
+    display: none !important; }
+  html.no-mini .show-for-mini {
+    display: none !important; } }
+
+@media only screen {
+  html.mini-down .hide-for-mini-down {
+    display: none !important; }
+  html.no-mini-down .show-for-mini-down {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-port .hide-for-xsmall-port {
+    display: none !important; }
+  html.no-xsmall-port .show-for-xsmall-port {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-port-down .hide-for-xsmall-port-down {
+    display: none !important; }
+  html.no-xsmall-port-down .show-for-xsmall-port-down {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-port-up .hide-for-xsmall-port-up {
+    display: none !important; }
+  html.no-xsmall-port-up .show-for-xsmall-port-up {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-land .hide-for-xsmall-land {
+    display: none !important; }
+  html.no-xsmall-land .show-for-xsmall-land {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-land-down .hide-for-xsmall-land-down {
+    display: none !important; }
+  html.no-xsmall-land-down .show-for-xsmall-land-down {
+    display: none !important; } }
+
+@media only screen {
+  html.xsmall-land-up .hide-for-xsmall-land-up {
+    display: none !important; }
+  html.no-xsmall-land-up .show-for-xsmall-land-up {
+    display: none !important; } }
+
+@media only screen {
+  html.small .hide-for-small {
+    display: none !important; }
+  html.no-small .show-for-small {
+    display: none !important; } }
+
+@media only screen {
+  html.small-down .hide-for-small-down {
+    display: none !important; }
+  html.no-small-down .show-for-small-down {
+    display: none !important; } }
+
+@media only screen {
+  html.small-up .hide-for-small-up {
+    display: none !important; }
+  html.no-small-up .show-for-small-up {
+    display: none !important; } }
+
+@media only screen {
+  html.medium .hide-for-medium {
+    display: none !important; }
+  html.no-medium .show-for-medium {
+    display: none !important; } }
+
+@media only screen {
+  html.medium-down .hide-for-medium-down {
+    display: none !important; }
+  html.no-medium-down .show-for-medium-down {
+    display: none !important; } }
+
+@media only screen {
+  html.medium-up .hide-for-medium-up {
+    display: none !important; }
+  html.no-medium-up .show-for-medium-up {
+    display: none !important; } }
+
+@media only screen {
+  html.large .hide-for-large {
+    display: none !important; }
+  html.no-large .show-for-large {
+    display: none !important; } }
+
+@media only screen {
+  html.large-down .hide-for-large-down {
+    display: none !important; }
+  html.no-large-down .show-for-large-down {
+    display: none !important; } }
+
+@media only screen {
+  html.large-up .hide-for-large-up {
+    display: none !important; }
+  html.no-large-up .show-for-large-up {
+    display: none !important; } }
+
+@media only screen {
+  html.xlarge .hide-for-xlarge {
+    display: none !important; }
+  html.no-xlarge .show-for-xlarge {
+    display: none !important; } }
+
+@media only screen {
+  html.xlarge-up .hide-for-xlarge-up {
+    display: none !important; }
+  html.no-xlarge-up .show-for-xlarge-up {
+    display: none !important; } }
+
+.modernizr-mediaquery-media-query {
+  font-family: "mini=screen and (max-width: 19.9375em)&mini-down=screen and (max-width: 19.9375em)&xsmall-port=screen and (min-width: 20em) and (max-width: 29.9375em)&xsmall-port-down=screen and (max-width: 29.9375em)&xsmall-port-up=screen and (min-width: 20em)&xsmall-land=screen and (min-width: 30em) and (max-width: 35.9375em)&xsmall-land-down=screen and (max-width: 35.9375em)&xsmall-land-up=screen and (min-width: 30em)&small=screen and (min-width: 36em) and (max-width: 47.9375em)&small-down=screen and (max-width: 47.9375em)&small-up=screen and (min-width: 36em)&medium=screen and (min-width: 48em) and (max-width: 61.9375em)&medium-down=screen and (max-width: 61.9375em)&medium-up=screen and (min-width: 48em)&large=screen and (min-width: 62em) and (max-width: 74.9375em)&large-down=screen and (max-width: 74.9375em)&large-up=screen and (min-width: 62em)&xlarge=screen and (min-width: 75em)&xlarge-up=screen and (min-width: 75em)&landscape=screen and (orientation: landscape)&portrait=screen and (orientation: portrait)"; }
+
+.modernizr-mediaquery-min-max {
+  font-family: "mini=0px_319px&mini-down=0_319px&xsmall-port=320px_479px&xsmall-port-down=0_479px&xsmall-port-up=320px_0&xsmall-land=480px_575px&xsmall-land-down=0_575px&xsmall-land-up=480px_0&small=576px_767px&small-down=0_767px&small-up=576px_0&medium=768px_991px&medium-down=0_991px&medium-up=768px_0&large=992px_1199px&large-down=0_1199px&large-up=992px_0&xlarge=1200px_0px&xlarge-up=1200px_0&landscape=0_1_1&portrait=0_1_0_1"; }
+
+html.fullscreen .hide-for-fullscreen {
+  display: none !important; }
+
+html.no-fullscreen .show-for-fullscreen {
+  display: none !important; }
+
+html.https .hide-for-https {
+  display: none !important; }
+
+html.no-https .show-for-https {
+  display: none !important; }
+
+/***********************************************
+	modernizr-mouse-events.scss,
+
+	(c) 2018, FCOO
+
+	https://github.com/FCOO/modernizr-mouse-events
+	https://github.com/FCOO
+
+
+************************************************/
+html.mouse .hide-for-mouse {
+  display: none !important; }
+
+html.mouse .show-for-no-mouse {
+  display: none !important; }
+
+html.no-mouse .show-for-mouse {
+  display: none !important; }
+
+html.no-mouse .hide-for-no-mouse {
+  display: none !important; }
+
+html.mouse-hover .hide-for-mouse-hover {
+  display: none !important; }
+
+html.mouse-hover .show-for-no-mouse-hover {
+  display: none !important; }
+
+html.no-mouse-hover .show-for-mouse-hover {
+  display: none !important; }
+
+html.no-mouse-hover .hide-for-no-mouse-hover {
+  display: none !important; }
+
+._test-for-hover_ {
+  display: none;
+  font-family: "__NO_HOVER_SUPPORT__"; }
+
+@media (hover: hover) {
+  ._test-for-hover_ {
+    font-family: "__HOVER_SUPPORT__"; } }
+
 /* required styles */
 
 .leaflet-pane,
@@ -638,271 +903,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	margin-left: -12px;
 	border-right-color: #fff;
 	}
-
-/***********************************************
-    fcoo-modernizr-mediaquery-device.scss,
-
-    (c) 2016, FCOO
-
-    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
-    https://github.com/FCOO
-
-
-************************************************/
-/***********************************************
-    _fcoo-modernizr-mediaquery-variables.scss,
-
-    (c) 2016, FCOO
-
-    https://github.com/FCOO/fcoo-modernizr-mediaquery-device
-    https://github.com/FCOO
-
-************************************************/
-/***********************************************
-    modernizr-mediaquery.scss, 
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-mediaquery
-    https://github.com/FCOO
-
-************************************************/
-/***********************************************
-    modernizr-mediaquery-variables.scss, 
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-mediaquery
-    https://github.com/FCOO
-
-    Variables and functions to create modernizr-mediaquery.css
-
-************************************************/
-/***********************************************
-    _modernizr-mediaquery-orientation_print.scss, 
-
-    (c) 2015, FCOO
-
-    https://github.com/FCOO/modernizr-mediaquery
-    https://github.com/FCOO
-
-    Media-query for orientation and print
-
-************************************************/
-.show-for-landscape {
-  display: block !important; }
-
-.hide-for-landscape {
-  display: none !important; }
-
-.hide-for-portrait {
-  display: block !important; }
-
-.show-for-portrait {
-  display: none !important; }
-
-@media screen and (orientation: landscape) {
-  .show-for-landscape {
-    display: block !important; }
-  .hide-for-landscape {
-    display: none !important; }
-  .hide-for-portrait {
-    display: block !important; }
-  .show-for-portrait {
-    display: none !important; } }
-
-@media screen and (orientation: portrait) {
-  .hide-for-landscape {
-    display: block !important; }
-  .show-for-landscape {
-    display: none !important; }
-  .show-for-portrait {
-    display: block !important; }
-  .hide-for-portrait {
-    display: none !important; } }
-
-.show-for-print {
-  display: none !important; }
-
-@media print {
-  .show-for-print {
-    display: block !important; }
-  .hide-for-print {
-    display: none !important; } }
-
-@media only screen {
-  html.mini .hide-for-mini {
-    display: none !important; }
-  html.no-mini .show-for-mini {
-    display: none !important; } }
-
-@media only screen {
-  html.mini-down .hide-for-mini-down {
-    display: none !important; }
-  html.no-mini-down .show-for-mini-down {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-port .hide-for-xsmall-port {
-    display: none !important; }
-  html.no-xsmall-port .show-for-xsmall-port {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-port-down .hide-for-xsmall-port-down {
-    display: none !important; }
-  html.no-xsmall-port-down .show-for-xsmall-port-down {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-port-up .hide-for-xsmall-port-up {
-    display: none !important; }
-  html.no-xsmall-port-up .show-for-xsmall-port-up {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-land .hide-for-xsmall-land {
-    display: none !important; }
-  html.no-xsmall-land .show-for-xsmall-land {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-land-down .hide-for-xsmall-land-down {
-    display: none !important; }
-  html.no-xsmall-land-down .show-for-xsmall-land-down {
-    display: none !important; } }
-
-@media only screen {
-  html.xsmall-land-up .hide-for-xsmall-land-up {
-    display: none !important; }
-  html.no-xsmall-land-up .show-for-xsmall-land-up {
-    display: none !important; } }
-
-@media only screen {
-  html.small .hide-for-small {
-    display: none !important; }
-  html.no-small .show-for-small {
-    display: none !important; } }
-
-@media only screen {
-  html.small-down .hide-for-small-down {
-    display: none !important; }
-  html.no-small-down .show-for-small-down {
-    display: none !important; } }
-
-@media only screen {
-  html.small-up .hide-for-small-up {
-    display: none !important; }
-  html.no-small-up .show-for-small-up {
-    display: none !important; } }
-
-@media only screen {
-  html.medium .hide-for-medium {
-    display: none !important; }
-  html.no-medium .show-for-medium {
-    display: none !important; } }
-
-@media only screen {
-  html.medium-down .hide-for-medium-down {
-    display: none !important; }
-  html.no-medium-down .show-for-medium-down {
-    display: none !important; } }
-
-@media only screen {
-  html.medium-up .hide-for-medium-up {
-    display: none !important; }
-  html.no-medium-up .show-for-medium-up {
-    display: none !important; } }
-
-@media only screen {
-  html.large .hide-for-large {
-    display: none !important; }
-  html.no-large .show-for-large {
-    display: none !important; } }
-
-@media only screen {
-  html.large-down .hide-for-large-down {
-    display: none !important; }
-  html.no-large-down .show-for-large-down {
-    display: none !important; } }
-
-@media only screen {
-  html.large-up .hide-for-large-up {
-    display: none !important; }
-  html.no-large-up .show-for-large-up {
-    display: none !important; } }
-
-@media only screen {
-  html.xlarge .hide-for-xlarge {
-    display: none !important; }
-  html.no-xlarge .show-for-xlarge {
-    display: none !important; } }
-
-@media only screen {
-  html.xlarge-up .hide-for-xlarge-up {
-    display: none !important; }
-  html.no-xlarge-up .show-for-xlarge-up {
-    display: none !important; } }
-
-.modernizr-mediaquery-media-query {
-  font-family: "mini=screen and (max-width: 19.9375em)&mini-down=screen and (max-width: 19.9375em)&xsmall-port=screen and (min-width: 20em) and (max-width: 29.9375em)&xsmall-port-down=screen and (max-width: 29.9375em)&xsmall-port-up=screen and (min-width: 20em)&xsmall-land=screen and (min-width: 30em) and (max-width: 35.9375em)&xsmall-land-down=screen and (max-width: 35.9375em)&xsmall-land-up=screen and (min-width: 30em)&small=screen and (min-width: 36em) and (max-width: 47.9375em)&small-down=screen and (max-width: 47.9375em)&small-up=screen and (min-width: 36em)&medium=screen and (min-width: 48em) and (max-width: 61.9375em)&medium-down=screen and (max-width: 61.9375em)&medium-up=screen and (min-width: 48em)&large=screen and (min-width: 62em) and (max-width: 74.9375em)&large-down=screen and (max-width: 74.9375em)&large-up=screen and (min-width: 62em)&xlarge=screen and (min-width: 75em)&xlarge-up=screen and (min-width: 75em)&landscape=screen and (orientation: landscape)&portrait=screen and (orientation: portrait)"; }
-
-.modernizr-mediaquery-min-max {
-  font-family: "mini=0px_319px&mini-down=0_319px&xsmall-port=320px_479px&xsmall-port-down=0_479px&xsmall-port-up=320px_0&xsmall-land=480px_575px&xsmall-land-down=0_575px&xsmall-land-up=480px_0&small=576px_767px&small-down=0_767px&small-up=576px_0&medium=768px_991px&medium-down=0_991px&medium-up=768px_0&large=992px_1199px&large-down=0_1199px&large-up=992px_0&xlarge=1200px_0px&xlarge-up=1200px_0&landscape=0_1_1&portrait=0_1_0_1"; }
-
-html.fullscreen .hide-for-fullscreen {
-  display: none !important; }
-
-html.no-fullscreen .show-for-fullscreen {
-  display: none !important; }
-
-html.https .hide-for-https {
-  display: none !important; }
-
-html.no-https .show-for-https {
-  display: none !important; }
-
-/***********************************************
-	modernizr-mouse-events.scss,
-
-	(c) 2018, FCOO
-
-	https://github.com/FCOO/modernizr-mouse-events
-	https://github.com/FCOO
-
-
-************************************************/
-html.mouse .hide-for-mouse {
-  display: none !important; }
-
-html.mouse .show-for-no-mouse {
-  display: none !important; }
-
-html.no-mouse .show-for-mouse {
-  display: none !important; }
-
-html.no-mouse .hide-for-no-mouse {
-  display: none !important; }
-
-html.mouse-hover .hide-for-mouse-hover {
-  display: none !important; }
-
-html.mouse-hover .show-for-no-mouse-hover {
-  display: none !important; }
-
-html.no-mouse-hover .show-for-mouse-hover {
-  display: none !important; }
-
-html.no-mouse-hover .hide-for-no-mouse-hover {
-  display: none !important; }
-
-._test-for-hover_ {
-  display: none;
-  font-family: "__NO_HOVER_SUPPORT__"; }
-
-@media (hover: hover) {
-  ._test-for-hover_ {
-    font-family: "__HOVER_SUPPORT__"; } }
 
 @charset "UTF-8";
 /***********************************************
