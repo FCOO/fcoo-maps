@@ -29,7 +29,6 @@
     "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.0.0",
     "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
     "fcoo-application": "fcoo/fcoo-application#^13.0.0",
-    "fcoo-global-switches": "fcoo/fcoo-global-switches#^0.1.0",
     "leaflet": "latest",
     "leaflet-bugfix": "fcoo/leaflet-bugfix#^2.0.2",
     "leaflet-multi-maps": "fcoo/leaflet-multi-maps#^2.0.0",
