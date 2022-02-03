@@ -655,7 +655,7 @@ search.js
             }
 
             //Create the marker - is allways created to be used for initial popup
-            this.marker = L.bsMarkerCircle(this.searchResult.options.latLng, {
+            this.marker = L.bsMarkerSimpleRound(this.searchResult.options.latLng, {
                 size           : 'small',
                 colorName      : searchResultColor,
                 borderColorName: searchResultLineColor,
