@@ -620,8 +620,8 @@
                     //Using isVisibleInMultiMaps from multi-maps to report if a map is visible
                     return map.isVisibleInMultiMaps;
                 },
-                //maxZoomOffset = Expected max different in zoom-level between any maps. No check is preformed.
-                maxZoomOffset: nsMap.setupOptions.multiMaps.maxZoomOffset,
+                //maxZoomOffset = Expected max different in zoom-level between any maps. Since it can be +/- nsMap.setupOptions.multiMaps.maxZoomOffset => 2*
+                maxZoomOffset: 2 * nsMap.setupOptions.multiMaps.maxZoomOffset,
 
 
             });
