@@ -1057,7 +1057,11 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
                 mapIsVisible: function( map ){
                     //Using isVisibleInMultiMaps from multi-maps to report if a map is visible
                     return map.isVisibleInMultiMaps;
-                }
+                },
+                //maxZoomOffset = Expected max different in zoom-level between any maps. No check is preformed.
+                maxZoomOffset: nsMap.setupOptions.multiMaps.maxZoomOffset,
+
+
             });
 
             //Create main map
