@@ -2957,6 +2957,12 @@ L.Layer.addInitHook(function(){
 
             this.hideColorInfo(map);
 
+            //Close popup (if any)
+            if (info.layer._popup && info.layer.closePopup){
+                info.layer._popup._pinned = false;
+                info.layer.closePopup();
+            };
+
             //Remove this from map
             info.map = null;
             info.layer.removeFrom(map);
