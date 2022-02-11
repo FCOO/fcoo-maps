@@ -2967,7 +2967,7 @@ L.Layer.addInitHook(function(){
                         layer._popup._pinned = false;
                         layer.closePopup();
                     }
-            };
+            }
             closePopup( info.layer );
 
 
