@@ -357,6 +357,7 @@ L.Layer.addInitHook(function(){
                             buttonOptions.class = (buttonOptions.class || '') + ' ' + _this.showAndHideClasses + '-visibility';
                     });
 
+
                     info.legend = new L.BsLegend({
                         index       : this.index,
                         icon        : this.options.legendIcon || this.options.icon,
@@ -366,7 +367,7 @@ L.Layer.addInitHook(function(){
                         noVerticalPadding  : this.options.noVerticalPadding,
                         noHorizontalPadding: this.options.noHorizontalPadding,
 
-                        buttonList  : buttonList,
+                        buttonList  : buttonList.length ? buttonList : null,
 
                         onInfo      : this.options.onInfo,
                         onWarning   : this.options.onWarning,
