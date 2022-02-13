@@ -2387,7 +2387,15 @@ options = {
     layerOptions    : {},       //Specific options for the Layer. Can include options marked (*)
 
     //Legend
-    buttonList: []bsButton-options + onlyShowWhenLayer: BOOLEAN. When true the button is only visible when the layer is visible
+    legendOptions: {
+        buttonList : []bsButton-options + onlyShowWhenLayer: BOOLEAN. When true the button is only visible when the layer is visible.
+        onInfo     : function()
+        onWarning  : function()
+    }
+
+    buttonList: Same as legendOptions.buttonList kept for backward combability
+    onInfo    : Same as legendOptions.onInfo kept for backward combability
+    onWarning : Same as legendOptions.onWarning kept for backward combability
 
     //colorInfo = options for showing info on the postion of the cursor/map center
     colorInfo: {
@@ -2491,6 +2499,7 @@ L.Layer.addInitHook(function(){
             createPane      : false,
             createMarkerPane: false,
             layerOptions    : {},
+            legendOptions   : {},
             colorInfo       : null,
         },
 
@@ -2619,6 +2628,16 @@ L.Layer.addInitHook(function(){
     function MapLayer(options) {
         this.options = $.extend(true, {}, defaultOptions, options || {});
 
+        //A list of options can for backward combability reasons be found both in options and in options.legendOptions
+        var _options = this.options,
+            _legendOptions = this.options.legendOptions;
+        $.each(['buttonList', 'buttons', 'content', 'noVerticalPadding', 'noHorizontalPadding', 'onInfo', 'onWarning'], function(index, id){
+            if ((_legendOptions[id] === undefined) && (_options[id] !== undefined)){
+                _legendOptions[id] = _options[id];
+                delete _options[id];
+            }
+        });
+
         this.index = this.options.index || maxLayerIndex + 1;
         maxLayerIndex = Math.max(maxLayerIndex, this.index);
 
@@ -2715,7 +2734,8 @@ L.Layer.addInitHook(function(){
             if (map.bsLegendControl && !this.options.noLegend){
 
                 if (!info.legend){
-                    var buttonList = this.options.buttonList || this.options.buttons;
+                    var legendOptions = this.options.legendOptions,
+                        buttonList = legendOptions.buttonList || legendOptions.buttons;
 
                     //If a button has onlyShowWhenLayer = true => the button is only visible if the layer is visible/shown
                     $.each(buttonList, function(dummy, buttonOptions){
@@ -2724,23 +2744,29 @@ L.Layer.addInitHook(function(){
                     });
 
 
-                    info.legend = new L.BsLegend({
+                    legendOptions = $.extend(true, {}, {
                         index       : this.index,
                         icon        : this.options.legendIcon || this.options.icon,
                         text        : this.options.text || null,
 
-                        content            : this.options.content,
-                        noVerticalPadding  : this.options.noVerticalPadding,
-                        noHorizontalPadding: this.options.noHorizontalPadding,
+                        //content            : this.options.content,
+                        //noVerticalPadding  : this.options.noVerticalPadding,
+                        //noHorizontalPadding: this.options.noHorizontalPadding,
 
-                        buttonList  : buttonList.length ? buttonList : null,
+                        //buttonList  : buttonList.length ? buttonList : null,
 
-                        onInfo      : this.options.onInfo,
-                        onWarning   : this.options.onWarning,
+                        //onInfo      : this.options.onInfo,
+                        //onWarning   : this.options.onWarning,
                         onRemove    : $.proxy(this.removeViaLegend, this),
                         normalIconClass: this.showAndHideClasses,
                         hiddenIconClass: this.inversShowAndHideClasses,
-                    });
+
+                    }, legendOptions);
+
+                    delete legendOptions.buttons;
+                    legendOptions.buttonList = buttonList.length ? buttonList : null;
+
+                    info.legend = new L.BsLegend( legendOptions );
                 }
 
                 map.bsLegendControl.addLegend( info.legend );
@@ -2912,6 +2938,7 @@ L.Layer.addInitHook(function(){
                 if (info && info.legend && ((onlyIndex == undefined) || (index == onlyIndex)))
                     info.legend[methodName].apply(info.legend, arg);
             });
+            return this;
         },
         //callAllInfoBox: Call this.methodName with arg (array) for all infoBox (colorInfo)
         callAllInfoBox: function( methodName, arg, onlyIndex ){
@@ -2920,8 +2947,28 @@ L.Layer.addInitHook(function(){
                     info.infoBox[methodName].apply(info.infoBox, arg);
                 }
             });
+            return this;
         },
 
+
+        /*********************************************************
+        Methods to show/hide the legend and show/hide the content og the legend
+        *********************************************************/
+        showLegend: function( extended ){
+            return this.callAllLegends('toggle', [true, extended]);
+        },
+
+        hideLegend: function( extended ){
+            return this.callAllLegends('toggle', [false, extended]);
+        },
+
+        showLegendContent: function( extended ){
+            return this.callAllLegends('toggleContent', [true, extended]);
+        },
+
+        hideLegendContent: function( extended ){
+            return this.callAllLegends('toggleContent', [false, extended]);
+        },
 
         /*********************************************************
         Methods to remove MapLayer from a map

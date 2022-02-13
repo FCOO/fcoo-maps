@@ -45,6 +45,3 @@ Copyright (c) 2020 [FCOO](https://github.com/FCOO)
 ## Contact information
 
 Niels Holt nho@fcoo.dk
-
-
-## Credits and acknowledgements

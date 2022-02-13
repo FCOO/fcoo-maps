@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps",
-  "version": "1.13.11",
+  "version": "1.14.0",
   "homepage": "https://github.com/fcoo/fcoo-maps",
   "authors": [
     "Niels Holt"
@@ -35,7 +35,7 @@
     "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
     "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
     "leaflet.edgebuffer": "TolonUK/Leaflet.EdgeBuffer#^1.0.3",
-    "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^3.10.1",
+    "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^3.13.0",
     "leaflet-bootstrap-marker": "fcoo/leaflet-bootstrap-marker#^3.0.0",
     "leaflet-polyline": "fcoo/leaflet-polyline#^2.4.2",
     "leaflet-bootstrap-draw": "fcoo/leaflet-bootstrap-draw#^4.0.0",
