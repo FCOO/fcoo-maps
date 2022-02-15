@@ -2735,7 +2735,7 @@ L.Layer.addInitHook(function(){
 
                 if (!info.legend){
                     var legendOptions = this.options.legendOptions,
-                        buttonList = legendOptions.buttonList || legendOptions.buttons;
+                        buttonList = legendOptions.buttonList || legendOptions.buttons || [];
 
                     //If a button has onlyShowWhenLayer = true => the button is only visible if the layer is visible/shown
                     $.each(buttonList, function(dummy, buttonOptions){
