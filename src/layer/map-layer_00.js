@@ -52,6 +52,22 @@ options = {
 }
 
 
+SETTING
+Map_Layer has the following methods to set and save settings the layer:
+
+//applySetting - apply individual setting for the Map_layer
+applySetting: function(setting, map, mapInfo, mapIndex){
+    //Apply setting for this layer at map. setting = {..} with options for this layer on map/mapInfo/mapIndex
+},
+
+//saveSetting: function() - Return individual setting for the Map_layer
+saveSetting: function(map, mapInfo, mapIndex){
+    //Return {..} with options for this layer on map/mapInfo/mapIndex
+},
+
+
+
+
 
 
 ****************************************************************************/
@@ -297,7 +313,7 @@ L.Layer.addInitHook(function(){
         ns.appSetting.add({
             id          : this.id,
             callApply   : true,
-            applyFunc   : $.proxy(this.applySetting, this),
+            applyFunc   : $.proxy(this._applySetting, this),
             defaultValue: {}
         });
 
@@ -317,7 +333,13 @@ L.Layer.addInitHook(function(){
         /*********************************************************
         applySetting and saveSetting
         *********************************************************/
-        applySetting: function(data){
+
+        //applySetting - apply individuel setting for the Map_layer
+        applySetting: function(/*setting, map, mapInfo, mapIndex*/){
+
+        },
+
+        _applySetting: function(data){
             var _this = this;
             nsMap.visitAllMaps( function(map, index){
                 var setting = data[index] || {};
@@ -327,17 +349,29 @@ L.Layer.addInitHook(function(){
                     _this.removeFrom(map);
 
                 //colorInfo - TODO
+
+
+                //Individual setting
+                _this.applySetting(setting, map, _this.info[index], index);
             });
         },
 
-        saveSetting: function(){
+        //saveSetting: function() - Return individuel setting for the Map_layer
+        saveSetting: function(/*map, mapInfo, mapIndex*/){
+            return {};
+        },
+
+        _saveSetting: function(){
             var _this = this,
                 data = {};
-            $.each(this.info, function(index/*, info*/){
-                data[index] = {
-                    show     : _this.isAddedToMap(index)
-                    //colorInfo - TODO
-                };
+            $.each(this.info, function(index, info){
+                data[index] =
+                    $.extend({
+                        show: _this.isAddedToMap(index)
+                        //colorInfo - TODO
+                    },
+                        _this.saveSetting(info ? info.map : null, info, index) || {}
+                    );
             });
             ns.appSetting.set(this.id, data);
             ns.appSetting.save();
@@ -553,7 +587,7 @@ L.Layer.addInitHook(function(){
             if (this.options.onAdd)
                 this.options.onAdd(map, layer);
 
-            this.saveSetting();
+            this._saveSetting();
 
             return this;
         },
@@ -662,7 +696,7 @@ L.Layer.addInitHook(function(){
             if (this.options.onRemove)
                 this.options.onRemove(map, info.layer);
 
-            this.saveSetting();
+            this._saveSetting();
 
             return this;
         },
