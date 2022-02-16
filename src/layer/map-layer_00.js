@@ -639,6 +639,46 @@ L.Layer.addInitHook(function(){
         },
 
         /*********************************************************
+        Methods to find all buttons in legend or popups on the layer
+        *********************************************************/
+        findAllLegendButtons: function(select = ''){
+            var $result = $();
+            $.each(this.info, function(index, info){
+                if (info && info.legend && info.legend.$buttonContainer){
+                    var $buttons = info.legend.$buttonContainer.children(select);
+                    if ($buttons.length)
+                        $result = $result.add($buttons);
+                }
+            });
+            return $result;
+        },
+
+        findAllPopupButtons: function(select = '') {
+            var $result = $();
+            $.each(this.info, function(index, info){
+                if (info && info.layer &&
+                    info.layer._popup &&
+                    info.layer._popup.bsModal &&
+                    info.layer._popup.bsModal.$buttons &&
+                    info.layer._popup.bsModal.$buttons.length){
+
+                    //For (to Niels) unknown reasons filter(select) do not work as expected
+                    //$result.add( $(info.layer._popup.bsModal.$buttons).filter(select) );
+                    //Instead test each element
+                    $( info.layer._popup.bsModal.$buttons ).each(function(){
+                        var $this = $(this);
+                        if ((!select) || $this.is(select))
+                            $result = $result.add( $this );
+                    });
+                }
+            });
+            return $result;
+        },
+
+
+
+
+        /*********************************************************
         Methods to remove MapLayer from a map
         *********************************************************/
         removeViaLegend: function(legend){
