@@ -2978,6 +2978,16 @@ L.Layer.addInitHook(function(){
         },
 
 
+        //visitAllLayers: Call method( layer, mapLayer) for all layer
+        visitAllLayers: function(method, onlyIndex){
+            var _this = this;
+            $.each(this.info, function(index, info){
+                if (info && info.layer && ((onlyIndex == undefined) || (index == onlyIndex)))
+                    method(info.layer, _this);
+            });
+            return this;
+        },
+
         //callAllLegends: Call methodName with arg (array) for all legend
         callAllLegends: function( methodName, arg, onlyIndex ){
             $.each(this.info, function(index, info){
