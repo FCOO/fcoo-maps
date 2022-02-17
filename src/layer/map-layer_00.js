@@ -594,12 +594,24 @@ L.Layer.addInitHook(function(){
 
         /*********************************************************
         Methods to handle events regarding loading, load colorInfo:
-        Updating legend and bsPosition.infoBox state and color-info
+        Updating layer, legend and bsPosition.infoBox state and color-info
         *********************************************************/
         //_getMapIndex: Get mapIndex from event
         _getMapIndex: function(event){
             return event.sourceTarget._map.fcooMapIndex;
         },
+
+
+        //callAllLayers: Call methodName with arg (array) for all layer
+        callAllLayers: function( methodName, arg, onlyIndex ){
+            $.each(this.info, function(index, info){
+                if (info && info.layer && ((onlyIndex == undefined) || (index == onlyIndex)))
+                    info.layer[methodName].apply(info.layer, arg);
+            });
+            return this;
+        },
+
+
         //callAllLegends: Call methodName with arg (array) for all legend
         callAllLegends: function( methodName, arg, onlyIndex ){
             $.each(this.info, function(index, info){
