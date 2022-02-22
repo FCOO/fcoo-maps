@@ -50,7 +50,7 @@ control-route.js
                 {da: '- Klik på et punkt for fjerne det',         en: '- Click on a point to remove it'},
             ];
             $.each( routeTutorial, function( index, text ){
-                routeTutorial[index] = {type:'textbox', noBorder: true, text: text};
+                routeTutorial[index] = {type: 'text', noBorder: true, text: text};
             });
 
             this.modalFormControl = L.control.bsModalForm({

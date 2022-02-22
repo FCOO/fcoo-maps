@@ -128,7 +128,7 @@ control-route.js
                 {da: '- Klik på et punkt for fjerne det',         en: '- Click on a point to remove it'},
             ];
             $.each( routeTutorial, function( index, text ){
-                routeTutorial[index] = {type:'textbox', noBorder: true, text: text};
+                routeTutorial[index] = {type: 'text', noBorder: true, text: text};
             });
 
             this.modalFormControl = L.control.bsModalForm({
@@ -6099,33 +6099,36 @@ search.js
             var lang = ns.globalSetting.get('language'),
                 content = [{
                     label    : {da:'Navn(e)', en:'Name(s)'},
-                    type     : 'textarea',
+                    type     : 'text',
                     text     : this.names[lang].split('&nbsp;/&nbsp;').join('<br>'),
-                    textClass: 'd-block font-weight-bold text-center w-100',
+                    center   : true,
+                    textStyle: 'font-weight-bold'
                 }];
 
             //Add position.
             if (this.inclPositionIsDetails)
                 content.push({
                     label    : {da:'Position', en:'Position'},
-                    type     : 'textarea',//'textarea',
+                    type     : 'text',
                     vfFormat : 'latlng',
                     vfValue  : this.options.latLng,
-                    textClass: 'd-block text-center w-100',
+                    center   : true,
+                    textStyle: 'center',
+
                     onClick  : $.proxy(this.showLatLngModal, this)
                 });
 
 
             //Add content from details
-            content = content.concat( nsMap.osm_details_list(this, {type: 'textarea', textClass: 'd-block text-center w-100'} ) );
+            content = content.concat( nsMap.osm_details_list(this, {type: 'text', center: true} ) );
 
             //Special case: Add flag
             if (this.options.extratags && this.options.extratags.flag)
                 content.push({
                     label    : {da:'Flag', en:'Flag'},
-                    type     : 'textarea',
+                    type     : 'text',
                     text     : '<img src="'+this.options.extratags.flag+'" style="border: 1px solid gray; height:100px"/>',
-                    textClass: 'd-block text-center w-100'
+                    center   : true
                 });
 
             this.langDetails = this.langDetails || {};
