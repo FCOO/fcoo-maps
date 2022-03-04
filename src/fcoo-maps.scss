@@ -359,3 +359,21 @@ Adjusted for new icons set in src/leaflet/leaflet.js
     //color: black;
     transform: translateX(-.1em) scaleX(.75);
 }
+
+
+/**********************************************************
+DATASET-VALUE
+Style for elements created by Dataset and DatasetValue
+See src/common/dataset.js
+**********************************************************/
+.show-for-dataset-value-is-null {
+    display: none !important;
+}
+
+.dataset-value-is-null {
+    &.hide-for-dataset-value-is-null { display: none !important; }
+
+    .hide-for-dataset-value-is-null { display: none !important; }
+    .show-for-dataset-value-is-null { display: block !important; }
+}
+

@@ -1092,3 +1092,20 @@ Adjusted for new icons set in src/leaflet/leaflet.js
 
 .no-device-orientation .lb-compass-btn .no-device-orientation-slash {
   transform: translateX(-0.1em) scaleX(0.75); }
+
+/**********************************************************
+DATASET-VALUE
+Style for elements created by Dataset and DatasetValue
+See src/common/dataset.js
+**********************************************************/
+.show-for-dataset-value-is-null {
+  display: none !important; }
+
+.dataset-value-is-null.hide-for-dataset-value-is-null {
+  display: none !important; }
+
+.dataset-value-is-null .hide-for-dataset-value-is-null {
+  display: none !important; }
+
+.dataset-value-is-null .show-for-dataset-value-is-null {
+  display: block !important; }
