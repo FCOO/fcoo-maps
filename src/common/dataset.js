@@ -71,14 +71,13 @@ dataset.js
         };
 
     nsMap.Dataset = function(datasetValueList, options, data = {}){
+        var _this = this;
 
         this.options = $.extend(true, defaultDatasetOptions, options);
         this.datasetValueList = [];
         this.datasetValues    = {};
 
-        var _this = this;
-        $.each(datasetValueList, function(index, datasetValue_or_Options){
-
+        function addDatasetValue( datasetValue_or_Options ){
             //If datasetValue_or_Options is id in nsMap.datasetValues
             if (typeof datasetValue_or_Options == 'string')
                 datasetValue_or_Options = $.extend(true, {}, nsMap.datasetValues[datasetValue_or_Options]);
@@ -88,9 +87,24 @@ dataset.js
                                 new nsMap.DatasetValue( datasetValue_or_Options );
             datasetValue.parent = _this;
 
-            _this.datasetValueList.push(datasetValue);
-            _this.datasetValues[datasetValue.id] = datasetValue;
+            if (!_this.datasetValues[datasetValue.id]){
+                _this.datasetValueList.push(datasetValue);
+                _this.datasetValues[datasetValue.id] = datasetValue;
+            }
+            return datasetValue;
+        }
+
+        $.each(datasetValueList, function(index, datasetValue_or_Options){
+
+            var datasetValue = addDatasetValue( datasetValue_or_Options );
+
+            //Add sub-datasetValues other that self (if any)
+            if (datasetValue.options.datasetValueIdList)
+                $.each(datasetValue.datasetValueIdList || [], function(index, datasetValue_or_Options2){
+                    addDatasetValue( datasetValue_or_Options2 );
+                });
         });
+
         this.data = data;
     };
 
@@ -251,6 +265,7 @@ dataset.js
         *********************************************/
         createContent: function( createOptions, showWhenNull, $container ){
             //To prevent <span> inside <span> the <span> (= $container) is deleted and the content is created direct
+
             $container = $container.parent().empty();
 
             if (this.options.column)
