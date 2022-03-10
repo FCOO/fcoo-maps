@@ -84,6 +84,7 @@ define default DatasetValue used by fcoo-maps
         icon  : altitudeIcon,
         text  : altitudeText,
         center: true,
+        showPartially: true,
         datasetValueIdList: ['altitude', 'altitudeAccuracy']
     });
 
@@ -159,7 +160,6 @@ define default DatasetValue used by fcoo-maps
         icon         : velocityIcon,
         text         : velocityText,
         showPartially: true,
-
         datasetValueIdList:['speed', 'direction_vector', 'direction_text', 'direction' ]
     });
 

@@ -392,6 +392,7 @@ define default DatasetValue used by fcoo-maps
         icon  : altitudeIcon,
         text  : altitudeText,
         center: true,
+        showPartially: true,
         datasetValueIdList: ['altitude', 'altitudeAccuracy']
     });
 
@@ -467,7 +468,6 @@ define default DatasetValue used by fcoo-maps
         icon         : velocityIcon,
         text         : velocityText,
         showPartially: true,
-
         datasetValueIdList:['speed', 'direction_vector', 'direction_text', 'direction' ]
     });
 
@@ -660,7 +660,7 @@ dataset.js
             //and set class to hide outer-element if all value(s9 are null
             $container.children().each( function(index){
                 $(this)
-                    .addClass( _this.datasetValueList[index].className+'_container' )
+                    .addClass( _this.datasetValueList[index].outerContainerClassName )
                     .toggleClass( 'hide-for-dataset-value-is-null', !_this.options.showWhenNull( _this.datasetValueList[index], createOptions ) );
             });
 
@@ -703,12 +703,20 @@ dataset.js
             vectorIcon   : 'far fa-up'
         }, options);
 
-        this.className = 'DSV_' + datasetValueId++;
+        datasetValueId++;
+        this.className               = 'DSV_' + datasetValueId;     //Class-name for the element containing the value
+        this.containerClassName      = 'DSV_C_' + datasetValueId;   //Class-name for the inner container of the element containing the value
+        this.outerContainerClassName = 'DSV_OC_' + datasetValueId;  //Class-name for the outer container of the inner container element
     };
 
     nsMap.datasSetValue = nsMap.datasetValue = function(options){
         return new nsMap.DatasetValue(options);
     };
+
+
+    function getElementsByClassName( $parentElement, className){
+        return $parentElement ? $parentElement.find('.'+className) : $('.'+className);
+    }
 
     nsMap.DatasetValue.prototype = {
         /*********************************************
@@ -812,9 +820,14 @@ dataset.js
             }
 
 
-            //Create and append the elements
             $.each(this.datasetValueList, function(index, datasetValue){
+
+                //Create and append the elements
                 $container.append( datasetValue.createElement(createOptions) );
+
+                //Set value for the new element
+                datasetValue.setValue(datasetValue.parent.data[datasetValue.dataId], $container, true );
+
             });
 
             if (showWhenNull)
@@ -836,10 +849,10 @@ dataset.js
 
             if (this.options.isVector)
                 //Create a icon-element
-                return $._bsCreateIcon( {icon: this.options.vectorIcon}, null, 'title', this.className + ' hide-for-dataset-value-is-null');
+                return $._bsCreateIcon( {icon: this.options.vectorIcon}, null, 'title', this.className + ' '+ this.containerClassName + ' hide-for-dataset-value-is-null');
             else
                 return $('<span/>')
-                            .addClass('hide-for-dataset-value-is-null')
+                            .addClass('hide-for-dataset-value-is-null ' + this.containerClassName)
                             ._bsAddHtml({
                                 textClass: this.className,
 
@@ -848,8 +861,6 @@ dataset.js
                                 onClick  : this.options.onClick,
                             });
         },
-
-
 
 
         /*********************************************
@@ -882,29 +893,23 @@ dataset.js
             this.showValue = showValue;
 
             //Find all outer elements
-            var search = '.' + this.className + '_container',
-            $elements = $parentElement ? $parentElement.find(search) : $(search);
-
-            $elements.toggleClass('dataset-value-is-null', !showValue);
+            getElementsByClassName($parentElement, this.outerContainerClassName).toggleClass('dataset-value-is-null', !showValue);
         },
 
         /*********************************************
         setValue
         Update all elements displaying the value
         *********************************************/
-        setValue: function (value, $parentElement ){
-            var _this  = this,
-
-                $elements;
+        setValue: function (value, $parentElement, force ){
+            var _this  = this;
 
             //Only update elements if it is a new value or a new instance (created inside $parentElement)
             if ((this.value == value) && !$parentElement)
                 return;
 
             var isNull = (value == null),
-                needToToggle = this.isNull != isNull,
-                adjustedValue = isNull ? null : this.options.adjustValue ? _this.options.adjustValue( value ) : value,
-                search = '.' + this.className;
+                needToToggle = force || (this.isNull != isNull),
+                adjustedValue = isNull ? null : this.options.adjustValue ? _this.options.adjustValue( value ) : value;
 
             this.value = value;
             this.isNull = isNull;
@@ -912,15 +917,16 @@ dataset.js
             if (isNull && !needToToggle)
                 return;
 
-            $elements = $parentElement ? $parentElement.find(search) : $(search);
-            $elements.each(function(){
-                var $element = $(this);
-                if (needToToggle)
-                    $element.toggle(!isNull);
+            //Hide/show outer elements
+            if (needToToggle)
+                getElementsByClassName($parentElement, this.containerClassName).toggle(!isNull);
 
-                if (!isNull)
-                    _this.updateElement( $element, adjustedValue );
-            });
+            //Update value
+            if (!isNull)
+                getElementsByClassName($parentElement, this.className).each(function(){
+                    _this.updateElement( $(this), adjustedValue );
+                });
+
         },
 
         /*********************************************
