@@ -595,6 +595,9 @@ L.Layer.addInitHook(function(){
         /*********************************************************
         Methods to handle events regarding loading, load colorInfo:
         Updating layer, legend and bsPosition.infoBox state and color-info
+
+        General methods to 'visit' or call a methods of layer, map, infoBox etc.
+        for all or selected maps
         *********************************************************/
         //_getMapIndex: Get mapIndex from event
         _getMapIndex: function(event){
@@ -602,6 +605,66 @@ L.Layer.addInitHook(function(){
         },
 
 
+        //_getAllInfoChild: Get []info[childName] if it exists and if the index/map match onlyIndexOrMapId
+        _getAllInfoChild: function(childName, onlyIndexOrMapId){
+            var result = [];
+            if (onlyIndexOrMapId !== undefined)
+                onlyIndexOrMapId = $.isArray(onlyIndexOrMapId) ? onlyIndexOrMapId : [onlyIndexOrMapId];
+            $.each(this.info, function(index, info){
+                if (!info) return;
+
+                var child = info[childName],
+                    map   = info.map;
+
+                if (!child) return;
+
+                if (onlyIndexOrMapId){
+                    if (
+                        onlyIndexOrMapId.includes(index) ||
+                        ( map && (onlyIndexOrMapId.includes(map.fcooMapId) || onlyIndexOrMapId.includes(map.fcooMapIndex)) )
+                       )
+                        result.push(child);
+                }
+                else
+                    result.push(child);
+            });
+            return result;
+        },
+
+        //_callAllChild
+        _callAllChild: function( childName, methodName, arg, onlyIndexOrMapId ){
+            $.each( this._getAllInfoChild(childName, onlyIndexOrMapId), function(index, child){
+                child[methodName].apply(child, arg);
+            });
+            return this;
+        },
+
+        //callAllLayers: Call methodName with arg (array) for all layer
+        callAllLayers: function( methodName, arg, onlyIndexOrMapId ){
+            return this._callAllChild( 'layer', methodName, arg, onlyIndexOrMapId );
+        },
+
+
+        //visitAllLayers: Call method( layer, mapLayer) for all layer
+        visitAllLayers: function(method, onlyIndexOrMapId){
+            var _this = this;
+            $.each( this._getAllInfoChild('layer', onlyIndexOrMapId), function(index, layer){
+                method(layer, _this);
+            });
+            return this;
+        },
+
+        //callAllLegends: Call methodName with arg (array) for all legend
+        callAllLegends: function( methodName, arg, onlyIndexOrMapId ){
+            return this._callAllChild( 'legend', methodName, arg, onlyIndexOrMapId );
+        },
+
+        //callAllInfoBox: Call this.methodName with arg (array) for all infoBox (colorInfo)
+        callAllInfoBox: function( methodName, arg, onlyIndexOrMapId ){
+            return this._callAllChild( 'infoBox', methodName, arg, onlyIndexOrMapId );
+        },
+
+/* OLD VERSION
         //callAllLayers: Call methodName with arg (array) for all layer
         callAllLayers: function( methodName, arg, onlyIndex ){
             $.each(this.info, function(index, info){
@@ -639,7 +702,7 @@ L.Layer.addInitHook(function(){
             });
             return this;
         },
-
+*/
 
         /*********************************************************
         Methods to show/hide the legend and show/hide the content og the legend
