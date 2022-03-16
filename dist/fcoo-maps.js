@@ -3043,6 +3043,15 @@ options = {
     onInfo    : Same as legendOptions.onInfo kept for backward combability
     onWarning : Same as legendOptions.onWarning kept for backward combability
 
+
+    //dataset = options for Dataset - see scr/common/dataset.js
+    /dataset: {
+        valueList,
+        options,
+        data
+    }
+
+
     //colorInfo = options for showing info on the postion of the cursor/map center
     colorInfo: {
         icon     : STRING       //If the MapLayer also have a legend the icon from the legend is used
@@ -3163,6 +3172,9 @@ L.Layer.addInitHook(function(){
             layerOptions    : {},
             legendOptions   : {},
             colorInfo       : null,
+
+            //dataset: {valueList, options, data}
+
         },
 
         defaultColorInfoOptions = {
@@ -3172,8 +3184,10 @@ L.Layer.addInitHook(function(){
             gettext : function(/*options*/){ return '';               },
         };
 
-    function getMap(mapOrMapIndex){
-        return mapOrMapIndex instanceof L.Map ? mapOrMapIndex : nsMap.mapIndex[mapOrMapIndex];
+    function getMap(mapOrMapIndexOrMapId){
+        return mapOrMapIndexOrMapId instanceof L.Map ?
+                mapOrMapIndexOrMapId :
+                nsMap.mapIndex[mapOrMapIndexOrMapId] || nsMap.mapList[mapOrMapIndexOrMapId];
     }
 
     nsMap.getPaneName       = function(id){ return id.toUpperCase()+'Pane'; };
@@ -3305,8 +3319,7 @@ L.Layer.addInitHook(function(){
 
         this.id = this.options.id || 'layer'+this.index;
 
-        this.info = []; //[] of {map, layer, legend, infoBox, colorInfoLayer, loading, timeout, updateColorInfoOnWorkingOff}
-
+        this.info = []; //[] of {map, layer, legend, infoBox, colorInfoLayer, loading, timeout, updateColorInfoOnWorkingOff, dataset}
 
         this.showAndHideClasses = '';
         this.inversShowAndHideClasses = '';
@@ -3345,7 +3358,6 @@ L.Layer.addInitHook(function(){
         /*********************************************************
         applySetting and saveSetting
         *********************************************************/
-
         //applySetting - apply individuel setting for the Map_layer
         applySetting: function(/*setting, map, mapInfo, mapIndex*/){
 
@@ -3410,6 +3422,19 @@ L.Layer.addInitHook(function(){
             var info = this.info[mapIndex] = {};
             info.map = map;
 
+
+            //Create dataset
+            if (this.options.dataset && !info.dataset){
+                info.dataset = nsMap.dataset(
+                    this.options.dataset.valueList,
+                    this.options.dataset.options,
+                    this.options.dataset.data
+                 );
+            }
+
+            //this.dataset = point to first created dataset
+            this.dataset = this.dataset || info.dataset;
+
             //Create and add legend
             if (map.bsLegendControl && !this.options.noLegend){
 
@@ -3441,7 +3466,10 @@ L.Layer.addInitHook(function(){
                         normalIconClass: this.showAndHideClasses,
                         hiddenIconClass: this.inversShowAndHideClasses,
 
+contentArg: [_this, map],
+
                     }, legendOptions);
+
 
                     delete legendOptions.buttons;
                     legendOptions.buttonList = buttonList.length ? buttonList : null;
@@ -3585,6 +3613,13 @@ L.Layer.addInitHook(function(){
                 info.updateColorInfoOnWorkingOff = true;
             }
 
+            //Update dataset (if any)
+            if (info.dataset){
+                var data = $.extend(true, {}, this.dataset.data, info.dataset.data);
+                this.dataset_setData(data, info.map.fcooMapIndex);
+            }
+
+
             //If it is a radio-group layer => remove all other layers with same radioGroup
             if (this.options.radioGroup)
                 $.each(nsMap.mapLayers, function(id, mapLayer){
@@ -3601,6 +3636,30 @@ L.Layer.addInitHook(function(){
 
             this._saveSetting();
 
+            return this;
+        },
+
+        /*********************************************************
+        getDataset( mapOrMapIndexOrMapId )
+        Return the dataset for the map given by index_mapId_map
+        *********************************************************/
+        getDataset: function( mapOrMapIndexOrMapId ){
+            var map = getMap(mapOrMapIndexOrMapId),
+                index = map ? map.fcooMapIndex : null,
+                info = index === null ? null : this.info[index];
+
+            return info ? info.dataset : null;
+        },
+
+
+        /*********************************************************
+        dataset_setData( data, onlyIndexOrMapId )
+        Set new data for each dataset in info
+        *********************************************************/
+        dataset_setData: function( data, onlyIndexOrMapId ){
+            $.each(this._getAllInfoChild(null, onlyIndexOrMapId), function(index, info){
+                info.dataset.setData(data, info.map.$container);
+            });
             return this;
         },
 
@@ -3625,7 +3684,7 @@ L.Layer.addInitHook(function(){
             $.each(this.info, function(index, info){
                 if (!info) return;
 
-                var child = info[childName],
+                var child = childName ? info[childName] : info, //If childName == null => return list of info
                     map   = info.map;
 
                 if (!child) return;
