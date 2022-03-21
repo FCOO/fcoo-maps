@@ -3428,7 +3428,7 @@ L.Layer.addInitHook(function(){
                 info.dataset = nsMap.dataset(
                     this.options.dataset.valueList,
                     this.options.dataset.options,
-                    this.options.dataset.data
+                    this.dataset ? this.dataset.data : this.options.dataset.data
                  );
             }
 
@@ -3455,6 +3455,7 @@ L.Layer.addInitHook(function(){
                         text        : this.options.text || null,
 
                         //content            : this.options.content,
+                        contentArg         : [_this, map],
                         //noVerticalPadding  : this.options.noVerticalPadding,
                         //noHorizontalPadding: this.options.noHorizontalPadding,
 
@@ -3466,7 +3467,6 @@ L.Layer.addInitHook(function(){
                         normalIconClass: this.showAndHideClasses,
                         hiddenIconClass: this.inversShowAndHideClasses,
 
-contentArg: [_this, map],
 
                     }, legendOptions);
 
