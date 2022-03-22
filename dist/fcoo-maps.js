@@ -3676,6 +3676,24 @@ L.Layer.addInitHook(function(){
         },
 
 
+        /*********************************************************
+        getMapInfoFromElement( element )
+        Find mapInfo from a element (typical a button)
+        *********************************************************/
+        getMapInfoFromElement: function(element){
+            var result = null,
+                $element = element instanceof $ ? element : $(element),
+                $mapContainer = $element.parents('.leaflet-container');
+
+            if ($mapContainer.length)
+                $.each(this._getAllInfoChild(), function(index, info){
+                    if (info && info.map && info.map.$container && (info.map.$container.get(0) === $mapContainer.get(0)))
+                        result = info;
+                });
+            return result;
+        },
+
+
         //_getAllInfoChild: Get []info[childName] if it exists and if the index/map match onlyIndexOrMapId
         _getAllInfoChild: function(childName, onlyIndexOrMapId){
             var result = [];
@@ -3735,45 +3753,6 @@ L.Layer.addInitHook(function(){
             return this._callAllChild( 'infoBox', methodName, arg, onlyIndexOrMapId );
         },
 
-/* OLD VERSION
-        //callAllLayers: Call methodName with arg (array) for all layer
-        callAllLayers: function( methodName, arg, onlyIndex ){
-            $.each(this.info, function(index, info){
-                if (info && info.layer && ((onlyIndex == undefined) || (index == onlyIndex)))
-                    info.layer[methodName].apply(info.layer, arg);
-            });
-            return this;
-        },
-
-
-        //visitAllLayers: Call method( layer, mapLayer) for all layer
-        visitAllLayers: function(method, onlyIndex){
-            var _this = this;
-            $.each(this.info, function(index, info){
-                if (info && info.layer && ((onlyIndex == undefined) || (index == onlyIndex)))
-                    method(info.layer, _this);
-            });
-            return this;
-        },
-
-        //callAllLegends: Call methodName with arg (array) for all legend
-        callAllLegends: function( methodName, arg, onlyIndex ){
-            $.each(this.info, function(index, info){
-                if (info && info.legend && ((onlyIndex == undefined) || (index == onlyIndex)))
-                    info.legend[methodName].apply(info.legend, arg);
-            });
-            return this;
-        },
-        //callAllInfoBox: Call this.methodName with arg (array) for all infoBox (colorInfo)
-        callAllInfoBox: function( methodName, arg, onlyIndex ){
-            $.each(this.info, function(index, info){
-                if (info && info.infoBox && ((onlyIndex == undefined) || (index == onlyIndex))){
-                    info.infoBox[methodName].apply(info.infoBox, arg);
-                }
-            });
-            return this;
-        },
-*/
 
         /*********************************************************
         Methods to show/hide the legend and show/hide the content og the legend
