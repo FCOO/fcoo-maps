@@ -1,60 +1,60 @@
 {
-  "name": "fcoo-maps",
-  "version": "1.22.0",
-  "homepage": "https://github.com/fcoo/fcoo-maps",
-  "authors": [
-    "Niels Holt"
-  ],
-  "description": "",
-  "main": [
-    "dist/fcoo-maps.js",
-    "dist/fcoo-maps.css"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/fcoo/fcoo-maps.git"
-  },
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "moduleType": [
-    "es6"
-  ],
-  "dependencies": {
-    "fcoo-application": "fcoo/fcoo-application#^13.0.0",
-    "leaflet-bower-bugfix-switches": "fcoo/leaflet-bower-bugfix-switches#~1.0.1",
-    "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
-    "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.4.0",
-    "leaflet-multi-maps": "fcoo/leaflet-multi-maps#^2.0.0",
-    "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.5.1",
-    "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
-    "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
-    "leaflet.edgebuffer": "TolonUK/Leaflet.EdgeBuffer#^1.0.3",
-    "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^3.13.0",
-    "leaflet-bootstrap-marker": "fcoo/leaflet-bootstrap-marker#^3.0.0",
-    "leaflet-polyline": "fcoo/leaflet-polyline#^2.4.2",
-    "leaflet-bootstrap-draw": "fcoo/leaflet-bootstrap-draw#^4.0.0",
-    "leaflet-latlng-format": "fcoo/leaflet-latlng-format#^2.0.0",
-    "leaflet-latlng-graticule": "fcoo/leaflet-latlng-graticule#^1.2.0",
-    "jquery-mousewheel": "^3.1.13",
-    "clipboard": "zenorocha/clipboard.js#^2.0.6"
-  },
-  "devDependencies": {
-    "modernizr-scss": "https://github.com/fcoo/modernizr-scss.git#latest"
-  },
-  "overrides": {
-    "leaflet.locatecontrol": {
-      "main": [
-        "src/L.Control.Locate.js"
-      ]
+    "name": "fcoo-maps",
+    "version": "1.22.0",
+    "homepage": "https://github.com/fcoo/fcoo-maps",
+    "authors": [
+        "Niels Holt"
+    ],
+    "description": "",
+    "main": [
+        "dist/fcoo-maps.js",
+        "dist/fcoo-maps.css"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/fcoo/fcoo-maps.git"
+    },
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "moduleType": [
+        "es6"
+    ],
+    "dependencies": {
+        "fcoo-application": "fcoo/fcoo-application#^13.0.0",
+        "leaflet-bower-bugfix-switches": "fcoo/leaflet-bower-bugfix-switches#~1.0.1",
+        "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
+        "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.4.0",
+        "leaflet-multi-maps": "fcoo/leaflet-multi-maps#^2.0.0",
+        "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.5.1",
+        "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
+        "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
+        "leaflet.edgebuffer": "TolonUK/Leaflet.EdgeBuffer#^1.0.3",
+        "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^3.13.0",
+        "leaflet-bootstrap-marker": "fcoo/leaflet-bootstrap-marker#^3.0.0",
+        "leaflet-polyline": "fcoo/leaflet-polyline#^2.4.2",
+        "leaflet-bootstrap-draw": "fcoo/leaflet-bootstrap-draw#^4.0.0",
+        "leaflet-latlng-format": "fcoo/leaflet-latlng-format#^2.0.0",
+        "leaflet-latlng-graticule": "fcoo/leaflet-latlng-graticule#^1.2.0",
+        "jquery-mousewheel": "^3.1.13",
+        "clipboard": "zenorocha/clipboard.js#^2.0.6"
+    },
+    "devDependencies": {
+        "modernizr-scss": "https://github.com/fcoo/modernizr-scss.git#latest"
+    },
+    "overrides": {
+        "leaflet.locatecontrol": {
+            "main": [
+                "src/L.Control.Locate.js"
+            ]
+        }
+    },
+    "resolutions": {
+        "leaflet-bugfix": "3.0.0"
     }
-  },
-  "resolutions": {
-    "leaflet-bugfix": "3.0.0"
-  }
 }

@@ -76,39 +76,46 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     nsMap.bsControls = {
         //Zoom (L.Control.BsZoom@leaflet-latlng)
         'bsZoomControl': {
-            header   : {icon: ['fa-plus-square', 'fa-minus-square'], text: {da: 'Zoom-knapper', en:'Zoom-buttons'} },
-            position : ''
+            icon    : ['fa-plus-square', 'fa-minus-square'],
+            text    : {da: 'Zoom-knapper', en:'Zoom-buttons'},
+            position: ''
         },
-        //Length scale (L.Control.BsScale@leaflet-latlng)
+
+        //Map Setting
         'bsSettingControl': {
-            header   : nsMap.mapSettingHeader,
-            position : ''
+            icon    : nsMap.mapSettingHeader.icon,
+            text    : nsMap.mapSettingHeader.text,
+            position: ''
         },
+
         //Legend (L.Control.BsLegend@leaflet-latlng)
         'bsLegendControl': {
-            header   : nsMap.mapLegendHeader,
-            position : ''
+            icon    : nsMap.mapLegendHeader.icon,
+            text    : nsMap.mapLegendHeader.text,
+            position: ''
         },
+
         //Scale (L.Control.BsScale@leaflet-latlng)
         'bsScaleControl': {
-            header   : {icon: 'fa-ruler-horizontal', text: {da: 'Længdeskala (in situ)', en:'Length Scale (in situ)'} },
-            position : ''
+            icon    : 'fa-ruler-horizontal',
+            text    : {da: 'Længdeskala (in situ)', en:'Length Scale (in situ)'},
+            position: ''
         },
 
         //Position (L.Control.BsPosition@leaflet-latlng)
         'bsPositionControl': {
-            header   : window.bsIsTouch ?
-                           {icon: 'fa-lb-center-marker', text: {da: 'Kortcenter-position', en:'Map Center Position'} } :
-                           {icon: 'fa-mouse-pointer',    text: {da: 'Cursor/Kortcenter-position', en:'Cursor/Map Center Position'} },
-            position : ''
+            icon    : window.bsIsTouch ? 'fa-lb-center-marker' : 'fa-mouse-pointer',
+            text    : window.bsIsTouch ? {da: 'Kortcenter-position', en:'Map Center Position'} : {da: 'Cursor/Kortcenter-position', en:'Cursor/Map Center Position'},
+            position: ''
         }
     };
 
     //Add Compass (L.Control.bsControlCompass) if mobile device
     if (ns.modernizrDevice.isMobile)
         nsMap.bsControls['bsCompassControl'] = {
-            header: {icon: 'fa-compass', text: {da: 'Kompas', en:'Compass'} },
-            position : ''
+            icon    : 'fa-compass',
+            text    : {da: 'Kompas', en: 'Compass'},
+            position: ''
         };
 
 
@@ -270,27 +277,37 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         $.each(bsControlList, function(index, options){
             /* TODO
             var showWhen = {};
-            showWhen[controlId+'_show'] = true;
-            */
-            _this.addMapSettingWithControl({
+            showWhen[options.controlId+'_show'] = true; <= virker pt ikke
+            //*/
+
+           _this.addMapSettingWithControl({
                 controlId      : options.controlId,
                 id             : 'show',
                 accordionId    : msgControls,
                 modalContent   : {
-                    type   : 'inputGroup',
-                    label  : options.header,
-                    content: [
-                        {id:'show', type:'checkbox', text: {da: 'Vis på kortet', en:'Show on the map'}, smallBottomPadding: true},
-                        /* TODO button to open settings for each control = items from its popupList
-                            class for form-group:
-                                display: inline-block;
-                                position: absolute;
-                                top: 0px;
-                                right: 0px;
+                    type             : 'inputGroup',
+                    noBorder         : true,
+                    noVerticalPadding: true,
+                    content : [{
+                        id      : 'show',
+                        type    : 'checkboxbutton',
+                        icon    : options.icon,
+                        text    : options.text,
+                        class   : 'w-100',
+                        smallBottomPadding: true,
 
-                        {id: 'setting', type:'button', icon:'fa-cog fa-fw', insideFormGroup: true, showWhen: showWhen, onClick: function(){ alert('mangler'); } },
-                        */
-                    ]
+                        /* TODO: Button with setting for the bsControl (if any). = items from its popupList
+                        after: {
+                            id    : 'setting',
+                            type  : 'button',
+                            square: true,
+                            icon  : 'fa-cog fa-fw',
+                            //insideFormGroup: true,
+                            showWhen: showWhen,
+                            onClick: function(){ alert('mangler'); }
+                        }
+                        //*/
+                    }]
                 }
             });
         });
