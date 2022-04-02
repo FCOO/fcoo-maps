@@ -2536,6 +2536,38 @@ Objects and methods to handle leaflet-maps
 
 
     /***********************************************************
+    From leaflet 1.7.1 documentation:
+    Renderer
+    Base class for vector renderer implementations (SVG, Canvas).
+    Handles the DOM container of the renderer, its bounds, and its zoom animation.
+
+    A Renderer works as an implicit layer group for all Paths - the renderer itself can be added or removed to the map.
+    All paths use a renderer, which can be implicit (the map will decide the type of renderer and use it automatically) or
+    explicit (using the renderer option of the path).
+
+    Do not use this class directly, use SVG and Canvas instead.
+
+    Options
+    Option	    Type	Default Description
+    padding	    Number	0.1	    How much to extend the clip area around the map view (relative to its size) e.g. 0.1 would be 10% of map view in each direction
+    tolerance	Number	0	    How much to extend click tolerance round a path/object on the map
+
+
+    Note:
+    Setting L.Renderer.prototype.options.padding higher that default .1 will increase the drawing of SVGs on the map
+    and reduce the time swhere a drawing is cut off when dragging the map.
+    Setting L.Renderer.prototype.options.padding = 1.0 will prevent any drawing from being cut off,
+    but will require a 3x3 redraw of the map hence increasing the load with a factor 9ish.
+
+    For now the value is set to .5 meaning that dragging the map from the center to any of the edges will not create a svg cut off
+    and it will 'only' require a (.5 + 1 + .5) x (.5 + 1 + .5) = 4 redraw
+
+    The finally number for L.Renderer.prototype.options.padding must be desided after some tryout and experience
+
+    ***********************************************************/
+    L.Renderer.prototype.options.padding = .5;
+
+    /***********************************************************
     Map.createSubPane - Creates a new pane under the main pane
     ***********************************************************/
     L.Map.prototype.createSubPane = function(name, parentPaneName, zIndex, classNames=''){
@@ -2673,6 +2705,8 @@ Objects and methods to handle leaflet-maps
         */
         //maxBoundsViscosity: 0.0,
 
+
+    renderer: {}
     });
 
 
@@ -2732,7 +2766,7 @@ Objects and methods to handle leaflet-maps
             showCursorPosition: !window.bsIsTouch,
             showLandSeaColor  : true,
 
-            inclContextmenu   : false,  //Set to true when contextmenu for the map is implemented
+            inclContextmenu   : true,
             selectFormat      : function(){ ns.globalSetting.edit(ns.events.LATLNGFORMATCHANGED); },
             popupList: [
                 //Add options showLandSeaColor to bsPositionControl
@@ -2758,7 +2792,7 @@ Objects and methods to handle leaflet-maps
                 header: nsMap.mapLegendHeader,
                 noVerticalPadding   : true,
                 noHorizontalPadding : false,
-width : 250,    //TODO
+                width: '20em',  //<= TODO Adjust
             }
         },
 
@@ -3006,6 +3040,74 @@ Objects and methods to handle save and setting of map center-position and zoom
     L.Map.addInitHook(function () {
         if (this.options.mapCenterZoomControl)
             this.mapCenterZoomControl = new L.Control.MapCenterZoomControl(this);
+    });
+}(jQuery, L, this, document));
+
+;
+/****************************************************************************
+map-contextmenu.js
+
+Global context-menu for all maps
+
+****************************************************************************/
+(function ($, L, window/*, document, undefined*/) {
+    "use strict";
+
+    var ns = window.fcoo = window.fcoo || {},
+        nsMap = ns.map = ns.map || {};
+
+
+    var map_contextmenu_header = {
+            icon: 'fa-map',
+            text: {da:'Kort', en:'Map'}
+        };
+
+
+    var map_contextmenu_itemList = [{
+            //Position in modal-window
+            icon   : 'fa-location-pin',
+            text   : {da:'Position...', en: 'Position...'},
+            onClick: function(latLng){
+                latLng.asModal();
+            }
+        },{
+            //Center map
+            icon   : 'fa-crosshairs',
+            text   : {da:'Centrér her', en:'Center here'},
+            _width : 180,
+            closeOnClick: false,
+
+            onClick: function(latLng, item){
+                var map = item._map;
+                if (map)
+                    map.setView(latLng, map.getZoom(), map._mapSync_NO_ANIMATION);
+            },
+
+        }];
+
+
+
+
+    map_contextmenu_itemList.push({
+        //Map-setting
+        icon      : nsMap.mapSettingHeader.icon,
+        text      : nsMap.mapSettingHeader.text,
+        lineBefore: true,
+        width     : '10em',
+        onClick: function(latlng, item){
+            var map = item._map;
+            if (map)
+                nsMap.editMapSetting(map.fcooMapIndex);
+        }
+    });
+
+
+    L.Map.addInitHook(function () {
+        //If the map has a BsPositionControl woth contextmenu or a options.MANGLER = true
+        if ( (this.options.bsPositionOptions && this.options.bsPositionOptions.inclContextmenu) || (this.options.MANGLER) ){
+            this.setContextmenuHeader( map_contextmenu_header  );
+            this.addContextmenuItems( map_contextmenu_itemList );
+        }
     });
 }(jQuery, L, this, document));
 
@@ -4575,39 +4677,46 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     nsMap.bsControls = {
         //Zoom (L.Control.BsZoom@leaflet-latlng)
         'bsZoomControl': {
-            header   : {icon: ['fa-plus-square', 'fa-minus-square'], text: {da: 'Zoom-knapper', en:'Zoom-buttons'} },
-            position : ''
+            icon    : ['fa-plus-square', 'fa-minus-square'],
+            text    : {da: 'Zoom-knapper', en:'Zoom-buttons'},
+            position: ''
         },
-        //Length scale (L.Control.BsScale@leaflet-latlng)
+
+        //Map Setting
         'bsSettingControl': {
-            header   : nsMap.mapSettingHeader,
-            position : ''
+            icon    : nsMap.mapSettingHeader.icon,
+            text    : nsMap.mapSettingHeader.text,
+            position: ''
         },
+
         //Legend (L.Control.BsLegend@leaflet-latlng)
         'bsLegendControl': {
-            header   : nsMap.mapLegendHeader,
-            position : ''
+            icon    : nsMap.mapLegendHeader.icon,
+            text    : nsMap.mapLegendHeader.text,
+            position: ''
         },
+
         //Scale (L.Control.BsScale@leaflet-latlng)
         'bsScaleControl': {
-            header   : {icon: 'fa-ruler-horizontal', text: {da: 'Længdeskala (in situ)', en:'Length Scale (in situ)'} },
-            position : ''
+            icon    : 'fa-ruler-horizontal',
+            text    : {da: 'Længdeskala (in situ)', en:'Length Scale (in situ)'},
+            position: ''
         },
 
         //Position (L.Control.BsPosition@leaflet-latlng)
         'bsPositionControl': {
-            header   : window.bsIsTouch ?
-                           {icon: 'fa-lb-center-marker', text: {da: 'Kortcenter-position', en:'Map Center Position'} } :
-                           {icon: 'fa-mouse-pointer',    text: {da: 'Cursor/Kortcenter-position', en:'Cursor/Map Center Position'} },
-            position : ''
+            icon    : window.bsIsTouch ? 'fa-lb-center-marker' : 'fa-mouse-pointer',
+            text    : window.bsIsTouch ? {da: 'Kortcenter-position', en:'Map Center Position'} : {da: 'Cursor/Kortcenter-position', en:'Cursor/Map Center Position'},
+            position: ''
         }
     };
 
     //Add Compass (L.Control.bsControlCompass) if mobile device
     if (ns.modernizrDevice.isMobile)
         nsMap.bsControls['bsCompassControl'] = {
-            header: {icon: 'fa-compass', text: {da: 'Kompas', en:'Compass'} },
-            position : ''
+            icon    : 'fa-compass',
+            text    : {da: 'Kompas', en: 'Compass'},
+            position: ''
         };
 
 
@@ -4622,7 +4731,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     /*******************************************************
     nsMap.mswcFunctionList (Map Setting With Control Function List)
     Is a list of functions used to create Settings in MapSettingGroup using
-    method addMapSettingWithControl when the MapSetting for each amps are created
+    method addMapSettingWithControl when the MapSetting for each maps are created
 
     nsMap.mswcFunctionList = []FUNCTION(map) {this == SettingGroup )
 
@@ -4684,7 +4793,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     /************************************
     Graticule (leaflet-latlng-graticule)
     ************************************/
-    nsMap.mswcFunctionList.push(function(map){
+    nsMap.mswcFunctionList.push( function(map){
         var nsllgt = L.latLngGraticuleType;
         function graticuleListItem(id, fileNamePrefix){
             return  {
@@ -4742,7 +4851,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     /************************************
     Controls from nsMap.bsControls
     ************************************/
-    nsMap.mswcFunctionList.push( function(/*map*/){
+    nsMap.mswcFunctionList.push( function( map ){
         var _this = this;
         this.options.accordionList.push({
             id    : msgControls,
@@ -4751,6 +4860,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         //Sort nsMap.bsControls by position (top > bottom, left > right)
         var bsControlList = [];
+
         $.each(nsMap.bsControls, function(id, options){
             var pos = options.position,
                 positionValue =
@@ -4767,33 +4877,220 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         bsControlList.sort(function(c1, c2){return c2.positionValue - c1.positionValue;} );
 
         $.each(bsControlList, function(index, options){
-            /* TODO
-            var showWhen = {};
-            showWhen[controlId+'_show'] = true;
-            */
-            _this.addMapSettingWithControl({
+           _this.addMapSettingWithControl({
                 controlId      : options.controlId,
                 id             : 'show',
                 accordionId    : msgControls,
                 modalContent   : {
-                    type   : 'inputGroup',
-                    label  : options.header,
-                    content: [
-                        {id:'show', type:'checkbox', text: {da: 'Vis på kortet', en:'Show on the map'}, smallBottomPadding: true},
-                        /* TODO button to open settings for each control = items from its popupList
-                            class for form-group:
-                                display: inline-block;
-                                position: absolute;
-                                top: 0px;
-                                right: 0px;
+                    type             : 'inputGroup',
+                    noBorder         : true,
+                    noVerticalPadding: true,
+                    content : [{
+                        id      : 'show',
+                        type    : 'checkboxbutton',
+                        icon    : options.icon,
+                        text    : options.text,
+                        class   : 'w-100',
+                        insideFormGroup   : true,
+                        smallBottomPadding: true,
 
-                        {id: 'setting', type:'button', icon:'fa-cog fa-fw', insideFormGroup: true, showWhen: showWhen, onClick: function(){ alert('mangler'); } },
-                        */
-                    ]
+                        //Button with setting for the bsControl (if any). = items from its popupList
+                        after: {
+                            id    : options.controlId+'_options',
+                            type  : 'button',
+                            square: true,
+                            icon  : 'fa-cog fa-fw',
+                            onClick: function(){
+                                nsMap.editControlOptions(options.controlId, map, getMapSettingGroup(map).options.applyToAll);
+                            }
+                        }
+                    }]
                 }
             });
         });
     });
+
+    /*****************************************************************************
+    editControlOptions(controlId, map, applyToAll)
+    Edit the options for control with id == controlId for map. If applyToAll == true =>
+    apply the data to all visible maps
+    *****************************************************************************/
+    var controlOptionsForm = null,
+        currentControlOptionsForm_options = {}; //Settings and data for the current form displayed and the control beeing edited
+
+
+    //****************************************************************************
+    function controlOptionsForm_preEdit(mapSetting/*, data */ ){
+        var applyToAll  = mapSetting.options.applyToAll,
+            mapList     = applyToAll ? [] : [mapSetting.map],
+            $modalBody  = mapSetting.modalForm.$bsModal.bsModal.$body;
+
+        if (applyToAll)
+            $.each(nsMap.mapIndex, function(index, nextMap){
+                if (nextMap && nextMap.isVisibleInMultiMaps)
+                    mapList.push(nextMap);
+            });
+
+        //Show/hide all edit-options button for all controls. Show if the control has any popup-items (single map) or all maps has the same popups
+        $.each(nsMap.bsControls, function(controlId){
+
+            var hideOptionsButton = false,
+                popupIdStr        = '';     //= string of all ids in given popup. Used to check if a control has the same popup-items in all maps
+
+            $.each(mapList, function(mapIndex, map){
+                var control         = map[controlId],
+                    state           = control ? control.getState() : {},
+                    popupList       = control ? control.options.popupList || []: [],
+                    nextPopupIdStr  = '';
+
+                //Create nextPopupIdStr
+                $.each(popupList, function(index, popupItem){
+                    var type = popupItem.type || 'text',
+                        id   = popupItem.id || popupItem.radioGroupId;
+                    if ((type != 'text') && id && (state[id] !== undefined))
+                        nextPopupIdStr = nextPopupIdStr + '_' + id;
+                });
+
+                if (!nextPopupIdStr || (popupIdStr && (popupIdStr != nextPopupIdStr)))
+                    hideOptionsButton = true;
+                else
+                    popupIdStr = nextPopupIdStr;
+            });
+
+            $modalBody.find('#' + controlId + '_options').toggleClass('invisible', hideOptionsButton);
+        });
+
+
+    }
+
+    //****************************************************************************
+    function controlOptionsForm_submit(data){
+        var newData = {},
+            ccofo   = currentControlOptionsForm_options;
+
+        $.each(ccofo.stateIds, function(id){
+            if (ccofo.originalData[id] !== data[id])
+                newData[id] = data[id];
+        });
+
+        $.each(ccofo.mapList, function(index, map){
+            map[ccofo.controlId].setState( newData );
+        });
+    }
+
+    //****************************************************************************
+    nsMap.editControlOptions = function(controlId, map, applyToAll){
+        var control = map[controlId],
+            state   = control.getState();
+
+
+        if (controlOptionsForm)
+            controlOptionsForm.$bsModal.remove();
+
+        var formOptions = {
+                header: {
+                    icon: nsMap.bsControls[controlId].icon,
+                    text: nsMap.bsControls[controlId].text
+                },
+                width   : '15em',//<= Adjust
+                show    : false,
+                onSubmit: controlOptionsForm_submit,
+                closeWithoutWarning: true,
+            };
+
+        //Find items in popup for the control to include in edit-options
+        var content     = formOptions.content = [],
+            fo_stateIds = formOptions.stateIds = {},
+            lastLabel   = null;
+
+        $.each(control.options.popupList, function(index, popupItem){
+            var type = popupItem.type || 'text',
+                id   = popupItem.id || popupItem.radioGroupId;
+
+            if (type == 'text')
+                lastLabel = {icon: popupItem.icon, text: popupItem.text};
+            else {
+                //Only include popup-items with id in the control state
+                if (id && (state[id] !== undefined)){
+                    fo_stateIds[id] = type;
+                    if (type == 'checkbox'){
+                        //Convert to checkboxbutton
+                        content.push({
+                            type: 'checkboxbutton',
+                            id  : id,
+                            icon: popupItem.icon,
+                            text: popupItem.text,
+                            fullWidth: true
+                        });
+                    }
+                    if (type == 'radio'){
+                        //Convert to 'radiobuttongroup'
+                        content.push({
+                            type     : 'radiobuttongroup',
+                            id       : id,
+                            list     : popupItem.list,
+                            vertical : true,
+                            fullWidth: true,
+                            label    : lastLabel
+                        });
+                    }
+                }
+                lastLabel = null;
+            }
+        });
+        controlOptionsForm = $.bsModalForm( formOptions );
+
+
+        //Save current settings and options in currentControlOptionsForm_options to be used by controlOptionsForm_submit
+        currentControlOptionsForm_options = {
+            controlId : controlId,
+            stateIds  : controlOptionsForm.options.stateIds,
+            mapList   : applyToAll ? [] : [map],
+            applyToAll: applyToAll,
+        };
+
+        //Find data (= state) from the map or all visible maps
+        var data     = {},
+            forceData = {},
+            stateIds = currentControlOptionsForm_options.stateIds,
+            mapList  = currentControlOptionsForm_options.mapList;
+
+        if (applyToAll)
+            $.each(nsMap.mapIndex, function(index, nextMap){
+                if (nextMap && nextMap.isVisibleInMultiMaps)
+                    mapList.push(nextMap);
+            });
+
+        //Save current values for all stateIds in all maps/the map in data and originalData
+        $.each(mapList, function(index, nextMap){
+            var nextState = nextMap[controlId].getState();
+            $.each(stateIds, function(id, type){
+                var nextValue = nextState[id];
+
+                //If any boolean-value are different on different maps => mark the checkbox as semi-selected (value = STRING)
+                if (type == 'checkbox'){
+                    if ((typeof data[id] == 'boolean') && (nextValue != data[id]))
+                        data[id] = 'NOT_CHANGED';
+                    else
+                        data[id] = data[id] || nextValue;
+                }
+
+                if (type == 'radio'){
+                    if (data[id] && (data[id] != nextValue)){
+                        data[id] = [nextValue, 'semi'];
+                        forceData[id] = data[id][1];    //Set = 'semi' to ensure that original and new data are the same
+                    }
+                    else
+                        data[id] = data[id] || nextValue;
+                }
+            });
+        });
+
+        currentControlOptionsForm_options.originalData = $.extend({}, data, forceData);
+
+        controlOptionsForm.edit( data );
+    };
+
 
     /*****************************************************************************
     MapSettingGroup = SettingGroup with NxSettings - one for each subset of options for a map
@@ -5093,6 +5390,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             mapSettingGroup.data = dataToEdit;
         }
 
+        mapSettingGroup.options.applyToAll = options.applyToAll;
 
         //If options.applyToAll => the settings is applied to all maps
         if (options.applyToAll){
@@ -5144,12 +5442,22 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             });
         });
 
-        mapSettingGroup.edit( msgAccordion ? msgAccordion.id : null, editData, preEdit );
+        //Extend preEdit with function to hide/show setting-buttons in XXX (not so pretty)
+        var fullPreEdit =
+                preEdit ?
+                    function(){
+                        preEdit.apply(this, arguments);
+                        controlOptionsForm_preEdit.apply(this, arguments);
+                    } :
+                    controlOptionsForm_preEdit;
+
+
+        mapSettingGroup.edit( msgAccordion ? msgAccordion.id : null, editData, fullPreEdit );
     };
 
     /*****************************************************************************
     editAllMapSettings()
-    Show the modal with
+    Show the modal with Map settings for all maps
     *****************************************************************************/
     var mapSettingModal        = null,
         mapSettingMiniMultiMap = null;

@@ -18,6 +18,38 @@ Objects and methods to handle leaflet-maps
 
 
     /***********************************************************
+    From leaflet 1.7.1 documentation:
+    Renderer
+    Base class for vector renderer implementations (SVG, Canvas).
+    Handles the DOM container of the renderer, its bounds, and its zoom animation.
+
+    A Renderer works as an implicit layer group for all Paths - the renderer itself can be added or removed to the map.
+    All paths use a renderer, which can be implicit (the map will decide the type of renderer and use it automatically) or
+    explicit (using the renderer option of the path).
+
+    Do not use this class directly, use SVG and Canvas instead.
+
+    Options
+    Option	    Type	Default Description
+    padding	    Number	0.1	    How much to extend the clip area around the map view (relative to its size) e.g. 0.1 would be 10% of map view in each direction
+    tolerance	Number	0	    How much to extend click tolerance round a path/object on the map
+
+
+    Note:
+    Setting L.Renderer.prototype.options.padding higher that default .1 will increase the drawing of SVGs on the map
+    and reduce the time swhere a drawing is cut off when dragging the map.
+    Setting L.Renderer.prototype.options.padding = 1.0 will prevent any drawing from being cut off,
+    but will require a 3x3 redraw of the map hence increasing the load with a factor 9ish.
+
+    For now the value is set to .5 meaning that dragging the map from the center to any of the edges will not create a svg cut off
+    and it will 'only' require a (.5 + 1 + .5) x (.5 + 1 + .5) = 4 redraw
+
+    The finally number for L.Renderer.prototype.options.padding must be desided after some tryout and experience
+
+    ***********************************************************/
+    L.Renderer.prototype.options.padding = .5;
+
+    /***********************************************************
     Map.createSubPane - Creates a new pane under the main pane
     ***********************************************************/
     L.Map.prototype.createSubPane = function(name, parentPaneName, zIndex, classNames=''){
@@ -155,6 +187,8 @@ Objects and methods to handle leaflet-maps
         */
         //maxBoundsViscosity: 0.0,
 
+
+    renderer: {}
     });
 
 
@@ -214,7 +248,7 @@ Objects and methods to handle leaflet-maps
             showCursorPosition: !window.bsIsTouch,
             showLandSeaColor  : true,
 
-            inclContextmenu   : false,  //Set to true when contextmenu for the map is implemented
+            inclContextmenu   : true,
             selectFormat      : function(){ ns.globalSetting.edit(ns.events.LATLNGFORMATCHANGED); },
             popupList: [
                 //Add options showLandSeaColor to bsPositionControl
@@ -240,7 +274,7 @@ Objects and methods to handle leaflet-maps
                 header: nsMap.mapLegendHeader,
                 noVerticalPadding   : true,
                 noHorizontalPadding : false,
-width : 250,    //TODO
+                width: '20em',  //<= TODO Adjust
             }
         },
 
