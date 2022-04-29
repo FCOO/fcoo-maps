@@ -19,7 +19,7 @@ Methods to adjust and display latLng-values
         options = options || {};
         var modalOptions = {
                 header: options.header || {
-                    icon: ['fa-map-marker-alt', 'fa-arrow-alt-right','fa-copy'],
+                    icon: ['fa-location-dot', 'fa-arrow-alt-right','fa-copy'],
                     text: {da:'Kopier position til udklipsholder', en:'Copy Position to Clipboard'}
                 },
                 content: [],

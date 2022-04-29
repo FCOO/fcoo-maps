@@ -187,8 +187,6 @@ Objects and methods to handle leaflet-maps
         */
         //maxBoundsViscosity: 0.0,
 
-
-    renderer: {}
     });
 
 

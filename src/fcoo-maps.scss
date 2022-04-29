@@ -91,6 +91,13 @@ Style for edit settings for graticule
 
 
 /**********************************************************
+HIDE/SHOW WHEN SINGLE OR MULTI-MAPS SELECTED
+**********************************************************/
+@include show-and-hide-for-modernizr-test( $modernizr-test: multi-maps-selected, $incl-no-selector: false, $incl-table-display: false);
+@include show-and-hide-for-modernizr-test( $modernizr-test: single-maps-selected, $incl-no-selector: false, $incl-table-display: false);
+
+
+/**********************************************************
 EDIT MULTI MAPS SETTINGS
 **********************************************************/
 //multi-maps-current = div with icon showing the current selected structure

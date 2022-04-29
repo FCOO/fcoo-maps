@@ -19,9 +19,9 @@ Global context-menu for all maps
 
     var map_contextmenu_itemList = [{
             //Position in modal-window
-            icon   : 'fa-location-pin',
+            icon   : 'fa-location-dot',
             text   : {da:'Position...', en: 'Position...'},
-            onClick: function(latLng){
+            onClick: function(id, latLng){
                 latLng.asModal();
             }
         },{
@@ -31,8 +31,7 @@ Global context-menu for all maps
             _width : 180,
             closeOnClick: false,
 
-            onClick: function(latLng, item){
-                var map = item._map;
+            onClick: function(id, latLng, $button, map){
                 if (map)
                     map.setView(latLng, map.getZoom(), map._mapSync_NO_ANIMATION);
             },
@@ -48,8 +47,7 @@ Global context-menu for all maps
         text      : nsMap.mapSettingHeader.text,
         lineBefore: true,
         width     : '10em',
-        onClick: function(latlng, item){
-            var map = item._map;
+        onClick: function(id, latlng, $button, map){
             if (map)
                 nsMap.editMapSetting(map.fcooMapIndex);
         }
@@ -57,10 +55,10 @@ Global context-menu for all maps
 
 
     L.Map.addInitHook(function () {
-        //If the map has a BsPositionControl woth contextmenu or a options.MANGLER = true
+        //If the map has a BsPositionControl with contextmenu or a options.MANGLER = true
         if ( (this.options.bsPositionOptions && this.options.bsPositionOptions.inclContextmenu) || (this.options.MANGLER) ){
             this.setContextmenuHeader( map_contextmenu_header  );
-            this.addContextmenuItems( map_contextmenu_itemList );
+            this.addContextmenuItems( map_contextmenu_itemList);
         }
     });
 }(jQuery, L, this, document));

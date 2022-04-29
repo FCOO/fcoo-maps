@@ -56,10 +56,12 @@
     <script src="../src/map/map-sync.js"></script>
     <script src="../src/map/multi-maps.js"></script>
 
-    <script src="../src/search/search-latlng.js"></script>
-    <script src="../src/search/search.js"></script>
     <script src="../src/search/search-category.js"></script>
     <script src="../src/search/search-details.js"></script>
+    <script src="../src/search/search-latlng.js"></script>
+    <script src="../src/search/search-mapLayer.js"></script>
+    <script src="../src/search/search-result.js"></script>
+    <script src="../src/search/search.js"></script>
 
     <script src="../src/setting/map-setting-group.js"></script>
 
@@ -82,7 +84,13 @@
             {
 
                 applicationName: {da:'Overskriften', en:'The Header'},
-
+/*
+                multiMaps: {
+                    enabled      : false,
+                    maxMaps      : 5,
+                    maxZoomOffset: 2
+                },
+*/
                 topMenu: {
                     messages : "data/ifm-maps-info.json", //null or STRING or {subDir:STRING, fileName:STRING}
                 },
@@ -219,6 +227,10 @@ NAVN MANGLER
                     "HARBORS_DK",
                     "BRIDGES_DK",
                     "TOWNS_GL"
+                ]},
+
+                {text: {da: "?:Diverse", en: "?:Miscellaneous"}, list:[
+                    'SEARCH-RESULT'
                 ]},
 
             ],

@@ -281,6 +281,21 @@ Style for edit settings for graticule
   display: none !important; }
 
 /**********************************************************
+HIDE/SHOW WHEN SINGLE OR MULTI-MAPS SELECTED
+**********************************************************/
+.multi-maps-selected .hide-for-multi-maps-selected {
+  display: none !important; }
+
+.no-multi-maps-selected .show-for-multi-maps-selected {
+  display: none !important; }
+
+.single-maps-selected .hide-for-single-maps-selected {
+  display: none !important; }
+
+.no-single-maps-selected .show-for-single-maps-selected {
+  display: none !important; }
+
+/**********************************************************
 EDIT MULTI MAPS SETTINGS
 **********************************************************/
 .multi-maps-current {

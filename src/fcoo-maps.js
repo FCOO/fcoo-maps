@@ -293,7 +293,10 @@
             modalOptions.helpButton = true;
         }
 
-        //Get multi-maps and max-maps
+        //Get multi-maps and max-maps. Set modernizr-classes first
+        window.modernizrOn ( 'single-maps-selected');
+        window.modernizrOff( 'multi-maps-selected');
+
         nsMap.hasMultiMaps = options.multiMaps && options.multiMaps.enabled;
         if (nsMap.hasMultiMaps){
             //Get max-maps

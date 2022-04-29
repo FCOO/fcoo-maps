@@ -20,12 +20,20 @@ options = {
 
     layerOptions    : {},       //Specific options for the Layer. Can include options marked (*)
 
+    //Menu
+    menuOptions: {
+        buttonList : []bsButton-options
+        useLegendButtonList: BOOLEAN, if true and menuOptions.buttonList is not given => use legendOptions.buttonList as in menu
+    },
+
     //Legend
     legendOptions: {
         buttonList : []bsButton-options + onlyShowWhenLayer: BOOLEAN. When true the button is only visible when the layer is visible.
         onInfo     : function()
         onWarning  : function()
     }
+
+
 
     buttonList: Same as legendOptions.buttonList kept for backward combability
     onInfo    : Same as legendOptions.onInfo kept for backward combability
@@ -172,11 +180,24 @@ L.Layer.addInitHook(function(){
             gettext : function(/*options*/){ return '';               },
         };
 
-    function getMap(mapOrMapIndexOrMapId){
+
+    //Adjust default options for legend
+    L.BsLegend.prototype.options.closeIconOptions = {
+        icon : [['show-for-single-maps-selected fa-circle-trash'], ['show-for-multi-maps-selected fa-circle-check']],
+        title: {da: 'Skjul', en: 'Hide'}
+    };
+
+    //Overwrite L.BsLegend.remove to select for all maps if multi maps
+    L.BsLegend.prototype.remove = function(){
+        this.options.mapLayer.selectMaps(this.parent._map);
+    };
+
+
+    nsMap.getMap = function(mapOrMapIndexOrMapId){
         return mapOrMapIndexOrMapId instanceof L.Map ?
                 mapOrMapIndexOrMapId :
                 nsMap.mapIndex[mapOrMapIndexOrMapId] || nsMap.mapList[mapOrMapIndexOrMapId];
-    }
+    };
 
     nsMap.getPaneName       = function(id){ return id.toUpperCase()+'Pane'; };
     nsMap.getMarkerPaneName = function(id){ return id.toUpperCase()+'MarkerPane'; };
@@ -339,20 +360,29 @@ L.Layer.addInitHook(function(){
         isAddedTo(mapOrIndex) - return true if the MapLayer is added to the map
         *********************************************************/
         isAddedToMap: function(mapOrIndex){
-            var mapIndex = getMap(mapOrIndex).fcooMapIndex;
+            var mapIndex = nsMap.getMap(mapOrIndex).fcooMapIndex;
             return !!this.info[mapIndex] && !!this.info[mapIndex].map;
         },
 
         /*********************************************************
-        applySetting and saveSetting
+        applySetting, applyCommonSetting and saveSetting, saveCommonSetting
         *********************************************************/
-        //applySetting - apply individuel setting for the Map_layer
+        //applySetting - apply individuel setting for the Map_layer at map
         applySetting: function(/*setting, map, mapInfo, mapIndex*/){
+
+        },
+        //applyCommonSetting - apply common setting for the Map_layer
+        applyCommonSetting: function(/*setting*/){
 
         },
 
         _applySetting: function(data){
             var _this = this;
+
+            //Apply common setting
+            this.applyCommonSetting(data.common || null);
+
+            //Apply individuel settings
             nsMap.visitAllMaps( function(map, index){
                 var setting = data[index] || {};
                 if (setting.show)
@@ -368,14 +398,23 @@ L.Layer.addInitHook(function(){
             });
         },
 
-        //saveSetting: function() - Return individuel setting for the Map_layer
+        //saveSetting: function() - Return individuel setting for the Map_layer at map
         saveSetting: function(/*map, mapInfo, mapIndex*/){
             return {};
+        },
+        //saveCommonSetting: function() - Return common setting for the Map_layer
+        saveCommonSetting: function(){
+            return null;
         },
 
         _saveSetting: function(){
             var _this = this,
-                data = {};
+                data = {},
+                commonSetting = this.saveCommonSetting() || null;
+
+            if (commonSetting !== null)
+                data.common = commonSetting;
+
             $.each(this.info, function(index, info){
                 data[index] =
                     $.extend({
@@ -386,21 +425,21 @@ L.Layer.addInitHook(function(){
                     );
             });
             ns.appSetting.set(this.id, data);
-            ns.appSetting.save();
-            return this;
+            return ns.appSetting.save();
         },
 
         /*********************************************************
         addTo
         *********************************************************/
         addTo: function(mapOrIndex){
+
             var _this = this;
             if ($.isArray(mapOrIndex)){
                 $.each(mapOrIndex, function(index, _map){ _this.addTo(_map); });
                 return _this;
             }
 
-            var map = getMap(mapOrIndex),
+            var map = nsMap.getMap(mapOrIndex),
                 mapIndex = map.fcooMapIndex;
 
             //Check if layer allready added
@@ -454,7 +493,7 @@ L.Layer.addInitHook(function(){
                         onRemove    : $.proxy(this.removeViaLegend, this),
                         normalIconClass: this.showAndHideClasses,
                         hiddenIconClass: this.inversShowAndHideClasses,
-
+                        mapLayer       : this,
 
                     }, legendOptions);
 
@@ -561,8 +600,8 @@ L.Layer.addInitHook(function(){
                     }
                 }
 
-                info.layer = this.createLayer(this.options.layerOptions);
-
+                info.layer = this.createLayer(this.options.layerOptions, map);
+                info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
 
                 //Sets options._popupContainerClass = this.showAndHideClasses to hide open popups when the layer is hidden and visa versa
                 info.layer.options._popupContainerClass = this.showAndHideClasses;
@@ -632,7 +671,7 @@ L.Layer.addInitHook(function(){
         Return the dataset for the map given by index_mapId_map
         *********************************************************/
         getDataset: function( mapOrMapIndexOrMapId ){
-            var map = getMap(mapOrMapIndexOrMapId),
+            var map = nsMap.getMap(mapOrMapIndexOrMapId),
                 index = map ? map.fcooMapIndex : null,
                 info = index === null ? null : this.info[index];
 
@@ -816,7 +855,7 @@ L.Layer.addInitHook(function(){
                 return this;
             }
 
-            var map = getMap(mapOrIndex),
+            var map = nsMap.getMap(mapOrIndex),
                 mapIndex = map.fcooMapIndex;
 
             //Check if layer is already removed
@@ -926,17 +965,17 @@ L.Layer.addInitHook(function(){
                 info.updateColorInfoOnWorkingOff = false;
 
                 //Call map._onColorPosition update color-info when the layer is loaded
-                getMap(mapIndex)._onColorPosition(true);
+                nsMap.getMap(mapIndex)._onColorPosition(true);
             }
 
         },
 
 
         /*********************************************************
-        createLayer: function(layerOptions)
+        createLayer: function(layerOptions, map)
         Set by the different types of MapLayer
         *********************************************************/
-        createLayer: function(/*layerOptions*/){
+        createLayer: function(/*layerOptions, map*/){
 
         },
 
@@ -954,7 +993,7 @@ L.Layer.addInitHook(function(){
                 $.each(mapOrIndex, function(index, _map){ _this.toggleColorInfo(_map, show); });
                 return _this;
             }
-            var map = getMap(mapOrIndex),
+            var map = nsMap.getMap(mapOrIndex),
                 mapIndex = map.fcooMapIndex,
                 bsPositionControl = map.bsPositionControl,
                 infoBox = this.info[mapIndex].infoBox;
@@ -974,14 +1013,22 @@ L.Layer.addInitHook(function(){
         Return options for this layer as MenuItem in Mmenu
         *******************************************************************/
         menuItemOptions: function(){
-            return {
-                id        : this.id,
-                icon      : this.options.icon,
-                text      : this.options.text,
-                type      : this.options.radioGroup ? 'radio' : 'check',
-                mapLayerId: this.id,
-                onClick   : $.proxy(this.selectMaps, this)
-            };
+            var menuOptions   = this.options.menuOptions = this.options.menuOptions || {},
+                legendOptions = this.options.legendOptions,
+                result = $.extend({
+                    id        : this.id,
+                    icon      : this.options.icon,
+                    text      : this.options.text,
+                    type      : this.options.radioGroup ? 'radio' : 'check',
+                    mapLayerId: this.id,
+                    onClick   : $.proxy(this.selectMaps, this)
+                }, menuOptions);
+
+            //Use legend-buttons if no direct menu-button is given
+            if (!result.buttonList && menuOptions.useLegendButtonList && legendOptions.buttonList)
+                result.buttonList = legendOptions.buttonList;
+
+            return result;
         },
 
         /******************************************************************
@@ -1016,7 +1063,7 @@ L.Layer.addInitHook(function(){
         Show modal window with checkbox or radio for each map
         Select/unseelct the layer in all visible maps
         *******************************************************************/
-        selectMaps: function(){
+        selectMaps: function( map ){
             //If only one map is vissible => simple toggle
             if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
                 if (this.isAddedToMap(0))
@@ -1027,6 +1074,7 @@ L.Layer.addInitHook(function(){
             }
 
             var _this = this,
+                currentMapIndex = map && map instanceof L.Map ? map.fcooMapIndex : null,
                 maxMaps = nsMap.setupOptions.multiMaps.maxMaps,
                 checkboxType = this.options.radioGroup ? 'radio' : 'checkbox',
                 selectedOnMap = [],
@@ -1084,6 +1132,7 @@ L.Layer.addInitHook(function(){
                             $.bsStandardCheckboxButton({
                                 square  : true,
                                 selected: selectedOnMap[index],
+                                class   : index === currentMapIndex ? 'active' : '',
                                 type    : checkboxType,
                                 onChange: function(id, selected){
                                     selectedOnMap[index] = selected;

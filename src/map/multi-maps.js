@@ -54,6 +54,11 @@ related issues in map sync
 
                 //Update menu-items in layerMenu (if any)
                 nsMap.mapLayer_updateMenuItem();
+
+                //Update modernizr-classe regarding single or multi maps selected
+                var nrOfMaps = parseInt(options.maps.split('_')[1]);
+                window.modernizrToggle( 'single-maps-selected', nrOfMaps == 1);
+                window.modernizrToggle( 'multi-maps-selected',  nrOfMaps > 1 );
             }
         },
         defaultValue: {

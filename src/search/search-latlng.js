@@ -69,8 +69,31 @@ search-latlng
         onlyLngLat
     Return []{formatId, latlng, text, priority, groupHeader}
     *************************************************************************/
-    nsMap.text2LatLng = function( text, options ){
-        options = options || {};
+    nsMap.text2LatLng = function( text, options = {}){
+
+        //***************************************************
+        function addResult(formatId, value, isLngLat){
+            if (value){
+                var latLng = L.latLng(value);
+                latLng.isLngLat = !!isLngLat;
+                formatResult.push( latLng );
+            }
+        }
+        //***************************************************
+        function checkLatLngPair(formatId, latLngText){
+            if (!options.onlyLngLat)
+                addResult(formatId, llf(latLngText[0], latLngText[1]).value());
+            if (!options.onlyLatLng && (options.onlyLngLat || (latLngText[0] != latLngText[1])))
+                addResult(formatId, llf(latLngText[1], latLngText[0]).value(), true);
+        }
+        //***************************************************
+        //Convert all latLng to {formatId, latLng, text, priority}
+        function getText(latLng, trunc, useEditMask){
+            var options = {asArray: true, useEditMask:useEditMask},
+                array = trunc ? latLng.formatTrunc(options) : latLng.format(options);
+            return latLng.isLngLat ? array[1]+'  '+array[0] : array.join('  ');
+        }
+        //***************************************************
 
         //First: Search for valid positions
         var saveFormatId = llf.options.formatId,
@@ -82,28 +105,6 @@ search-latlng
                             .replace(/\s{2,}/mg, ' ')
                             .replace(/\s*[.]\s*/mg, '.')
                             .replace(/\s*[,]\s*/mg, ',');
-
-        function addResult(formatId, value, isLngLat){
-            if (value){
-                var latLng = L.latLng(value);
-                latLng.isLngLat = !!isLngLat;
-                formatResult.push( latLng );
-            }
-        }
-
-        function checkLatLngPair(formatId, latLngText){
-            if (!options.onlyLngLat)
-                addResult(formatId, llf(latLngText[0], latLngText[1]).value());
-            if (!options.onlyLatLng && (options.onlyLngLat || (latLngText[0] != latLngText[1])))
-                addResult(formatId, llf(latLngText[1], latLngText[0]).value(), true);
-        }
-
-        //Convert all latLng to {formatId, latLng, text, priority}
-        function getText(latLng, trunc, useEditMask){
-            var options = {asArray: true, useEditMask:useEditMask},
-                array = trunc ? latLng.formatTrunc(options) : latLng.format(options);
-            return latLng.isLngLat ? array[1]+'  '+array[0] : array.join('  ');
-        }
 
         //Check if search match a position in any of the avaiable formats
         for (var formatId = llf.LATLNGFORMAT_FIRST; formatId <= llf.LATLNGFORMAT_LAST; formatId++){
@@ -147,6 +148,7 @@ search-latlng
             else
                 //Single text format
                 addResult(formatId, llf(text).value());
+
             if (formatResult.length){
                 //Convert all found latlng to {formatId, latLng, groupId, text, priority}
                 $.each( formatResult, function(index, latLng){

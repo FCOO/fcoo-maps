@@ -1377,7 +1377,10 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
             modalOptions.helpButton = true;
         }
 
-        //Get multi-maps and max-maps
+        //Get multi-maps and max-maps. Set modernizr-classes first
+        window.modernizrOn ( 'single-maps-selected');
+        window.modernizrOff( 'multi-maps-selected');
+
         nsMap.hasMultiMaps = options.multiMaps && options.multiMaps.enabled;
         if (nsMap.hasMultiMaps){
             //Get max-maps
@@ -1895,7 +1898,7 @@ Methods to adjust and display latLng-values
         options = options || {};
         var modalOptions = {
                 header: options.header || {
-                    icon: ['fa-map-marker-alt', 'fa-arrow-alt-right','fa-copy'],
+                    icon: ['fa-location-dot', 'fa-arrow-alt-right','fa-copy'],
                     text: {da:'Kopier position til udklipsholder', en:'Copy Position to Clipboard'}
                 },
                 content: [],
@@ -2705,8 +2708,6 @@ Objects and methods to handle leaflet-maps
         */
         //maxBoundsViscosity: 0.0,
 
-
-    renderer: {}
     });
 
 
@@ -3065,9 +3066,9 @@ Global context-menu for all maps
 
     var map_contextmenu_itemList = [{
             //Position in modal-window
-            icon   : 'fa-location-pin',
+            icon   : 'fa-location-dot',
             text   : {da:'Position...', en: 'Position...'},
-            onClick: function(latLng){
+            onClick: function(id, latLng){
                 latLng.asModal();
             }
         },{
@@ -3077,8 +3078,7 @@ Global context-menu for all maps
             _width : 180,
             closeOnClick: false,
 
-            onClick: function(latLng, item){
-                var map = item._map;
+            onClick: function(id, latLng, $button, map){
                 if (map)
                     map.setView(latLng, map.getZoom(), map._mapSync_NO_ANIMATION);
             },
@@ -3094,8 +3094,7 @@ Global context-menu for all maps
         text      : nsMap.mapSettingHeader.text,
         lineBefore: true,
         width     : '10em',
-        onClick: function(latlng, item){
-            var map = item._map;
+        onClick: function(id, latlng, $button, map){
             if (map)
                 nsMap.editMapSetting(map.fcooMapIndex);
         }
@@ -3103,10 +3102,10 @@ Global context-menu for all maps
 
 
     L.Map.addInitHook(function () {
-        //If the map has a BsPositionControl woth contextmenu or a options.MANGLER = true
+        //If the map has a BsPositionControl with contextmenu or a options.MANGLER = true
         if ( (this.options.bsPositionOptions && this.options.bsPositionOptions.inclContextmenu) || (this.options.MANGLER) ){
             this.setContextmenuHeader( map_contextmenu_header  );
-            this.addContextmenuItems( map_contextmenu_itemList );
+            this.addContextmenuItems( map_contextmenu_itemList);
         }
     });
 }(jQuery, L, this, document));
@@ -3134,12 +3133,20 @@ options = {
 
     layerOptions    : {},       //Specific options for the Layer. Can include options marked (*)
 
+    //Menu
+    menuOptions: {
+        buttonList : []bsButton-options
+        useLegendButtonList: BOOLEAN, if true and menuOptions.buttonList is not given => use legendOptions.buttonList as in menu
+    },
+
     //Legend
     legendOptions: {
         buttonList : []bsButton-options + onlyShowWhenLayer: BOOLEAN. When true the button is only visible when the layer is visible.
         onInfo     : function()
         onWarning  : function()
     }
+
+
 
     buttonList: Same as legendOptions.buttonList kept for backward combability
     onInfo    : Same as legendOptions.onInfo kept for backward combability
@@ -3286,11 +3293,24 @@ L.Layer.addInitHook(function(){
             gettext : function(/*options*/){ return '';               },
         };
 
-    function getMap(mapOrMapIndexOrMapId){
+
+    //Adjust default options for legend
+    L.BsLegend.prototype.options.closeIconOptions = {
+        icon : [['show-for-single-maps-selected fa-circle-trash'], ['show-for-multi-maps-selected fa-circle-check']],
+        title: {da: 'Skjul', en: 'Hide'}
+    };
+
+    //Overwrite L.BsLegend.remove to select for all maps if multi maps
+    L.BsLegend.prototype.remove = function(){
+        this.options.mapLayer.selectMaps(this.parent._map);
+    };
+
+
+    nsMap.getMap = function(mapOrMapIndexOrMapId){
         return mapOrMapIndexOrMapId instanceof L.Map ?
                 mapOrMapIndexOrMapId :
                 nsMap.mapIndex[mapOrMapIndexOrMapId] || nsMap.mapList[mapOrMapIndexOrMapId];
-    }
+    };
 
     nsMap.getPaneName       = function(id){ return id.toUpperCase()+'Pane'; };
     nsMap.getMarkerPaneName = function(id){ return id.toUpperCase()+'MarkerPane'; };
@@ -3453,20 +3473,29 @@ L.Layer.addInitHook(function(){
         isAddedTo(mapOrIndex) - return true if the MapLayer is added to the map
         *********************************************************/
         isAddedToMap: function(mapOrIndex){
-            var mapIndex = getMap(mapOrIndex).fcooMapIndex;
+            var mapIndex = nsMap.getMap(mapOrIndex).fcooMapIndex;
             return !!this.info[mapIndex] && !!this.info[mapIndex].map;
         },
 
         /*********************************************************
-        applySetting and saveSetting
+        applySetting, applyCommonSetting and saveSetting, saveCommonSetting
         *********************************************************/
-        //applySetting - apply individuel setting for the Map_layer
+        //applySetting - apply individuel setting for the Map_layer at map
         applySetting: function(/*setting, map, mapInfo, mapIndex*/){
+
+        },
+        //applyCommonSetting - apply common setting for the Map_layer
+        applyCommonSetting: function(/*setting*/){
 
         },
 
         _applySetting: function(data){
             var _this = this;
+
+            //Apply common setting
+            this.applyCommonSetting(data.common || null);
+
+            //Apply individuel settings
             nsMap.visitAllMaps( function(map, index){
                 var setting = data[index] || {};
                 if (setting.show)
@@ -3482,14 +3511,23 @@ L.Layer.addInitHook(function(){
             });
         },
 
-        //saveSetting: function() - Return individuel setting for the Map_layer
+        //saveSetting: function() - Return individuel setting for the Map_layer at map
         saveSetting: function(/*map, mapInfo, mapIndex*/){
             return {};
+        },
+        //saveCommonSetting: function() - Return common setting for the Map_layer
+        saveCommonSetting: function(){
+            return null;
         },
 
         _saveSetting: function(){
             var _this = this,
-                data = {};
+                data = {},
+                commonSetting = this.saveCommonSetting() || null;
+
+            if (commonSetting !== null)
+                data.common = commonSetting;
+
             $.each(this.info, function(index, info){
                 data[index] =
                     $.extend({
@@ -3500,21 +3538,21 @@ L.Layer.addInitHook(function(){
                     );
             });
             ns.appSetting.set(this.id, data);
-            ns.appSetting.save();
-            return this;
+            return ns.appSetting.save();
         },
 
         /*********************************************************
         addTo
         *********************************************************/
         addTo: function(mapOrIndex){
+
             var _this = this;
             if ($.isArray(mapOrIndex)){
                 $.each(mapOrIndex, function(index, _map){ _this.addTo(_map); });
                 return _this;
             }
 
-            var map = getMap(mapOrIndex),
+            var map = nsMap.getMap(mapOrIndex),
                 mapIndex = map.fcooMapIndex;
 
             //Check if layer allready added
@@ -3568,7 +3606,7 @@ L.Layer.addInitHook(function(){
                         onRemove    : $.proxy(this.removeViaLegend, this),
                         normalIconClass: this.showAndHideClasses,
                         hiddenIconClass: this.inversShowAndHideClasses,
-
+                        mapLayer       : this,
 
                     }, legendOptions);
 
@@ -3675,8 +3713,8 @@ L.Layer.addInitHook(function(){
                     }
                 }
 
-                info.layer = this.createLayer(this.options.layerOptions);
-
+                info.layer = this.createLayer(this.options.layerOptions, map);
+                info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
 
                 //Sets options._popupContainerClass = this.showAndHideClasses to hide open popups when the layer is hidden and visa versa
                 info.layer.options._popupContainerClass = this.showAndHideClasses;
@@ -3746,7 +3784,7 @@ L.Layer.addInitHook(function(){
         Return the dataset for the map given by index_mapId_map
         *********************************************************/
         getDataset: function( mapOrMapIndexOrMapId ){
-            var map = getMap(mapOrMapIndexOrMapId),
+            var map = nsMap.getMap(mapOrMapIndexOrMapId),
                 index = map ? map.fcooMapIndex : null,
                 info = index === null ? null : this.info[index];
 
@@ -3930,7 +3968,7 @@ L.Layer.addInitHook(function(){
                 return this;
             }
 
-            var map = getMap(mapOrIndex),
+            var map = nsMap.getMap(mapOrIndex),
                 mapIndex = map.fcooMapIndex;
 
             //Check if layer is already removed
@@ -4040,17 +4078,17 @@ L.Layer.addInitHook(function(){
                 info.updateColorInfoOnWorkingOff = false;
 
                 //Call map._onColorPosition update color-info when the layer is loaded
-                getMap(mapIndex)._onColorPosition(true);
+                nsMap.getMap(mapIndex)._onColorPosition(true);
             }
 
         },
 
 
         /*********************************************************
-        createLayer: function(layerOptions)
+        createLayer: function(layerOptions, map)
         Set by the different types of MapLayer
         *********************************************************/
-        createLayer: function(/*layerOptions*/){
+        createLayer: function(/*layerOptions, map*/){
 
         },
 
@@ -4068,7 +4106,7 @@ L.Layer.addInitHook(function(){
                 $.each(mapOrIndex, function(index, _map){ _this.toggleColorInfo(_map, show); });
                 return _this;
             }
-            var map = getMap(mapOrIndex),
+            var map = nsMap.getMap(mapOrIndex),
                 mapIndex = map.fcooMapIndex,
                 bsPositionControl = map.bsPositionControl,
                 infoBox = this.info[mapIndex].infoBox;
@@ -4088,14 +4126,22 @@ L.Layer.addInitHook(function(){
         Return options for this layer as MenuItem in Mmenu
         *******************************************************************/
         menuItemOptions: function(){
-            return {
-                id        : this.id,
-                icon      : this.options.icon,
-                text      : this.options.text,
-                type      : this.options.radioGroup ? 'radio' : 'check',
-                mapLayerId: this.id,
-                onClick   : $.proxy(this.selectMaps, this)
-            };
+            var menuOptions   = this.options.menuOptions = this.options.menuOptions || {},
+                legendOptions = this.options.legendOptions,
+                result = $.extend({
+                    id        : this.id,
+                    icon      : this.options.icon,
+                    text      : this.options.text,
+                    type      : this.options.radioGroup ? 'radio' : 'check',
+                    mapLayerId: this.id,
+                    onClick   : $.proxy(this.selectMaps, this)
+                }, menuOptions);
+
+            //Use legend-buttons if no direct menu-button is given
+            if (!result.buttonList && menuOptions.useLegendButtonList && legendOptions.buttonList)
+                result.buttonList = legendOptions.buttonList;
+
+            return result;
         },
 
         /******************************************************************
@@ -4130,7 +4176,7 @@ L.Layer.addInitHook(function(){
         Show modal window with checkbox or radio for each map
         Select/unseelct the layer in all visible maps
         *******************************************************************/
-        selectMaps: function(){
+        selectMaps: function( map ){
             //If only one map is vissible => simple toggle
             if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
                 if (this.isAddedToMap(0))
@@ -4141,6 +4187,7 @@ L.Layer.addInitHook(function(){
             }
 
             var _this = this,
+                currentMapIndex = map && map instanceof L.Map ? map.fcooMapIndex : null,
                 maxMaps = nsMap.setupOptions.multiMaps.maxMaps,
                 checkboxType = this.options.radioGroup ? 'radio' : 'checkbox',
                 selectedOnMap = [],
@@ -4198,6 +4245,7 @@ L.Layer.addInitHook(function(){
                             $.bsStandardCheckboxButton({
                                 square  : true,
                                 selected: selectedOnMap[index],
+                                class   : index === currentMapIndex ? 'active' : '',
                                 type    : checkboxType,
                                 onChange: function(id, selected){
                                     selectedOnMap[index] = selected;
@@ -5917,6 +5965,11 @@ related issues in map sync
 
                 //Update menu-items in layerMenu (if any)
                 nsMap.mapLayer_updateMenuItem();
+
+                //Update modernizr-classe regarding single or multi maps selected
+                var nrOfMaps = parseInt(options.maps.split('_')[1]);
+                window.modernizrToggle( 'single-maps-selected', nrOfMaps == 1);
+                window.modernizrToggle( 'multi-maps-selected',  nrOfMaps > 1 );
             }
         },
         defaultValue: {
@@ -6634,8 +6687,31 @@ search-latlng
         onlyLngLat
     Return []{formatId, latlng, text, priority, groupHeader}
     *************************************************************************/
-    nsMap.text2LatLng = function( text, options ){
-        options = options || {};
+    nsMap.text2LatLng = function( text, options = {}){
+
+        //***************************************************
+        function addResult(formatId, value, isLngLat){
+            if (value){
+                var latLng = L.latLng(value);
+                latLng.isLngLat = !!isLngLat;
+                formatResult.push( latLng );
+            }
+        }
+        //***************************************************
+        function checkLatLngPair(formatId, latLngText){
+            if (!options.onlyLngLat)
+                addResult(formatId, llf(latLngText[0], latLngText[1]).value());
+            if (!options.onlyLatLng && (options.onlyLngLat || (latLngText[0] != latLngText[1])))
+                addResult(formatId, llf(latLngText[1], latLngText[0]).value(), true);
+        }
+        //***************************************************
+        //Convert all latLng to {formatId, latLng, text, priority}
+        function getText(latLng, trunc, useEditMask){
+            var options = {asArray: true, useEditMask:useEditMask},
+                array = trunc ? latLng.formatTrunc(options) : latLng.format(options);
+            return latLng.isLngLat ? array[1]+'  '+array[0] : array.join('  ');
+        }
+        //***************************************************
 
         //First: Search for valid positions
         var saveFormatId = llf.options.formatId,
@@ -6647,28 +6723,6 @@ search-latlng
                             .replace(/\s{2,}/mg, ' ')
                             .replace(/\s*[.]\s*/mg, '.')
                             .replace(/\s*[,]\s*/mg, ',');
-
-        function addResult(formatId, value, isLngLat){
-            if (value){
-                var latLng = L.latLng(value);
-                latLng.isLngLat = !!isLngLat;
-                formatResult.push( latLng );
-            }
-        }
-
-        function checkLatLngPair(formatId, latLngText){
-            if (!options.onlyLngLat)
-                addResult(formatId, llf(latLngText[0], latLngText[1]).value());
-            if (!options.onlyLatLng && (options.onlyLngLat || (latLngText[0] != latLngText[1])))
-                addResult(formatId, llf(latLngText[1], latLngText[0]).value(), true);
-        }
-
-        //Convert all latLng to {formatId, latLng, text, priority}
-        function getText(latLng, trunc, useEditMask){
-            var options = {asArray: true, useEditMask:useEditMask},
-                array = trunc ? latLng.formatTrunc(options) : latLng.format(options);
-            return latLng.isLngLat ? array[1]+'  '+array[0] : array.join('  ');
-        }
 
         //Check if search match a position in any of the avaiable formats
         for (var formatId = llf.LATLNGFORMAT_FIRST; formatId <= llf.LATLNGFORMAT_LAST; formatId++){
@@ -6712,6 +6766,7 @@ search-latlng
             else
                 //Single text format
                 addResult(formatId, llf(text).value());
+
             if (formatResult.length){
                 //Convert all found latlng to {formatId, latLng, groupId, text, priority}
                 $.each( formatResult, function(index, latLng){
@@ -6777,291 +6832,489 @@ search-latlng
 
 ;
 /****************************************************************************
-search.js
+search-mapLayer.js
 ****************************************************************************/
 (function ($, L, i18next, window/*, document, undefined*/) {
     "use strict";
 
     var ns = window.fcoo = window.fcoo || {},
-        nsMap = ns.map = ns.map || {},
-
-        searchText             = '',
-        selectedSearchResultId = '',
-        searchLang             = '', //The language selected during last search
-        minSearchLength        = 3;
+        nsMap = ns.map = ns.map || {};
 
 
-    ns.events.on( ns.events.LANGUAGECHANGED, function(){
-        searchText = '';
-    });
+    var selectedSearchResultList = [],       //List of current selected SearchResult
+        selectedSearchResult = null; //Current selected SearchResult in selectedSearchResultList
 
+    /***********************************************************
+    Add MapLayer_SearchResult to createMapLayer
+    ***********************************************************/
+    var id = "SEARCH-RESULT",
+        header = {
+            icon: L.bsMarkerAsIcon('search-result'),
+            text: {da: 'Søgeresultater', en: 'Search Results'}
+        };
 
-    /*************************************************************************
-    search( text )
-    *************************************************************************/
-    nsMap.search = function( text ){
-        /* TEST
-        text = text || '12 12 - 12 12';
-        text = text || "56° 28,619'N - 006° 05,055'E";
-        text = text || 'Köln';
-        */
-        var lang = ns.globalSetting.get('language');
-        if (text === null){
-            showSearchModalForm(searchText);
-            return;
-        }
-        text = (text || '').trim();
-
-        //If text is same as last search => show same result!
-        if ((text == searchText) && (searchLang == lang)){
-            showSearchResultModal(searchResultList);
-            return;
-        }
-
-        //If text to short => open modal to enter search
-        if (text.length < minSearchLength){
-            showSearchModalForm(text);
-            return;
-        }
-
-        //Save text and lang as last search
-        searchText = text;
-        searchLang = lang;
-
-        //Add search to end of history-list
-        searchHistoryList.goLast();
-        searchHistoryList.add(text);
-
-        //Update input in top-menu with latest search
-        nsMap.main.topMenuObject.searchInput.val(searchText);
-
-        //First: Search for position
-        var latLngList = nsMap.text2LatLng(text);
-        if (latLngList.length){
-            var currentGroupHeaderId = null,
-                list = [];
-            $.each(latLngList, function(index, rec){
-                if (rec.groupHeaderId !== currentGroupHeaderId)
-                    currentGroupHeaderId = rec.groupHeaderId;
-                list.push(
-                    new SearchResult({
-                            latLng    : rec.latLng,
-                            name      : rec.text,
-                            type      : rec.groupHeader,
-                            isPosition: true
-                        })
-                );
+    nsMap.createMapLayer[id] = function(options, addMenu){
+        nsMap.searchResultMapLayer =
+            nsMap._addMapLayer(id, MapLayer_SearchResult, {
+                icon: header.icon,
+                text: header.text,
+                legendOptions: {}
             });
-            showSearchResultModal(list);
-        }
-        else {
-            //If no position was found => search in OpenStreetMap
-            var params = {
-                    'q'               : searchText,
-                    'format'          : 'jsonv2',
-                    'polygon_geojson' : 1,
-                    'extratags'       : 1,
-                    'namedetails'     : 1,
-                    'addressdetails'  : 1,
-                    'accept-language' : 'en',
-                    'limit'           : 20,
-                };
 
-            if (lang != 'en')
-                params['accept-language'] = lang + ',en';
-            $.workingOn();
-            Promise.getJSON( nsMap.setupOptions.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
-        }
+
+        addMenu( nsMap.searchResultMapLayer.menuItemOptions() );
     };
 
-    function nominatim_response(json){
-        $.workingOff();
 
-        var list = [], noToInclude = 10;
-        $.each(json, function(index, nominatim){
-            var searchResult = new SearchResult(nominatim);
-            if (searchResult.options.include && noToInclude){
-                noToInclude--;
-                list.push(searchResult);
+    /***********************************************************
+    ************************************************************
+    MapLayer_SearchResult
+    MapLayer for showing search results
+    ************************************************************
+    ***********************************************************/
+    var searchResultIndex = 0;
+    var MapLayer_SearchResult = function(options = {}) {
+
+        options.legendOptions = {
+            buttonList : this.buttonList(),
+        };
+        options.menuOptions = {
+            useLegendButtonList: true
+        };
+
+        nsMap.MapLayer.call(this, options);
+
+        this.searchResults    = {}; //{ID: SearchResult} shown on the maps
+        this.numberOfSearchResults = 0;
+    };
+
+    MapLayer_SearchResult.prototype = Object.create(nsMap.MapLayer.prototype);
+    MapLayer_SearchResult.prototype = $.extend({}, nsMap.MapLayer.prototype, {
+
+        /*****************************************************
+        searchButton and buttonList = ´Buttons for legend, menu etc.
+        *****************************************************/
+        _searchButton_onClick: function(){
+            if (this.searchResultListModal)
+                this.searchResultListModal.close();
+            nsMap.showSearchModalForm('', ns.showSearchResultInMap );
+        },
+
+        searchButton: function(){
+            return {
+                type   : 'button',
+                icon   : 'fa-search',
+                class  : 'min-width',
+                text   : {da:'Søg', en:'Search'},
+                onClick: this._searchButton_onClick,
+                context: this
+            };
+        },
+
+        buttonList: function(){
+            var _this = this;
+            return [
+                {icon: 'fa-th-list',   text: {da: 'Alle',  en: 'All'},     class: 'min-width', onClick: _this._showList,  context: _this, lineBefore: true},
+                {icon: 'fa-trash-alt', text: {da: 'Fjern', en: 'Remove' }, class: 'min-width', onClick: _this.removeAll,  context: _this},
+                this.searchButton()
+            ];
+        },
+
+        /*****************************************************
+        createLayer
+        *****************************************************/
+        createLayer: function(layerOptions, map){
+            var layerGroup = L.layerGroup({/*pane: 'MANGLER - TODO'*/});
+
+            //Add contextmenu with items to show and remove all items
+            layerGroup.setContextmenuHeader(header);
+            layerGroup.addContextmenuItems(this.buttonList());
+
+            //Add all searchResult to the new layerGroup
+            $.each(this.searchResults, function(id, searchResult){
+                searchResult.addTo(layerGroup, map);
+            });
+
+            return layerGroup;
+        },
+
+        /*************************************************************************
+        add( searchResult )
+        Maintain a list of SearchResult viewed on the maps
+        *************************************************************************/
+        add: function( searchResult ){
+            var id = searchResult.id;
+            if (this.searchResults[id])
+                //Allready shown on the maps => use the saved version
+                searchResult = this.searchResults[id];
+            else {
+                this.searchResults[id] = searchResult;
+                searchResult.index = searchResultIndex++;
+
+                searchResult.mapLayer = this;
+
+                //Add marker and poly (if any) of the searchResult to the maps
+                this.visitAllLayers( function(layerGroup){
+                    if (layerGroup)
+                        searchResult.addTo(layerGroup, layerGroup._map);
+                });
+
+                this.numberOfSearchResults++;
+
+                this._saveSetting();
             }
-        });
-        showSearchResultModal(list);
-    }
+            return searchResult;
+        },
 
-    function nominatim_reject(){
-        $.workingOff();
-        window.notyError({
-            da: 'Søgningen efter "'+searchText+'" mislykkedes<br>Prøv eventuelt igen senere',
-            en: 'The search for "'+searchText+'" failed<br>Try again later',
-        }, {textAlign: 'center'});
-    }
+        /*************************************************************************
+        remove
+        *************************************************************************/
+        remove: function( searchResult, dontSaveSetting ){
+            //Remove the marker and poly from all maps
+            this.visitAllLayers( function(layerGroup){
+                if (layerGroup)
+                    searchResult.removeFrom(layerGroup._map);
+            });
+
+            delete this.searchResults[searchResult.id];
+
+            this.numberOfSearchResults--;
+
+            if (!dontSaveSetting)
+                this._saveSetting();
+        },
+
+        /*************************************************************************
+        removeAll - Remove all search results
+        *************************************************************************/
+        removeAll: function(){
+            if (this.numberOfSearchResults)
+                window.notyConfirm({
+                    type: 'warning',
+                    text: {
+                        da: nsMap.hasMultiMaps ? 'Fjern alle søgeresultater i alle kort' : 'Fjern alle søgeresultater',
+                        en: nsMap.hasMultiMaps ? 'Remove all search results in all maps' : 'Remove all search results'
+                    },
+                    onOk: this._removeAll.bind(this)
+                });
+            else
+                this._noSearchResult();
+        },
+
+        _removeAll: function(){
+            var _this = this;
+            $.each(this.searchResults, function(id, searchResult){
+                _this.remove( searchResult, true );
+            });
+
+            this._saveSetting();
+        },
+
+        /*************************************************************************
+        applyCommonSetting
+        *************************************************************************/
+        applyCommonSetting: function(list = []){
+            if (this.isApplingCommonSetting || !list)
+                return;
+
+            this.isApplingCommonSetting = true;
+
+            this.settingList = list;
+
+            //Create list of 'dummy' SearchResult to past on to ns.getNominatimLookupUrl. Only include not already added SearchResults
+            var nominatimList = [],
+                _this = this;
+            list.forEach( function( opt ){
+                if (!opt.isPosition && !_this.searchResults['_'+opt.osm_id])
+                    nominatimList.push({
+                        options: $.extend(true, {}, opt)
+                    });
+            });
+
+            if (nominatimList.length)
+                Promise.getJSON(
+                    ns.getNominatimLookupUrl(nominatimList, true), {},
+                    this._nominatim_response.bind(this),
+                    this._nominatim_reject.bind(this)
+                );
+            else
+                this._nominatim_response([]);
+        },
+
+        _nominatim_response: function(list = []){
+            //Create and add all new SearchResult from this.settingList with new options from list (if not a position)
+            var _this = this;
+
+            //Add all saved SearchResults
+            this.settingList.forEach( function(opt){
+                //If it alresdy exists => Do nothing
+                if (_this.searchResults[opt.id])
+                    return;
+
+                var newSearchResultOptions = opt;
+
+                //Find new options in list (for non-position)
+                if (!opt.isPosition)
+                    list.forEach( function( osmOptions ){
+                        if (opt.osm_id == osmOptions.osm_id)
+                            newSearchResultOptions = osmOptions;
+                    });
+
+                //Add The new saved SearchResult
+                _this.add( new nsMap.SearchResult( newSearchResultOptions ) );
+
+            });
+
+            this.isApplingCommonSetting = false;
+            return this;
+        },
+
+        _nominatim_reject: function(){
+            this.isApplingCommonSetting = false;
+
+            window.notyError({
+                da: 'Indlæsning af tidligere søgeresultater mislykkedes desværre',
+                en: 'The request for previous search results failed',
+            }, {textAlign: 'center'});
+        },
 
 
-    /*************************************************************************
-    showSearchModalForm( text )
-    *************************************************************************/
-    var searchModalForm = null,
-        searchHistoryList = new window.HistoryList({
-            action: function( text ){
-                if (searchModalForm)
-                    searchModalForm.getInput('search').setValue(text);
-            }
-        });
-
-    function showSearchModalForm( text ){
-        searchModalForm = searchModalForm || $.bsModalForm({
-            header        : {icon: 'fa-search', text:{da:'Søg efter position eller lokation', en:'Search for Position or Location'}},
-            static        : false,
-            keyboard      : true,
-            formValidation: true,
-            content: {
-                id         : 'search',
-                type       : 'input',
-                placeholder: {da:'Søg...', en:'Search..'},
-                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
-            },
-            closeWithoutWarning: true,
-            historyList: searchHistoryList,
-            submitIcon: 'fa-search',
-            submitText: {da:'Søg', en:'Search'},
-            onSubmit  : function(data){ nsMap.search(data.search); },
-        });
-        searchModalForm.edit({search: text});
-        searchModalForm.getInput('search').$element.get(0).select();
-    }
+        /*************************************************************************
+        saveCommonSetting
+        *************************************************************************/
+        saveCommonSetting: function(){
+            var list = [];
+            this.getList(true).forEach( function(searchResult){
+                list.push(searchResult.saveOptions);
+            });
+            return list;
+        },
 
 
-    /*************************************************************************
-    showSearchResultModal( list )
-    list = []{[icon,] text, [latLng,] [geoJSON]}
-    *************************************************************************/
-    var searchResultModal = null,
-        searchResultList = [],
-        selectedSearchResultIndex = -1;
+        /*************************************************************************
+        _noSearchResult - Modal with info-text when no SearchResult are selected
+        *************************************************************************/
+        _noSearchResult: function(){
+            $.bsNoty({
+                type     : 'alert',
+                layout   : 'center',
+                header   : {icon: 'fa-search', text:{da:'Søg', en:'Search'}},
+                text     : {da:'Ingen søgeresultater er vist', en:'No search result are shown'},
+                buttons  : [this.searchButton()],
+                closeWith: ['click', 'button'],
+                textAlign: 'center'
+            });
+            return this;
 
-    function showSearchResultModal( list ){
+        },
 
-        searchResultList = list;
 
-        //If only ONE result => show direct on map
-        if (list.length == 1){
-            list[0].showOnMainMap();
-            return;
-        }
+        /*************************************************************************
+        getList
+        Return an array of shown SearcResult(s)
+        *************************************************************************/
+        getList: function( reverse ){
+            var result = [];
 
-        var searchAgainButton = {
-                type: 'button',
-                icon: 'fa-search',
-                text: {da:'Søg igen', en:'New Search'},
-                onClick: function(){
-                    if (searchResultModal)
-                        searchResultModal.close();
-                    showSearchModalForm(searchText);
-                }
-            },
-            selectlistItems = [];
-
-        //Create result-list
-        selectedSearchResultIndex = 0;
-        $.each(list, function(index, searchResult){
-            if (searchResult.id == selectedSearchResultId)
-                selectedSearchResultIndex = index;
-        });
-        var inclDetails = true;
-        $.each(list, function(index, searchResult){
-            if (searchResult.options.isPosition)
-                inclDetails = false;
-            selectlistItems.push(
-                    searchResult.listContent({
-                        id       : searchResult.options.latLng ? 'item_'+index : null,
-                        selected : index == selectedSearchResultIndex,
-                        textClass: 'text-wrap'
-                    })
+            $.each(this.searchResults, function(id, searchResult){
+                result.push(searchResult);
+            });
+            result.sort(
+                reverse ?
+                    function( sr1, sr2 ){ return sr1.index - sr2.index; } :
+                    function( sr1, sr2 ){ return sr2.index - sr1.index; }
             );
-        });
+            return result;
+        },
 
-        if (selectlistItems.length){
-            var onClick = function(){
-                    searchResultModal.close();
-                    searchResultList[selectedSearchResultIndex].showOnMainMap();
-                },
-                options = {
+
+        /*************************************************************************
+        showList
+        Show a modal with all the visible searchResults
+        *************************************************************************/
+        _showList: function(id, latlng, $button, map){
+            this.showList( map );
+        },
+
+        showList: function( map, noError ){
+            ns.showSearchResultInMap = map;
+
+
+            if (!this.numberOfSearchResults){
+                //Error on no searchResults on maps
+                if (!noError)
+                    this._noSearchResult();
+                return;
+            }
+
+            //Move all searchResults into a array and sort them by index
+            var searchResultListModal = null;
+            selectedSearchResult = null;
+            selectedSearchResultList = this.getList();
+
+            var _this = this;
+
+
+            //buttons = generel list for SearchResult = nsMap.searchResultButtonList
+            var buttonList = [];
+            nsMap.searchResultButtonList.forEach( function( options ){
+                buttonList.push( $.extend(true, {}, options ) );
+            });
+
+
+            //*****************************************************
+            function onClick(id){
+                var buttonIndex = parseInt(id.split('_')[1]),
+                    buttonOptions = buttonList[buttonIndex],
+                    methodName = buttonOptions.method.split('_')[1]; //Method-name without '_' = method(map)
+
+                if (buttonOptions.closeOnClick || buttonOptions.reloadOnClick)
+                    searchResultListModal.close();
+
+                selectedSearchResult[methodName]( ns.showSearchResultInMap );
+
+                if (buttonOptions.reloadOnClick)
+                    _this.showList( ns.showSearchResultInMap, true );
+            }
+            //*****************************************************
+
+
+            buttonList.forEach( function( buttonOptions, index ){
+                buttonOptions.id = 'item_'+ index;
+                buttonOptions.title = buttonOptions.text;
+                buttonOptions.text = null;
+                buttonOptions.square = true;
+
+                buttonOptions.onClick = onClick;
+
+            });
+            buttonList.push(this.searchButton());
+
+            //Create options for modal with list of shown searchResults
+            var contentList = [];
+            $.each(selectedSearchResultList, function(index, searchResult){
+                selectedSearchResult = selectedSearchResult || searchResult;
+                contentList.push( searchResult.listContent( index ) );
+            });
+
+            //*****************************************************
+            //Updates the enabled/disabled of the buttons related to the current selected SearchResult
+            function update(){
+                var $buttonContainer = searchResultListModal.bsModal.$buttonContainer,
+                    buttonList = selectedSearchResult._getButtonList(true);
+
+                buttonList.forEach( function( options ){
+                    $buttonContainer.find('.'+options.className).toggleClass('disabled', !options.include);
+                });
+            }
+            //*****************************************************
+
+            var modalOptions = {
                     header   : {icon: 'fa-search', text:{da:'Søgeresultater', en:'Search Results'}},
                     static   : false,
                     keyboard : true,
                     flexWidth: true,
-                    fixedContent: {
-                        type : 'text',
-                        label: {da:'Søgte efter', en:'Searched for'},
-                        text : searchText,
-                        after: searchAgainButton
-                    },
+                    closeButton: false,
                     content : {
-                        type  : 'selectlist',
-                        list  : selectlistItems,
+                        type    : 'selectlist',
+                        list    : contentList,
                         onChange: function(id){
-                            selectedSearchResultIndex = parseInt(id.split('_')[1]);
-                            selectedSearchResultId = searchResultList[selectedSearchResultIndex].id;
-                        },
-                        onDblClick: onClick
-                    },
-                    buttons : [
-                        {
-                            icon   : 'fa-info-circle',
-                            className: 'btn_search_result_detail',
-                            text   : {da:'Detaljer', en:'Details'},
-                            onClick: function(){ searchResultList[selectedSearchResultIndex].showDetails(); }
-                        }, {
-                            icon   : 'fa-map-marker',
-                            text   : {da:'Vis på kort', en:'Show on map'},
-                            onClick: onClick
+                            var index = parseInt(id.split('_')[1]);
+                            selectedSearchResult = selectedSearchResultList[index];
+                            update();
                         }
-                    ],
-                    footer: {
-                        text: {da:'Søgning efter positioner, byer, havområder og lign. - men ikke efter adresser', en:'Search for positions, cities, seas and the likes - but not for addresses'},
-                        textClass: 'd-block text-wrap'
-                    }
+                    },
+                    buttons: buttonList
                 };
-            searchResultModal = searchResultModal ? searchResultModal.update(options) : $.bsModal(options);
 
-            searchResultModal.bsModal.$buttons[1].toggle(inclDetails);
+            searchResultListModal = this.searchResultListModal = this.searchResultListModal ? this.searchResultListModal.update(modalOptions) : $.bsModal(modalOptions);
 
-            searchResultModal.show();
+            this.searchResultListModal.show();
+
+            update();
+
         }
-        else {
-            $.bsNoty({
-                type     : 'alert',
-                layout   : 'center',
-                header   : {icon:'fa-search', text:{da:'Søg', en:'Search'}},
-                text     : {da:'Søgning after "'+searchText+'" gav ikke noget resultat', en:'Search for "'+searchText+'" gave no result'},
-                buttons  : [searchAgainButton],
-                closeWith: ['click', 'button'],
-                timeout  : 4000,
-                textAlign: 'center'
-            });
-        }
-    }
+
+    });
+
+
+
+}(jQuery, L, this.i18next, this, document));
+;
+/****************************************************************************
+search-result.js
+****************************************************************************/
+(function ($, L, i18next, window/*, document, undefined*/) {
+    "use strict";
+
+    var ns = window.fcoo = window.fcoo || {},
+        nsMap = ns.map = ns.map || {};
+
+
+    var searchResultLineColor = 'black',
+        searchResultColor     = 'search-result';
 
 
     /*************************************************************************
-    **************************************************************************
+    searchResultButtonList = []options for all buttons used
+    options = button-options plus
+    isPosition   : BOOLEAN: Only for SearchResult with options.isPosition
+    isNotPosition: BOOLEAN: Only for SearchResult with not options.isPosition
+    hasPosition  : BOOLEAN: Only for SearchResult with inclPositionIsDetails
+    hasPoly      : BOOLEAN: Only for SearchResult with showPoly
+
+    *************************************************************************/
+    nsMap.searchResultButtonList = [
+        {                     icon: 'fa-crosshairs',   text: {da:'Centrér',  en:'Center'  },                    className: 'sr-center-on-map',     method: '_centerOnMap',     closeOnClick: true  },
+        {hasPoly      : true, icon: 'fa-expand',       text: {da:'Udvid',    en:'Expand'  },                    className: 'sr-expand-on-map',     method: '_expandOnMap',     closeOnClick: true  },
+        {hasPosition  : true, icon: 'fa-location-dot', text: {da:'Position', en:'Position'},                    className: 'sr-show-latlng-modal', method: '_showLatLngModal', },
+        {isNotPosition: true, icon: 'fa-info-circle',  text: {da:'Detaljer', en:'Details' },                    className: 'sr-show-details',      method: '_showDetails',     },
+        {                     icon: 'fa-trash-alt',    text: {da:'Fjern',    en:'Remove'  }, lineBefore: true,  className: 'sr-remove-from',       method: '_remove',          reloadOnClick: true }
+    ];
+
+
+    /*************************************************************************
     SearchResult
     Represent one result of a search
-    **************************************************************************
     *************************************************************************/
+    nsMap.searchResults = {};
     var searchResultDetailModal = null;
 
-    function SearchResult(options){
+    var SearchResult = nsMap.SearchResult = function(options){
+
+        //Save options needed to recreate the SearchResult: Position: All, Location: Just
+        if (options.isPosition)
+            this.saveOptions = $.extend(true, {}, options);
+        else
+            this.saveOptions = {
+                osm_type: options.osm_type,
+                osm_id  : options.osm_id
+            };
+
+        //Allow both format = "json" and "jsonv2"
+        options.category = options.category || options.class;
+
         options.include = nsMap.osm_include(options);
         options.address = options.address || {};
-        options.latLng = options.latLng || L.latLng(options.lat, options.lon);
+
+        //Create a L.LatLng from the options
+        var lat = options.latLng ? options.latLng.lat : options.lat,
+            lng = options.latLng ? options.latLng.lng : options.lon,
+            isLngLat = options.latLng && options.latLng.isLngLat;
+        options.latLng = L.latLng(lat, lng);
+        options.latLng.isLngLat = isLngLat;
+
         this.id = '_' + (options.osm_id || options.latLng.lat+'_'+options.latLng.lng);
+        this.saveOptions.id = this.id;
 
         this.update(options);
 
-
         this.showMarker = true;
         this.showPoly   = false;
+
+        this.markers = {}; //{MAPINDEX:  L.bsMarkerSimpleRound}
+        this.polys   = {}; //{MAPINDEX: L.polygon}
+
         if (this.options.geojson && this.options.geojson.coordinates && (this.options.geojson.type != 'Point') && (this.options.geojson.type != 'MultiPoint')){
             var map        = nsMap.mainMap,
                 markerSize = 14;
@@ -7089,7 +7342,7 @@ search.js
             this.showMarker    = this.visibleAtZoom > minZoom;
         }
 
-        //inclPositionIsDetails: true if the search-result has a single point and bo polygons OR the polygon is smaller that a given size. It is to give small cities a point but not big areas like countries etc.
+        //inclPositionIsDetails: true if the search-result has a single point and no polygons OR the polygon is smaller that a given size. It is to give small cities a point but not big areas like countries etc.
         this.inclPositionIsDetails = options.latLng && this.showMarker && (!this.showPoly || (this.visibleAtZoom >= 6 /* OR 5*/));
 
         //Create BsModalContentPromise to update modal-content in modal-window
@@ -7103,25 +7356,41 @@ search.js
         });
 
         this.bsModalContentPromise.addBsModalOwner(this);
-    }
+    };
+
+
+    ns.getNominatimLookupUrl = function( searchResultList, inclPolygon ){
+        searchResultList = $.isArray(searchResultList) ? searchResultList : [searchResultList];
+
+        var osm_ids = '';
+        searchResultList.forEach( function(searchResult){
+            if (osm_ids.length)
+                osm_ids += ',';
+            osm_ids += searchResult.options.osm_type.toUpperCase()[0] + searchResult.options.osm_id;
+        });
+
+        var lang = ns.globalSetting.get('language'),
+            params = {
+                'osm_ids'          : osm_ids,
+                'format'           : 'jsonv2',
+                'addressdetails'   : 1,
+                'extratags'        : 1,
+                'namedetails'      : 1,
+                'polygon_geojson'  : inclPolygon ? 1 : 0,
+                'polygon_threshold': ns.osm_polygon_threshold,
+                'accept-language'  : 'en'
+            };
+        if (lang != 'en')
+            params['accept-language'] = lang + ',en';
+
+        return nsMap.setupOptions.topMenu.nominatim + '/lookup' + L.Util.getParamString(params);
+    };
 
 	//Extend the prototype
 	SearchResult.prototype = {
         //Internal methods used by this.bsModalContentPromise
         _getUrl: function(){
-            var lang = ns.globalSetting.get('language'),
-                params = {
-                    'osm_ids'        : this.options.osm_type.toUpperCase()[0] + this.options.osm_id,
-                    'format'         : 'jsonv2',
-                    'addressdetails' : 1,
-                    'extratags'      : 1,
-                    'namedetails'    : 1,
-                    'accept-language': 'en'
-                };
-            if (lang != 'en')
-                params['accept-language'] = lang + ',en';
-
-            return nsMap.setupOptions.topMenu.nominatim + '/lookup' + L.Util.getParamString(params);
+            return ns.getNominatimLookupUrl( this );
         },
 
         _needToUpdate: function(){
@@ -7275,11 +7544,13 @@ search.js
         /**********************************************
 		listContent - Return content for the list of results
         **********************************************/
-		listContent: function( options ){
-
-            options = options || {};
-
+		listContent: function( listIndex ){
             var thisOpt     = this.options,
+                options = {
+                    id       : 'item_'+listIndex,
+                    selected : !listIndex,
+                    textClass: 'text-wrap'
+                },
                 content     = [],
                 displayName = nsMap.osm_display_name(thisOpt);
 
@@ -7320,213 +7591,591 @@ search.js
 
 
         /**********************************************
-        //showOnMainMap - find or create the corresponding SearchResultGeoJSON and show it on the map
+        addTo(layerGroup, map) - Create marker and/or polyline and add them to layerGroup
         **********************************************/
-        showOnMainMap: function(){
-            this.searchResultGeoJSON = searchResultGeoJSONList[this.id] = searchResultGeoJSONList[this.id] || new SearchResultGeoJSON(this);
-            this.searchResultGeoJSON.searchResult = this;
-            this.searchResultGeoJSON.create();
-
-            if (this.showPoly)
-                nsMap.mainMap.fitBounds(
-                    this.searchResultGeoJSON.poly.getBounds(),
-                    $.extend(
-                        {maxZoom: nsMap.mainMap.getZoom()},
-                        nsMap.mainMap._mapSync_NO_ANIMATION
-                    )
-                );
-            else
-                this.searchResultGeoJSON.centerOnMap();
-
-            //Open popup
-            this.searchResultGeoJSON.marker.openPopup();
-        },
-
-
-        /**********************************************
-        //showLatLngModal - show modal with position
-        **********************************************/
-        showLatLngModal: function(){
-            nsMap.latLngAsModal(this.options.latLng, {header: this.header});
-        },
-
-        /**********************************************
-        //showDetails - create and show modal with detalis
-        **********************************************/
-        showDetails: function(){
-            searchResultDetailModal =
-                searchResultDetailModal ||
-                    $.bsModal({
-                        scroll : true,
-                        content: ' ',
-                        _buttons: [{
-                            icon: 'fa-map-marker',
-                            text: {da:'Vis på kort', en:'Show on map'},
-                            onClick: function(){
-                                searchResultDetailModal.close();
-                                searchResultModal.close();
-                                searchResultList[selectedSearchResultIndex].showOnMainMap();
-                            }
-                        }],
-                        footer : [{icon:'fa-copyright', text: 'OpenStreetMap', link: 'https://www.openstreetmap.org/copyright'},{text:'contributors'}],
-                        show   : false,
-                    });
-
-            searchResultDetailModal.showAfterUpdate = true;
-            this.bsModalContentPromise.update();
-        },
-    };
-
-    /*************************************************************************
-    SearchResultGeoJSON
-    Represent one result of a search as geoJSON on the main map
-    *************************************************************************/
-    var searchResultGeoJSONList = {},
-        searchResultLineColor = 'black',
-        searchResultColor     = 'search-result'; //original = 'osm';
-
-    function SearchResultGeoJSON(searchResult){
-        this.searchResult = searchResult;
-    }
-
-	//Extend the prototype
-	SearchResultGeoJSON.prototype = {
-        /**********************************************
-        create - Create marker and polygon for this.searchResult
-        **********************************************/
-		create: function(){
-            if (this.marker || this.poly) return;
-
-            var map             = nsMap.mainMap,
+        addTo: function(layerGroup, map){
+            var mapIndex = map ? map.fcooMapIndex : layerGroup.fcooMapIndex,
                 markerClassName = '';
 
-            if (this.searchResult.showPoly){
-                markerClassName = 'hide-for-leaflet-zoom-'+this.searchResult.visibleAtZoom+'-up';
-                var polylineOptions = {
-                        fill         : false,
-                        lineColorName: searchResultColor,
-                        weight       : 5,
-                        border       : true,
-                        shadow       : true,
-                        hover        : true,
-                        transparent  : true,
+            if (this.showPoly){
+                markerClassName = 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-up';
 
-                        tooltipHideWhenPopupOpen: true,
-                        shadowWhenPopupOpen     : true,
-                        shadowWhenInteractive   : true,
+                if (this.polys[mapIndex])
+                    poly = this.polys[mapIndex];
+                else {
+                    //Create polyline
+                    var poly = L.polyline(this.latLngs, {
+                            fill         : false,
+                            lineColorName: searchResultColor,
+                            weight       : 5,
+                            border       : true,
+                            shadow       : true,
+                            hover        : true,
+                            transparent  : true,
 
-                        addInteractive     : true,
-                        interactive        : true,
-                    };
-                /* All are shown as line
-                var polygonOptions = $.extend({}, polylineOptions, {colorName: 'transparent', fill: true});
-                this.poly = isLine ?
-                    L.polyline(latLngs, polylineOptions ) :
-                    L.polygon (latLngs, polygonOptions );
-                */
-                this.poly = L.polyline(this.searchResult.latLngs, polylineOptions );
+                            tooltipHideWhenPopupOpen: true,
+                            shadowWhenPopupOpen     : true,
+                            shadowWhenInteractive   : true,
 
-                this.poly.addTo(map);
-                this.poly.bindTooltip(this.searchResult.header);
+                            addInteractive     : true,
+                            interactive        : true,
+                        });
 
-                this._addPopupAndContextMenu(this.poly);
+                    poly.bindTooltip(this.header);
+                    this._addPopupAndContextMenu(poly, layerGroup);
 
-                //Add class to hide  on when marker is visible
-                this.poly._addClass(null, 'hide-for-leaflet-zoom-'+(this.searchResult.visibleAtZoom-1)+'-down');
+                    //Add class to hide  on when marker is visible
+                    poly._addClass(null, 'hide-for-leaflet-zoom-'+(this.visibleAtZoom-1)+'-down');
+
+                    this.polys[mapIndex] = poly;
+                }
+
+                layerGroup.addLayer( this.polys[mapIndex] );
             }
 
             //Create the marker - is allways created to be used for initial popup
-            this.marker = L.bsMarkerSimpleRound(this.searchResult.options.latLng, {
-                size           : 'small',
-                colorName      : searchResultColor,
-                borderColorName: searchResultLineColor,
-                transparent    : true,
-                hover          : true,
-                puls           : false,
-                interactive    : true,
-                tooltip                 : this.searchResult.header,
-                tooltipPermanent        : false,
-                tooltipHideWhenDragging : true,
-                tooltipHideWhenPopupOpen: true,
-                shadowWhenPopupOpen     : true
-            });
+            if (!this.markers[mapIndex]){
+                var marker = L.bsMarkerSimpleRound(this.options.latLng, {
+                        size           : 'small',
+                        colorName      : searchResultColor,
+                        borderColorName: searchResultLineColor,
+                        transparent    : true,
+                        hover          : true,
+                        puls           : false,
+                        interactive    : true,
+                        tooltip                 : this.header,
+                        tooltipPermanent        : false,
+                        tooltipHideWhenDragging : true,
+                        tooltipHideWhenPopupOpen: true,
+                        shadowWhenPopupOpen     : true
+                    });
 
-            this._addPopupAndContextMenu(this.marker);
-            if (this.searchResult.showMarker)
-                this.marker.addClass(markerClassName);
-            else
-                this.marker.setOpacity(0);
-            this.marker.addTo(map);
+                this._addPopupAndContextMenu(marker, layerGroup);
+                if (this.showMarker)
+                    marker.addClass(markerClassName);
+                else
+                    marker.setOpacity(0);
+
+                this.markers[mapIndex] = marker;
+            }
+
+            layerGroup.addLayer(this.markers[mapIndex]);
+        },
+
+        /**********************************************
+        _getPoly, _getMarker
+        **********************************************/
+        _getPoly  : function( mapOrMapIndexOrMapId ){ return this._getObj(mapOrMapIndexOrMapId, 'polys'); },
+        _getMarker: function( mapOrMapIndexOrMapId ){ return this._getObj(mapOrMapIndexOrMapId, 'markers'); },
+
+        _getObj   : function( mapOrMapIndexOrMapId, listId ){
+            if (!this.mapLayer) return null;
+
+            var map = nsMap.getMap(mapOrMapIndexOrMapId),
+                mapIndex = map ? map.fcooMapIndex : -1;
+
+            return mapIndex > -1 ? this[listId][mapIndex] : null;
+        },
+
+        /**********************************************
+        _getButtonList
+        Return a copy of nsMap.searchResultButtonList with each button marked included: true/false
+            isPosition   : BOOLEAN: Only for SearchResult with options.isPosition
+            isNotPosition: BOOLEAN: Only for SearchResult with not options.isPosition
+            hasPosition  : BOOLEAN: Only for SearchResult with options.inclPositionIsDetails
+            hasPoly      : BOOLEAN: Only for SearchResult with showPoly
+        **********************************************/
+        _getButtonList: function(onlySetInclude){
+            var _this   = this,
+                thisOpt = this.options,
+                list    = [];
+
+            $.each($.extend(true, {}, nsMap.searchResultButtonList), function(index, o /*=button options */){
+                var include = (
+                    (!o.isPosition    || thisOpt.isPosition) &&
+                    (!o.isNotPosition || !thisOpt.isPosition) &&
+                    (!o.hasPosition   || _this.inclPositionIsDetails) &&
+                    (!o.hasPoly       || _this.showPoly)
+                );
+                if (onlySetInclude)
+                    o.include = include;
+
+                if (include || onlySetInclude)
+                    list.push(o);
+            });
+            return list;
         },
 
         /**********************************************
         _addPopupAndContextMenu
         **********************************************/
-        _addPopupAndContextMenu: function( obj ){
+        _addPopupAndContextMenu: function( obj, layerGroup ){
             var _this = this,
                 menuList = [];
 
-            function addMenuItem(icon, text, methodName, lineBefore){
-                menuList.push({icon: icon, text: text, onClick: $.proxy(_this[methodName], _this), lineBefore: lineBefore});
-            }
-
-            if (!this.searchResult.options.isPosition)
-                addMenuItem('fa-info-circle', {da:'Detaljer', en:'Details'}, 'showDetails');
-
-            if (this.searchResult.inclPositionIsDetails)
-                addMenuItem('fa-map-marker', {da:'Position', en:'Position'}, 'showLatLngModal');
-
-            addMenuItem('fa-crosshairs', {da:'Centrér', en:'Center'}, 'centerOnMap');
-
-            if (this.poly)
-                addMenuItem('fa-expand', {da:'Udvid', en:'Expand'}, 'expandOnMap');
-
-            addMenuItem('fa-trash-alt', {da:'Fjern', en:'Remove'}, 'removeFromMap', true);
-
-            obj.bindPopup({
-                width  : 105,
-                header : this.searchResult.header,
-                content: {type:'menu', fullWidth: true, list: menuList},
+            $.each(this._getButtonList(), function(index, buttonOptions){
+                menuList.push({
+                    icon      : buttonOptions.icon,
+                    text      : buttonOptions.text,
+                    lineBefore: buttonOptions.lineBefore,
+                    class     : buttonOptions.className,
+                    onClick   : _this[buttonOptions.method],
+                    context   : _this
+                });
             });
+
+            obj.setContextmenuParent(layerGroup);
+            obj.setContextmenuOptions({alsoAsPopup: true});
+            obj.setContextmenuHeader(this.header);
+            obj.addContextmenuItems(menuList);
 
             return this;
         },
 
-        centerOnMap: function(){
-            this._closePopup();
-            nsMap.mainMap.setView(this.searchResult.options.latLng, nsMap.mainMap.getZoom(), nsMap.mainMap._mapSync_NO_ANIMATION);
-        },
-        expandOnMap: function(){
-            this._closePopup();
-            nsMap.mainMap.fitBounds(this.poly.getBounds());
+
+        /**********************************************
+        Internal methods to find correct arguments from
+        arguments = (id, latLng,   $button, map, owner)
+        See fcoo/leaflet-bootstrap src/00_leaflet-bootstrap.js
+        **********************************************/
+        _centerOnMap    : function(id, latLng, $button, map/*, owner*/){ this.centerOnMap( map );     },
+        _expandOnMap    : function(id, latLng, $button, map/*, owner*/){ this.expandOnMap( map );     },
+        _showLatLngModal: function(id, latLng, $button, map/*, owner*/){ this.showLatLngModal( map ); },
+        _showDetails    : function(id, latLng, $button, map/*, owner*/){ this.showDetails( map );     },
+        _remove         : function(id, latLng, $button, map/*, owner*/){ this.remove( map );          },
+
+
+        /**********************************************
+        _closePopup( map )
+        **********************************************/
+        _closePopup: function( map ){
+            var marker = this._getMarker(map),
+                poly   = this._getPoly(map);
+
+            if (marker)
+                marker.closePopup();
+            if (poly)
+                poly.closePopup();
         },
 
-        showLatLngModal: function(){
-            this._closePopup();
-            this.searchResult.showLatLngModal();
+        /**********************************************
+        centerOnMap( map )
+        **********************************************/
+        centerOnMap: function( map ){
+            this._closePopup( map );
+            map.setView(this.options.latLng, map.getZoom(), map._mapSync_NO_ANIMATION);
         },
 
-        showDetails: function(){
-            this._closePopup();
-            this.searchResult.showDetails();
+
+        /**********************************************
+        expandOnMap( map )
+        **********************************************/
+        expandOnMap: function( map ){
+            this._closePopup( map );
+            var poly = this._getPoly( map );
+            if (poly)
+                map.fitBounds(poly.getBounds(), map._mapSync_NO_ANIMATION);
         },
 
-        removeFromMap: function(){
-            this._closePopup();
-            if (this.marker)
-                this.marker.remove();
-            if (this.poly)
-                this.poly.remove();
-            delete searchResultGeoJSONList[this.searchResult.id];
+
+        /**********************************************
+        showLatLngModal - show modal with position
+        **********************************************/
+        showLatLngModal: function( map ){
+            this._closePopup( map );
+            nsMap.latLngAsModal(this.options.latLng, {header: this.header});
         },
 
-        _closePopup: function(){
-            if (this.marker)
-                this.marker.closePopup();
-            if (this.poly)
-                this.poly.closePopup();
+        /**********************************************
+        showDetails - create and show modal with detalis
+        **********************************************/
+        showDetails: function( map ){
+            this._closePopup( map );
+
+            if (searchResultDetailModal)
+                searchResultDetailModal.bsModal.$modalContent.remove();
+
+            searchResultDetailModal =
+                $.bsModal({
+                    scroll : true,
+                    content: ' ',
+                    footer : [{icon:'fa-copyright', text: 'OpenStreetMap', link: 'https://www.openstreetmap.org/copyright'},{text:'contributors'}],
+                    show   : false,
+                });
+
+            searchResultDetailModal.showAfterUpdate = true;
+            this.bsModalContentPromise.update();
+        },
+
+        /**********************************************
+        remove()
+        **********************************************/
+        remove: function(){
+            this.mapLayer.remove( this );
+        },
+
+        /**********************************************
+        removeFrom( map ) - Remove marker and/or polyline from map
+        **********************************************/
+        removeFrom: function( map ){
+            this._getMarker(map) ? this._getMarker(map).remove() : null;
+            this._getPoly(map)   ? this._getPoly(map).remove()   : null;
+        },
+
+        /**********************************************
+        showOnMap - Makes the SearchResult visible on map
+        Enable the mapLayer on map and center this
+        **********************************************/
+        showOnMap: function( map ){
+            //Add the mapLayer to the map
+            this.mapLayer.addTo(map);
+
+            //Fit to poly or center marker
+            if (this.showPoly)
+                map.fitBounds(
+                    this._getPoly(map).getBounds(),
+                    $.extend(
+                        {maxZoom: map.getZoom()},
+                        map._mapSync_NO_ANIMATION
+                    )
+                );
+            else
+                this.centerOnMap( map );
+
+            //Open popup
+            var popupOwner = this._getMarker(map) || this._getPoly(map);
+            if (popupOwner)
+                popupOwner.openPopup();
         }
-	};
+    };
+}(jQuery, L, this.i18next, this, document));
+;
+/****************************************************************************
+search.js
+****************************************************************************/
+(function ($, L, i18next, window/*, document, undefined*/) {
+    "use strict";
+
+    var ns = window.fcoo = window.fcoo || {},
+        nsMap = ns.map = ns.map || {};
+
+
+    /*************************************************************************
+    **************************************************************************
+    search( text )
+    **************************************************************************
+    *************************************************************************/
+    var searchText             = '',
+        selectedSearchResultId = '',
+        searchLang             = '', //The language selected during last search
+        minSearchLength        = 3;
+
+    //showSearchResultInMap = The map where a SearchResult or list of SearchResults are shown
+    ns.showSearchResultInMap = null;
+
+
+    //Option polygon_threshold = Return a simplified version of the output geometry.
+    //The parameter is the tolerance in degrees with which the geometry may differ from the original geometry.
+    //Topology is preserved in the result. (Default: 0.0)
+    ns.osm_polygon_threshold = 0.001;   //Reduce nr of pints in big polygons (eq. USA) by a factor 10!
+
+    ns.events.on( ns.events.LANGUAGECHANGED, function(){
+        searchText = '';
+    });
+
+
+    var testList = [
+            'Danmark',
+            '55 12.001',
+            'køln',
+            //'xhil',
+            'Hillerød',
+            'usa'
+        ];
+
+    nsMap.search = function( text, map ){
+        /* TEST
+        text = text || '12 12 - 12 12';
+        text = text || "56° 28,619'N - 006° 05,055'E";
+        text = text || 'Köln';
+        text = text || '12 12.001';
+        //*/
+        if (testList.length)
+            text = testList.pop();
+
+
+        var lang = ns.globalSetting.get('language');
+        if (text === null){
+            nsMap.showSearchModalForm(searchText, map);
+            return;
+        }
+        text = (text || '').trim();
+
+        //If text is same as last search => show same result!
+        if ((text == searchText) && (searchLang == lang)){
+            showSearchResultModal(searchResultList, map);
+            return;
+        }
+
+        //If text to short => open modal to enter search
+        if (text.length < minSearchLength){
+            nsMap.showSearchModalForm(text, map);
+            return;
+        }
+
+        //Set default map
+        ns.showSearchResultInMap = map;
+
+        //Save text and lang as last search
+        searchText = text;
+        searchLang = lang;
+
+        //Add search to end of history-list
+        searchHistoryList.goLast();
+        searchHistoryList.add(text);
+
+        //Update input in top-menu with latest search
+        nsMap.main.topMenuObject.searchInput.val(searchText);
+
+        //First: Search for position
+        var latLngList = nsMap.text2LatLng(text);
+
+        if (latLngList.length){
+            var currentGroupHeaderId = null,
+                list = [];
+            $.each(latLngList, function(index, rec){
+                if (rec.groupHeaderId !== currentGroupHeaderId)
+                    currentGroupHeaderId = rec.groupHeaderId;
+                list.push(
+                    new nsMap.SearchResult({
+                            latLng    : rec.latLng,
+                            name      : rec.text,
+                            type      : rec.groupHeader,
+                            isPosition: true
+                        })
+                );
+            });
+            showSearchResultModal(list, map);
+        }
+        else {
+            //If no position was found => search in OpenStreetMap
+            var params = {
+                    'q'                : searchText,
+                    'format'           : 'jsonv2',
+                    'polygon_geojson'  : 1,
+                    'polygon_threshold': ns.osm_polygon_threshold,
+                    'extratags'        : 1,
+                    'namedetails'      : 1,
+                    'addressdetails'   : 1,
+                    'accept-language'  : 'en',
+                    'limit'            : 20,
+                };
+
+            if (lang != 'en')
+                params['accept-language'] = lang + ',en';
+            $.workingOn();
+
+            Promise.getJSON( nsMap.setupOptions.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
+        }
+    };
+
+    function nominatim_response(json){
+        $.workingOff();
+        var list = [], noToInclude = 10;
+        $.each(json, function(index, nominatim){
+            var searchResult = new nsMap.SearchResult(nominatim);
+            if (searchResult.options.include && noToInclude){
+                noToInclude--;
+                list.push(searchResult);
+            }
+        });
+        return showSearchResultModal(list, ns.showSearchResultInMap);
+    }
+
+    function nominatim_reject(){
+        $.workingOff();
+        window.notyError({
+            da: 'Søgningen efter "'+searchText+'" mislykkedes<br>Prøv eventuelt igen senere',
+            en: 'The search for "'+searchText+'" failed<br>Try again later',
+        }, {textAlign: 'center'});
+    }
+
+
+    /*************************************************************************
+    showSearchModalForm( text, map )
+    *************************************************************************/
+    var searchModalForm = null,
+        searchHistoryList = new window.HistoryList({
+            action: function( text ){
+                if (searchModalForm)
+                    searchModalForm.getInput('search').setValue(text);
+            }
+        });
+
+    nsMap.showSearchModalForm = function( text, map ){
+        ns.showSearchResultInMap = map;
+
+        searchModalForm = searchModalForm || $.bsModalForm({
+            header        : {icon: 'fa-search', text:{da:'Søg efter position eller lokation', en:'Search for Position or Location'}},
+            static        : false,
+            keyboard      : true,
+            formValidation: true,
+            content: {
+                id         : 'search',
+                type       : 'input',
+                placeholder: {da:'Søg...', en:'Search..'},
+                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
+            },
+            closeWithoutWarning: true,
+            historyList: searchHistoryList,
+            submitIcon: 'fa-search',
+            submitText: {da:'Søg', en:'Search'},
+            onSubmit  : function(data){
+                nsMap.search(data.search, ns.showSearchResultInMap);
+            },
+        });
+        searchModalForm.edit({search: text});
+        searchModalForm.getInput('search').$element.get(0).select();
+    };
+
+
+    /*************************************************************************
+    showSearchResultModal( list, map )
+    list = []{[icon,] text, [latLng,] [geoJSON]}
+    Show modal with list of SearchResult
+    *************************************************************************/
+    ns.searchResultModal = null;
+
+    var searchResultList = [],
+        selectedSearchResultIndex = -1;
+
+    function showSearchResultModal( list, map ){
+        searchResultList = list;
+
+        /*
+        Find the map where a SearchResult is fit/centered on when selected.
+        Use:
+        1: Previous used map (if still showing search-results, or
+        2: main-map if search-result are shown, or
+        3: any visible map with search-result shown, or
+        4: main-map
+        */
+        if (!map){
+            var mapLayer = nsMap.searchResultMapLayer;
+
+            if (ns.showSearchResultInMap && mapLayer.isAddedToMap(ns.showSearchResultInMap) )
+                //1: Previous used map (if still showing search-results
+                map = ns.showSearchResultInMap;
+            else
+                nsMap.visitAllVisibleMaps( function( nextMap ){
+                    //2: main-map if search-result are shown, or
+                    //3: any visible map with search-result shown
+                    if (!map && mapLayer.isAddedToMap( nextMap ) )
+                        map = nextMap;
+                });
+
+            //4: main-map
+            map = map || nsMap.mainMap;
+        }
+
+        //If only ONE result => show direct on map
+        if (list.length == 1){
+            var result = nsMap.searchResultMapLayer.add( list[0] );
+            result.showOnMap( map );
+            return result;
+        }
+
+        ns.showSearchResultInMap = map;
+        var searchAgainButton = {
+                type: 'button',
+                icon: 'fa-search',
+                text: {da:'Søg igen', en:'New Search'},
+                onClick: function(){
+                    if (ns.searchResultModal)
+                        ns.searchResultModal.close();
+                    nsMap.showSearchModalForm(searchText, ns.showSearchResultInMap);
+                }
+            },
+            selectlistItems = [];
+
+        //Create result-list
+        selectedSearchResultIndex = 0;
+        $.each(list, function(index, searchResult){
+            if (searchResult.id == selectedSearchResultId)
+                selectedSearchResultIndex = index;
+        });
+        var inclDetails = true;
+        $.each(list, function(index, searchResult){
+            if (searchResult.options.isPosition)
+                inclDetails = false;
+            selectlistItems.push( searchResult.listContent(index) );
+        });
+
+        if (selectlistItems.length){
+            var onClick = function(){
+                    ns.searchResultModal.close();
+                    nsMap.searchResultMapLayer
+                        .add( searchResultList[selectedSearchResultIndex] )
+                        .showOnMap( ns.showSearchResultInMap );
+                },
+                options = {
+                    header   : {icon: 'fa-search', text:{da:'Søgeresultater', en:'Search Results'}},
+                    static   : false,
+                    keyboard : true,
+                    flexWidth: true,
+                    fixedContent: {
+                        type : 'text',
+                        label: {da:'Søgte efter', en:'Searched for'},
+                        text : searchText,
+                        after: searchAgainButton
+                    },
+                    content : {
+                        type  : 'selectlist',
+                        list  : selectlistItems,
+                        onChange: function(id){
+                            selectedSearchResultIndex = parseInt(id.split('_')[1]);
+                            selectedSearchResultId = searchResultList[selectedSearchResultIndex].id;
+                        },
+                        onDblClick: onClick
+                    },
+                    buttons : [
+                        {
+                            icon   : 'fa-info-circle',
+                            className: 'btn_search_result_detail',
+                            text   : {da:'Detaljer', en:'Details'},
+                            onClick: function(){ searchResultList[selectedSearchResultIndex].showDetails( ns.showSearchResultInMap ); }
+                        }, {
+                            icon   : 'fa-location-plus',
+                            text   : {da:'Vis på kort', en:'Show on map'},
+                            onClick: onClick
+                        }
+                    ],
+                    footer: {
+                        text: {da:'Søgning efter positioner, byer, havområder og lign. - men ikke efter adresser', en:'Search for positions, cities, seas and the likes - but not for addresses'},
+                        textClass: 'd-block text-wrap'
+                    }
+                };
+            ns.searchResultModal = ns.searchResultModal ? ns.searchResultModal.update(options) : $.bsModal(options);
+
+            ns.searchResultModal.bsModal.$buttons[1].toggle(inclDetails);
+
+            ns.searchResultModal.show();
+        }
+        else {
+            $.bsNoty({
+                type     : 'alert',
+                layout   : 'center',
+                header   : {icon:'fa-search', text:{da:'Søg', en:'Search'}},
+                text     : {da:'Søgning efter "'+searchText+'" gav ikke noget resultat', en:'Search for "'+searchText+'" gave no result'},
+                buttons  : [searchAgainButton],
+                closeWith: ['click', 'button'],
+                timeout  : 4000,
+                textAlign: 'center'
+            });
+        }
+
+        return this;
+    }
 
 }(jQuery, L, this.i18next, this, document));
 ;
