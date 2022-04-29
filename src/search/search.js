@@ -31,7 +31,7 @@ search.js
         searchText = '';
     });
 
-
+    /* Just for test:
     var testList = [
             'Danmark',
             '55 12.001',
@@ -40,7 +40,7 @@ search.js
             'Hillerød',
             'usa'
         ];
-
+    */
     nsMap.search = function( text, map ){
         /* TEST
         text = text || '12 12 - 12 12';
@@ -48,9 +48,10 @@ search.js
         text = text || 'Köln';
         text = text || '12 12.001';
         //*/
+        /* Just for test
         if (testList.length)
             text = testList.pop();
-
+        */
 
         var lang = ns.globalSetting.get('language');
         if (text === null){
