@@ -7727,6 +7727,8 @@ search-result.js
             obj.setContextmenuParent(layerGroup);
             obj.setContextmenuOptions({alsoAsPopup: true});
             obj.setContextmenuHeader(this.header);
+            obj.excludeMapContextmenu();
+
             obj.addContextmenuItems(menuList);
 
             return this;
