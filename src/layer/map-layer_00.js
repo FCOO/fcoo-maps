@@ -187,10 +187,15 @@ L.Layer.addInitHook(function(){
         title: {da: 'Skjul', en: 'Hide'}
     };
 
+
     //Overwrite L.BsLegend.remove to select for all maps if multi maps
-    L.BsLegend.prototype.remove = function(){
+    L.BsLegend.prototype.remove = function(e){
+        //Since this.parent.removeLegend removed DOM-elements the event must stop propagation
+        L.DomEvent.stopPropagation(e);
+
         this.options.mapLayer.selectMaps(this.parent._map);
     };
+
 
 
     nsMap.getMap = function(mapOrMapIndexOrMapId){
@@ -836,8 +841,6 @@ L.Layer.addInitHook(function(){
             });
             return $result;
         },
-
-
 
 
         /*********************************************************
