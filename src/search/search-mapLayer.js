@@ -14,7 +14,7 @@ search-mapLayer.js
     /***********************************************************
     Add MapLayer_SearchResult to createMapLayer
     ***********************************************************/
-    var id = "SEARCH-RESULT",
+    var id = nsMap.searchMapLayerId = "SEARCH-RESULT",
         header = {
             icon: L.bsMarkerAsIcon('search-result'),
             text: {da: 'Søgeresultater', en: 'Search Results'}
@@ -305,7 +305,6 @@ search-mapLayer.js
 
         showList: function( map, noError ){
             ns.showSearchResultInMap = map;
-
 
             if (!this.numberOfSearchResults){
                 //Error on no searchResults on maps

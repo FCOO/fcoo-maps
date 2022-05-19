@@ -313,6 +313,11 @@
                 ns.promiseList.append( options2promiseOptions(fileNameOrData, nsMap.standard[id]) );
         });
 
+        //Do not create MapLayer with search-results if search is not pressent
+        if (!nsMap.setupOptions.topMenu.search)
+            delete nsMap.createMapLayer[nsMap.searchMapLayerId];
+
+
         //3: "Load" content for left- and/or right-menu. If the menu isn't the layer-menu its content is loaded last to have the $-container ready
         $.each(['left', 'right'], function(index, prefix){
             var menuId = prefix+'Menu',
@@ -458,6 +463,7 @@
         This function is called to create the mapLayer and set the new menu-item-options (via addMenu-function)
         The code for nsMap.createMapLayerAndMenu is in src/layer/map-layer_00.js
         *********************************************/
+
         nsMap.createMapLayerAndMenu(layerMenuOptions.list);
 
     }
@@ -568,7 +574,6 @@
             nsMap.main.topMenuObject.search.on('submit', submitSearch );
             nsMap.main.topMenuObject.searchButton.on('click', clickSearch );
         }
-
 
         //Set min- and max-zoom for main-map
         $.extend(nsMap.mainMapOptions, {
