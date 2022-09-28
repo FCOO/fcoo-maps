@@ -25,7 +25,7 @@ Create and set different global variables and methods
     };
 
     nsMap.mapSettingIconWithStatus = function(fontSizeClass){
-        return [nsMap.mapSettingIcon, ns.iconSub('fa-map', 'fa-sync icon-active font-weight-bold ' + fontSizeClass)];
+        return [nsMap.mapSettingIcon, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
     };
 
     nsMap.updateMapSettingIconWithStatus = function($parent, inSync){

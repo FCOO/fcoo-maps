@@ -2,7 +2,7 @@
 map-setting-group.js,
 Create mapSettingGroup = setting-group for each maps with settings for the map
 ****************************************************************************/
-(function ($, L, window/*, document, undefined*/) {
+(function ($, L, i18next, window/*, document, undefined*/) {
     "use strict";
 
     //Create fcoo-namespace
@@ -959,23 +959,15 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 .css('padding-left', '10px')
                 .width('1.75em')
         );
-        $.each(content, function(index, text){
-            content[index] = {
-                text     : text,
-                textClass: typeof text == 'string' ? 'no-margin' : 'text-nowrap'
-            };
-        });
-        content.unshift('<br>');
-        content.unshift({
-            text     : header,
-            textClass: 'font-weight-bold font-size-1-2em'
-        });
 
         $result.push(
             $('<div/>')
-                .addClass('flex-grow-1 no-margin-children')
+                .addClass('flex-grow-1 no-margin-children d-flex flex-column')
                 .height('6em')
-                ._bsAddHtml(content)
+                ._bsAddHtml([
+                    {text: header,  textClass: 'text-center fw-bold font-size-1-2em'},
+                    {text: content, textClass: 'text-center'},
+                ])
         );
         return $result;
     }
@@ -983,20 +975,19 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     var mapSettingMainModal;
     nsMap.showMapSettingMain = function(){
         if (!mapSettingMainModal){
-            var list        = [],
-                contentList = [];
+            var list = [];
 
             //Button witch opens form with multi-map-settinge
             list.push({
                 id     : 'multiMapSetting',
                 content: createBigIconButton(
                              ns.iconSub('fa-map', 'fa-tally', true),
-                             {da:'Antal kort', en:'Number of Maps'},
-                             [
-                                 {da:'Vis 1-'+nsMap.setupOptions.multiMaps.maxMaps+' kort samtidig', en:'View 1-'+nsMap.setupOptions.multiMaps.maxMaps+' maps at the same time'},
-                                 '<br>',
-                                 {da:'Klik for at vælge...', en:'Click to select...'}
-                             ]
+                             {  da:'Antal kort',
+                                en:'Number of Maps'
+                             },{
+                                da:'Vis 1-'+nsMap.setupOptions.multiMaps.maxMaps+' kort samtidig<br>Klik for at vælge...',
+                                en:'View 1-'+nsMap.setupOptions.multiMaps.maxMaps+' maps at the same time<br>Click to select...'
+                             }
                          ),
                 allowContent: true,
                 class       : 'w-100 d-flex',
@@ -1005,13 +996,16 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
 
             //Button witch opens modal with individuel map-settings
-            contentList = [];
+            var text = {};
             $.each(nsMap.msgAccordionList, function(index, options){
-                if (!options.header.dontInclude){
-                    if (contentList.length)
-                        contentList.push('&nbsp;-&nbsp;');
-                    contentList.push(options.header.smallText || options.header.text);
-                }
+                if (!options.header.dontInclude)
+                    $.each(i18next.languages, function(index, lang){
+                        var langText = text[lang] || '';
+                        if (langText.length)
+                            langText += '&nbsp;- ';
+                        langText = langText + (options.header.smallText || options.header.text)[lang];
+                        text[lang] = langText;
+                    });
             });
 
             list.push({
@@ -1019,7 +1013,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 content: createBigIconButton(
                              nsMap.mapSettingIcon,
                              {da:'Indstillinger for hvert kort', en:'Settings for each map'},
-                             contentList
+                             text
                          ),
                 allowContent: true,
                 class       : 'w-100 d-flex',
@@ -1042,6 +1036,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 helpButton : true,
                 content    : {
                     type          : 'buttongroup',
+                    vertical      : true,
+                    fullWidth     : true,
                     centerInParent: true,
                     list          : list
                 }
@@ -1050,4 +1046,4 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         mapSettingMainModal.show();
     };
 
-}(jQuery, L, this, document));
+}(jQuery, L, this.i18next, this, document));

@@ -36,7 +36,7 @@
     <script src="../src/latlng/latlng-modal.js"></script>
     <script src="../src/latlng/latlng-format.js"></script>
 
-    <script src="../src/layer/layer_color.js"></script>
+    <script src="../src/layer/layer_colorx.js"></script>
 
     <script src="../src/layer/layer_wms.js"></script>
     <script src="../src/layer/layer_z-index.js"></script>
@@ -137,6 +137,26 @@
                     }, 
                     reload:1
                 }],
+
+                colorInfo: {
+                    icon     : 'fa-map', //       //If the MapLayer also have a legend the icon from the legend is used
+                    text     : 'Only land', //STRING       //If the MapLayer also have a legend the text from the legend is used
+// HER>                     onlyLand : true,     //Only show when cursor/map center is over land. Default = false
+// HER>                     onlyWater: false, //Only show when cursor/map center is over water/sea. Default = false
+                    show     : true,      //Turn the update on/off. Default = true
+
+// HER>                     getColor : function(options)    //Return the color (hex) to use as background-color in the infoBox.
+                                                    //options = {colorRGBA, colorHex, latLng}
+                                                    //Default = return options.colorHex
+                                                    //Set to false if no background-color in the infoBox is needed
+// HER>                     allowTransparentColor: BOOLEAN  //If true getColor is also called on fully transparent colors
+
+// HER>                     getText : function(options)     //Return the content (STRING or {da:STRING, en:STRING} or {icon, text}) to be displayed in the infoBox.
+                                                    //options = {colorRGBA, colorHex, transparent, color (from getColor), latLng}
+                                                    //Default: return ""
+                },
+
+
 
                 finally: function(){ 
 

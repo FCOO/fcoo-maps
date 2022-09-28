@@ -209,7 +209,7 @@ control-legend.js,
                         .append(
                             $('<span/>')
                                 .i18n( i18nNamespace+':delayed' )
-                                .addClass('text-danger font-weight-bold')
+                                .addClass('text-danger fw-bold')
                         )
                         .appendTo( $extra );
                     addExtra = true;

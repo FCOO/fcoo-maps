@@ -123,7 +123,7 @@ search-result.js
                     type     : 'text',
                     text     : this.names[lang].split('&nbsp;/&nbsp;').join('<br>'),
                     center   : true,
-                    textStyle: 'font-weight-bold'
+                    textStyle: 'fw-bold'
                 }];
 
             //Add position.

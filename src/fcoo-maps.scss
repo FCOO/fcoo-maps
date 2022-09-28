@@ -84,6 +84,17 @@ DIVERSE
 //HER@import "fcoo-maps-control-legend";
 
 
+/**********************************************************
+POPUP
+**********************************************************/
+//Set header in popup to fcoo-applisation color 50%
+.popover {
+    --jb-header-color: var(--fcoo-app-text-color-50);
+    --jb-header-bg   : var(--fcoo-app-bg-color-50);
+}
+
+
+
 /****************************************************************************
 Style for edit settings for graticule
 ****************************************************************************/
@@ -298,11 +309,10 @@ when loading or not visible
         .bsp-color-info-header {
             flex-shrink: 0;
             flex-grow  : 0;
-            @include header-variant-sm();
-            @include header-colors();
             text-align: center;
             border    : none;
         }
+        @include header-content-footer-variant(".bsp-color-info-header");
     }
 }
 
