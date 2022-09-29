@@ -313,7 +313,7 @@
                 ns.promiseList.append( options2promiseOptions(fileNameOrData, nsMap.standard[id]) );
         });
 
-        //Do not create MapLayer with search-results if search is not pressent
+        //Do not create MapLayer with search-results if search is not pressent AND only include search if MapLayer with is included
         if (!nsMap.setupOptions.topMenu.search)
             delete nsMap.createMapLayer[nsMap.searchMapLayerId];
 

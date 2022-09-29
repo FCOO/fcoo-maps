@@ -26022,9 +26022,15 @@ Is a modification to Bootstrap modal-dialog-class
     animation-name: noty-flash;
     animation-iteration-count: 3;
     animation-duration: .5s; }
-  .modal-dialog.noty_bar.noty_theme__jquery-bootstrap .modal-body.noty_body {
+  .modal-dialog.noty_bar.noty_theme__jquery-bootstrap .modal-content {
     color: var(--bs-alert-color);
     background-color: var(--bs-alert-bg); }
+  .modal-dialog.noty_bar.noty_theme__jquery-bootstrap .header-content {
+    --jb-header-bg: rgba(0,0,0, .1);
+    --jb-header-color: var(--bs-alert-color); }
+  .modal-dialog.noty_bar.noty_theme__jquery-bootstrap .modal-body.noty_body {
+    color: inherit;
+    background-color: transparent; }
     .modal-dialog.noty_bar.noty_theme__jquery-bootstrap .modal-body.noty_body * {
       white-space: pre-wrap;
       word-break: break-word;

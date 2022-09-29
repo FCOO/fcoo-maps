@@ -53,6 +53,17 @@ search.js
             text = testList.pop();
         */
 
+        //If no MayLayer to show search-results => No able to search
+        if (!nsMap.searchResultMapLayer){
+             $.bsNotyError({
+                 da:'Lag med søgeresultater er ikke installeret',
+                 en:'Layer with search results is not installed'
+             });
+            return;
+        }
+
+
+
         var lang = ns.globalSetting.get('language');
         if (text === null){
             nsMap.showSearchModalForm(searchText, map);
@@ -168,12 +179,12 @@ search.js
             header        : {icon: 'fa-search', text:{da:'Søg efter position eller lokation', en:'Search for Position or Location'}},
             static        : false,
             keyboard      : true,
-            formValidation: true,
+// HER-----> form-validation virker ikke             formValidation: true,
             content: {
                 id         : 'search',
                 type       : 'input',
                 placeholder: {da:'Søg...', en:'Search..'},
-                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
+// HER-----> form-validation virker ikke                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
             },
             closeWithoutWarning: true,
             historyList: searchHistoryList,
@@ -212,19 +223,23 @@ search.js
         if (!map){
             var mapLayer = nsMap.searchResultMapLayer;
 
-            if (ns.showSearchResultInMap && mapLayer.isAddedToMap(ns.showSearchResultInMap) )
-                //1: Previous used map (if still showing search-results
-                map = ns.showSearchResultInMap;
-            else
-                nsMap.visitAllVisibleMaps( function( nextMap ){
-                    //2: main-map if search-result are shown, or
-                    //3: any visible map with search-result shown
-                    if (!map && mapLayer.isAddedToMap( nextMap ) )
-                        map = nextMap;
-                });
+            if (mapLayer){
+                if (ns.showSearchResultInMap && mapLayer.isAddedToMap(ns.showSearchResultInMap) )
+                    //1: Previous used map (if still showing search-results
+                    map = ns.showSearchResultInMap;
+                else
+                    nsMap.visitAllVisibleMaps( function( nextMap ){
+                        //2: main-map if search-result are shown, or
+                        //3: any visible map with search-result shown
+                        if (!map && mapLayer.isAddedToMap( nextMap ) )
+                            map = nextMap;
+                    });
 
-            //4: main-map
-            map = map || nsMap.mainMap;
+                //4: main-map
+                map = map || nsMap.mainMap;
+            }
+            else
+                /* search-result-layer not installed */;
         }
 
         //If only ONE result => show direct on map
