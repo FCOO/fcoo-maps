@@ -179,12 +179,13 @@ search.js
             header        : {icon: 'fa-search', text:{da:'Søg efter position eller lokation', en:'Search for Position or Location'}},
             static        : false,
             keyboard      : true,
-// HER-----> form-validation virker ikke             formValidation: true,
             content: {
                 id         : 'search',
                 type       : 'input',
                 placeholder: {da:'Søg...', en:'Search..'},
 // HER-----> form-validation virker ikke                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
+                validators : ['required', {type: 'length', min: minSearchLength}]
+
             },
             closeWithoutWarning: true,
             historyList: searchHistoryList,
