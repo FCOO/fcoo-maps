@@ -30,10 +30,10 @@ facilities.js
                 { id: 'CAFE',          icon: 'far fa-coffee',       text: {da: 'Cafeteria/café/grillbar', en:'Cafeteria/Café/Grill Bar'} },
                 { id: 'CAMPING',       icon: 'far fa-campground',   text: {da: 'Campingplads', en:'Campsite'} },
                 { id: 'CYKEL',         icon: 'far fa-bicycle',      text: {da: 'Cykeludlejning', en:'Bicycle rental'} },
-                { id: 'GRILL',         icon: 'fai fai-barbecue2 font-weight-bold',  text: {da: 'Grillplads', en:'Barbecue area'} },
-                { id: 'LEGEPL',        icon: 'fai fai-child font-weight-bolder',    text: {da: 'Legeplads', en:'Playground'} }, // or fai-playground(2)
+                { id: 'GRILL',         icon: 'fai fai-barbecue2 fw-bold',  text: {da: 'Grillplads', en:'Barbecue area'} },
+                { id: 'LEGEPL',        icon: 'fai fai-child fw-bolder',    text: {da: 'Legeplads', en:'Playground'} }, // or fai-playground(2)
                 { id: 'RESTAU',        icon: 'far fa-utensils',     text: {da: 'Restaurant', en:'Restaurant'} },
-                { id: 'SURF',          icon: 'fai fai-wind-surfing font-weight-bold',   text: {da: 'Surfing', en:'Surfing'} }, //or fai fa-surfing-board(2)
+                { id: 'SURF',          icon: 'fai fai-wind-surfing fw-bold',   text: {da: 'Surfing', en:'Surfing'} }, //or fai fa-surfing-board(2)
                 { id: 'INFO',          icon: 'far fa-info',         text: {da: 'Turistinformation', en:'Tourist Information'} }
             ]
         },{
@@ -46,10 +46,10 @@ facilities.js
         },{
             text: {da:'Proviantering', en:'Provisioning'},
             list: [
-                { id: 'BENZIN',        icon: 'far fa-gas-pump',                         text: {da: 'Benzin/diesel/olie', en:'Petrol/Diesel/Oil'} },
-                { id: 'GAS',           icon: 'fai fai-gas-cylinder font-weight-bold',   text: {da: 'Flaskegas', en:'Bottled gas'} }, //or fai fa-gas-cylinder2-4
-                { id: 'KIOSK',         icon: 'far fa-shopping-basket',                  text: {da: 'Kiosk/købmand/proviant', en:'Kiosk/Grocery/Provisions'} }, //or fa-shopping-cart
-                { id: 'PROVIANT',      icon: '', /*<-- TODO/MANGLER*/                   text: {da: 'Skibsproviantering', en:'Provisions'} },
+                { id: 'BENZIN',        icon: 'far fa-gas-pump',                 text: {da: 'Benzin/diesel/olie', en:'Petrol/Diesel/Oil'} },
+                { id: 'GAS',           icon: 'fai fai-gas-cylinder fw-bold',    text: {da: 'Flaskegas', en:'Bottled gas'} }, //or fai fa-gas-cylinder2-4
+                { id: 'KIOSK',         icon: 'far fa-shopping-basket',          text: {da: 'Kiosk/købmand/proviant', en:'Kiosk/Grocery/Provisions'} }, //or fa-shopping-cart
+                { id: 'PROVIANT',      icon: '', /*<-- TODO/MANGLER*/           text: {da: 'Skibsproviantering', en:'Provisions'} },
             ]
         },{
             text: {da:'Transport og Kommunikation', en:'Transport and Communication'},
@@ -349,7 +349,7 @@ location.js,
         content_popup: function($body, popup/*,map*/){
             var url = this.photoUrl(0) || this.planUrl(0);
             if (url)
-                $('<img src="' + url + '" style="cursor: pointer; max-width:100%; max-height:100%"/>')
+                $('<img src="' + url + '" style="cursor: pointer; max-width:99%; max-height:99%"/>')
                     .i18n(this.name, 'title')
                     .on('click', function(){
                         popup.$contentNode._bsModalSetSize( $.MODAL_SIZE_EXTENDED );
@@ -369,7 +369,7 @@ location.js,
         content_popup_extended: function($body, popup/*,map*/){
             var url = this.photoUrl(0) || this.planUrl(0);
             if (url)
-                $('<img src="' + url + '" style="cursor: pointer; max-width:100%; max-height:100%"/>')
+                $('<img src="' + url + '" style="cursor: pointer; max-width:99%; max-height:99%"/>')
                     .i18n(this.name, 'title')
                     .on('click', function(){
                         popup.$contentNode._bsModalSetSize( $.MODAL_SIZE_NORMAL );
