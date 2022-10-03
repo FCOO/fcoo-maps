@@ -724,8 +724,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-control-attribution a:focus {
 	text-decoration: underline;
 	}
-.leaflet-control-attribution svg {
+.leaflet-attribution-flag {
 	display: inline !important;
+	vertical-align: baseline !important;
+	width: 1em;
+	height: 0.6669em;
 	}
 .leaflet-left .leaflet-control-scale {
 	margin-left: 5px;
@@ -838,8 +841,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 .leaflet-popup-scrolled {
 	overflow: auto;
-	border-bottom: 1px solid #ddd;
-	border-top: 1px solid #ddd;
 	}
 
 .leaflet-oldie .leaflet-popup-content-wrapper {
@@ -953,7 +954,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	/* Prevent printers from removing background-images of controls. */
 	.leaflet-control {
 		-webkit-print-color-adjust: exact;
-		color-adjust: exact;
+		print-color-adjust: exact;
 		}
 	}
 
@@ -18139,10 +18140,14 @@ textarea.form-control-lg {
   @media (prefers-reduced-motion: reduce) {
     .btn {
       transition: none; } }
-  :not(.btn-check) + .btn:hover, .btn:first-child:hover {
+  .btn:hover {
     color: var(--bs-btn-hover-color);
     background-color: var(--bs-btn-hover-bg);
     border-color: var(--bs-btn-hover-border-color); }
+  .btn-check + .btn:hover {
+    color: var(--bs-btn-color);
+    background-color: var(--bs-btn-bg);
+    border-color: var(--bs-btn-border-color); }
   .btn:focus-visible {
     color: var(--bs-btn-hover-color);
     background-color: var(--bs-btn-hover-bg);
@@ -19974,6 +19979,7 @@ textarea.form-control-lg {
     display: none; }
 
 .toast-container {
+  --bs-toast-zindex: 1090;
   position: absolute;
   z-index: var(--bs-toast-zindex);
   width: max-content;
@@ -24545,10 +24551,14 @@ Bootstrap allready have the following classes
 .text-capitalize
 
 // Weight and italics
-
-.font-weight-normal
-.font-weight-bold
-.font-italic
+.fw-bold        Bold text
+.fw-bolder      Bolder weight text (relative to the parent element)
+.fw-semibold    Semibold weight text
+.fw-normal      Normal weight text
+.fw-light       Light weight text
+.fw-lighter     Lighter weight text (relative to the parent element)
+.fst-italic     Italic text
+.fst-normal     Text with normal font style>
 
 */
 .opacity-0 {
@@ -31938,6 +31948,9 @@ Accordion
 Card
 ***********************************************/
 /***********************************************
+Form
+***********************************************/
+/***********************************************
 Toast
 ***********************************************/
 /***********************************************
@@ -32027,6 +32040,13 @@ Varients of different properties
 /************************************************************
 HEADER and FOOTER-VARIANT
 Adjust padding and font-size for header and footer
+************************************************************/
+/************************************************************
+BUTTON-VARIANT
+button-text-color-variant
+button-border-color-variant
+button-background-color-variant
+Adjust text-, border-, and background-color for a button
 ************************************************************/
 /***********************************************
 leaflet-bootstrap-variables.scss
