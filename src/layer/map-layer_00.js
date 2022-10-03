@@ -537,7 +537,7 @@ L.Layer.addInitHook(function(){
 
 
                 info.$colorInfoBoxContent = $('<div/>')
-                    .addClass('w-100 h-100 d-flex align-items-center justify-content-center text-monospace')
+                    .addClass('w-100 h-100 d-flex align-items-center justify-content-center font-monospace')
                     .appendTo($contentContainer);
 
                 var infoBoxOptions = {

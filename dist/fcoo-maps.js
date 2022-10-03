@@ -3655,7 +3655,7 @@ L.Layer.addInitHook(function(){
 
 
                 info.$colorInfoBoxContent = $('<div/>')
-                    .addClass('w-100 h-100 d-flex align-items-center justify-content-center text-monospace')
+                    .addClass('w-100 h-100 d-flex align-items-center justify-content-center font-monospace')
                     .appendTo($contentContainer);
 
                 var infoBoxOptions = {
@@ -8035,12 +8035,13 @@ search.js
             header        : {icon: 'fa-search', text:{da:'Søg efter position eller lokation', en:'Search for Position or Location'}},
             static        : false,
             keyboard      : true,
-// HER-----> form-validation virker ikke             formValidation: true,
             content: {
                 id         : 'search',
                 type       : 'input',
                 placeholder: {da:'Søg...', en:'Search..'},
 // HER-----> form-validation virker ikke                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
+                validators : ['required', {type: 'length', min: minSearchLength}]
+
             },
             closeWithoutWarning: true,
             historyList: searchHistoryList,
