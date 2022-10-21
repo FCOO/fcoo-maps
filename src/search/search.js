@@ -62,8 +62,6 @@ search.js
             return;
         }
 
-
-
         var lang = ns.globalSetting.get('language');
         if (text === null){
             nsMap.showSearchModalForm(searchText, map);
@@ -179,11 +177,11 @@ search.js
             header        : {icon: 'fa-search', text:{da:'Søg efter position eller lokation', en:'Search for Position or Location'}},
             static        : false,
             keyboard      : true,
+            formValidation: true,
             content: {
                 id         : 'search',
                 type       : 'input',
                 placeholder: {da:'Søg...', en:'Search..'},
-// HER-----> form-validation virker ikke                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
                 validators : ['required', {type: 'length', min: minSearchLength}]
 
             },
@@ -210,38 +208,47 @@ search.js
     var searchResultList = [],
         selectedSearchResultIndex = -1;
 
-    function showSearchResultModal( list, map ){
-        searchResultList = list;
 
-        /*
-        Find the map where a SearchResult is fit/centered on when selected.
-        Use:
-        1: Previous used map (if still showing search-results, or
-        2: main-map if search-result are shown, or
-        3: any visible map with search-result shown, or
-        4: main-map
-        */
-        if (!map){
+    /*************************************************************************
+    getSearchResultMap
+    Find the map where a SearchResult is fit/centered on when selected.
+    Use:
+    1: Previous used map (if still showing search-results, or
+    2: main-map if search-result are shown, or
+    3: any visible map with search-result shown, or
+    4: main-map
+    *************************************************************************/
+    nsMap.getSearchResultMap = function( map ){
+        var result = map;
+        if (!result){
             var mapLayer = nsMap.searchResultMapLayer;
 
             if (mapLayer){
                 if (ns.showSearchResultInMap && mapLayer.isAddedToMap(ns.showSearchResultInMap) )
                     //1: Previous used map (if still showing search-results
-                    map = ns.showSearchResultInMap;
+                    result = ns.showSearchResultInMap;
                 else
                     nsMap.visitAllVisibleMaps( function( nextMap ){
                         //2: main-map if search-result are shown, or
                         //3: any visible map with search-result shown
-                        if (!map && mapLayer.isAddedToMap( nextMap ) )
-                            map = nextMap;
+                        if (!result && mapLayer.isAddedToMap( nextMap ) )
+                            result = nextMap;
                     });
 
                 //4: main-map
-                map = map || nsMap.mainMap;
+                result = result || nsMap.mainMap;
             }
             else
                 /* search-result-layer not installed */;
         }
+
+        return result;
+    }
+
+    function showSearchResultModal( list, map ){
+        searchResultList = list;
+
+        map = nsMap.getSearchResultMap( map );
 
         //If only ONE result => show direct on map
         if (list.length == 1){

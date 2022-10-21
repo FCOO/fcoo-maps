@@ -76,10 +76,13 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     nsMap.bsControls = {
         //Zoom (L.Control.BsZoom@leaflet-latlng)
         'bsZoomControl': {
-            icon    : ['fa-plus-square', 'fa-minus-square'],
+            icon    : [['far fa-plus-minus transform-scale-0-65', 'fa-square transform-scale-1-2']],
             text    : {da: 'Zoom-knapper', en:'Zoom-buttons'},
             position: ''
         },
+
+
+
 
         //Map Setting
         'bsSettingControl': {
@@ -284,14 +287,16 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     type             : 'inputGroup',
                     noBorder         : true,
                     noVerticalPadding: true,
+                    noPadding        : true,
                     content : [{
                         id      : 'show',
                         type    : 'checkboxbutton',
                         icon    : options.icon,
                         text    : options.text,
-                        class   : 'w-100',
-                        insideFormGroup   : true,
-                        smallBottomPadding: true,
+                        class   : 'flex-grow-1',
+                        insideFormGroup     : true,
+                        noVerticalPadding   : true,
+                        //smallBottomPadding  : true,
 
                         //Button with setting for the bsControl (if any). = items from its popupList
                         after: {
@@ -356,7 +361,11 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     popupIdStr = nextPopupIdStr;
             });
 
-            $modalBody.find('#' + controlId + '_options').toggleClass('invisible', hideOptionsButton);
+            var $optionsButton = $modalBody.find('#' + controlId + '_options'),
+                $checkboxButton = $optionsButton.prev();
+
+            $optionsButton.toggleClass('invisible', hideOptionsButton);
+            $checkboxButton.toggleClass('btn-round-border', hideOptionsButton);
         });
 
 
@@ -962,11 +971,11 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         $result.push(
             $('<div/>')
-                .addClass('flex-grow-1 no-margin-children d-flex flex-column')
+                .addClass('flex-grow-1 no-margin-children d-flex flex-column justify-content-center')
                 .height('6em')
                 ._bsAddHtml([
-                    {text: header,  textClass: 'text-center fw-bold font-size-1-2em'},
-                    {text: content, textClass: 'text-center'},
+                    {text: header,  textClass: 'text-center fw-bold font-size-1-1em'},
+                    {text: content, textClass: 'text-center text-wrap'},
                 ])
         );
         return $result;
@@ -1012,7 +1021,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 id     : 'allMapSettings',
                 content: createBigIconButton(
                              nsMap.mapSettingIcon,
-                             {da:'Indstillinger for hvert kort', en:'Settings for each map'},
+                             //{da:'Indstillinger for hvert kort', en:'Settings for each map'},
+                             {da:'Indstillinger for kortene', en:'Settings for the maps'},
                              text
                          ),
                 allowContent: true,

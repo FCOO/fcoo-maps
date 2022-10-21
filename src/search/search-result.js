@@ -521,6 +521,7 @@ search-result.js
         centerOnMap( map )
         **********************************************/
         centerOnMap: function( map = nsMap.mainMap ){
+            this.mapLayer.addTo(map);
             this._closePopup( map );
             map.setView(this.options.latLng, map.getZoom(), map._mapSync_NO_ANIMATION);
         },
@@ -530,6 +531,7 @@ search-result.js
         expandOnMap( map )
         **********************************************/
         expandOnMap: function( map = nsMap.mainMap ){
+            this.mapLayer.addTo(map);
             this._closePopup( map );
             var poly = this._getPoly( map );
             if (poly)

@@ -126,6 +126,9 @@ that includes current position, and use this other map to get the color
         ******************************************************************/
         getColor: function(latLng){
 
+            if (!this._map)
+                return null;
+
             var size = this.getTileSize(),
                 point = this._map.project(latLng, this._tileZoom).floor(),
                 coords = point.unscaleBy(size).floor(),

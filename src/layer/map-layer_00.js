@@ -184,8 +184,10 @@ L.Layer.addInitHook(function(){
     //Adjust default options for legend
     L.BsLegend_defaultOptions.closeIconOptions = {
         icon : [['show-for-single-maps-selected fa-circle-trash'], ['show-for-multi-maps-selected fa-circle-check']],
-        title: {da: 'Skjul', en: 'Hide'}
+        title: {da: 'Skjul/Vælg', en: 'Hide/Select'}
     };
+
+
 
     //Overwrite L.BsLegend.remove to select for all maps if multi maps
     L.BsLegend.prototype.remove = function(e){

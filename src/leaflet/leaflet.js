@@ -426,13 +426,6 @@ Objects and methods to handle leaflet-maps
         }
     });
 
-    //********************************************
-    //Simple parameter hidecontrols => hide all controls (bug fix: using opacity) - TODO: To be removed in later versions
-    L.Map.addInitHook(function () {
-        if (window.Url.queryString('hidecontrols'))
-            $('.leaflet-control-container').css('opacity',0);
-    });
-
 
 }(jQuery, L, this, document));
 

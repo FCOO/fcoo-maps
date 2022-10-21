@@ -8,8 +8,8 @@ search-mapLayer.js
         nsMap = ns.map = ns.map || {};
 
 
-    var selectedSearchResultList = [],       //List of current selected SearchResult
-        selectedSearchResult = null; //Current selected SearchResult in selectedSearchResultList
+    var selectedSearchResultList = [],  //List of current selected SearchResult
+        selectedSearchResult = null;    //Current selected SearchResult in selectedSearchResultList
 
     /***********************************************************
     Add MapLayer_SearchResult to createMapLayer
@@ -61,10 +61,10 @@ search-mapLayer.js
         /*****************************************************
         searchButton and buttonList = ´Buttons for legend, menu etc.
         *****************************************************/
-        _searchButton_onClick: function(){
+        _searchButton_onClick: function(id, selected, $button, map){
             if (this.searchResultListModal)
                 this.searchResultListModal.close();
-            nsMap.showSearchModalForm('', ns.showSearchResultInMap );
+            nsMap.showSearchModalForm('', map || ns.showSearchResultInMap );
         },
 
         searchButton: function(){
@@ -81,7 +81,7 @@ search-mapLayer.js
         buttonList: function(){
             var _this = this;
             return [
-                {icon: 'fa-th-list',   text: {da: 'Alle',  en: 'All'},     class: 'min-width', onClick: _this._showList,  context: _this, lineBefore: true},
+                {icon: 'fa-th-list',   text: {da: 'Alle',  en: 'All'},     class: 'min-width', onClick: _this._showList,  context: _this},
                 {icon: 'fa-trash-alt', text: {da: 'Fjern', en: 'Remove' }, class: 'min-width', onClick: _this.removeAll,  context: _this},
                 this.searchButton()
             ];
@@ -300,7 +300,7 @@ search-mapLayer.js
         Show a modal with all the visible searchResults
         *************************************************************************/
         _showList: function(id, latlng, $button, map){
-            this.showList( map );
+            this.showList( nsMap.getSearchResultMap( map ) );
         },
 
         showList: function( map, noError ){
