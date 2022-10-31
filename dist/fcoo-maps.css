@@ -1063,11 +1063,11 @@ when loading or not visible
       --bs-modal-content-font-size: 0.875rem;
       --bs-modal-padding-x: 0.25rem;
       --bs-modal-padding-y: 0.25rem;
-      --bs-modal-padding: 0.25rem 0.25rem; }
+      --bs-modal-padding: 0.25rem; }
       .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm .header-content {
         --bs-modal-header-padding-x: 0.25rem;
         --bs-modal-header-padding-y: 0.25rem;
-        --bs-modal-header-padding: 0.25rem 0.25rem; }
+        --bs-modal-header-padding: 0.25rem; }
       .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm .footer-content {
         --bs-footer-font-size: 0.75rem;
         --bs-footer-padding-y: 0.25rem;
@@ -1076,11 +1076,11 @@ when loading or not visible
       --bs-modal-content-font-size: 0.75rem;
       --bs-modal-padding-x: 0.125rem;
       --bs-modal-padding-y: 0.125rem;
-      --bs-modal-padding: 0.125rem 0.125rem; }
+      --bs-modal-padding: 0.125rem; }
       .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs .header-content {
         --bs-modal-header-padding-x: 0.125rem;
         --bs-modal-header-padding-y: 0.125rem;
-        --bs-modal-header-padding: 0.125rem 0.125rem; }
+        --bs-modal-header-padding: 0.125rem; }
       .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs .footer-content {
         --bs-footer-font-size: 0.6875rem;
         --bs-footer-padding-y: 0.125rem;

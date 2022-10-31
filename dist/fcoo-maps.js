@@ -1832,8 +1832,9 @@ global-events.js
         'bsScaleControl',
         [ns.events.UNITCHANGED, ns.events.NUMBERFORMATCHANGED],
         function(){
+            var lengthMode = ns.globalSetting.get('length');
             this.setState({
-                mode: ns.globalSetting.get('length')
+                mode: lengthMode == 'METRIC2' ? 'METRIC' : lengthMode
             });
         }
     );
