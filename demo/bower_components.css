@@ -24762,6 +24762,9 @@ Modernizr-test for elements with class="hide-for-selected" or "show-for-selected
 /************************************************************
 BUTTON-GROUP
 ************************************************************/
+.btn-group-vertical.btn-group-no-round-border > .btn {
+  border-radius: 0; }
+
 .input-group .btn-group,
 .btn-group:not(.btn-group-vertical).btn-group-full-width {
   display: flex;
@@ -25788,6 +25791,10 @@ Using Bootstrap Collapse to create accordion
     line-height: 1.25;
     font-size: var(--bs-footer-font-size);
     padding: var(--bs-accordion-footer-padding); }
+  .accordion .accordion-body.no-vertical-padding {
+    --bs-accordion-body-padding-y: 0 !important; }
+  .accordion .accordion-body.no-horizontal-padding {
+    --bs-accordion-body-padding-x: 0 !important; }
   .modal-dialog-sm .accordion, .accordion.accordion-sm {
     --bs-accordion-font-size: 0.875rem;
     --bs-accordion-btn-padding-x: 0.25rem;
@@ -28742,9 +28749,22 @@ ADJUST MMENU AND JQUERY-BOOTSTRAP ELEMENTS
   margin-bottom: calc( var(--mm-listitem-size) / 2); }
 
 .mm-listitem__text {
-  display: flex; }
+  display: flex;
+  flex-wrap: wrap; }
   .mm-listitem__text > *:first-child {
     flex: 1; }
+
+.button-bar-container {
+  padding: 0;
+  margin: 0; }
+  .button-bar-container:last-child {
+    margin-bottom: 2px; }
+  .button-bar-container.padding-left {
+    padding-left: 1.5em; }
+  .button-bar-container.padding-right {
+    padding-right: 2.375rem; }
+    .mm-menu-sm .button-bar-container.padding-right {
+      padding-right: 1.9375rem; }
 
 /***********************************************
     fcoo-application.scss,

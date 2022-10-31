@@ -153,11 +153,11 @@ related issues in map sync
             });
 
             content.push({
-                id        :'showOutline',
-                type      : 'checkbox',
-                text      : {da:'Vis omrids, når et kort trækkes', en:'Show outline when dragging'},
-                lineBefore: true,
-                hideWhen  : {maps: 'maps_1'}
+                id         :'showOutline',
+                type       : 'checkbox',
+                text       : {da:'Vis omrids, når et kort trækkes', en:'Show outline when dragging'},
+                spaceBefore: true,
+                hideWhen   : {maps: 'maps_1'}
             });
 
             //checkbox for displaying the shadow cursor or map center-marker on all maps

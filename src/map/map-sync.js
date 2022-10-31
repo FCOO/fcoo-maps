@@ -133,7 +133,7 @@ Objects and methods to handle map-sync
             modalFooter : [
                 {icon:'fas fa-square-full text-multi-maps-current', text:{da:':&nbsp;Dette kort', en:':&nbsp;This map'}},
                 {text:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'},
-                {icon:'fa-square-full text-multi-maps-main', text:{da:':&nbsp;Hovedkort',  en:':&nbsp;Main map'}}
+                {icon:'far fa-square-full text-multi-maps-main', text:{da:':&nbsp;Hovedkort',  en:':&nbsp;Main map'}}
             ],
             onChanging: mapSettingGroup_mapSyncOptions_onChanging
         };

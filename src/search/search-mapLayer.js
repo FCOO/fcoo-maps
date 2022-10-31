@@ -18,6 +18,10 @@ search-mapLayer.js
         header = {
             icon: L.bsMarkerAsIcon('search-result'),
             text: {da: 'Søgeresultater', en: 'Search Results'}
+        },
+        smallHeader = {
+            icon: L.bsMarkerAsIcon('search-result'),
+            text: {da: 'Søgeres.', en: 'Search Res.'}
         };
 
     nsMap.createMapLayer[id] = function(options, addMenu){
@@ -77,12 +81,22 @@ search-mapLayer.js
                 context: this
             };
         },
+        removeAllButton: function(){
+            return {
+                type   : 'button',
+                icon   : 'fa-trash-alt',
+                text   : {da: 'Fjern', en: 'Remove' },
+                class  : 'min-width',
+                onClick: this.removeAll,
+                context: this
+            };
+        },
 
         buttonList: function(){
             var _this = this;
             return [
                 {icon: 'fa-th-list',   text: {da: 'Alle',  en: 'All'},     class: 'min-width', onClick: _this._showList,  context: _this},
-                {icon: 'fa-trash-alt', text: {da: 'Fjern', en: 'Remove' }, class: 'min-width', onClick: _this.removeAll,  context: _this},
+                this.removeAllButton(),
                 this.searchButton()
             ];
         },
@@ -94,7 +108,9 @@ search-mapLayer.js
             var layerGroup = L.layerGroup({/*pane: 'MANGLER - TODO'*/});
 
             //Add contextmenu with items to show and remove all items
-            layerGroup.setContextmenuHeader(header);
+            layerGroup.setContextmenuHeader(smallHeader);
+            layerGroup.setContextmenuWidth('9em');
+
             layerGroup.addContextmenuItems(this.buttonList());
 
             //Add all searchResult to the new layerGroup
@@ -344,17 +360,16 @@ search-mapLayer.js
             }
             //*****************************************************
 
-
             buttonList.forEach( function( buttonOptions, index ){
                 buttonOptions.id = 'item_'+ index;
                 buttonOptions.title = buttonOptions.text;
                 buttonOptions.text = null;
                 buttonOptions.square = true;
 
-                buttonOptions.onClick = onClick;
+                buttonOptions._class = buttonOptions.className; //Needed in BsButtonBar
 
+                buttonOptions.onClick = onClick;
             });
-            buttonList.push(this.searchButton());
 
             //Create options for modal with list of shown searchResults
             var contentList = [];
@@ -366,15 +381,14 @@ search-mapLayer.js
             //*****************************************************
             //Updates the enabled/disabled of the buttons related to the current selected SearchResult
             function update(){
-                var $buttonContainer = searchResultListModal.bsModal.$buttonContainer,
+                var $footer = searchResultListModal.bsModal.$footer,
                     buttonList = selectedSearchResult._getButtonList(true);
 
                 buttonList.forEach( function( options ){
-                    $buttonContainer.find('.'+options.className).toggleClass('disabled', !options.include);
+                    $footer.find('.'+options.className).toggleClass('disabled', !options.include);
                 });
             }
             //*****************************************************
-
             var modalOptions = {
                     header   : {icon: 'fa-search', text:{da:'Søgeresultater', en:'Search Results'}},
                     static   : false,
@@ -390,7 +404,16 @@ search-mapLayer.js
                             update();
                         }
                     },
-                    buttons: buttonList
+
+                    footer: $.bsButtonBar({
+                        justify: 'start',
+                        list   : buttonList
+                    }),
+
+                    buttons: [
+                        this.removeAllButton(),
+                        this.searchButton()
+                    ]
                 };
 
             searchResultListModal = this.searchResultListModal = this.searchResultListModal ? this.searchResultListModal.update(modalOptions) : $.bsModal(modalOptions);

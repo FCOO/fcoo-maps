@@ -243,7 +243,7 @@ search.js
         }
 
         return result;
-    }
+    };
 
     function showSearchResultModal( list, map ){
         searchResultList = list;

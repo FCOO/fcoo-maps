@@ -26,7 +26,7 @@ search-result.js
         {hasPoly      : true, icon: 'fa-expand',       text: {da:'Udvid',    en:'Expand'  },                    className: 'sr-expand-on-map',     method: '_expandOnMap',     closeOnClick: true  },
         {hasPosition  : true, icon: 'fa-location-dot', text: {da:'Position', en:'Position'},                    className: 'sr-show-latlng-modal', method: '_showLatLngModal', },
         {isNotPosition: true, icon: 'fa-info-circle',  text: {da:'Detaljer', en:'Details' },                    className: 'sr-show-details',      method: '_showDetails',     },
-        {                     icon: 'fa-trash-alt',    text: {da:'Fjern',    en:'Remove'  }, lineBefore: true,  className: 'sr-remove-from',       method: '_remove',          reloadOnClick: true }
+        {                     icon: 'fa-trash-alt',    text: {da:'Fjern',    en:'Remove'  }, spaceBefore: true, className: 'sr-remove-from',       method: '_remove',          reloadOnClick: true }
     ];
 
 
@@ -472,12 +472,12 @@ search-result.js
 
             $.each(this._getButtonList(), function(index, buttonOptions){
                 menuList.push({
-                    icon      : buttonOptions.icon,
-                    text      : buttonOptions.text,
-                    lineBefore: buttonOptions.lineBefore,
-                    class     : buttonOptions.className,
-                    onClick   : _this[buttonOptions.method],
-                    context   : _this
+                    icon       : buttonOptions.icon,
+                    text       : buttonOptions.text,
+                    spaceBefore: buttonOptions.spaceBefore,
+                    class      : buttonOptions.className,
+                    onClick    : _this[buttonOptions.method],
+                    context    : _this
                 });
             });
 

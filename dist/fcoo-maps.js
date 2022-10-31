@@ -2131,6 +2131,9 @@ that includes current position, and use this other map to get the color
         ******************************************************************/
         getColor: function(latLng){
 
+            if (!this._map)
+                return null;
+
             var size = this.getTileSize(),
                 point = this._map.project(latLng, this._tileZoom).floor(),
                 coords = point.unscaleBy(size).floor(),
@@ -2952,13 +2955,6 @@ Objects and methods to handle leaflet-maps
         }
     });
 
-    //********************************************
-    //Simple parameter hidecontrols => hide all controls (bug fix: using opacity) - TODO: To be removed in later versions
-    L.Map.addInitHook(function () {
-        if (window.Url.queryString('hidecontrols'))
-            $('.leaflet-control-container').css('opacity',0);
-    });
-
 
 }(jQuery, L, this, document));
 
@@ -3095,10 +3091,10 @@ Global context-menu for all maps
 
     map_contextmenu_itemList.push({
         //Map-setting
-        icon      : nsMap.mapSettingHeader.icon,
-        text      : nsMap.mapSettingHeader.text,
-        lineBefore: true,
-        width     : '10em',
+        icon       : nsMap.mapSettingHeader.icon,
+        text       : nsMap.mapSettingHeader.text,
+        spaceBefore: true,
+        width      : '11em',
         onClick: function(id, latlng, $button, map){
             if (map)
                 nsMap.editMapSetting(map.fcooMapIndex);
@@ -3302,8 +3298,10 @@ L.Layer.addInitHook(function(){
     //Adjust default options for legend
     L.BsLegend_defaultOptions.closeIconOptions = {
         icon : [['show-for-single-maps-selected fa-circle-trash'], ['show-for-multi-maps-selected fa-circle-check']],
-        title: {da: 'Skjul', en: 'Hide'}
+        title: {da: 'Skjul/Vælg', en: 'Hide/Select'}
     };
+
+
 
     //Overwrite L.BsLegend.remove to select for all maps if multi maps
     L.BsLegend.prototype.remove = function(e){
@@ -4732,10 +4730,13 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     nsMap.bsControls = {
         //Zoom (L.Control.BsZoom@leaflet-latlng)
         'bsZoomControl': {
-            icon    : ['fa-plus-square', 'fa-minus-square'],
+            icon    : [['far fa-plus-minus transform-scale-0-65', 'fa-square transform-scale-1-2']],
             text    : {da: 'Zoom-knapper', en:'Zoom-buttons'},
             position: ''
         },
+
+
+
 
         //Map Setting
         'bsSettingControl': {
@@ -4940,14 +4941,16 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     type             : 'inputGroup',
                     noBorder         : true,
                     noVerticalPadding: true,
+                    noPadding        : true,
                     content : [{
                         id      : 'show',
                         type    : 'checkboxbutton',
                         icon    : options.icon,
                         text    : options.text,
-                        class   : 'w-100',
-                        insideFormGroup   : true,
-                        smallBottomPadding: true,
+                        class   : 'flex-grow-1',
+                        insideFormGroup     : true,
+                        noVerticalPadding   : true,
+                        //smallBottomPadding  : true,
 
                         //Button with setting for the bsControl (if any). = items from its popupList
                         after: {
@@ -5012,10 +5015,12 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     popupIdStr = nextPopupIdStr;
             });
 
-            $modalBody.find('#' + controlId + '_options').toggleClass('invisible', hideOptionsButton);
+            var $optionsButton = $modalBody.find('#' + controlId + '_options'),
+                $checkboxButton = $optionsButton.prev();
+
+            $optionsButton.toggleClass('invisible', hideOptionsButton);
+            $checkboxButton.toggleClass('btn-round-border', hideOptionsButton);
         });
-
-
     }
 
     //****************************************************************************
@@ -5283,7 +5288,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 var data = this._editDataToData(editData);
 
                 this.options.simpleMode = true;
-                SettingGroup_onSubmit.call(this, data); //sætter this.data = data
+                SettingGroup_onSubmit.call(this, data); //Sets this.data = data
                 this.options.simpleMode = false;
 
                 this.saveParent(data);
@@ -5409,18 +5414,17 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         return mapSettingGroup;
     }
 
-    nsMap.editMapSetting = function(mapIndex, options){
+    nsMap.editMapSetting = function(mapIndex, options = {}){
         var mapSettingGroup = getMapSettingGroup(nsMap.mapIndex[mapIndex]);
         if (!mapSettingGroup) return;
-
-        options = options || {};
 
         var msgAccordion = nsMap.msgAccordions[options.msgAccordionId],
             preEdit = msgAccordion ?
                 function(settingGroup/*, data*/){
-                    //Hide all accordions except the one gíven by
-                    settingGroup.modalForm.$bsModal.find('.card').addClass('d-none');
-                    settingGroup.modalForm.$bsModal.find('.card[data-user-id="'+options.msgAccordionId+'"]').removeClass('d-none');
+                    //Hide all accordions except the one gíven by accordion-item
+                    settingGroup.modalForm.$bsModal.find('.accordion-item').addClass('d-none');
+                    settingGroup.modalForm.$bsModal.find('.accordion-item[data-user-id="'+options.msgAccordionId+'"]').removeClass('d-none');
+
                 } : null;
 
         //If it is one accordion applyed to all maps (options.applyToAll and msgAccordion) => save current settings for all maps and get common data from all maps as data for main (dataToEdit)
@@ -5449,13 +5453,10 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         //If options.applyToAll => the settings is applied to all maps
         if (options.applyToAll){
-
             mapSettingGroup.options.onSubmit = function(data){
                 //Reset main-map setting to remove any "NOT_CHANGED" values
                 mapSettingGroup.data         = $.extend(true, {}, mapSettingGroup.backupData);
                 mapSettingGroup.originalData = $.extend(true, {}, mapSettingGroup.backupData);
-
-
 
                 //Set common setting for all maps
                 nsMap.visitAllVisibleMaps(function(map){
@@ -5466,18 +5467,21 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                         //If msgAccordion is given => only set data from the settings with the same accordionId
                         if (msgAccordion)
                             $.each(nextMapSettingGroup.settings, function(id, setting){
-                                if (setting.options.accordionId != options.msgAccordionId)
+                                if (setting.options.accordionId != options.msgAccordionId){
                                     mapData[id] = nextMapSettingGroup.data[id];
+                                }
                             });
                         nextMapSettingGroup.saveParent(mapData);
                     }
                 });
+
+                //Update backup-data for main MapSettingGroup
+                mapSettingGroup.backupData = $.extend(true, {}, mapSettingGroup.data);
             };
 
             mapSettingGroup.options.onClose = function(){
                 mapSettingGroup.data = mapSettingGroup.backupData;
             };
-
         }
         else {
             mapSettingGroup.options.onSubmit = null;
@@ -5486,8 +5490,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         //Reset all accordions to be visible
         if (mapSettingGroup.modalForm)
-            mapSettingGroup.modalForm.$bsModal.find('.card').removeClass('d-none');
-
+            mapSettingGroup.modalForm.$bsModal.find('.accordion-item').removeClass('d-none');
 
         //Convert mapSettingGroup.data into 1-dim record
         var editData = {};
@@ -5505,7 +5508,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                         controlOptionsForm_preEdit.apply(this, arguments);
                     } :
                     controlOptionsForm_preEdit;
-
 
         mapSettingGroup.edit( msgAccordion ? msgAccordion.id : null, editData, fullPreEdit );
     };
@@ -5618,11 +5620,11 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         $result.push(
             $('<div/>')
-                .addClass('flex-grow-1 no-margin-children d-flex flex-column')
+                .addClass('flex-grow-1 no-margin-children d-flex flex-column justify-content-center')
                 .height('6em')
                 ._bsAddHtml([
-                    {text: header,  textClass: 'text-center fw-bold font-size-1-2em'},
-                    {text: content, textClass: 'text-center'},
+                    {text: header,  textClass: 'text-center fw-bold font-size-1-1em'},
+                    {text: content, textClass: 'text-center text-wrap'},
                 ])
         );
         return $result;
@@ -5668,7 +5670,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 id     : 'allMapSettings',
                 content: createBigIconButton(
                              nsMap.mapSettingIcon,
-                             {da:'Indstillinger for hvert kort', en:'Settings for each map'},
+                             //{da:'Indstillinger for hvert kort', en:'Settings for each map'},
+                             {da:'Indstillinger for kortene', en:'Settings for the maps'},
                              text
                          ),
                 allowContent: true,
@@ -5839,7 +5842,7 @@ Objects and methods to handle map-sync
             modalFooter : [
                 {icon:'fas fa-square-full text-multi-maps-current', text:{da:':&nbsp;Dette kort', en:':&nbsp;This map'}},
                 {text:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'},
-                {icon:'fa-square-full text-multi-maps-main', text:{da:':&nbsp;Hovedkort',  en:':&nbsp;Main map'}}
+                {icon:'far fa-square-full text-multi-maps-main', text:{da:':&nbsp;Hovedkort',  en:':&nbsp;Main map'}}
             ],
             onChanging: mapSettingGroup_mapSyncOptions_onChanging
         };
@@ -6067,11 +6070,11 @@ related issues in map sync
             });
 
             content.push({
-                id        :'showOutline',
-                type      : 'checkbox',
-                text      : {da:'Vis omrids, når et kort trækkes', en:'Show outline when dragging'},
-                lineBefore: true,
-                hideWhen  : {maps: 'maps_1'}
+                id         :'showOutline',
+                type       : 'checkbox',
+                text       : {da:'Vis omrids, når et kort trækkes', en:'Show outline when dragging'},
+                spaceBefore: true,
+                hideWhen   : {maps: 'maps_1'}
             });
 
             //checkbox for displaying the shadow cursor or map center-marker on all maps
@@ -6844,8 +6847,8 @@ search-mapLayer.js
         nsMap = ns.map = ns.map || {};
 
 
-    var selectedSearchResultList = [],       //List of current selected SearchResult
-        selectedSearchResult = null; //Current selected SearchResult in selectedSearchResultList
+    var selectedSearchResultList = [],  //List of current selected SearchResult
+        selectedSearchResult = null;    //Current selected SearchResult in selectedSearchResultList
 
     /***********************************************************
     Add MapLayer_SearchResult to createMapLayer
@@ -6854,6 +6857,10 @@ search-mapLayer.js
         header = {
             icon: L.bsMarkerAsIcon('search-result'),
             text: {da: 'Søgeresultater', en: 'Search Results'}
+        },
+        smallHeader = {
+            icon: L.bsMarkerAsIcon('search-result'),
+            text: {da: 'Søgeres.', en: 'Search Res.'}
         };
 
     nsMap.createMapLayer[id] = function(options, addMenu){
@@ -6897,10 +6904,10 @@ search-mapLayer.js
         /*****************************************************
         searchButton and buttonList = ´Buttons for legend, menu etc.
         *****************************************************/
-        _searchButton_onClick: function(){
+        _searchButton_onClick: function(id, selected, $button, map){
             if (this.searchResultListModal)
                 this.searchResultListModal.close();
-            nsMap.showSearchModalForm('', ns.showSearchResultInMap );
+            nsMap.showSearchModalForm('', map || ns.showSearchResultInMap );
         },
 
         searchButton: function(){
@@ -6913,12 +6920,22 @@ search-mapLayer.js
                 context: this
             };
         },
+        removeAllButton: function(){
+            return {
+                type   : 'button',
+                icon   : 'fa-trash-alt',
+                text   : {da: 'Fjern', en: 'Remove' },
+                class  : 'min-width',
+                onClick: this.removeAll,
+                context: this
+            };
+        },
 
         buttonList: function(){
             var _this = this;
             return [
-                {icon: 'fa-th-list',   text: {da: 'Alle',  en: 'All'},     class: 'min-width', onClick: _this._showList,  context: _this, lineBefore: true},
-                {icon: 'fa-trash-alt', text: {da: 'Fjern', en: 'Remove' }, class: 'min-width', onClick: _this.removeAll,  context: _this},
+                {icon: 'fa-th-list',   text: {da: 'Alle',  en: 'All'},     class: 'min-width', onClick: _this._showList,  context: _this},
+                this.removeAllButton(),
                 this.searchButton()
             ];
         },
@@ -6930,7 +6947,9 @@ search-mapLayer.js
             var layerGroup = L.layerGroup({/*pane: 'MANGLER - TODO'*/});
 
             //Add contextmenu with items to show and remove all items
-            layerGroup.setContextmenuHeader(header);
+            layerGroup.setContextmenuHeader(smallHeader);
+            layerGroup.setContextmenuWidth('9em');
+
             layerGroup.addContextmenuItems(this.buttonList());
 
             //Add all searchResult to the new layerGroup
@@ -7136,7 +7155,7 @@ search-mapLayer.js
         Show a modal with all the visible searchResults
         *************************************************************************/
         _showList: function(id, latlng, $button, map){
-            this.showList( map );
+            this.showList( nsMap.getSearchResultMap( map ) );
         },
 
         showList: function( map, noError ){
@@ -7180,17 +7199,16 @@ search-mapLayer.js
             }
             //*****************************************************
 
-
             buttonList.forEach( function( buttonOptions, index ){
                 buttonOptions.id = 'item_'+ index;
                 buttonOptions.title = buttonOptions.text;
                 buttonOptions.text = null;
                 buttonOptions.square = true;
 
-                buttonOptions.onClick = onClick;
+                buttonOptions._class = buttonOptions.className; //Needed in BsButtonBar
 
+                buttonOptions.onClick = onClick;
             });
-            buttonList.push(this.searchButton());
 
             //Create options for modal with list of shown searchResults
             var contentList = [];
@@ -7202,15 +7220,14 @@ search-mapLayer.js
             //*****************************************************
             //Updates the enabled/disabled of the buttons related to the current selected SearchResult
             function update(){
-                var $buttonContainer = searchResultListModal.bsModal.$buttonContainer,
+                var $footer = searchResultListModal.bsModal.$footer,
                     buttonList = selectedSearchResult._getButtonList(true);
 
                 buttonList.forEach( function( options ){
-                    $buttonContainer.find('.'+options.className).toggleClass('disabled', !options.include);
+                    $footer.find('.'+options.className).toggleClass('disabled', !options.include);
                 });
             }
             //*****************************************************
-
             var modalOptions = {
                     header   : {icon: 'fa-search', text:{da:'Søgeresultater', en:'Search Results'}},
                     static   : false,
@@ -7226,7 +7243,16 @@ search-mapLayer.js
                             update();
                         }
                     },
-                    buttons: buttonList
+
+                    footer: $.bsButtonBar({
+                        justify: 'start',
+                        list   : buttonList
+                    }),
+
+                    buttons: [
+                        this.removeAllButton(),
+                        this.searchButton()
+                    ]
                 };
 
             searchResultListModal = this.searchResultListModal = this.searchResultListModal ? this.searchResultListModal.update(modalOptions) : $.bsModal(modalOptions);
@@ -7271,7 +7297,7 @@ search-result.js
         {hasPoly      : true, icon: 'fa-expand',       text: {da:'Udvid',    en:'Expand'  },                    className: 'sr-expand-on-map',     method: '_expandOnMap',     closeOnClick: true  },
         {hasPosition  : true, icon: 'fa-location-dot', text: {da:'Position', en:'Position'},                    className: 'sr-show-latlng-modal', method: '_showLatLngModal', },
         {isNotPosition: true, icon: 'fa-info-circle',  text: {da:'Detaljer', en:'Details' },                    className: 'sr-show-details',      method: '_showDetails',     },
-        {                     icon: 'fa-trash-alt',    text: {da:'Fjern',    en:'Remove'  }, lineBefore: true,  className: 'sr-remove-from',       method: '_remove',          reloadOnClick: true }
+        {                     icon: 'fa-trash-alt',    text: {da:'Fjern',    en:'Remove'  }, spaceBefore: true, className: 'sr-remove-from',       method: '_remove',          reloadOnClick: true }
     ];
 
 
@@ -7717,12 +7743,12 @@ search-result.js
 
             $.each(this._getButtonList(), function(index, buttonOptions){
                 menuList.push({
-                    icon      : buttonOptions.icon,
-                    text      : buttonOptions.text,
-                    lineBefore: buttonOptions.lineBefore,
-                    class     : buttonOptions.className,
-                    onClick   : _this[buttonOptions.method],
-                    context   : _this
+                    icon       : buttonOptions.icon,
+                    text       : buttonOptions.text,
+                    spaceBefore: buttonOptions.spaceBefore,
+                    class      : buttonOptions.className,
+                    onClick    : _this[buttonOptions.method],
+                    context    : _this
                 });
             });
 
@@ -7766,6 +7792,7 @@ search-result.js
         centerOnMap( map )
         **********************************************/
         centerOnMap: function( map = nsMap.mainMap ){
+            this.mapLayer.addTo(map);
             this._closePopup( map );
             map.setView(this.options.latLng, map.getZoom(), map._mapSync_NO_ANIMATION);
         },
@@ -7775,6 +7802,7 @@ search-result.js
         expandOnMap( map )
         **********************************************/
         expandOnMap: function( map = nsMap.mainMap ){
+            this.mapLayer.addTo(map);
             this._closePopup( map );
             var poly = this._getPoly( map );
             if (poly)
@@ -7918,8 +7946,6 @@ search.js
             return;
         }
 
-
-
         var lang = ns.globalSetting.get('language');
         if (text === null){
             nsMap.showSearchModalForm(searchText, map);
@@ -8035,11 +8061,11 @@ search.js
             header        : {icon: 'fa-search', text:{da:'Søg efter position eller lokation', en:'Search for Position or Location'}},
             static        : false,
             keyboard      : true,
+            formValidation: true,
             content: {
                 id         : 'search',
                 type       : 'input',
                 placeholder: {da:'Søg...', en:'Search..'},
-// HER-----> form-validation virker ikke                validators : [ {'stringLength': {min:minSearchLength, trim:true}}, 'notEmpty' ]
                 validators : ['required', {type: 'length', min: minSearchLength}]
 
             },
@@ -8066,38 +8092,47 @@ search.js
     var searchResultList = [],
         selectedSearchResultIndex = -1;
 
-    function showSearchResultModal( list, map ){
-        searchResultList = list;
 
-        /*
-        Find the map where a SearchResult is fit/centered on when selected.
-        Use:
-        1: Previous used map (if still showing search-results, or
-        2: main-map if search-result are shown, or
-        3: any visible map with search-result shown, or
-        4: main-map
-        */
-        if (!map){
+    /*************************************************************************
+    getSearchResultMap
+    Find the map where a SearchResult is fit/centered on when selected.
+    Use:
+    1: Previous used map (if still showing search-results, or
+    2: main-map if search-result are shown, or
+    3: any visible map with search-result shown, or
+    4: main-map
+    *************************************************************************/
+    nsMap.getSearchResultMap = function( map ){
+        var result = map;
+        if (!result){
             var mapLayer = nsMap.searchResultMapLayer;
 
             if (mapLayer){
                 if (ns.showSearchResultInMap && mapLayer.isAddedToMap(ns.showSearchResultInMap) )
                     //1: Previous used map (if still showing search-results
-                    map = ns.showSearchResultInMap;
+                    result = ns.showSearchResultInMap;
                 else
                     nsMap.visitAllVisibleMaps( function( nextMap ){
                         //2: main-map if search-result are shown, or
                         //3: any visible map with search-result shown
-                        if (!map && mapLayer.isAddedToMap( nextMap ) )
-                            map = nextMap;
+                        if (!result && mapLayer.isAddedToMap( nextMap ) )
+                            result = nextMap;
                     });
 
                 //4: main-map
-                map = map || nsMap.mainMap;
+                result = result || nsMap.mainMap;
             }
             else
                 /* search-result-layer not installed */;
         }
+
+        return result;
+    };
+
+    function showSearchResultModal( list, map ){
+        searchResultList = list;
+
+        map = nsMap.getSearchResultMap( map );
 
         //If only ONE result => show direct on map
         if (list.length == 1){

@@ -367,8 +367,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             $optionsButton.toggleClass('invisible', hideOptionsButton);
             $checkboxButton.toggleClass('btn-round-border', hideOptionsButton);
         });
-
-
     }
 
     //****************************************************************************
@@ -636,7 +634,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 var data = this._editDataToData(editData);
 
                 this.options.simpleMode = true;
-                SettingGroup_onSubmit.call(this, data); //sætter this.data = data
+                SettingGroup_onSubmit.call(this, data); //Sets this.data = data
                 this.options.simpleMode = false;
 
                 this.saveParent(data);
@@ -762,18 +760,17 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         return mapSettingGroup;
     }
 
-    nsMap.editMapSetting = function(mapIndex, options){
+    nsMap.editMapSetting = function(mapIndex, options = {}){
         var mapSettingGroup = getMapSettingGroup(nsMap.mapIndex[mapIndex]);
         if (!mapSettingGroup) return;
-
-        options = options || {};
 
         var msgAccordion = nsMap.msgAccordions[options.msgAccordionId],
             preEdit = msgAccordion ?
                 function(settingGroup/*, data*/){
-                    //Hide all accordions except the one gíven by
-                    settingGroup.modalForm.$bsModal.find('.card').addClass('d-none');
-                    settingGroup.modalForm.$bsModal.find('.card[data-user-id="'+options.msgAccordionId+'"]').removeClass('d-none');
+                    //Hide all accordions except the one gíven by accordion-item
+                    settingGroup.modalForm.$bsModal.find('.accordion-item').addClass('d-none');
+                    settingGroup.modalForm.$bsModal.find('.accordion-item[data-user-id="'+options.msgAccordionId+'"]').removeClass('d-none');
+
                 } : null;
 
         //If it is one accordion applyed to all maps (options.applyToAll and msgAccordion) => save current settings for all maps and get common data from all maps as data for main (dataToEdit)
@@ -802,13 +799,10 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         //If options.applyToAll => the settings is applied to all maps
         if (options.applyToAll){
-
             mapSettingGroup.options.onSubmit = function(data){
                 //Reset main-map setting to remove any "NOT_CHANGED" values
                 mapSettingGroup.data         = $.extend(true, {}, mapSettingGroup.backupData);
                 mapSettingGroup.originalData = $.extend(true, {}, mapSettingGroup.backupData);
-
-
 
                 //Set common setting for all maps
                 nsMap.visitAllVisibleMaps(function(map){
@@ -819,18 +813,21 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                         //If msgAccordion is given => only set data from the settings with the same accordionId
                         if (msgAccordion)
                             $.each(nextMapSettingGroup.settings, function(id, setting){
-                                if (setting.options.accordionId != options.msgAccordionId)
+                                if (setting.options.accordionId != options.msgAccordionId){
                                     mapData[id] = nextMapSettingGroup.data[id];
+                                }
                             });
                         nextMapSettingGroup.saveParent(mapData);
                     }
                 });
+
+                //Update backup-data for main MapSettingGroup
+                mapSettingGroup.backupData = $.extend(true, {}, mapSettingGroup.data);
             };
 
             mapSettingGroup.options.onClose = function(){
                 mapSettingGroup.data = mapSettingGroup.backupData;
             };
-
         }
         else {
             mapSettingGroup.options.onSubmit = null;
@@ -839,8 +836,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         //Reset all accordions to be visible
         if (mapSettingGroup.modalForm)
-            mapSettingGroup.modalForm.$bsModal.find('.card').removeClass('d-none');
-
+            mapSettingGroup.modalForm.$bsModal.find('.accordion-item').removeClass('d-none');
 
         //Convert mapSettingGroup.data into 1-dim record
         var editData = {};
@@ -858,7 +854,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                         controlOptionsForm_preEdit.apply(this, arguments);
                     } :
                     controlOptionsForm_preEdit;
-
 
         mapSettingGroup.edit( msgAccordion ? msgAccordion.id : null, editData, fullPreEdit );
     };
