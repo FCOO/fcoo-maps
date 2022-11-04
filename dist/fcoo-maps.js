@@ -340,7 +340,12 @@ define default DatasetValue used by fcoo-maps
         vfFormat : 'latlng',
         vfOptions: function(createOptions){return createOptions.compact ? {separator: '<br>'} : {}; },
         saveValue: true,
-        onClick  : function(){ $(this).data('dataSetValue').asModal(); }
+        onClick  : function(event){
+            $(this).data('dataSetValue').asModal();
+            if (event && event.stopPropagation)
+                event.stopPropagation();
+            return false;
+        }
     });
 
     //accuracy (position)
