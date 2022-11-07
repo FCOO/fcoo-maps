@@ -3825,7 +3825,7 @@ L.Layer.addInitHook(function(){
         *********************************************************/
         dataset_setData: function( data, onlyIndexOrMapId ){
             $.each(this._getAllInfoChild(null, onlyIndexOrMapId), function(index, info){
-                info.dataset.setData(data, info.map.$container);
+                info.dataset.setData(data, info.map ? info.map.$container : null);
             });
             return this;
         },
