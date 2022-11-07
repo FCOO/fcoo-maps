@@ -340,11 +340,15 @@ define default DatasetValue used by fcoo-maps
         vfFormat : 'latlng',
         vfOptions: function(createOptions){return createOptions.compact ? {separator: '<br>'} : {}; },
         saveValue: true,
-        onClick  : function(event){
-            $(this).data('dataSetValue').asModal();
-            if (event && event.stopPropagation)
-                event.stopPropagation();
-            return false;
+        getOnClick: function( createOptions ){
+            if (createOptions.noLinks)
+                return null;
+            else return function(event){
+                $(this).data('dataSetValue').asModal();
+                if (event && event.stopPropagation)
+                    event.stopPropagation();
+                return false;
+            };
         }
     });
 
@@ -369,12 +373,14 @@ define default DatasetValue used by fcoo-maps
         altitudeText = {da:'Højde', en:'Altitude'};
     //altitude
     addDatasetValue({
-        id      : 'altitude',
-        icon    : altitudeIcon,
-        text    : altitudeText,
-        vfFormat: 'height',
-        vfOptions: {
-            withUnitLink: true
+        id       : 'altitude',
+        icon     : altitudeIcon,
+        text     : altitudeText,
+        vfFormat : 'height',
+        vfOptions: function( createOptions ){
+            return {
+                withUnitLink: !createOptions.noLinks
+            };
         }
     });
 
@@ -413,8 +419,10 @@ define default DatasetValue used by fcoo-maps
         icon    : directionIcon,
         text    : directionText,
         vfFormat: 'direction',
-        vfOptions: {
-            withUnitLink: true
+        vfOptions: function( createOptions ){
+            return {
+                withUnitLink: !createOptions.noLinks
+            };
         }
     });
 
@@ -447,8 +455,10 @@ define default DatasetValue used by fcoo-maps
         icon    : speedIcon,
         text    : {da:'Fart', en:'Speed'},
         vfFormat: 'speed',
-        vfOptions: {
-            withUnitLink: true
+        vfOptions: function( createOptions ){
+            return {
+                withUnitLink: !createOptions.noLinks
+            };
         }
     });
 
@@ -541,7 +551,7 @@ dataset.js
     Method:
     createContent: function( $container, createOptions = {})
         Create all elements of all DatasetValue inside $container
-        createOptions = {small: BOOLEAN, compact: BOOLEAN} = Options for jquery-methods
+        createOptions = {small: BOOLEAN, compact: BOOLEAN, noLinks: BOOLEAN} = Options for jquery-methods
 
     setData      : function( data, $container )
         Update all datasetValues with data={ID:VALUE}.
@@ -863,7 +873,7 @@ dataset.js
 
                                 vfFormat : this._getOptionsValue('vfFormat',  null, createOptions ),
                                 vfOptions: this._getOptionsValue('vfOptions', null, createOptions),
-                                onClick  : this.options.onClick,
+                                onClick  : this.options.getOnClick ? this.options.getOnClick( createOptions ) : this.options.onClick,
                             });
         },
 

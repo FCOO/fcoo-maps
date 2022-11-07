@@ -20,7 +20,7 @@ dataset.js
     Method:
     createContent: function( $container, createOptions = {})
         Create all elements of all DatasetValue inside $container
-        createOptions = {small: BOOLEAN, compact: BOOLEAN} = Options for jquery-methods
+        createOptions = {small: BOOLEAN, compact: BOOLEAN, noLinks: BOOLEAN} = Options for jquery-methods
 
     setData      : function( data, $container )
         Update all datasetValues with data={ID:VALUE}.
@@ -342,7 +342,7 @@ dataset.js
 
                                 vfFormat : this._getOptionsValue('vfFormat',  null, createOptions ),
                                 vfOptions: this._getOptionsValue('vfOptions', null, createOptions),
-                                onClick  : this.options.onClick,
+                                onClick  : this.options.getOnClick ? this.options.getOnClick( createOptions ) : this.options.onClick,
                             });
         },
 
