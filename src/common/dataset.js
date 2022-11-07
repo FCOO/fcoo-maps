@@ -54,6 +54,8 @@ dataset.js
         showPartially: BOOLEAN - If true the element is visible if one or more values are <> null. If false the elemnt is hidden if one value == null
         showWhenNull : BOOLEAN - If true and the element is 'hidden' due to values = null => the content of the element is replaced with a "Unknown"-textmore values == null))
 
+        title        : STRING
+
     **********************************************************/
 
     //fcoo.map.datasetValues = options for default DatasetValue
@@ -184,7 +186,8 @@ dataset.js
         this.options = $.extend(true, {
             showPartially: false,
             showWhenNull : false,
-            vectorIcon   : 'far fa-up'
+            vectorIcon   : 'far fa-up',
+            title        : ''
         }, options);
 
         datasetValueId++;
@@ -328,21 +331,22 @@ dataset.js
         Return a element to be used to display the value
         *********************************************/
         createElement: function(createOptions){
-            if (this.options.createElement)
-                return this.options.createElement(createOptions, this);
+            var o = this.options;
+            if (o.createElement)
+                return o.createElement(createOptions, this);
 
-            if (this.options.isVector)
+            if (o.isVector)
                 //Create a icon-element
-                return $._bsCreateIcon( {icon: this.options.vectorIcon}, null, 'title', this.className + ' '+ this.containerClassName + ' hide-for-dataset-value-is-null');
+                return $._bsCreateIcon( {icon: o.vectorIcon}, null, o.title, this.className + ' '+ this.containerClassName + ' hide-for-dataset-value-is-null');
             else
                 return $('<span/>')
                             .addClass('hide-for-dataset-value-is-null ' + this.containerClassName)
                             ._bsAddHtml({
                                 textClass: this.className,
-
+                                title    : o.title,
                                 vfFormat : this._getOptionsValue('vfFormat',  null, createOptions ),
                                 vfOptions: this._getOptionsValue('vfOptions', null, createOptions),
-                                onClick  : this.options.getOnClick ? this.options.getOnClick( createOptions ) : this.options.onClick,
+                                onClick  : o.getOnClick ? o.getOnClick( createOptions ) : o.onClick,
                             });
         },
 
