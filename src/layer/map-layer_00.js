@@ -886,17 +886,7 @@ L.Layer.addInitHook(function(){
 
             this.hideColorInfo(map);
 
-            //Close popup (if any)
-            function closePopup( layer ){
-                if (layer.eachLayer)
-                    layer.eachLayer( closePopup );
-                else
-                    if (layer._popup && layer.closePopup){
-                        layer._popup._pinned = false;
-                        layer.closePopup();
-                    }
-            }
-            closePopup( info.layer );
+            this.closePopupOnLayer( info.layer );
 
 
             //Remove this from map
@@ -912,6 +902,29 @@ L.Layer.addInitHook(function(){
             this._saveSetting();
 
             return this;
+        },
+
+        /*******************************************************
+        closePopup(mapOrIndex)
+        Close all popups on the layer in mapOrIndex
+        *******************************************************/
+        closePopup: function(mapOrIndex){
+            return this.visitAllLayers(this.closePopupOnLayer, mapOrIndex);
+        },
+
+        /*******************************************************
+        closePopupOnLayer(layer)
+        Method to close all popups on layer
+        Can be overwritten by descending classes
+        *******************************************************/
+        closePopupOnLayer: function(layer){
+            if (layer.eachLayer)
+                layer.eachLayer( this.closePopupOnLayer );
+            else
+                if (layer._popup && layer.closePopup){
+                    layer._popup._pinned = false;
+                    layer.closePopup();
+                }
         },
 
         /*******************************************************
