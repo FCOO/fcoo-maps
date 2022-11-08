@@ -606,7 +606,14 @@ L.Layer.addInitHook(function(){
                     }
                 }
 
-                info.layer = this.createLayer(this.options.layerOptions, map);
+                //Create layer with updated options/values
+                var newLayerOptions = $.extend(true, {},
+                        this.options.layerOptions,
+                        this.dataset ? this.dataset.data || {} : {},
+                        info.dataset ? info.dataset.data || {} : {}
+                    );
+
+                info.layer = this.createLayer(newLayerOptions, map);
                 info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
 
                 //Sets options._popupContainerClass = this.showAndHideClasses to hide open popups when the layer is hidden and visa versa
