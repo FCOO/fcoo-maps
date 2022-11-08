@@ -93,6 +93,7 @@ coast-lines, and name of cites and places
                         colorFilter: colorFilter,
                         zIndex     : nsMap.zIndex.BACKGROUND_LAYER_LAND
                     },                  //options
+                    undefined,          //map
                     undefined,          //defaultOptions
                     undefined,          //url
                     BackgroundLandLayer //LayerConstructor

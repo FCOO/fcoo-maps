@@ -2403,7 +2403,7 @@ that includes current position, and use this other map to get the color
         maxZoom         : NUMBER (optional)
     }
     ***********************************************************/
-    nsMap.layer_wms = function(options, defaultOptions, url, LayerConstructor = L.TileLayer.WMS){
+    nsMap.layer_wms = function(options, map, defaultOptions, url, LayerConstructor = L.TileLayer.WMS){
         //Adjust options
         if (typeof options == 'string')
             options = {layers: options};
@@ -2444,19 +2444,19 @@ that includes current position, and use this other map to get the color
     /***********************************************************
     layer_static - Creates a L.TileLayer.WMS (layer_wms) with options for static layers
     ***********************************************************/
-    nsMap.layer_static = function(options, defaultOptions = nsMap.wmsStatic.options, url = nsMap.wmsStatic.url, LayerConstructor){
-        return nsMap.layer_wms(options, defaultOptions, url, LayerConstructor);
+    nsMap.layer_static = function(options, map, defaultOptions = nsMap.wmsStatic.options, url = nsMap.wmsStatic.url, LayerConstructor){
+        return nsMap.layer_wms(options, map, defaultOptions, url, LayerConstructor);
     };
 
 
     /***********************************************************
     layer_dynamic - Creates a L.TileLayer.WMS (layer_wms) with options for dynamic layers
     ***********************************************************/
-    nsMap.layer_dynamic = function(options, defaultOptions = nsMap.wmsDynamic.options, url = nsMap.wmsDynamic.url, LayerConstructor){
+    nsMap.layer_dynamic = function(options, map, defaultOptions = nsMap.wmsDynamic.options, url = nsMap.wmsDynamic.url, LayerConstructor){
         //Adjust url to include eq. dataset
         url = adjustString(url, options);
 
-        return nsMap.layer_wms(options, defaultOptions, url, LayerConstructor);
+        return nsMap.layer_wms(options, map, defaultOptions, url, LayerConstructor);
     };
 
 }(jQuery, L, this, document));
@@ -4549,6 +4549,7 @@ coast-lines, and name of cites and places
                         colorFilter: colorFilter,
                         zIndex     : nsMap.zIndex.BACKGROUND_LAYER_LAND
                     },                  //options
+                    undefined,          //map
                     undefined,          //defaultOptions
                     undefined,          //url
                     BackgroundLandLayer //LayerConstructor
