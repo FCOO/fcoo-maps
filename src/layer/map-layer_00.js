@@ -918,13 +918,17 @@ L.Layer.addInitHook(function(){
         Can be overwritten by descending classes
         *******************************************************/
         closePopupOnLayer: function(layer){
-            if (layer.eachLayer)
-                layer.eachLayer( this.closePopupOnLayer );
-            else
-                if (layer._popup && layer.closePopup){
-                    layer._popup._pinned = false;
-                    layer.closePopup();
-                }
+
+            function closePOL( layer ){
+                if (layer.eachLayer)
+                    layer.eachLayer( closePOL );
+                else
+                    if (layer._popup && layer.closePopup){
+                        layer._popup._pinned = false;
+                        layer.closePopup();
+                    }
+            }
+            closePOL( layer );
         },
 
         /*******************************************************

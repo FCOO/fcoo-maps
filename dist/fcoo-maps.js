@@ -1279,7 +1279,7 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
 
 
             leftMenu: {
-                width  : 300,   //Width of left-menu
+                width  : 359,   //Width of left-menu. Supports mobil device with screen width = 360+
                 buttons: {
                     setting: function(){ ns.globalSetting.edit(); }
                 },
@@ -4052,13 +4052,17 @@ L.Layer.addInitHook(function(){
         Can be overwritten by descending classes
         *******************************************************/
         closePopupOnLayer: function(layer){
-            if (layer.eachLayer)
-                layer.eachLayer( this.closePopupOnLayer );
-            else
-                if (layer._popup && layer.closePopup){
-                    layer._popup._pinned = false;
-                    layer.closePopup();
-                }
+
+            function closePOL( layer ){
+                if (layer.eachLayer)
+                    layer.eachLayer( closePOL );
+                else
+                    if (layer._popup && layer.closePopup){
+                        layer._popup._pinned = false;
+                        layer.closePopup();
+                    }
+            }
+            closePOL( layer );
         },
 
         /*******************************************************

@@ -95,7 +95,7 @@
                 applicationName: {da:'fcoo-maps - Overskriften', en:'fcoo-maps - The Header'},
 //*
                 multiMaps: {
-                    enabled      : false,//true,
+                    enabled      : true,
                     maxMaps      : 5,
                     maxZoomOffset: 2
                 },
@@ -106,7 +106,6 @@
 
                 leftMenu: {
                     isLayerMenu: true,
-                    width: 350,                        
                     buttons: {
                         bookmark: function(){ alert('bookmark'); },
                         share   : function(){ alert('share');    },
@@ -245,13 +244,13 @@ NAVN MANGLER
                 {text: {da: "Tidevandstabeller", en: " Tide tables"}, list:[
                     "TIDE_TABLES"
                 ]},
-
+/*
                 {text: {da: "Navigation og Sikkerhed", en: "Navigation and Safety"}, list:[
                     'NAVIGATION_NIORD',
                     'NAVIGATION_AND_SAFETY',
                     'NAVIGATION_PILOT_BOARDING_POSITIONS'
                 ]},
-
+*/
                 {text: {da: "NAVN MANGLER: Byer, Havne, Broer mv.", en: "NAME MISSING: Cities, Ports, Harbors, Bridges etc."}, list:[
                     "HARBORS_DK",
                     "BRIDGES_DK",
@@ -271,6 +270,7 @@ NAVN MANGLER
 
         );  //end of window.fcoo.map.createApplication
 
+console.log(window.fcoo);
     </script>
  </body>
 </html>

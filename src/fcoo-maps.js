@@ -176,7 +176,7 @@
 
 
             leftMenu: {
-                width  : 300,   //Width of left-menu
+                width  : 359,   //Width of left-menu. Supports mobil device with screen width = 360+
                 buttons: {
                     setting: function(){ ns.globalSetting.edit(); }
                 },
