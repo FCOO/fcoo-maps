@@ -1,0 +1,8 @@
+{
+    "MED_UNDERMENU": {
+        "submenus": {
+            "ID-1": false,
+            "ID-4": {"text": { "da":"Undermenu 4", "en": "Sub menu 4"}}
+        }
+    }
+}

@@ -26,6 +26,8 @@
     <script src="bower_components.js"></script>
 
     <script src="../src/00_fcoo-maps_initialize.js"></script>
+    <script src="../src/10_fcoo-maps_setup.js"></script>
+
     <script src="../src/fcoo-maps.js"></script>
     <script src="../src/fcoo-maps-console.js"></script>
 
@@ -71,14 +73,30 @@
     
     <script src="fcoo-maps-navigation-and-safety.js"></script>
 
-<!-- 
     <script src="fcoo-maps-havnelods.js"></script>
- -->
+
 <!-- <script src="../dist/fcoo-maps.js"></script> -->
  
     <script>
         //window.fcoo.LOCAL_DATA = true;
         window.fcoo.DEMO_VERSION = true;
+
+/*
+        //* Test setupFileVersion
+        window.fcoo.setupFileVersion = {
+            'name-address-link_owner': {
+                postfix: '-fiin', 
+                merge: true
+            },
+            'data/test_menu.json': {
+                postfix: '-fiin', 
+                merge: true
+            }
+        }
+
+*/
+
+
 
 //        window.bsIsTouch = window.bsIsTouch || (window.location.search =='?touch');
 
@@ -93,7 +111,7 @@
             {
 
                 applicationName: {da:'fcoo-maps - Overskriften', en:'fcoo-maps - The Header'},
-//*
+/*
                 multiMaps: {
                     enabled      : true,
                     maxMaps      : 5,
@@ -161,6 +179,8 @@
 
                 finally: function(){ 
 
+console.log('FINALLY:', arguments);
+
 //HER                    setTimeout(function(){
 //HER                        fcoo.map.time.setCurrentRelative(300);
 //HER                    }, 3000);
@@ -168,8 +188,9 @@
 //HER                    setTimeout(function(){
 //HER                        fcoo.map.time.setCurrentRelative(-13);
 //HER                    }, 10000);
-                    return;
-                    if (!fcoo.map.MapLayer_Time) return;
+
+                     return;
+                     if (!fcoo.map.MapLayer_Time) return;
 
                     fcoo.map._addMapLayer('DETTE_ER_EN_TEST', fcoo.map.MapLayer_Time, {
                         text:' Dette er en test', icon: 'fa-clock',
@@ -188,89 +209,12 @@
                 }
             },
 
-            //layerMenu
-            //"data/test_menu.json",                
-            /*
-                    "Navigation and Safety" : "Navigation og Sikkerhed",
-                    "Harbors and Bridges"   : "Havne og Broer",
-                    "Harbors"               : "Havne",
-                    "Towns, Hamlets, and Stations": "Byer, Bygder of Stationer",
-Impacts
-    ....
-
-Målinger
-    Vandstand
-    Strøm
-
-
-Satellit og Radar
-    ...
-
-Navigation og Sikkerhed
-    Navigationsadvarsler og Efterretninger
-        ...
-    Områder, Grænser og Zoner
-        Landegrænser
-        EEZ
-        Ruter (DK)
-        VTS-meldelinier (DK)
-        Fiskerizoner (GL)
-        SAR (GL)
-    
-NAVN MANGLER
-
-            
-            
-            */
-
-            [
-                {text: {da: "Prognoser", en: "Forecasts"}, list:[
-                    "FORECAST"
-                ]},
-
-
-                {text: {da: "Impacts", en: "Impacts"}, list:[
-                    "IMPACTS"
-                ]},
-
-                {text: {da: "Målinger", en: "Measurements"}, list:[
-                    "OBSERVATION"
-                ]},
-
-                {text: {da: "Satellit og Radar", en: "Satellite and Radar"}, list:[
-                    "SATELLITE_AND_RADAR"
-                ]},
-
-                {text: {da: "Tidevandstabeller", en: " Tide tables"}, list:[
-                    "TIDE_TABLES"
-                ]},
-/*
-                {text: {da: "Navigation og Sikkerhed", en: "Navigation and Safety"}, list:[
-                    'NAVIGATION_NIORD',
-                    'NAVIGATION_AND_SAFETY',
-                    'NAVIGATION_PILOT_BOARDING_POSITIONS'
-                ]},
-*/
-                {text: {da: "NAVN MANGLER: Byer, Havne, Broer mv.", en: "NAME MISSING: Cities, Ports, Harbors, Bridges etc."}, list:[
-                    "HARBORS_DK",
-                    "BRIDGES_DK",
-                    "TOWNS_GL"
-                ]},
-
-                {text: {da: "?:Diverse", en: "?:Miscellaneous"}, list:[
-                     'SEARCH-RESULT'
-                ]},
-
-            ],
-            
-            //excludeLayerMenu
-            []
-            //'data/test_exclude.json' 
-            //['NAVIGATION']
+            //Default menu-layer
 
         );  //end of window.fcoo.map.createApplication
+            
+          
 
-console.log(window.fcoo);
     </script>
  </body>
 </html>

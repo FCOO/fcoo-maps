@@ -251,7 +251,7 @@ L.Layer.addInitHook(function(){
         mapLayerAdded    = false,
         mapLayerMenulist = menuList;
 
-        _createMapLayerAndMenu(mapLayerMenulist);
+        _createMapLayerAndMenu(mapLayerMenulist, {});
 
         //Add promise to check and finish the creation of the mapLayer-menu
         ns.promiseList.append({
@@ -262,15 +262,19 @@ L.Layer.addInitHook(function(){
     };
 
 
-    function _createMapLayerAndMenu(menuList){
+    function _createMapLayerAndMenu(menuList, parentMenuOptions){
         $.each(menuList, function(index, menuOptions){
             var createMapLayerFunc = menuOptions.isMapLayerMenu ? nsMap.createMapLayer[menuOptions.id] : null;
 
             if (createMapLayerFunc)
-                createMapLayerFunc( menuOptions.options || {}, function(menuItemOrList){ _addMenu(menuItemOrList, menuList, menuOptions.id); } );
+                createMapLayerFunc(
+                    menuOptions.options || {},
+                    function(menuItemOrList)                     { _addMenu(menuItemOrList, menuList, menuOptions.id);          },  //addMenu
+                    function(adjustmentsToParentMenuOptions = {}){ $.extend(parentMenuOptions, adjustmentsToParentMenuOptions); }   //adjustParentMenuOptions
+                );
 
             if (menuOptions.list)
-                _createMapLayerAndMenu(menuOptions.list);
+                _createMapLayerAndMenu(menuOptions.list, menuOptions);
         });
     }
 
