@@ -17107,6 +17107,7 @@ See https://getbootstrap.com/docs/5.2/customize/options/ for description
 ************************************************/
 /**/
 /**/
+/**/
 /***********************************************
 OPACITY
 ************************************************/
@@ -27025,6 +27026,7 @@ Adjustmernt to Bootstrap table
   --bs-table-cell-padding-y: 0.375rem;
   --bs-table-cell-padding: 0.375rem;
   word-break: normal;
+  margin-bottom: 0;
   /*************************************
     Header
     *************************************/

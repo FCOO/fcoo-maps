@@ -381,13 +381,15 @@ search-result.js
                     poly.bindTooltip(this.header);
                     this._addPopupAndContextMenu(poly, layerGroup);
 
-                    //Add class to hide  on when marker is visible
-                    poly._addClass(null, 'hide-for-leaflet-zoom-'+(this.visibleAtZoom-1)+'-down');
-
                     this.polys[mapIndex] = poly;
                 }
 
                 layerGroup.addLayer( this.polys[mapIndex] );
+
+                //Add class to hide  on when marker is visible - done after the poly is added
+                poly._addClass(null, 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-down');
+
+
             }
 
             //Create the marker - is allways created to be used for initial popup

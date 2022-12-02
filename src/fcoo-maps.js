@@ -271,7 +271,7 @@
                 };
 
             //If the menuItem only contains ONE element its assumed that it is {"MENU_ID": true/false/options}
-            var id, keys = Object.keys(menuItem);
+            var keys = Object.keys(menuItem);
             if (keys.length == 1){
                 id = keys[0];
                 return {
