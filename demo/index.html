@@ -9,9 +9,15 @@
 	<meta name='copyright' content='FCOO'>
 	<meta name='owner' content='FCOO'>
 
-  <link  href="bower_components.css" rel="stylesheet">
-  <link  href="../src/fcoo-maps.css" rel="stylesheet">
-  <link  href="fcoo-maps-havnelods.css" rel="stylesheet">
+    <link  href="bower_components.css" rel="stylesheet">
+    <link  href="../src/fcoo-maps.css" rel="stylesheet">
+    <link  href="fcoo-maps-havnelods.css" rel="stylesheet">
+    <style>
+        :root {
+            --jb-modal-sm-rem: 20rem;
+        }
+
+    </style>
 
 
 </head>
@@ -111,12 +117,20 @@
             {
 
                 applicationName: {da:'fcoo-maps - Overskriften', en:'fcoo-maps - The Header'},
-/*
-                multiMaps: {
+//*
+                _multiMaps: {
                     enabled      : true,
                     maxMaps      : 5,
                     maxZoomOffset: 2
                 },
+
+                multiMaps: {
+                    enabled           : {mobile:false, tablet:true, desktop:true},
+                    maxMaps           : {mobile:2, tablet:3, desktop:5},
+                    maxZoomOffset     : 2
+                },
+
+
 //*/
                 topMenu: {
                     messages : "data/ifm-maps-info.json", //null or STRING or {subDir:STRING, fileName:STRING}

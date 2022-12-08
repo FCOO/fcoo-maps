@@ -137,15 +137,21 @@
         window.modernizrOn ( 'single-maps-selected');
         window.modernizrOff( 'multi-maps-selected');
 
-        nsMap.hasMultiMaps = options.multiMaps && options.multiMaps.enabled;
-        if (nsMap.hasMultiMaps){
-            //Get max-maps
-            if ($.isPlainObject(options.multiMaps.maxMaps))
-                options.multiMaps.maxMaps =
-                    ns.modernizrDevice.isDesktop ? options.multiMaps.maxMaps.desktop :
-                    ns.modernizrDevice.isTablet  ? options.multiMaps.maxMaps.tablet :
-                    options.multiMaps.maxMaps.mobile;
+
+        function getDeviceDependendValue( obj ){
+            if ($.isPlainObject(obj)){
+                if (ns.modernizrDevice.isDesktop) return obj.desktop;
+                if (ns.modernizrDevice.isTablet) return obj.tablet;
+                return obj.mobile;
+            }
+            else
+                return obj;
         }
+
+        nsMap.hasMultiMaps = options.multiMaps && getDeviceDependendValue(options.multiMaps.enabled);
+        if (nsMap.hasMultiMaps)
+            //Get max-maps
+            options.multiMaps.maxMaps = getDeviceDependendValue(options.multiMaps.maxMaps);
 
         //2: "Load" standard setup/options for differnet parts of the application. Check if there are any resolve-function assigned in nsMap.standard
         $.each(options.standard, function(id, fileNameOrData){
@@ -238,6 +244,8 @@
     5: "Load" the added layers via there build-method
     ******************************************************************/
     function resolve_layerMenu(listOrMenus){
+
+console.log(listOrMenus);
 
 
         /*********************************************

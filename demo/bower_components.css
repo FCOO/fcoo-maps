@@ -21431,7 +21431,7 @@ textarea.form-control-lg {
     margin-right: auto;
     margin-left: auto; }
   .modal-sm {
-    --bs-modal-width: 320px; } }
+    --bs-modal-width: 352px; } }
 
 @media (min-width: 992px) {
   .modal-lg,
@@ -26502,6 +26502,12 @@ body.modal-open .modal {
   overflow-y: hidden;
   padding: 0 !important; }
 
+:root {
+  --jb-modal-sm-rem: 22rem;
+  --jb-modal-md-rem: 31.25rem;
+  --jb-modal-lg-rem: 50rem;
+  --jb-modal-xl-rem: 75rem; }
+
 .modal div.modal-dialog {
   opacity: 0;
   transition: opacity .3s linear; }
@@ -26558,17 +26564,17 @@ div.modal-dialog {
   margin: 0 auto;
   min-height: 100%;
   max-width: 100vw;
-  width: 20rem;
+  width: var(--jb-modal-sm-rem);
   /****************************************************
     .MODAL-CONTENT
     AND ITS COMPONENTS (HEADER, FIXED-BODY, BODY AND FOOTER)
     ****************************************************/ }
   div.modal-dialog.modal-flex-width {
-    width: 31.25rem; }
+    width: var(--jb-modal-md-rem); }
     div.modal-dialog.modal-flex-width.modal-extra-width {
-      width: 50rem; }
+      width: var(--jb-modal-lg-rem); }
     div.modal-dialog.modal-flex-width.modal-mega-width {
-      width: 75rem; }
+      width: var(--jb-modal-xl-rem); }
   div.modal-dialog.modal-dialog-inline .modal-content {
     box-shadow: none;
     max-height: inherit; }
@@ -31024,7 +31030,7 @@ animations and to apply to button even when no-hover
 }
 */
 /*****************************************************
-Style for 'About FCOO'
+Style for 'About OWNER'
 *****************************************************/
 /*****************************************************
 ABOUT
@@ -31079,15 +31085,15 @@ Two modes:
   .touch-menu-container.mode-side {
     z-index: 1048; }
   .touch-menu-container.opened {
-    transition-property: transform !important;
-    transition-duration: 0.3s !important;
-    transition-timing-function: ease-out !important; }
+    transition-property: transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out; }
     .touch-menu-container.opened.no-animation {
       transition: none !important; }
   .touch-menu-container.closed {
-    transition-property: transform, z-index !important;
-    transition-duration: 0.3s !important;
-    transition-timing-function: ease-out !important;
+    transition-property: transform, z-index;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
     transform: none !important; }
     .touch-menu-container.closed.no-animation {
       transition: none !important; }
@@ -31143,7 +31149,7 @@ Two modes:
   transition-duration: 0.3s !important;
   transition-timing-function: ease-out !important; }
   .neighbour-container.no-animation {
-    transition-duration: 0s !important; }
+    transition-duration: 0s 4; }
 
 /*****************************************************
 Style for icons
@@ -31230,6 +31236,36 @@ Different versions of sub-icons can be created using different methods in namesp
     font-size: 0.765em;
     right: -0.1875em;
     bottom: -0.09375em; }
+
+/*****************************************************
+Classes to disable transition, transform, or animation
+*****************************************************/
+/***********************************************
+transition-transform-animation.scss,
+Classes to disable transition, transform, or animation
+
+From https://onezeronull.com/2016/10/06/disable-css-transitions-and-animations-temporarily-or-permanently/
+************************************************/
+html.no-transition * {
+  -o-transition-property: none !important;
+  -moz-transition-property: none !important;
+  -ms-transition-property: none !important;
+  -webkit-transition-property: none !important;
+  transition-property: none !important; }
+
+html.no-transform * {
+  -o-transform: none !important;
+  -moz-transform: none !important;
+  -ms-transform: none !important;
+  -webkit-transform: none !important;
+  transform: none !important; }
+
+html.no-animation * {
+  -webkit-animation: none !important;
+  -moz-animation: none !important;
+  -o-animation: none !important;
+  -ms-animation: none !important;
+  animation: none !important; }
 
 /*****************************************************
 Create classes invisible-for-XX a la hide-for-XX using

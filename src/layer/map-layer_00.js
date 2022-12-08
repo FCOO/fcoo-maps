@@ -486,8 +486,23 @@ L.Layer.addInitHook(function(){
                     });
 
 
+                    //Find index for legend
+                    var levelIndex = [],
+                        menuItem = this.menuItem;
+                    while (menuItem && menuItem._getParentIndex){
+                        levelIndex.unshift(menuItem._getParentIndex());
+                        menuItem = menuItem.parent;
+                    }
+
+                    //Convert levelIndex = [1,2,3,88] to integer 0102038800000000 via string "0102038800000000"
+                    var indexAsStr = '';
+                    for (var i=0; i<8; i++){
+                        var nextLevel = levelIndex.length > i ? levelIndex[i] : 0;
+                        indexAsStr = indexAsStr + (nextLevel < 10 ? '0' : '') + nextLevel;
+                    }
+
                     legendOptions = $.extend(true, {}, {
-                        index       : this.index,
+                        index       : parseInt(indexAsStr), //this.index,
                         icon        : this.options.legendIcon || this.options.icon,
                         text        : this.options.text || null,
 

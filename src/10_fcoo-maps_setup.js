@@ -67,7 +67,7 @@ See src/fcoo-maps.js
 
         //Multi maps
         multiMaps: {
-            enabled           : true,
+            enabled           : true, //OR {mobile:BOOLEAN, tablet:BOOLEAN, desktop:BOOLEAN}
             maxMaps           : 5, //OR {mobile:INTEGER, tablet:INTEGER, desktop:INTEGER}
             maxZoomOffset     : 2
         }
