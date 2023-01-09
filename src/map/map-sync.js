@@ -14,8 +14,8 @@ Objects and methods to handle map-sync
     and showOutline for map-sync incl bsPositionControl
     *********************************************************************/
     nsMap.setMapSyncCursorAndShadowOptions = function( options ){
-        nsMap.mapSync.enableShadowCursor( options.showShadowCursor );
-        nsMap.mapSync.enableOutline( options.showOutline );
+        nsMap.mapSync.enableShadowCursor( !!options.showShadowCursor );
+        nsMap.mapSync.enableOutline( !!options.showOutline );
 
         //Enable/disable sync between bsPosition-controls of all maps
         var mapList = nsMap.multiMaps.mapList;

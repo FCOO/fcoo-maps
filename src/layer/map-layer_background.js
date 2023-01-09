@@ -201,7 +201,7 @@ coast-lines, and name of cites and places
     L.Control.BackgroundLayer = L.Control.extend({
         options: {
             position  : 'bottomright',
-            background: 'charts'
+            background: 'standard', //'charts'
         },
         onAdd: function (map) {
             var container = L.DomUtil.create('div');

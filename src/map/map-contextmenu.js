@@ -43,8 +43,8 @@ Global context-menu for all maps
 
     map_contextmenu_itemList.push({
         //Map-setting
-        icon       : nsMap.mapSettingHeader.icon,
-        text       : nsMap.mapSettingHeader.text,
+        icon       : ns.icons.mapSetting,
+        text       : ns.texts.mapSetting,
         spaceBefore: true,
         width      : '11em',
         onClick: function(id, latlng, $button, map){

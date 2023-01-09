@@ -14,18 +14,22 @@ Create and set different global variables and methods
     ICONS
     ***********************************************************/
     //Icon and header for map-settings
-    nsMap.mapSettingIcon = ns.settingIcon('fa-map');
-    nsMap.mapSettingHeader = {
-        icon: nsMap.mapSettingIcon,
-        text: {da:'Kortindstillinger', en:'Map Settings'}
-    };
+    ns.icons.mapSetting = ns.settingIcon('fa-map');
+    ns.texts.mapSetting = {da:'Kortindstillinger', en:'Map Settings'};
+
+    //Icon for Number of Maps
+    ns.icons.numberOfMaps = ns.iconSub('fa-map', 'fa-tally', true);
+
+    //Icon and header for legend
+    ns.icons.mapLegend = 'fa-list';     //TODO fa-th-list when forecast@mouse-position is implemented <-- ??????? (remove line?)
+    ns.texts.mapLegend = {da:'Signaturforklaring', en:'Legend'};
 
     ns.mapIcon = function(subIcon, subClassPostfix){
         return ns.iconSub('fa-map', subIcon, subClassPostfix);
     };
 
     nsMap.mapSettingIconWithStatus = function(fontSizeClass){
-        return [nsMap.mapSettingIcon, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
+        return [ns.icons.mapSetting, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
     };
 
     nsMap.updateMapSettingIconWithStatus = function($parent, inSync){
@@ -34,12 +38,6 @@ Create and set different global variables and methods
         $(icons[1]).toggle(!!inSync);
     };
 
-    //Icon and header for legend
-    //nsMap.mapLegendIcon = 'fa-list';  //TODO fa-th-list when forecast@mouse-position is implemented <-- ??????? (remove line?)
-    nsMap.mapLegendHeader = {
-        icon: 'fa-list',
-        text: {da:'Signaturforklaring', en:'Legend'}
-    };
 
 
     /***********************************************************
@@ -110,12 +108,12 @@ See src/fcoo-maps.js
             width: 359,
             buttons: As leftMenuButtons and rightMenuButtons in fcoo-aapplication = {
                 preButtons  = []buttonOptions or buttonOptions or null //Individuel button(s) placed before the standard buttons
-                save        = onClick or buttonOptions, //Standard save-button
-                load        = onClick or buttonOptions, //Standard load-button
-                bookmark    = onClick or buttonOptions, //Standard bootmark-button
-                share       = onClick or buttonOptions, //Standard share-button
-                user        = onClick or buttonOptions, //Standard user-button
-                setting     = onClick or buttonOptions, //Standard setting-button
+                save        = true or onClick or buttonOptions, //Standard save-button
+                load        = true or onClick or buttonOptions, //Standard load-button
+                bookmark    = true or onClick or buttonOptions, //Standard bootmark-button
+                share       = true or onClick or buttonOptions, //Standard share-button
+                user        = true or onClick or buttonOptions, //Standard user-button
+                setting     = true or onClick or buttonOptions, //Standard setting-button
                 postButtons = []buttonOptions or buttonOptions or null //Individuel button(s) placed after the standard buttons
             }
 
@@ -145,7 +143,7 @@ See src/fcoo-maps.js
 
         //Multi maps
         multiMaps: {
-            enabled           : true,
+            enabled           : true, //OR {mobile:BOOLEAN, tablet:BOOLEAN, desktop:BOOLEAN}
             maxMaps           : 5, //OR {mobile:INTEGER, tablet:INTEGER, desktop:INTEGER}
             maxZoomOffset     : 2
         }
@@ -275,7 +273,7 @@ See src/fcoo-maps.js
 
                 //Add button before setting-button with settings for map(s)
                 preSetting: {
-                    icon   : nsMap.mapSettingIcon,
+                    icon   : ns.icons.mapSetting,
                     onClick: function(){
                                  if (nsMap.hasMultiMaps)
                                      nsMap.showMapSettingMain();
@@ -287,15 +285,21 @@ See src/fcoo-maps.js
             },
 
             layerMenuOptions: {
-                inclBar    : true,
-                barCloseAll: true
+                inclBar     : true,
+                barCloseAll : true,
+
+                resetIcon: 'far fa-layer-group',
+                reset: {
+                    resetState  : "RESET",
+                }
             },
 
 
             leftMenu: {
                 width  : 359,   //Width of left-menu. Supports mobil device with screen width = 360+
                 buttons: {
-                    setting: function(){ ns.globalSetting.edit(); }
+                    reste  : true,
+                    setting: true
                 },
                 isLayerMenu : true,
                 bsMenuOptions: {
@@ -1518,15 +1522,45 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
         window.modernizrOn ( 'single-maps-selected');
         window.modernizrOff( 'multi-maps-selected');
 
-        nsMap.hasMultiMaps = options.multiMaps && options.multiMaps.enabled;
-        if (nsMap.hasMultiMaps){
-            //Get max-maps
-            if ($.isPlainObject(options.multiMaps.maxMaps))
-                options.multiMaps.maxMaps =
-                    ns.modernizrDevice.isDesktop ? options.multiMaps.maxMaps.desktop :
-                    ns.modernizrDevice.isTablet  ? options.multiMaps.maxMaps.tablet :
-                    options.multiMaps.maxMaps.mobile;
+
+        function getDeviceDependendValue( obj ){
+            if ($.isPlainObject(obj)){
+                if (ns.modernizrDevice.isDesktop) return obj.desktop;
+                if (ns.modernizrDevice.isTablet) return obj.tablet;
+                return obj.mobile;
+            }
+            else
+                return obj;
         }
+
+        nsMap.hasMultiMaps = options.multiMaps && getDeviceDependendValue(options.multiMaps.enabled);
+        if (nsMap.hasMultiMaps)
+            //Get max-maps
+            options.multiMaps.maxMaps = getDeviceDependendValue(options.multiMaps.maxMaps);
+
+
+        //Adjust text on reset-button for the layer-menu and/or map-options
+        var resetLayerText;
+        if (nsMap.hasMultiMaps){
+            if (options.multiMaps.maxMaps == 2)
+                resetLayerText = {
+                    da: 'Fravælg alle lag i begge kort',
+                    en: 'Unselect all layers in both maps'
+                };
+            else
+                resetLayerText = {
+                    da: 'Fravælg alle lag i alle kort',
+                    en: 'Unselect all layers in all maps'
+                };
+        }
+        else
+            resetLayerText = {
+                da: 'Fravælg alle lag i kortet',
+                en: 'Unselect all layers in the map'
+            };
+
+        if (nsMap.setupOptions.layerMenuOptions)
+            nsMap.setupOptions.layerMenuOptions.resetText = resetLayerText;
 
         //2: "Load" standard setup/options for differnet parts of the application. Check if there are any resolve-function assigned in nsMap.standard
         $.each(options.standard, function(id, fileNameOrData){
@@ -1619,8 +1653,6 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
     5: "Load" the added layers via there build-method
     ******************************************************************/
     function resolve_layerMenu(listOrMenus){
-
-
         /*********************************************
         function convertList(listOrMenus)
         listOrMenus =
@@ -2796,21 +2828,23 @@ Objects and methods to handle leaflet-maps
         this.on('unload', onUnload);
     });
 
-    //nsMap.visitAllMaps: Call method(map) for all maps
-    nsMap.visitAllMaps = function(method){
+    //nsMap.visitAllMaps: Call method(map, arg[0], arg[1],...) for all maps
+    nsMap.visitAllMaps = function(method, arg = [], onlyVisibleMaps){
+        arg.unshift('');
+
         $.each(nsMap.mapIndex, function(index, map){
-            if (map)
-                method(map, index);
+            arg[0] = map;
+            if (map && (!onlyVisibleMaps || map.isVisibleInMultiMaps))
+                method.apply(map, arg);
         });
     };
 
-    //nsMap.visitAllVisibleMaps: Call method(map) for all visible maps
-    nsMap.visitAllVisibleMaps = function(method){
-        $.each(nsMap.mapIndex, function(index, map){
-            if (map && map.isVisibleInMultiMaps)
-                method(map, index);
-        });
+    //nsMap.visitAllVisibleMaps: Call method(map, arg[0], arg[1],...) for all visible maps
+    nsMap.visitAllVisibleMaps = function(method, arg = []){
+        nsMap.visitAllMaps(method, arg, true);
     };
+
+
 
     //nsMap.callAllMaps: Call methodName with arg (array) for all maps
     nsMap.callAllMaps = function(methodName, arg){
@@ -2970,7 +3004,10 @@ Objects and methods to handle leaflet-maps
         bsLegendOptions: {
             position: 'topright',
             content: {
-                header: nsMap.mapLegendHeader,
+                header: {
+                    icon: ns.icons.mapLegend,
+                    text: ns.texts.mapLegend
+                },
                 noVerticalPadding   : true,
                 noHorizontalPadding : false,
                 width: '20em',  //<= TODO Adjust
@@ -3263,8 +3300,8 @@ Global context-menu for all maps
 
     map_contextmenu_itemList.push({
         //Map-setting
-        icon       : nsMap.mapSettingHeader.icon,
-        text       : nsMap.mapSettingHeader.text,
+        icon       : ns.icons.mapSetting,
+        text       : ns.texts.mapSetting,
         spaceBefore: true,
         width      : '11em',
         onClick: function(id, latlng, $button, map){
@@ -3679,8 +3716,9 @@ L.Layer.addInitHook(function(){
             this.applyCommonSetting(data.common || null);
 
             //Apply individuel settings
-            nsMap.visitAllMaps( function(map, index){
-                var setting = data[index] || {};
+            nsMap.visitAllMaps( function(map){
+                var mapIndex = map.fcooMapIndex,
+                    setting = data[mapIndex] || {};
                 if (setting.show)
                     _this.addTo(map);
                 else
@@ -3688,9 +3726,8 @@ L.Layer.addInitHook(function(){
 
                 //colorInfo - TODO
 
-
                 //Individual setting
-                _this.applySetting(setting, map, _this.info[index], index);
+                _this.applySetting(setting, map, _this.info[mapIndex], mapIndex);
             });
         },
 
@@ -3772,8 +3809,23 @@ L.Layer.addInitHook(function(){
                     });
 
 
+                    //Find index for legend
+                    var levelIndex = [],
+                        menuItem = this.menuItem;
+                    while (menuItem && menuItem._getParentIndex){
+                        levelIndex.unshift(menuItem._getParentIndex());
+                        menuItem = menuItem.parent;
+                    }
+
+                    //Convert levelIndex = [1,2,3,88] to integer 0102038800000000 via string "0102038800000000"
+                    var indexAsStr = '';
+                    for (var i=0; i<8; i++){
+                        var nextLevel = levelIndex.length > i ? levelIndex[i] : 0;
+                        indexAsStr = indexAsStr + (nextLevel < 10 ? '0' : '') + nextLevel;
+                    }
+
                     legendOptions = $.extend(true, {}, {
-                        index       : this.index,
+                        index       : parseInt(indexAsStr), //this.index,
                         icon        : this.options.legendIcon || this.options.icon,
                         text        : this.options.text || null,
 
@@ -4194,6 +4246,10 @@ L.Layer.addInitHook(function(){
             return this;
         },
 
+        removeFromAll: function(){
+            nsMap.visitAllMaps( $.proxy(this.removeFrom, this) );
+        },
+
         /*******************************************************
         closePopup(mapOrIndex)
         Close all popups on the layer in mapOrIndex
@@ -4381,7 +4437,13 @@ L.Layer.addInitHook(function(){
         Show modal window with checkbox or radio for each map
         Select/unseelct the layer in all visible maps
         *******************************************************************/
-        selectMaps: function( map ){
+        selectMaps: function( map, state ){
+            //If it is rest all selected => do that
+            if (state == 'RESET'){
+                this.removeFromAll();
+                return this;
+            }
+
             //If only one map is vissible => simple toggle
             if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
                 if (this.isAddedToMap(0))
@@ -4817,7 +4879,7 @@ coast-lines, and name of cites and places
     L.Control.BackgroundLayer = L.Control.extend({
         options: {
             position  : 'bottomright',
-            background: 'charts'
+            background: 'standard', //'charts'
         },
         onAdd: function (map) {
             var container = L.DomUtil.create('div');
@@ -4864,6 +4926,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     var ns = window.fcoo = window.fcoo || {},
         nsMap = ns.map = ns.map || {};
 
+    //min-height for buttons in reset-form = contains two lines of subtext
+    ns.resetButtonMinHeight = '3em';
+
     //id, icon, text, short-text for the accordions in MapSetting
     nsMap.msgAccordions = {};
     nsMap.msgAccordionList = [];
@@ -4882,10 +4947,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             accordionId: 'sync',
             excludeFromCommon: true,
             header  : {
-                icon       : 'fa-sync',
-                text       : {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'},
-                //smallText  : {da:'Synk.', en:'Sync.'}
-                smallText  : {da:'Synkronisering', en:'Synchronizing'}
+                icon      : 'fa-sync',
+                text      : {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'},
+                smallText: {da:'Synk.', en:'Sync.'},
             }
         }),
 
@@ -4894,7 +4958,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             header: {
                 icon     : 'far fa-map',
                 text     : {da:'Baggrundskort', en:'Background Map'},
-                smallText: ''
+                smallText: {da:'Baggrund', en:'Background'}
             }
         }),
 
@@ -4903,7 +4967,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             header: {
                 icon     : [['fa-grip-lines-vertical', 'fa-grip-lines']],
                 text     : {da:'Gitterlinjer', en:'Graticule'},
-                smallText: ''
+                smallText: {da:'Gitter', en:'Graticule'},
             }
         }),
 
@@ -4912,9 +4976,56 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             header: {
                 icon     : 'fa-tools',
                 text     : {da: 'Værktøjer og information', en:'Tools and Information'},
-                smallText: {da: 'Værktøj. & info', en:'Tools & Info'}
+                smallText: {da: 'Værktøj.&nbsp;&&nbsp;info', en:'Tools&nbsp;&&nbsp;Info'}
             }
         });
+
+
+    //Set and create title and subTitle for Editing settings for all maps
+    //ns.texts.allMapsSettings = {da:'Indstillinger for hvert kort', en:'Settings for each map'};
+    var allMapsSetting_text =  {da:'Indstillinger for kortene', en:'Settings for the maps'},
+        allMapsSetting_subtext,
+        allMapsSetting_subtextSeparator = ', &nbsp;';
+
+    $.each(nsMap.msgAccordionList, function(index, options){
+        if (options.header.dontInclude)
+            return;
+        allMapsSetting_subtext = allMapsSetting_subtext || [];
+        allMapsSetting_subtext.push( options.header.smallText || options.header.text );
+    });
+
+
+
+
+    //Add reset of position and zoom to ns.resetList
+    ns.resetList.push({
+        id   : 'positionAndZoom',
+        icon : 'fal fa-lb-center-marker',
+        text : {da:'Nulstil position og zoom', en:'Reset position and zoom'},
+        reset: function(){
+            nsMap.visitAllMaps( function( map ){
+                //If it is the main map or the map is not in sync => set default position and zoom
+                if (map.options.isMainMap || !map.options.mapSync || !map.options.mapSync.enabled)
+                    map.setView(
+                        nsMap.defaultCenterZoom.center,
+                        nsMap.defaultCenterZoom.zoom,
+                        map._mapSync_NO_ANIMATION
+                    );
+            });
+        }
+    });
+
+    //Add reset of all map-options to ns.resetList
+    ns.resetList.push({
+        id     : 'allMapsSetting',
+        icon   : ns.icons.mapSetting,
+        text   : allMapsSetting_text,
+        subtext: allMapsSetting_subtext,
+        subtextSeparator: allMapsSetting_subtextSeparator,
+        reset  : function(){ nsMap.resetMapSetting(null); }
+    });
+
+
 
 
     /*******************************************************
@@ -4936,20 +5047,17 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             position: ''
         },
 
-
-
-
         //Map Setting
         'bsSettingControl': {
-            icon    : nsMap.mapSettingHeader.icon,
-            text    : nsMap.mapSettingHeader.text,
+            icon    : ns.icons.mapSetting,
+            text    : ns.texts.mapSetting,
             position: ''
         },
 
         //Legend (L.Control.BsLegend@leaflet-latlng)
         'bsLegendControl': {
-            icon    : nsMap.mapLegendHeader.icon,
-            text    : nsMap.mapLegendHeader.text,
+            icon    : ns.icons.mapLegend,
+            text    : ns.texts.mapLegend,
             position: ''
         },
 
@@ -5357,14 +5465,22 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     MapSettingGroup = SettingGroup with NxSettings - one for each subset of options for a map
     *****************************************************************************/
     var MapSettingGroup = function(map){
+        var _this = this;
         ns.SettingGroup.call(this, {
             id           : 'NOT_USED',
             dontSave     : true,    //<-- MUST be true!!
-            modalHeader  : nsMap.mapSettingHeader,
+            modalHeader  : {
+                icon: ns.icons.mapSetting,
+                text: ns.texts.mapSetting
+            },
             modalOptions : {
                 static             : false,
                 closeWithoutWarning: true,
-
+                buttons: [{
+                    icon: ns.icons.reset,
+                    text: ns.texts.reset,
+                    onClick: function() { nsMap.resetMapSetting( map ); }
+                }],
                 helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
                 helpButton: true
             },
@@ -5378,7 +5494,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         Create the different Setting for the different Controls etc.
         ******************************************************************************
         *****************************************************************************/
-        var _this = this;
         $.each(nsMap.mswcFunctionList, function(index, func){
             func.call(_this, map);
         });
@@ -5496,6 +5611,24 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             };
         }(ns.SettingGroup.prototype.onSubmit),
 
+
+        //reset - Reset all settings or settings in onlyAccordionId
+        reset: function(onlyAccordionId){
+            var data = {};
+            $.each(this.settings, function(settingId, setting){
+                if (!onlyAccordionId || (onlyAccordionId == setting.options.accordionId))
+                    data[settingId] = setting.options.defaultValue || {};
+            });
+
+            if (this.modalForm)
+                this.modalForm.$bsModal.close();
+
+// HER>             this.save(data);
+            this.saveParent(data);
+
+
+        },
+
         //saveParent - Save data in 'parent' = appSetting
         saveParent: function(data, dontSaveParent){
             if (this.isSavingParent)
@@ -5602,21 +5735,57 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     });
 
     /*****************************************************************************
-    editMapSetting(mapIndex, options)
+    resetMapSetting(mapOrMapIndexOrMapId, accordionId)
+    *****************************************************************************/
+    function getMapSettingGroup(mapOrMapIndexOrMapId){
+        var map = nsMap.getMap(mapOrMapIndexOrMapId),
+            bsSettingControl = map ? map.bsSettingControl : null,
+            mapSettingGroup = bsSettingControl ? bsSettingControl.mapSettingGroup : null;
+        return mapSettingGroup;
+    }
+
+    nsMap.resetMapSetting = function(mapOrMapIndexOrMapId, accordionId){
+        //accordionId is given direct i call or once by editMapSetting_options
+        accordionId = accordionId || editMapSetting_options.msgAccordionId;
+        var singleMap  = mapOrMapIndexOrMapId && !editMapSetting_options.applyToAll;
+//console.log('accordionId=',accordionId, singleMap ? 'ONE map ' : 'ALL maps', !accordionId ? 'ALL settings' : 'ONE setting='+ accordionId);
+        editMapSetting_options = {};
+        /*
+        There are tree different mode
+            All4All: Reset ALL settings for ALL maps
+            All4One: reset ALL settings for ONE map
+            One4All: Reset ONE specific setting for ALL maps
+            One4One: Reset ONE specific setting for ONE map is not supported
+        */
+
+        if (singleMap){
+            var mapSettingGroup = getMapSettingGroup(mapOrMapIndexOrMapId);
+            if (!mapSettingGroup) return;
+            //All4One
+            mapSettingGroup.reset();
+        }
+        else
+            //All4All (accordionId undefined) or One4All (accordionId given)
+            nsMap.visitAllMaps( nsMap.resetMapSetting, accordionId ? [accordionId] : undefined);
+    };
+
+
+    /*****************************************************************************
+    editMapSetting(mapOrMapIndexOrMapId, options)
     Show the modal with settings for one map with index in nsMap.mapIndex
     options = {
         applyToAll      : if applyToAll == true => the settings are applied to all maps
         msgAccordionId  : if msgAccordionId is given => Only edit data inside accordion with accordionId == msgAccordionId
         multiMapSetupId : if given use this as id for mini-multi-map else use global setting
     *****************************************************************************/
-    function getMapSettingGroup(map){
-        var bsSettingControl = map ? map.bsSettingControl : null,
-            mapSettingGroup = bsSettingControl ? bsSettingControl.mapSettingGroup : null;
-        return mapSettingGroup;
-    }
+    var editMapSetting_options = {},
+        clear_editMapSetting_options = function(){
+            editMapSetting_options = {};
+        };
 
-    nsMap.editMapSetting = function(mapIndex, options = {}){
-        var mapSettingGroup = getMapSettingGroup(nsMap.mapIndex[mapIndex]);
+    nsMap.editMapSetting = function(mapOrMapIndexOrMapId, options = {}){
+        var mapSettingGroup = getMapSettingGroup(mapOrMapIndexOrMapId);
+        editMapSetting_options = options;
         if (!mapSettingGroup) return;
 
         var msgAccordion = nsMap.msgAccordions[options.msgAccordionId],
@@ -5676,17 +5845,19 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     }
                 });
 
-                //Update backup-data for main MapSettingGroup
+                //Update backup-data for main MapSettingGroup and reset editMapSetting_options
                 mapSettingGroup.backupData = $.extend(true, {}, mapSettingGroup.data);
+                clear_editMapSetting_options();
             };
 
             mapSettingGroup.options.onClose = function(){
                 mapSettingGroup.data = mapSettingGroup.backupData;
+                clear_editMapSetting_options();
             };
         }
         else {
-            mapSettingGroup.options.onSubmit = null;
-            mapSettingGroup.options.onClose = null;
+            mapSettingGroup.options.onSubmit = clear_editMapSetting_options; //null;
+            mapSettingGroup.options.onClose  = clear_editMapSetting_options; //null;
         }
 
         //Reset all accordions to be visible
@@ -5789,9 +5960,17 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             });
 
             mapSettingModal = $.bsModal({
-                header    : nsMap.mapSettingHeader,
+                header    : {
+                    icon: ns.icons.mapSetting,
+                    text: ns.texts.mapSetting
+                },
                 helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
                 helpButton: true,
+                buttons: [{
+                    icon   : ns.icons.reset,
+                    text   : ns.texts.reset,
+                    onClick: ns.reset.bind(null, {allMapsSetting: true})
+                }],
                 static    : false,
                 keyboard  : true,
                 content   : content,
@@ -5805,32 +5984,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     }
 
 
-    /*****************************************************************************
-    showMapSettingMain()
-    Show the modal with two buttons to edit multi-maps or map-setting (both individual and all)
-    *****************************************************************************/
-    function createBigIconButton(icon, header, content){
-        var $result = [];
-        $result.push(
-            $('<div/>')
-                ._bsAddHtml({icon: icon})
-                .addClass('fa-2x align-self-center flex-shrink-0 text-left')
-                .css('padding-left', '10px')
-                .width('1.75em')
-        );
-
-        $result.push(
-            $('<div/>')
-                .addClass('flex-grow-1 no-margin-children d-flex flex-column justify-content-center')
-                .height('6em')
-                ._bsAddHtml([
-                    {text: header,  textClass: 'text-center fw-bold font-size-1-1em'},
-                    {text: content, textClass: 'text-center text-wrap'},
-                ])
-        );
-        return $result;
-    }
-
     var mapSettingMainModal;
     nsMap.showMapSettingMain = function(){
         if (!mapSettingMainModal){
@@ -5839,15 +5992,20 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             //Button witch opens form with multi-map-settinge
             list.push({
                 id     : 'multiMapSetting',
-                content: createBigIconButton(
-                             ns.iconSub('fa-map', 'fa-tally', true),
-                             {  da:'Antal kort',
-                                en:'Number of Maps'
-                             },{
-                                da:'Vis 1-'+nsMap.setupOptions.multiMaps.maxMaps+' kort samtidig<br>Klik for at vælge...',
-                                en:'View 1-'+nsMap.setupOptions.multiMaps.maxMaps+' maps at the same time<br>Click to select...'
-                             }
-                         ),
+                content: $._bsBigIconButtonContent({
+                    icon: ns.icons.numberOfMaps,
+                    text: {
+                        da:'Antal kort',
+                        en:'Number of Maps'
+                    },
+                    subtext: {
+                        da:'Vis 1-'+nsMap.setupOptions.multiMaps.maxMaps+' kort samtidig<br>Klik for at vælge...',
+                        en:'View 1-'+nsMap.setupOptions.multiMaps.maxMaps+' maps at the same time<br>Click to select...'
+                    },
+                    big : true,
+                    bold: true,
+                    minHeight: '5em'
+                }),
                 allowContent: true,
                 class       : 'w-100 d-flex',
                 onClick     : nsMap.editMultiMapsAndSyncMapsSetting,
@@ -5869,12 +6027,17 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
             list.push({
                 id     : 'allMapSettings',
-                content: createBigIconButton(
-                             nsMap.mapSettingIcon,
-                             //{da:'Indstillinger for hvert kort', en:'Settings for each map'},
-                             {da:'Indstillinger for kortene', en:'Settings for the maps'},
-                             text
-                         ),
+                content: $._bsBigIconButtonContent({
+                    icon   : ns.icons.mapSetting,
+                    text   : allMapsSetting_text,
+                    subtext: allMapsSetting_subtext,
+                    subtextSeparator: allMapsSetting_subtextSeparator,
+                    big    : true,
+                    bold   : true,
+                    minHeight: '5em'
+                }),
+
+
                 allowContent: true,
                 class       : 'w-100 d-flex',
                 onClick     : function(){
@@ -5883,17 +6046,24 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                         nsMap.editMapSetting(0);
                     else
                         editAllMapSettings();
-                },
+                }
             });
-
 
             mapSettingMainModal = $.bsModal({
                 noHorizontalPadding: true,
-                header     : nsMap.mapSettingHeader,
+                header    : {
+                    icon: ns.icons.mapSetting,
+                    text: ns.texts.mapSetting
+                },
                 closeButton: true,
                 helpId     : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
                 scroll     : false,
                 helpButton : true,
+                buttons: [{
+                    icon: ns.icons.reset,
+                    text: ns.texts.reset,
+                    onClick: ns.reset.bind(null, { multiMaps: true, allMapsSetting: true })
+                }],
                 content    : {
                     type          : 'buttongroup',
                     vertical      : true,
@@ -5924,8 +6094,8 @@ Objects and methods to handle map-sync
     and showOutline for map-sync incl bsPositionControl
     *********************************************************************/
     nsMap.setMapSyncCursorAndShadowOptions = function( options ){
-        nsMap.mapSync.enableShadowCursor( options.showShadowCursor );
-        nsMap.mapSync.enableOutline( options.showOutline );
+        nsMap.mapSync.enableShadowCursor( !!options.showShadowCursor );
+        nsMap.mapSync.enableOutline( !!options.showOutline );
 
         //Enable/disable sync between bsPosition-controls of all maps
         var mapList = nsMap.multiMaps.mapList;
@@ -6159,7 +6329,7 @@ related issues in map sync
         return data[data.maps];
     }
 
-    ns.appSetting.add({
+    var multiMapsSetting = ns.appSetting.add({
         id       : 'multi-maps',
         callApply: false,
         applyFunc: function(options){
@@ -6187,16 +6357,32 @@ related issues in map sync
         }
     });
 
+
+    /*********************************************************************
+    Add multi-maps reset to reset-list: Only if it is multi maps and with closing the form
+    *********************************************************************/
+    ns.resetList.unshift({
+        id       : 'multiMaps',
+        icon     : ns.icons.numberOfMaps,
+        text     : {da: 'Vis kun ét kort', en: 'Show only one map'},
+        //subtext  : 'MANGLER (måske)',
+        prepend  : true,
+        closeForm: function(){ return nsMap.mapSettingModalForm; },
+        include  : function(){ return nsMap.hasMultiMaps;        },
+        setting  : multiMapsSetting,
+    });
+
+
     /*********************************************************************
     editMultiMapsAndSyncMapsSetting
     Create and display a modal-form window to edit settings
     multi-maps, common settings for map-sync and for each of the visible maps
     *********************************************************************/
-    var mapSettingModalForm    = null,
-        mapSettingMiniMultiMap = null;
+    nsMap.mapSettingModalForm = null;
+    var mapSettingMiniMultiMap = null;
 
     nsMap.editMultiMapsAndSyncMapsSetting = function(){
-        if (!mapSettingModalForm){
+        if (!nsMap.mapSettingModalForm){
             var list    = [],
                 maxMaps = nsMap.setupOptions.multiMaps.maxMaps;
 
@@ -6287,14 +6473,23 @@ related issues in map sync
                     hideWhen: {maps: 'maps_1'}
                 });
 
-            mapSettingModalForm = $.bsModalForm({
-                header    : nsMap.mapSettingHeader,
+            nsMap.mapSettingModalForm = $.bsModalForm({
+                header    : {
+                    icon: ns.icons.mapSetting,
+                    text: ns.texts.mapSetting
+                },
                 static    : false,
                 keyboard  : true,
                 content   : content,
                 helpId    : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
                 helpButton: true,
-                footer    : [{da:'Klik på', en:'Click on'}, {icon: nsMap.mapSettingIcon}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
+                buttons: [{
+                    icon   : ns.icons.reset,
+                    text   : ns.texts.reset,
+                    onClick: ns.reset.bind(null, {multiMaps: true})
+                }],
+
+                footer    : [{da:'Klik på', en:'Click on'}, {icon: ns.icons.mapSetting}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
 
                 onChanging : function( data ){
                     mapSettingMiniMultiMap.set( getMultiMapId(data) );
@@ -6308,7 +6503,7 @@ related issues in map sync
         }
 
         var data = ns.appSetting.get('multi-maps');
-        mapSettingModalForm.edit( data );
+        nsMap.mapSettingModalForm.edit( data );
     };
 }(jQuery, L, this, document));
 

@@ -41,7 +41,7 @@ related issues in map sync
         return data[data.maps];
     }
 
-    ns.appSetting.add({
+    var multiMapsSetting = ns.appSetting.add({
         id       : 'multi-maps',
         callApply: false,
         applyFunc: function(options){
@@ -69,16 +69,32 @@ related issues in map sync
         }
     });
 
+
+    /*********************************************************************
+    Add multi-maps reset to reset-list: Only if it is multi maps and with closing the form
+    *********************************************************************/
+    ns.resetList.unshift({
+        id       : 'multiMaps',
+        icon     : ns.icons.numberOfMaps,
+        text     : {da: 'Vis kun ét kort', en: 'Show only one map'},
+        //subtext  : 'MANGLER (måske)',
+        prepend  : true,
+        closeForm: function(){ return nsMap.mapSettingModalForm; },
+        include  : function(){ return nsMap.hasMultiMaps;        },
+        setting  : multiMapsSetting,
+    });
+
+
     /*********************************************************************
     editMultiMapsAndSyncMapsSetting
     Create and display a modal-form window to edit settings
     multi-maps, common settings for map-sync and for each of the visible maps
     *********************************************************************/
-    var mapSettingModalForm    = null,
-        mapSettingMiniMultiMap = null;
+    nsMap.mapSettingModalForm = null;
+    var mapSettingMiniMultiMap = null;
 
     nsMap.editMultiMapsAndSyncMapsSetting = function(){
-        if (!mapSettingModalForm){
+        if (!nsMap.mapSettingModalForm){
             var list    = [],
                 maxMaps = nsMap.setupOptions.multiMaps.maxMaps;
 
@@ -169,14 +185,23 @@ related issues in map sync
                     hideWhen: {maps: 'maps_1'}
                 });
 
-            mapSettingModalForm = $.bsModalForm({
-                header    : nsMap.mapSettingHeader,
+            nsMap.mapSettingModalForm = $.bsModalForm({
+                header    : {
+                    icon: ns.icons.mapSetting,
+                    text: ns.texts.mapSetting
+                },
                 static    : false,
                 keyboard  : true,
                 content   : content,
                 helpId    : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
                 helpButton: true,
-                footer    : [{da:'Klik på', en:'Click on'}, {icon: nsMap.mapSettingIcon}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
+                buttons: [{
+                    icon   : ns.icons.reset,
+                    text   : ns.texts.reset,
+                    onClick: ns.reset.bind(null, {multiMaps: true})
+                }],
+
+                footer    : [{da:'Klik på', en:'Click on'}, {icon: ns.icons.mapSetting}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
 
                 onChanging : function( data ){
                     mapSettingMiniMultiMap.set( getMultiMapId(data) );
@@ -190,7 +215,7 @@ related issues in map sync
         }
 
         var data = ns.appSetting.get('multi-maps');
-        mapSettingModalForm.edit( data );
+        nsMap.mapSettingModalForm.edit( data );
     };
 }(jQuery, L, this, document));
 

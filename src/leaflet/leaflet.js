@@ -95,21 +95,23 @@ Objects and methods to handle leaflet-maps
         this.on('unload', onUnload);
     });
 
-    //nsMap.visitAllMaps: Call method(map) for all maps
-    nsMap.visitAllMaps = function(method){
+    //nsMap.visitAllMaps: Call method(map, arg[0], arg[1],...) for all maps
+    nsMap.visitAllMaps = function(method, arg = [], onlyVisibleMaps){
+        arg.unshift('');
+
         $.each(nsMap.mapIndex, function(index, map){
-            if (map)
-                method(map, index);
+            arg[0] = map;
+            if (map && (!onlyVisibleMaps || map.isVisibleInMultiMaps))
+                method.apply(map, arg);
         });
     };
 
-    //nsMap.visitAllVisibleMaps: Call method(map) for all visible maps
-    nsMap.visitAllVisibleMaps = function(method){
-        $.each(nsMap.mapIndex, function(index, map){
-            if (map && map.isVisibleInMultiMaps)
-                method(map, index);
-        });
+    //nsMap.visitAllVisibleMaps: Call method(map, arg[0], arg[1],...) for all visible maps
+    nsMap.visitAllVisibleMaps = function(method, arg = []){
+        nsMap.visitAllMaps(method, arg, true);
     };
+
+
 
     //nsMap.callAllMaps: Call methodName with arg (array) for all maps
     nsMap.callAllMaps = function(methodName, arg){
@@ -269,7 +271,10 @@ Objects and methods to handle leaflet-maps
         bsLegendOptions: {
             position: 'topright',
             content: {
-                header: nsMap.mapLegendHeader,
+                header: {
+                    icon: ns.icons.mapLegend,
+                    text: ns.texts.mapLegend
+                },
                 noVerticalPadding   : true,
                 noHorizontalPadding : false,
                 width: '20em',  //<= TODO Adjust

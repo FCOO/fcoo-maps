@@ -153,6 +153,30 @@
             //Get max-maps
             options.multiMaps.maxMaps = getDeviceDependendValue(options.multiMaps.maxMaps);
 
+
+        //Adjust text on reset-button for the layer-menu and/or map-options
+        var resetLayerText;
+        if (nsMap.hasMultiMaps){
+            if (options.multiMaps.maxMaps == 2)
+                resetLayerText = {
+                    da: 'Fravælg alle lag i begge kort',
+                    en: 'Unselect all layers in both maps'
+                };
+            else
+                resetLayerText = {
+                    da: 'Fravælg alle lag i alle kort',
+                    en: 'Unselect all layers in all maps'
+                };
+        }
+        else
+            resetLayerText = {
+                da: 'Fravælg alle lag i kortet',
+                en: 'Unselect all layers in the map'
+            };
+
+        if (nsMap.setupOptions.layerMenuOptions)
+            nsMap.setupOptions.layerMenuOptions.resetText = resetLayerText;
+
         //2: "Load" standard setup/options for differnet parts of the application. Check if there are any resolve-function assigned in nsMap.standard
         $.each(options.standard, function(id, fileNameOrData){
             if (nsMap.standard[id])
@@ -244,10 +268,6 @@
     5: "Load" the added layers via there build-method
     ******************************************************************/
     function resolve_layerMenu(listOrMenus){
-
-console.log(listOrMenus);
-
-
         /*********************************************
         function convertList(listOrMenus)
         listOrMenus =

@@ -14,18 +14,22 @@ Create and set different global variables and methods
     ICONS
     ***********************************************************/
     //Icon and header for map-settings
-    nsMap.mapSettingIcon = ns.settingIcon('fa-map');
-    nsMap.mapSettingHeader = {
-        icon: nsMap.mapSettingIcon,
-        text: {da:'Kortindstillinger', en:'Map Settings'}
-    };
+    ns.icons.mapSetting = ns.settingIcon('fa-map');
+    ns.texts.mapSetting = {da:'Kortindstillinger', en:'Map Settings'};
+
+    //Icon for Number of Maps
+    ns.icons.numberOfMaps = ns.iconSub('fa-map', 'fa-tally', true);
+
+    //Icon and header for legend
+    ns.icons.mapLegend = 'fa-list';     //TODO fa-th-list when forecast@mouse-position is implemented <-- ??????? (remove line?)
+    ns.texts.mapLegend = {da:'Signaturforklaring', en:'Legend'};
 
     ns.mapIcon = function(subIcon, subClassPostfix){
         return ns.iconSub('fa-map', subIcon, subClassPostfix);
     };
 
     nsMap.mapSettingIconWithStatus = function(fontSizeClass){
-        return [nsMap.mapSettingIcon, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
+        return [ns.icons.mapSetting, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
     };
 
     nsMap.updateMapSettingIconWithStatus = function($parent, inSync){
@@ -34,12 +38,6 @@ Create and set different global variables and methods
         $(icons[1]).toggle(!!inSync);
     };
 
-    //Icon and header for legend
-    //nsMap.mapLegendIcon = 'fa-list';  //TODO fa-th-list when forecast@mouse-position is implemented <-- ??????? (remove line?)
-    nsMap.mapLegendHeader = {
-        icon: 'fa-list',
-        text: {da:'Signaturforklaring', en:'Legend'}
-    };
 
 
     /***********************************************************

@@ -14,7 +14,7 @@
     <link  href="fcoo-maps-havnelods.css" rel="stylesheet">
     <style>
         :root {
-            --jb-modal-sm-rem: 20rem;
+//            --jb-modal-sm-rem: 20rem;
         }
 
     </style>
@@ -118,13 +118,14 @@
 
                 applicationName: {da:'fcoo-maps - Overskriften', en:'fcoo-maps - The Header'},
 //*
-                _multiMaps: {
+                _multiMaps: false,
+                multiMaps: {
                     enabled      : true,
                     maxMaps      : 5,
                     maxZoomOffset: 2
                 },
 
-                multiMaps: {
+                _multiMaps: {
                     enabled           : {mobile:false, tablet:true, desktop:true},
                     maxMaps           : {mobile:2, tablet:3, desktop:5},
                     maxZoomOffset     : 2
@@ -139,10 +140,12 @@
                 leftMenu: {
                     isLayerMenu: true,
                     buttons: {
-                        bookmark: function(){ alert('bookmark'); },
-                        share   : function(){ alert('share');    },
-                        load    : function(){ alert('load');     },
-                        save    : function(){ alert('save');     }
+                        bookmark: true,
+                        share   : true,
+                        load    : true,
+                        save    : true,
+                        reset   : true,
+                        setting : true
                     }
 
                 },

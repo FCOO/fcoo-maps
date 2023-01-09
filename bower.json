@@ -1,60 +1,147 @@
 {
-    "name": "fcoo-maps",
-    "version": "1.30.2",
-    "homepage": "https://github.com/fcoo/fcoo-maps",
-    "authors": [
-        "Niels Holt"
-    ],
-    "description": "",
-    "main": [
-        "dist/fcoo-maps.js",
-        "dist/fcoo-maps.css"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/fcoo/fcoo-maps.git"
+  "name": "fcoo-maps",
+  "version": "1.31.0",
+  "homepage": "https://github.com/fcoo/fcoo-maps",
+  "authors": [
+    "Niels Holt"
+  ],
+  "description": "",
+  "main": [
+    "dist/fcoo-maps.js",
+    "dist/fcoo-maps.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fcoo/fcoo-maps.git"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "moduleType": [
+    "es6"
+  ],
+  "dependencies": {
+    "fcoo-application": "fcoo/fcoo-application#^14.0.0",
+    "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
+    "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.4.0",
+    "leaflet-multi-maps": "fcoo/leaflet-multi-maps#^2.0.0",
+    "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.5.1",
+    "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
+    "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
+    "leaflet.edgebuffer": "TolonUK/Leaflet.EdgeBuffer#^1.0.3",
+    "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^3.25.0",
+    "leaflet-bootstrap-marker": "fcoo/leaflet-bootstrap-marker#^3.0.0",
+    "leaflet-polyline": "fcoo/leaflet-polyline#^2.4.2",
+    "leaflet-bootstrap-draw": "fcoo/leaflet-bootstrap-draw#^4.0.0",
+    "leaflet-latlng-format": "fcoo/leaflet-latlng-format#^2.0.0",
+    "leaflet-latlng-graticule": "fcoo/leaflet-latlng-graticule#^1.2.0",
+    "jquery-mousewheel": "^3.1.13",
+    "clipboard": "zenorocha/clipboard.js#^2.0.6",
+    "canvas-utilities": "fcoo/canvas-utilities.js#^1.0.0"
+  },
+  "devDependencies": {
+    "modernizr-scss": "https://github.com/fcoo/modernizr-scss.git#latest"
+  },
+  "overrides": {
+    "leaflet.locatecontrol": {
+      "main": [
+        "src/L.Control.Locate.js"
+      ]
     },
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "moduleType": [
-        "es6"
-    ],
-    "dependencies": {
-        "fcoo-application": "fcoo/fcoo-application#^14.0.0",
-        "fcoo-maps-colors": "fcoo/fcoo-maps-colors#latest",
-        "leaflet-map-sync": "fcoo/leaflet-map-sync#^2.4.0",
-        "leaflet-multi-maps": "fcoo/leaflet-multi-maps#^2.0.0",
-        "leaflet-zoom-modernizr": "fcoo/leaflet-zoom-modernizr#^1.5.1",
-        "leaflet-control-topcenter": "fcoo/leaflet-control-topcenter#^2.0.0",
-        "leaflet-freeze": "fcoo/leaflet-freeze#^2.1.0",
-        "leaflet.edgebuffer": "TolonUK/Leaflet.EdgeBuffer#^1.0.3",
-        "leaflet-bootstrap": "fcoo/leaflet-bootstrap#^3.25.0",
-        "leaflet-bootstrap-marker": "fcoo/leaflet-bootstrap-marker#^3.0.0",
-        "leaflet-polyline": "fcoo/leaflet-polyline#^2.4.2",
-        "leaflet-bootstrap-draw": "fcoo/leaflet-bootstrap-draw#^4.0.0",
-        "leaflet-latlng-format": "fcoo/leaflet-latlng-format#^2.0.0",
-        "leaflet-latlng-graticule": "fcoo/leaflet-latlng-graticule#^1.2.0",
-        "jquery-mousewheel": "^3.1.13",
-        "clipboard": "zenorocha/clipboard.js#^2.0.6",
-        "canvas-utilities": "fcoo/canvas-utilities.js#^1.0.0"
+    "modernizr-mouse-events": {
+      "dependencies": {
+        "fcoo-modernizr-mediaquery-device": "latest"
+      }
     },
-    "devDependencies": {
-        "modernizr-scss": "https://github.com/fcoo/modernizr-scss.git#latest"
+    "offline": {
+      "main": "offline.js"
     },
-    "overrides": {
-        "leaflet.locatecontrol": {
-            "main": [
-                "src/L.Control.Locate.js"
-            ]
-        }
+    "contactjs": {
+      "main": "dist/contact.js"
     },
-    "resolutions": {
-        "leaflet-bugfix": "3.0.0"
+    "swiped-events": {
+      "main": "src/swiped-events.js"
+    },
+    "bootstrap-select": {
+      "main": [
+        "dist/js/bootstrap-select.js"
+      ]
+    },
+    "jquery.scrollbar": {
+      "main": [
+        "jquery.scrollbar.js"
+      ]
+    },
+    "bootstrap": {
+      "dependencies": {
+        "jquery": "latest"
+      },
+      "main": [
+        "dist/js/bootstrap.bundle.js"
+      ]
+    },
+    "inputmask": {
+      "main": [
+        "dist/jquery.inputmask.bundle.js"
+      ]
+    },
+    "js-url": {
+      "main": [
+        "dist/url.min.js"
+      ]
+    },
+    "promise-polyfill": {
+      "main": "dist/polyfill.js"
+    },
+    "moment": {
+      "main": [
+        "moment.js",
+        "locale/da.js",
+        "locale/de.js",
+        "locale/sv.js",
+        "locale/nb.js",
+        "locale/fo.js"
+      ]
+    },
+    "mmenu-js": {
+      "main": "dist/mmenu.js"
+    },
+    "leaflet-bower": {
+      "main": [
+        "dist/leaflet-src.js"
+      ],
+      "dependencies": {
+        "leaflet-global-switches": "latest"
+      }
+    },
+    "leaflet": {
+      "main": [
+        "dist/leaflet.css"
+      ],
+      "dependencies": {
+        "leaflet-bower": "latest"
+      }
+    },
+    "Leaflet.GeometryUtil": {
+      "main": "src/leaflet.geometryutil.js",
+      "dependencies": {
+        "leaflet": "latest"
+      }
+    },
+    "Leaflet.Geodesic": {
+      "dependencies": {
+        "leaflet": "latest"
+      }
     }
+  },
+  "resolutions": {
+    "leaflet-bugfix": "3.0.0",
+    "bootstrap": "^4.0.0",
+    "leaflet": "1.9.2"
+  }
 }

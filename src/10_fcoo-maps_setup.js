@@ -32,12 +32,12 @@ See src/fcoo-maps.js
             width: 359,
             buttons: As leftMenuButtons and rightMenuButtons in fcoo-aapplication = {
                 preButtons  = []buttonOptions or buttonOptions or null //Individuel button(s) placed before the standard buttons
-                save        = onClick or buttonOptions, //Standard save-button
-                load        = onClick or buttonOptions, //Standard load-button
-                bookmark    = onClick or buttonOptions, //Standard bootmark-button
-                share       = onClick or buttonOptions, //Standard share-button
-                user        = onClick or buttonOptions, //Standard user-button
-                setting     = onClick or buttonOptions, //Standard setting-button
+                save        = true or onClick or buttonOptions, //Standard save-button
+                load        = true or onClick or buttonOptions, //Standard load-button
+                bookmark    = true or onClick or buttonOptions, //Standard bootmark-button
+                share       = true or onClick or buttonOptions, //Standard share-button
+                user        = true or onClick or buttonOptions, //Standard user-button
+                setting     = true or onClick or buttonOptions, //Standard setting-button
                 postButtons = []buttonOptions or buttonOptions or null //Individuel button(s) placed after the standard buttons
             }
 
@@ -197,7 +197,7 @@ See src/fcoo-maps.js
 
                 //Add button before setting-button with settings for map(s)
                 preSetting: {
-                    icon   : nsMap.mapSettingIcon,
+                    icon   : ns.icons.mapSetting,
                     onClick: function(){
                                  if (nsMap.hasMultiMaps)
                                      nsMap.showMapSettingMain();
@@ -209,15 +209,21 @@ See src/fcoo-maps.js
             },
 
             layerMenuOptions: {
-                inclBar    : true,
-                barCloseAll: true
+                inclBar     : true,
+                barCloseAll : true,
+
+                resetIcon: 'far fa-layer-group',
+                reset: {
+                    resetState  : "RESET",
+                }
             },
 
 
             leftMenu: {
                 width  : 359,   //Width of left-menu. Supports mobil device with screen width = 360+
                 buttons: {
-                    setting: function(){ ns.globalSetting.edit(); }
+                    reste  : true,
+                    setting: true
                 },
                 isLayerMenu : true,
                 bsMenuOptions: {

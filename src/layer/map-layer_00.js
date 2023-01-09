@@ -393,8 +393,9 @@ L.Layer.addInitHook(function(){
             this.applyCommonSetting(data.common || null);
 
             //Apply individuel settings
-            nsMap.visitAllMaps( function(map, index){
-                var setting = data[index] || {};
+            nsMap.visitAllMaps( function(map){
+                var mapIndex = map.fcooMapIndex,
+                    setting = data[mapIndex] || {};
                 if (setting.show)
                     _this.addTo(map);
                 else
@@ -402,9 +403,8 @@ L.Layer.addInitHook(function(){
 
                 //colorInfo - TODO
 
-
                 //Individual setting
-                _this.applySetting(setting, map, _this.info[index], index);
+                _this.applySetting(setting, map, _this.info[mapIndex], mapIndex);
             });
         },
 
@@ -923,6 +923,10 @@ L.Layer.addInitHook(function(){
             return this;
         },
 
+        removeFromAll: function(){
+            nsMap.visitAllMaps( $.proxy(this.removeFrom, this) );
+        },
+
         /*******************************************************
         closePopup(mapOrIndex)
         Close all popups on the layer in mapOrIndex
@@ -1110,7 +1114,13 @@ L.Layer.addInitHook(function(){
         Show modal window with checkbox or radio for each map
         Select/unseelct the layer in all visible maps
         *******************************************************************/
-        selectMaps: function( map ){
+        selectMaps: function( map, state ){
+            //If it is rest all selected => do that
+            if (state == 'RESET'){
+                this.removeFromAll();
+                return this;
+            }
+
             //If only one map is vissible => simple toggle
             if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
                 if (this.isAddedToMap(0))
