@@ -222,7 +222,7 @@ See src/fcoo-maps.js
             leftMenu: {
                 width  : 359,   //Width of left-menu. Supports mobil device with screen width = 360+
                 buttons: {
-                    reste  : true,
+                    reset  : true,
                     setting: true
                 },
                 isLayerMenu : true,
