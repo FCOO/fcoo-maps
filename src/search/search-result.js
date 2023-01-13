@@ -355,7 +355,7 @@ search-result.js
                 markerClassName = '';
 
             if (this.showPoly){
-                markerClassName = 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-up';
+                markerClassName = 'show-for-leaflet-zoom-'+this.visibleAtZoom+'-down';
 
                 if (this.polys[mapIndex])
                     poly = this.polys[mapIndex];

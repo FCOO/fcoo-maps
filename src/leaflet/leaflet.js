@@ -285,6 +285,7 @@ Objects and methods to handle leaflet-maps
         //bsCompassControl = Show device orientation
         bsCompassControl: ns.modernizrDevice.isMobile,
         bsCompassOptions: {
+            show    : false,
             position: 'topcenter',
             icons: {
                 //Original = device   : 'compass-device fa-mobile',

@@ -3018,6 +3018,7 @@ Objects and methods to handle leaflet-maps
         //bsCompassControl = Show device orientation
         bsCompassControl: ns.modernizrDevice.isMobile,
         bsCompassOptions: {
+            show    : false,
             position: 'topcenter',
             icons: {
                 //Original = device   : 'compass-device fa-mobile',
@@ -8022,7 +8023,7 @@ search-result.js
                 markerClassName = '';
 
             if (this.showPoly){
-                markerClassName = 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-up';
+                markerClassName = 'show-for-leaflet-zoom-'+this.visibleAtZoom+'-down';
 
                 if (this.polys[mapIndex])
                     poly = this.polys[mapIndex];
