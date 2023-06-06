@@ -114,13 +114,27 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
         '████      ████████████████    ████████████████     ████████████████',
         '████        ████████████        ████████████         ████████████',
         '             Forsvarets Center for Operativ Oceanografi',
+        '             Defence Centre for Operational Oceanography',
         '                       fcoo.dk - info@fcoo.dk',
     ];
 
-    /* eslint-disable no-console */
+    /* eslint-disable no-console, no-constant-condition*/
     for (var i=0; i<text.length; i++)
         console.log(text[i]);
-    /* eslint-enable no-console */
+
+    if ('{APPLICATION_NAME_DA}' != ('{APPLICATION_' + 'NAME_DA}'))
+        console.log('{APPLICATION_NAME_DA}');
+    if ('{APPLICATION_NAME_EN}' != ('{APPLICATION_' + 'NAME_EN}'))
+        console.log('{APPLICATION_NAME_EN}');
+    var version_build = '';
+    if ('{VERSION}' != ('{VER' + 'SION}'))
+        version_build = 'Version '+'{VERSION}';
+    if ('{BUILD}' != ('{BUI' + 'LD}'))
+        version_build = version_build + (version_build ? ' / ':'') + '{BUILD}';
+    if (version_build)
+        console.log(version_build);
+
+    /* eslint-enable no-console, no-constant-condition */
 
 }(this, document));
 
