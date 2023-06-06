@@ -1382,8 +1382,8 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
     if ('{APPLICATION_NAME_EN}' != ('{APPLICATION_' + 'NAME_EN}'))
         console.log('{APPLICATION_NAME_EN}');
     var version_build = '';
-    if ('1.31.4' != ('{VER' + 'SION}'))
-        version_build = 'Version '+'1.31.4';
+    if ('1.31.5' != ('{VER' + 'SION}'))
+        version_build = 'Version '+'1.31.5';
     if ('{BUILD}' != ('{BUI' + 'LD}'))
         version_build = version_build + (version_build ? ' / ':'') + '{BUILD}';
     if (version_build)

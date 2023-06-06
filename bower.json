@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps",
-  "version": "1.31.4",
+  "version": "1.31.5",
   "homepage": "https://github.com/fcoo/fcoo-maps",
   "authors": [
     "Niels Holt"
@@ -46,102 +46,5 @@
   },
   "devDependencies": {
     "modernizr-scss": "https://github.com/fcoo/modernizr-scss.git#latest"
-  },
-  "overrides": {
-    "leaflet.locatecontrol": {
-      "main": [
-        "src/L.Control.Locate.js"
-      ]
-    },
-    "modernizr-mouse-events": {
-      "dependencies": {
-        "fcoo-modernizr-mediaquery-device": "latest"
-      }
-    },
-    "offline": {
-      "main": "offline.js"
-    },
-    "contactjs": {
-      "main": "dist/contact.js"
-    },
-    "swiped-events": {
-      "main": "src/swiped-events.js"
-    },
-    "bootstrap-select": {
-      "main": [
-        "dist/js/bootstrap-select.js"
-      ]
-    },
-    "jquery.scrollbar": {
-      "main": [
-        "jquery.scrollbar.js"
-      ]
-    },
-    "bootstrap": {
-      "dependencies": {
-        "jquery": "latest"
-      },
-      "main": [
-        "dist/js/bootstrap.bundle.js"
-      ]
-    },
-    "inputmask": {
-      "main": [
-        "dist/jquery.inputmask.bundle.js"
-      ]
-    },
-    "js-url": {
-      "main": [
-        "dist/url.min.js"
-      ]
-    },
-    "promise-polyfill": {
-      "main": "dist/polyfill.js"
-    },
-    "moment": {
-      "main": [
-        "moment.js",
-        "locale/da.js",
-        "locale/de.js",
-        "locale/sv.js",
-        "locale/nb.js",
-        "locale/fo.js"
-      ]
-    },
-    "mmenu-js": {
-      "main": "dist/mmenu.js"
-    },
-    "leaflet-bower": {
-      "main": [
-        "dist/leaflet-src.js"
-      ],
-      "dependencies": {
-        "leaflet-global-switches": "latest"
-      }
-    },
-    "leaflet": {
-      "main": [
-        "dist/leaflet.css"
-      ],
-      "dependencies": {
-        "leaflet-bower": "latest"
-      }
-    },
-    "Leaflet.GeometryUtil": {
-      "main": "src/leaflet.geometryutil.js",
-      "dependencies": {
-        "leaflet": "latest"
-      }
-    },
-    "Leaflet.Geodesic": {
-      "dependencies": {
-        "leaflet": "latest"
-      }
-    }
-  },
-  "resolutions": {
-    "leaflet-bugfix": "3.0.0",
-    "bootstrap": "^4.0.0",
-    "leaflet": "1.9.2"
   }
 }
