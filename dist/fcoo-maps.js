@@ -1368,26 +1368,36 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
         '████    ████           ████  ████          ████   ████          ████ ',
         '████      ████████████████    ████████████████     ████████████████',
         '████        ████████████        ████████████         ████████████',
-        '             Forsvarets Center for Operativ Oceanografi',
-        '             Defence Centre for Operational Oceanography',
-        '                       fcoo.dk - info@fcoo.dk',
     ];
 
     /* eslint-disable no-console, no-constant-condition*/
-    for (var i=0; i<text.length; i++)
+    var maxTxtLgd = 0;
+    for (var i=0; i<text.length; i++){
+        maxTxtLgd = Math.max(maxTxtLgd, text[i].length);
         console.log(text[i]);
+    }
+
+    function centerConsole( txt ){
+        if (txt.length < maxTxtLgd)
+            txt = txt.padStart((txt.length + maxTxtLgd)/2);
+        console.log(txt);
+    }
+    centerConsole('Forsvarets Center for Operativ Oceanografi');
+    centerConsole('Defence Centre for Operational Oceanography');
+    centerConsole('fcoo.dk - info@fcoo.dk');
+
 
     if ('{APPLICATION_NAME_DA}' != ('{APPLICATION_' + 'NAME_DA}'))
-        console.log('{APPLICATION_NAME_DA}');
+        centerConsole('{APPLICATION_NAME_DA}');
     if ('{APPLICATION_NAME_EN}' != ('{APPLICATION_' + 'NAME_EN}'))
-        console.log('{APPLICATION_NAME_EN}');
+        centerConsole('{APPLICATION_NAME_EN}');
     var version_build = '';
-    if ('1.31.5' != ('{VER' + 'SION}'))
-        version_build = 'Version '+'1.31.5';
+    if ('1.31.6' != ('{VER' + 'SION}'))
+        version_build = 'Version '+'1.31.6';
     if ('{BUILD}' != ('{BUI' + 'LD}'))
         version_build = version_build + (version_build ? ' / ':'') + '{BUILD}';
     if (version_build)
-        console.log(version_build);
+        centerConsole(version_build);
 
     /* eslint-enable no-console, no-constant-condition */
 
