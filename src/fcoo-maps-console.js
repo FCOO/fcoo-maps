@@ -137,10 +137,10 @@ XXXX              XXXXXXXX        XXXXXXXX         XXXXXXXX
     if ('{APPLICATION_NAME_EN}' != ('{APPLICATION_' + 'NAME_EN}'))
         centerConsole('{APPLICATION_NAME_EN}');
     var version_build = '';
-    if ('{VERSION}' != ('{VER' + 'SION}'))
-        version_build = 'Version '+'{VERSION}';
-    if ('{BUILD}' != ('{BUI' + 'LD}'))
-        version_build = version_build + (version_build ? ' / ':'') + '{BUILD}';
+    if ('{APPLICATION_VERSION}' != ('{APPLICATION_' + 'VERSION}'))
+        version_build = 'Version '+'{APPLICATION_VERSION}';
+    if ('{APPLICATION_BUILD}' != ('{APPLICATION_' + 'BUILD}'))
+        version_build = version_build + (version_build ? ' / ':'') + '{APPLICATION_BUILD}';
     if (version_build)
         centerConsole(version_build);
 
