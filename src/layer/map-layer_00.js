@@ -1202,14 +1202,7 @@ L.Layer.addInitHook(function(){
                 });
             }
 
-            //Delete last used modal-form
-            this.modalForm = null;
-            if (mapLayerModalForm){
-                mapLayerModalForm.$bsModal.close();
-                mapLayerModalForm.$bsModal.modal('dispose');
-            }
-
-            mapLayerModalForm = this.modalForm = $.bsModalForm({
+            var mapLayerModalForm = $.bsModalForm({
                 width     : 240,
                 header    : {icon: this.options.icon, text:  this.options.text},
                 static    : false,
@@ -1224,14 +1217,14 @@ L.Layer.addInitHook(function(){
                                     else
                                         _this.removeFrom(map);
                                 });
-                            }
+                            },
+                remove: true
             });
 
             updateCheckbox();
-            this.modalForm.edit({});
+            mapLayerModalForm.edit({});
         }
     };
-    var mapLayerModalForm = null;
 
     /****************************************************************************
     *****************************************************************************

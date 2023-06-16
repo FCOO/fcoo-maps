@@ -4550,14 +4550,7 @@ L.Layer.addInitHook(function(){
                 });
             }
 
-            //Delete last used modal-form
-            this.modalForm = null;
-            if (mapLayerModalForm){
-                mapLayerModalForm.$bsModal.close();
-                mapLayerModalForm.$bsModal.modal('dispose');
-            }
-
-            mapLayerModalForm = this.modalForm = $.bsModalForm({
+            var mapLayerModalForm = $.bsModalForm({
                 width     : 240,
                 header    : {icon: this.options.icon, text:  this.options.text},
                 static    : false,
@@ -4572,14 +4565,14 @@ L.Layer.addInitHook(function(){
                                     else
                                         _this.removeFrom(map);
                                 });
-                            }
+                            },
+                remove: true
             });
 
             updateCheckbox();
-            this.modalForm.edit({});
+            mapLayerModalForm.edit({});
         }
     };
-    var mapLayerModalForm = null;
 
     /****************************************************************************
     *****************************************************************************
@@ -5307,9 +5300,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     Edit the options for control with id == controlId for map. If applyToAll == true =>
     apply the data to all visible maps
     *****************************************************************************/
-    var controlOptionsForm = null,
-        currentControlOptionsForm_options = {}; //Settings and data for the current form displayed and the control beeing edited
-
+    var currentControlOptionsForm_options = {}; //Settings and data for the current form displayed and the control beeing edited
 
     //****************************************************************************
     function controlOptionsForm_preEdit(mapSetting/*, data */ ){
@@ -5378,8 +5369,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             state   = control.getState();
 
 
-        if (controlOptionsForm)
-            controlOptionsForm.$bsModal.remove();
 
         var formOptions = {
                 header: {
@@ -5388,8 +5377,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 },
                 width   : '15em',//<= Adjust
                 show    : false,
+                remove  : true,
                 onSubmit: controlOptionsForm_submit,
-                closeWithoutWarning: true,
+                closeWithoutWarning: true
             };
 
         //Find items in popup for the control to include in edit-options
@@ -5432,8 +5422,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 lastLabel = null;
             }
         });
-        controlOptionsForm = $.bsModalForm( formOptions );
 
+        var controlOptionsForm = $.bsModalForm( formOptions );
 
         //Save current settings and options in currentControlOptionsForm_options to be used by controlOptionsForm_submit
         currentControlOptionsForm_options = {
@@ -5773,7 +5763,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
         //accordionId is given direct i call or once by editMapSetting_options
         accordionId = accordionId || editMapSetting_options.msgAccordionId;
         var singleMap  = mapOrMapIndexOrMapId && !editMapSetting_options.applyToAll;
-//console.log('accordionId=',accordionId, singleMap ? 'ONE map ' : 'ALL maps', !accordionId ? 'ALL settings' : 'ONE setting='+ accordionId);
+
         editMapSetting_options = {};
         /*
         There are tree different mode
@@ -6004,7 +5994,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
         //update minimap
         mapSettingMiniMultiMap.set( nsMap.multiMaps.setup.id );
-
         mapSettingModal.show();
     }
 
@@ -6098,6 +6087,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 }
             });
         }
+
         mapSettingMainModal.show();
     };
 
@@ -7677,7 +7667,6 @@ search-mapLayer.js
                 };
 
             searchResultListModal = this.searchResultListModal = this.searchResultListModal ? this.searchResultListModal.update(modalOptions) : $.bsModal(modalOptions);
-
             this.searchResultListModal.show();
 
             update();
@@ -7702,7 +7691,6 @@ search-result.js
 
     var searchResultLineColor = 'black',
         searchResultColor     = 'search-result';
-
 
     /*************************************************************************
     searchResultButtonList = []options for all buttons used
@@ -8247,15 +8235,13 @@ search-result.js
         showDetails: function( map ){
             this._closePopup( map );
 
-            if (searchResultDetailModal)
-                searchResultDetailModal.bsModal.$modalContent.remove();
-
             searchResultDetailModal =
                 $.bsModal({
                     scroll : true,
                     content: ' ',
                     footer : [{icon:'fa-copyright', text: 'OpenStreetMap', link: 'https://www.openstreetmap.org/copyright'},{text:'contributors'}],
                     show   : false,
+                    remove : true
                 });
 
             searchResultDetailModal.showAfterUpdate = true;
@@ -8313,7 +8299,6 @@ search.js
 
     var ns = window.fcoo = window.fcoo || {},
         nsMap = ns.map = ns.map || {};
-
 
     /*************************************************************************
     **************************************************************************

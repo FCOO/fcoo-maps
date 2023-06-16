@@ -11,7 +11,6 @@ search-result.js
     var searchResultLineColor = 'black',
         searchResultColor     = 'search-result';
 
-
     /*************************************************************************
     searchResultButtonList = []options for all buttons used
     options = button-options plus
@@ -555,15 +554,13 @@ search-result.js
         showDetails: function( map ){
             this._closePopup( map );
 
-            if (searchResultDetailModal)
-                searchResultDetailModal.bsModal.$modalContent.remove();
-
             searchResultDetailModal =
                 $.bsModal({
                     scroll : true,
                     content: ' ',
                     footer : [{icon:'fa-copyright', text: 'OpenStreetMap', link: 'https://www.openstreetmap.org/copyright'},{text:'contributors'}],
                     show   : false,
+                    remove : true
                 });
 
             searchResultDetailModal.showAfterUpdate = true;

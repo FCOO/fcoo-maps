@@ -417,7 +417,6 @@ search-mapLayer.js
                 };
 
             searchResultListModal = this.searchResultListModal = this.searchResultListModal ? this.searchResultListModal.update(modalOptions) : $.bsModal(modalOptions);
-
             this.searchResultListModal.show();
 
             update();
