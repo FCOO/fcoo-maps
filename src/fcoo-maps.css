@@ -168,7 +168,8 @@ jquery-scroll-container-variables.scss
 :root {
   --jsc-scroll-size: 10px;
   --jsc-scroll-padding: 10px;
-  --jsc-scroll-auto-padding: 10px; }
+  --jsc-scroll-auto-padding: 10px;
+}
 
 /************************************************************
 VARIABLES
@@ -221,74 +222,91 @@ Adjust text-, border-, and background-color for a button
 LEAFLET MAPS
 **********************************************************/
 html, body {
-  height: 100%; }
+  height: 100%;
+}
 
 body {
   padding: 0;
-  margin: 0; }
+  margin: 0;
+}
 
 #map {
-  height: 100%; }
+  height: 100%;
+}
 
 body .leaflet-grab {
-  cursor: default; }
-
+  cursor: default;
+}
 body.leaflet-dragging .leaflet-grab,
 body.leaflet-dragging .leaflet-grab .leaflet-interactive,
 body.leaflet-dragging .leaflet-marker-draggable {
-  cursor: move; }
+  cursor: move;
+}
 
 /**********************************************************
 DIVERSE
 **********************************************************/
 .font-size-1-2rem {
-  font-size: 1.2rem !important; }
+  font-size: 1.2rem !important;
+}
 
 .transform-scale-0-5 {
-  transform: scale(0.5); }
+  transform: scale(0.5);
+}
 
 .transform-scale-0-65 {
-  transform: scale(0.65); }
+  transform: scale(0.65);
+}
 
 .transform-scale-1-2 {
-  transform: scale(1.2); }
+  transform: scale(1.2);
+}
 
 .transform-scale-1-5 {
-  transform: scale(1.5); }
+  transform: scale(1.5);
+}
 
 .icon-active {
-  color: #0d6efd; }
+  color: #0d6efd;
+}
 
 /**********************************************************
 POPUP
 **********************************************************/
 .popover {
   --jb-header-color: var(--fcoo-app-text-color-50);
-  --jb-header-bg: var(--fcoo-app-bg-color-50); }
+  --jb-header-bg: var(--fcoo-app-bg-color-50);
+}
 
 /****************************************************************************
 Style for edit settings for graticule
 ****************************************************************************/
 .graticule-label .hide-for-graticule-label {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-graticule-label .show-for-graticule-label {
-  display: none !important; }
+  display: none !important;
+}
 
 /**********************************************************
 HIDE/SHOW WHEN SINGLE OR MULTI-MAPS SELECTED
 **********************************************************/
 .multi-maps-selected .hide-for-multi-maps-selected {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-multi-maps-selected .show-for-multi-maps-selected {
-  display: none !important; }
+  display: none !important;
+}
 
 .single-maps-selected .hide-for-single-maps-selected {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-single-maps-selected .show-for-single-maps-selected {
-  display: none !important; }
+  display: none !important;
+}
 
 /**********************************************************
 EDIT MULTI MAPS SETTINGS
@@ -300,54 +318,67 @@ EDIT MULTI MAPS SETTINGS
   text-align: center;
   padding: 0;
   font-size: 137.5px;
-  height: 115.5px; }
-  .multi-maps-current i {
-    position: relative;
-    width: 100%;
-    top: -11px; }
+  height: 115.5px;
+}
+.multi-maps-current i {
+  position: relative;
+  width: 100%;
+  top: -11px;
+}
 
 /**********************************************************
 EDIT SYNC MAPS SETTINGS
 **********************************************************/
 .text-multi-maps-current {
-  color: #ff7800; }
+  color: #ff7800;
+}
 
 .bg-multi-maps-current {
-  background-color: #ff7800; }
+  background-color: #ff7800;
+}
 
 .text-multi-maps-main {
-  color: #3216B0; }
+  color: #3216B0;
+}
 
 .bg-multi-maps-main {
-  background-color: #3216B0; }
+  background-color: #3216B0;
+}
 
 .border-multi-maps-main {
-  border: 1px solid #3216B0 !important; }
+  border: 1px solid #3216B0 !important;
+}
 
 .map-sync-zoom-offset {
-  margin: auto; }
-  .map-sync-zoom-offset .multi-map-container .outline {
-    display: none; }
-  .map-sync-zoom-offset .multi-map-container.current-map {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    background-color: #ff7800; }
-    .map-sync-zoom-offset .multi-map-container.current-map .outline {
-      display: block;
-      border: 2px dotted #3216B0;
-      width: 50%;
-      height: 50%; }
-  .map-sync-zoom-offset .multi-map-container.main-map {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid #3216B0 !important; }
-    .map-sync-zoom-offset .multi-map-container.main-map .outline {
-      display: block;
-      border: 2px dotted #ff7800;
-      width: 50%;
-      height: 50%; }
+  margin: auto;
+}
+.map-sync-zoom-offset .multi-map-container .outline {
+  display: none;
+}
+.map-sync-zoom-offset .multi-map-container.current-map {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff7800;
+}
+.map-sync-zoom-offset .multi-map-container.current-map .outline {
+  display: block;
+  border: 2px dotted #3216B0;
+  width: 50%;
+  height: 50%;
+}
+.map-sync-zoom-offset .multi-map-container.main-map {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #3216B0 !important;
+}
+.map-sync-zoom-offset .multi-map-container.main-map .outline {
+  display: block;
+  border: 2px dotted #ff7800;
+  width: 50%;
+  height: 50%;
+}
 
 /**********************************************************
 EDIT BACKGROUND MAP SETTINGS
@@ -355,16 +386,20 @@ EDIT BACKGROUND MAP SETTINGS
 .background-image-container {
   margin: auto;
   width: 220px;
-  height: 50px; }
-  .background-image-container img {
-    width: 220px;
-    height: 50px; }
-    .background-image-container img:not(:first-child) {
-      margin-top: -50px; }
-    .background-image-container img.coastline {
-      border: 1px solid black;
-      position: relative;
-      z-index: 10; }
+  height: 50px;
+}
+.background-image-container img {
+  width: 220px;
+  height: 50px;
+}
+.background-image-container img:not(:first-child) {
+  margin-top: -50px;
+}
+.background-image-container img.coastline {
+  border: 1px solid black;
+  position: relative;
+  z-index: 10;
+}
 
 /**********************************************************
 STYLE FOR ICONS IN BUTTONS
@@ -373,15 +408,17 @@ Each of the sub-icons may need a individual class to adjust size and position
 **********************************************************/
 .fa-sync-small-right-bottom {
   position: relative;
-  right: calc(-5em / 16);
-  bottom: calc(-7em / 16);
-  font-size: .9em; }
+  right: -0.3125em;
+  bottom: -0.4375em;
+  font-size: 0.9em;
+}
 
 .fa-tally-small-right-bottom {
   position: relative;
-  right: calc(-3em / 16);
-  bottom: calc(-7em / 16);
-  font-size: .85em; }
+  right: -0.1875em;
+  bottom: -0.4375em;
+  font-size: 0.85em;
+}
 
 /**********************************************************
 STYLE FOR SEARCH RESULTS
@@ -389,620 +426,724 @@ STYLE FOR SEARCH RESULTS
 .search-result-row {
   display: flex;
   flex-direction: row;
-  align-items: baseline; }
-  .search-result-row .search-result-type {
-    font-size: .65625rem;
-    text-transform: capitalize; }
-  .search-result-row .search-result-name {
-    white-space: normal !important;
-    font-weight: 500;
-    font-size: 1.1em; }
-  .search-result-row .search-result-display {
-    white-space: normal !important;
-    font-size: .85em; }
+  align-items: baseline;
+}
+.search-result-row .search-result-type {
+  font-size: 0.65625rem;
+  text-transform: capitalize;
+}
+.search-result-row .search-result-name {
+  white-space: normal !important;
+  font-weight: 500;
+  font-size: 1.1em;
+}
+.search-result-row .search-result-display {
+  white-space: normal !important;
+  font-size: 0.85em;
+}
 
 /**********************************************************
 ZOOM MODERNIZR https://github.com/fcoo/leaflet-zoom-modernizr
 **********************************************************/
 .leaflet-zoom-3 .show-for-leaflet-zoom-3 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-3 .hide-for-leaflet-zoom-3 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-3 .hide-for-leaflet-zoom-3 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-3 .show-for-leaflet-zoom-3 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-3-up .show-for-leaflet-zoom-3-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-3-up .show-for-leaflet-zoom-3-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-3-down .show-for-leaflet-zoom-3-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-3-down .show-for-leaflet-zoom-3-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-4 .show-for-leaflet-zoom-4 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-4 .hide-for-leaflet-zoom-4 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-4 .hide-for-leaflet-zoom-4 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-4 .show-for-leaflet-zoom-4 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-4-up .show-for-leaflet-zoom-4-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-4-up .show-for-leaflet-zoom-4-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-4-down .show-for-leaflet-zoom-4-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-4-down .show-for-leaflet-zoom-4-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-5 .show-for-leaflet-zoom-5 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-5 .hide-for-leaflet-zoom-5 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-5 .hide-for-leaflet-zoom-5 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-5 .show-for-leaflet-zoom-5 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-5-up .show-for-leaflet-zoom-5-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-5-up .show-for-leaflet-zoom-5-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-5-down .show-for-leaflet-zoom-5-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-5-down .show-for-leaflet-zoom-5-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-6 .show-for-leaflet-zoom-6 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-6 .hide-for-leaflet-zoom-6 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-6 .hide-for-leaflet-zoom-6 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-6 .show-for-leaflet-zoom-6 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-6-up .show-for-leaflet-zoom-6-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-6-up .show-for-leaflet-zoom-6-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-6-down .show-for-leaflet-zoom-6-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-6-down .show-for-leaflet-zoom-6-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-7 .show-for-leaflet-zoom-7 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-7 .hide-for-leaflet-zoom-7 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-7 .hide-for-leaflet-zoom-7 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-7 .show-for-leaflet-zoom-7 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-7-up .show-for-leaflet-zoom-7-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-7-up .show-for-leaflet-zoom-7-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-7-down .show-for-leaflet-zoom-7-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-7-down .show-for-leaflet-zoom-7-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-8 .show-for-leaflet-zoom-8 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-8 .hide-for-leaflet-zoom-8 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-8 .hide-for-leaflet-zoom-8 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-8 .show-for-leaflet-zoom-8 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-8-up .show-for-leaflet-zoom-8-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-8-up .show-for-leaflet-zoom-8-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-8-down .show-for-leaflet-zoom-8-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-8-down .show-for-leaflet-zoom-8-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-9 .show-for-leaflet-zoom-9 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-9 .hide-for-leaflet-zoom-9 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-9 .hide-for-leaflet-zoom-9 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-9 .show-for-leaflet-zoom-9 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-9-up .show-for-leaflet-zoom-9-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-9-up .show-for-leaflet-zoom-9-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-9-down .show-for-leaflet-zoom-9-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-9-down .show-for-leaflet-zoom-9-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-10 .show-for-leaflet-zoom-10 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-10 .hide-for-leaflet-zoom-10 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-10 .hide-for-leaflet-zoom-10 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-10 .show-for-leaflet-zoom-10 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-10-up .show-for-leaflet-zoom-10-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-10-up .show-for-leaflet-zoom-10-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-10-down .show-for-leaflet-zoom-10-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-10-down .show-for-leaflet-zoom-10-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-11 .show-for-leaflet-zoom-11 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-11 .hide-for-leaflet-zoom-11 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-11 .hide-for-leaflet-zoom-11 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-11 .show-for-leaflet-zoom-11 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-11-up .show-for-leaflet-zoom-11-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-11-up .show-for-leaflet-zoom-11-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-11-down .show-for-leaflet-zoom-11-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-11-down .show-for-leaflet-zoom-11-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-12 .show-for-leaflet-zoom-12 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-12 .hide-for-leaflet-zoom-12 {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-12 .hide-for-leaflet-zoom-12 {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-12 .show-for-leaflet-zoom-12 {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-12-up .show-for-leaflet-zoom-12-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-12-up .show-for-leaflet-zoom-12-up {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-12-down .show-for-leaflet-zoom-12-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down {
-  display: initial !important; }
-
+  display: initial !important;
+}
 .no-leaflet-zoom-12-down .show-for-leaflet-zoom-12-down {
-  display: none !important; }
+  display: none !important;
+}
 
 .leaflet-zoom-3-up .show-for-leaflet-zoom-3-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-3-up .hide-for-leaflet-zoom-3-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-3-up .show-for-leaflet-zoom-3-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-3-down .show-for-leaflet-zoom-3-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-3-down .hide-for-leaflet-zoom-3-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-3-down .show-for-leaflet-zoom-3-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-4-up .show-for-leaflet-zoom-4-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-4-up .hide-for-leaflet-zoom-4-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-4-up .show-for-leaflet-zoom-4-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-4-down .show-for-leaflet-zoom-4-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-4-down .hide-for-leaflet-zoom-4-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-4-down .show-for-leaflet-zoom-4-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-5-up .show-for-leaflet-zoom-5-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-5-up .hide-for-leaflet-zoom-5-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-5-up .show-for-leaflet-zoom-5-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-5-down .show-for-leaflet-zoom-5-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-5-down .hide-for-leaflet-zoom-5-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-5-down .show-for-leaflet-zoom-5-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-6-up .show-for-leaflet-zoom-6-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-6-up .hide-for-leaflet-zoom-6-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-6-up .show-for-leaflet-zoom-6-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-6-down .show-for-leaflet-zoom-6-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-6-down .hide-for-leaflet-zoom-6-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-6-down .show-for-leaflet-zoom-6-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-7-up .show-for-leaflet-zoom-7-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-7-up .hide-for-leaflet-zoom-7-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-7-up .show-for-leaflet-zoom-7-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-7-down .show-for-leaflet-zoom-7-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-7-down .hide-for-leaflet-zoom-7-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-7-down .show-for-leaflet-zoom-7-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-8-up .show-for-leaflet-zoom-8-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-8-up .hide-for-leaflet-zoom-8-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-8-up .show-for-leaflet-zoom-8-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-8-down .show-for-leaflet-zoom-8-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-8-down .hide-for-leaflet-zoom-8-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-8-down .show-for-leaflet-zoom-8-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-9-up .show-for-leaflet-zoom-9-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-9-up .hide-for-leaflet-zoom-9-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-9-up .show-for-leaflet-zoom-9-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-9-down .show-for-leaflet-zoom-9-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-9-down .hide-for-leaflet-zoom-9-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-9-down .show-for-leaflet-zoom-9-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-10-up .show-for-leaflet-zoom-10-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-10-up .hide-for-leaflet-zoom-10-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-10-up .show-for-leaflet-zoom-10-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-10-down .show-for-leaflet-zoom-10-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-10-down .hide-for-leaflet-zoom-10-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-10-down .show-for-leaflet-zoom-10-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-11-up .show-for-leaflet-zoom-11-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-11-up .hide-for-leaflet-zoom-11-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-11-up .show-for-leaflet-zoom-11-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-11-down .show-for-leaflet-zoom-11-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-11-down .hide-for-leaflet-zoom-11-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-11-down .show-for-leaflet-zoom-11-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-12-up .show-for-leaflet-zoom-12-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-12-up .hide-for-leaflet-zoom-12-up-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-12-up .show-for-leaflet-zoom-12-up-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .leaflet-zoom-12-down .show-for-leaflet-zoom-12-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 .no-leaflet-zoom-12-down .hide-for-leaflet-zoom-12-down-visibility {
-  visibility: initial !important; }
-
+  visibility: initial !important;
+}
 .no-leaflet-zoom-12-down .show-for-leaflet-zoom-12-down-visibility {
-  visibility: hidden !important; }
+  visibility: hidden !important;
+}
 
 /**********************************************************
 POSITION-CONTROL
@@ -1014,60 +1155,73 @@ when loading or not visible
 **********************************************************/
 .no-bsPosition-on-land .show-for-bsPosition-on-land,
 .no-bsPosition-on-water .show-for-bsPosition-on-water {
-  display: none !important; }
+  display: none !important;
+}
 
 .bsp-color-info-outer {
   height: 4em;
   display: flex;
-  padding: 0; }
-  .bsp-color-info-outer *.header {
-    color: initial; }
-  .bsp-color-info-outer .bsp-color-info-outer-container {
-    height: 100%;
-    width: 100%; }
-    .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header {
-      flex-shrink: 0;
-      flex-grow: 0;
-      text-align: center;
-      border: none; }
-    .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm {
-      --bs-modal-content-font-size: 0.875rem;
-      --bs-modal-padding-x: 0.25rem;
-      --bs-modal-padding-y: 0.25rem;
-      --bs-modal-padding: 0.25rem; }
-      .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm .header-content {
-        --bs-modal-header-padding-x: 0.25rem;
-        --bs-modal-header-padding-y: 0.25rem;
-        --bs-modal-header-padding: 0.25rem; }
-      .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm .footer-content {
-        --bs-footer-font-size: 0.75rem;
-        --bs-footer-padding-y: 0.25rem;
-        --bs-footer-padding-x: 0.25rem; }
-    .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs {
-      --bs-modal-content-font-size: 0.75rem;
-      --bs-modal-padding-x: 0.125rem;
-      --bs-modal-padding-y: 0.125rem;
-      --bs-modal-padding: 0.125rem; }
-      .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs .header-content {
-        --bs-modal-header-padding-x: 0.125rem;
-        --bs-modal-header-padding-y: 0.125rem;
-        --bs-modal-header-padding: 0.125rem; }
-      .bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs .footer-content {
-        --bs-footer-font-size: 0.6875rem;
-        --bs-footer-padding-y: 0.125rem;
-        --bs-footer-padding-x: 0.125rem; }
+  padding: 0;
+}
+.bsp-color-info-outer *.header {
+  color: initial;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container {
+  height: 100%;
+  width: 100%;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header {
+  flex-shrink: 0;
+  flex-grow: 0;
+  text-align: center;
+  border: none;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm {
+  --bs-modal-content-font-size: 0.875rem;
+  --bs-modal-padding-x: 0.25rem;
+  --bs-modal-padding-y: 0.25rem;
+  --bs-modal-padding: 0.25rem;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm .header-content {
+  --bs-modal-header-padding-x: 0.25rem;
+  --bs-modal-header-padding-y: 0.25rem;
+  --bs-modal-header-padding: 0.25rem;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-sm .footer-content {
+  --bs-footer-font-size: 0.75rem;
+  --bs-footer-padding-y: 0.25rem;
+  --bs-footer-padding-x: 0.25rem;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs {
+  --bs-modal-content-font-size: 0.75rem;
+  --bs-modal-padding-x: 0.125rem;
+  --bs-modal-padding-y: 0.125rem;
+  --bs-modal-padding: 0.125rem;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs .header-content {
+  --bs-modal-header-padding-x: 0.125rem;
+  --bs-modal-header-padding-y: 0.125rem;
+  --bs-modal-header-padding: 0.125rem;
+}
+.bsp-color-info-outer .bsp-color-info-outer-container .bsp-color-info-header-xs .footer-content {
+  --bs-footer-font-size: 0.6875rem;
+  --bs-footer-padding-y: 0.125rem;
+  --bs-footer-padding-x: 0.125rem;
+}
 
 .bsl-working .hide-for-bsl-working {
-  display: none !important; }
-
+  display: none !important;
+}
 .bsl-working .show-for-no-bsl-working {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-bsl-working .show-for-bsl-working {
-  display: none !important; }
-
+  display: none !important;
+}
 .no-bsl-working .hide-for-no-bsl-working {
-  display: none !important; }
+  display: none !important;
+}
 
 /**********************************************************
 COMPASS-CONTROL
@@ -1076,26 +1230,35 @@ Adjusted for new icons set in src/leaflet/leaflet.js
 **********************************************************/
 @media screen and (orientation: landscape) {
   .lb-compass-btn i.compass-device-landscape {
-    transform: rotate(90deg) translateX(-0.2em) scale(0.4) !important; }
-    html.orientation-secondary .lb-compass-btn i.compass-device-landscape {
-      transform: rotate(-90deg) translateX(0.1em) scale(0.4) !important; }
+    transform: rotate(90deg) translateX(-0.2em) scale(0.4) !important;
+  }
+  html.orientation-secondary .lb-compass-btn i.compass-device-landscape {
+    transform: rotate(-90deg) translateX(0.1em) scale(0.4) !important;
+  }
   .lb-compass-btn i.compass-arrow {
-    transform: rotate(90deg) translateY(-0.45em) scale(0.7) !important; }
-    html.orientation-secondary .lb-compass-btn i.compass-arrow {
-      transform: rotate(-90deg) translateY(-0.45em) scale(0.7) !important; } }
-
+    transform: rotate(90deg) translateY(-0.45em) scale(0.7) !important;
+  }
+  html.orientation-secondary .lb-compass-btn i.compass-arrow {
+    transform: rotate(-90deg) translateY(-0.45em) scale(0.7) !important;
+  }
+}
 @media screen and (orientation: portrait) {
   .lb-compass-btn i.compass-device-portrait {
-    transform: rotate(0deg) translateY(-0.05em) scale(0.5) !important; }
-    html.orientation-secondary .lb-compass-btn i.compass-device-portrait {
-      transform: rotate(180deg) translateY(0.25em) scale(0.5) !important; }
+    transform: rotate(0deg) translateY(-0.05em) scale(0.5) !important;
+  }
+  html.orientation-secondary .lb-compass-btn i.compass-device-portrait {
+    transform: rotate(180deg) translateY(0.25em) scale(0.5) !important;
+  }
   .lb-compass-btn i.compass-arrow {
-    transform: rotate(0deg) translateY(-0.5em) scale(0.7) !important; }
-    html.orientation-secondary .lb-compass-btn i.compass-arrow {
-      transform: rotate(180deg) translateY(-0.5em) scale(0.7) !important; } }
-
+    transform: rotate(0deg) translateY(-0.5em) scale(0.7) !important;
+  }
+  html.orientation-secondary .lb-compass-btn i.compass-arrow {
+    transform: rotate(180deg) translateY(-0.5em) scale(0.7) !important;
+  }
+}
 .no-device-orientation .lb-compass-btn .no-device-orientation-slash {
-  transform: translateX(-0.1em) scaleX(0.75); }
+  transform: translateX(-0.1em) scaleX(0.75);
+}
 
 /**********************************************************
 DATASET-VALUE
@@ -1103,13 +1266,15 @@ Style for elements created by Dataset and DatasetValue
 See src/common/dataset.js
 **********************************************************/
 .show-for-dataset-value-is-null {
-  display: none !important; }
+  display: none !important;
+}
 
 .dataset-value-is-null.hide-for-dataset-value-is-null {
-  display: none !important; }
-
+  display: none !important;
+}
 .dataset-value-is-null .hide-for-dataset-value-is-null {
-  display: none !important; }
-
+  display: none !important;
+}
 .dataset-value-is-null .show-for-dataset-value-is-null {
-  display: block !important; }
+  display: block !important;
+}

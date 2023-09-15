@@ -7718,7 +7718,6 @@ search-result.js
     var searchResultDetailModal = null;
 
     var SearchResult = nsMap.SearchResult = function(options){
-
         //Save options needed to recreate the SearchResult: Position: All, Location: Just
         if (options.isPosition)
             this.saveOptions = $.extend(true, {}, options);
@@ -7904,6 +7903,8 @@ search-result.js
         //update - append new options and update object
         **********************************************/
         update: function(newOptions){
+            var _this = this;
+
             this.optionsLang = ns.globalSetting.get('language'); //The lang used to get the new options
 
             this.options = this.options || {};
@@ -7922,8 +7923,7 @@ search-result.js
             else {
                 if (!this.name && opt.namedetails){
                     //Construct name and name = {lang:STRING} for all lang in i18next.languages and the local language (if found)
-                    var _this = this,
-                        localLang = ns.country2lang(this.countryCode),
+                    var localLang = ns.country2lang(this.countryCode),
                         localName = opt.namedetails.name || opt.namedetails['name:'+localLang] || '',
                         defaultName = opt.namedetails['name:en'] || '';
 
@@ -7955,9 +7955,17 @@ search-result.js
                     });
                 }
 
+                //If only one name is given => convert to {lang:name}
+                if (this.name && (typeof this.name == 'string')){
+                    var nameStr = this.name;
+                    this.name = {};
+                    this.name[this.optionsLang] =  nameStr;
+                }
+
                 //Sync between name and names
                 this.name = this.name || {};
                 this.names = this.names || {};
+
                 $.each(this.names, function(lang, names){
                     if (!_this.name[lang])
                         _this.name[lang] = names.split('&nbsp;/&nbsp;')[0];
@@ -8389,7 +8397,6 @@ search.js
 
         //First: Search for position
         var latLngList = nsMap.text2LatLng(text);
-
         if (latLngList.length){
             var currentGroupHeaderId = null,
                 list = [];
@@ -8424,7 +8431,6 @@ search.js
             if (lang != 'en')
                 params['accept-language'] = lang + ',en';
             $.workingOn();
-
             Promise.getJSON( nsMap.setupOptions.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
         }
     };

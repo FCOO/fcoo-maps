@@ -16445,11 +16445,13 @@ The scss is divided in two parts: First the common part equal for all types and 
   left: 0;
   width: 100%;
   height: 100%;
-  overflow-x: hidden; }
-  .base-slider-container-outer .base-slider-container-full-width {
-    position: relative;
-    left: 0;
-    overflow-y: visible; }
+  overflow-x: hidden;
+}
+.base-slider-container-outer .base-slider-container-full-width {
+  position: relative;
+  left: 0;
+  overflow-y: visible;
+}
 
 /***************************************************************
 COMMON STYLE
@@ -16458,109 +16460,126 @@ COMMON STYLE
   position: relative;
   display: block;
   user-select: none;
-  box-sizing: border-box; }
-  .base-slider-container .line-background {
-    position: absolute;
-    display: block;
-    width: 100%;
-    top: 0; }
-  .base-slider-container .line {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 4px;
-    left: -1px;
-    overflow: hidden;
-    outline: none !important;
-    box-sizing: content-box;
-    background-color: transparent;
-    border: 1px solid #afb3bb;
-    border-bottom-left-radius: 2px;
-    border-top-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-    border-top-right-radius: 2px; }
-    .base-slider-container .line .line-color {
-      position: absolute;
-      display: block;
-      height: 100%; }
-      .base-slider-container .line .line-color:first-child {
-        border-bottom-left-radius: 2px;
-        border-top-left-radius: 2px; }
-      .base-slider-container .line .line-color:last-child:not(:first-child) {
-        border-bottom-right-radius: 2px;
-        border-top-right-radius: 2px; }
-  .base-slider-container .handle {
-    position: absolute;
-    display: block;
-    z-index: 10;
-    top: 20.33px;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-attachment: local;
-    background-position: 0% 0%; }
-    .base-slider-container .handle.type-last {
-      z-index: 12; }
-  .base-slider-container .handle.pin {
-    position: absolute;
-    z-index: 100;
-    height: 10.2857142857px !important;
-    margin-top: -8.2285714286px;
-    width: 16px;
-    margin-left: -8px;
-    font-size: 10.2857142857px;
-    text-align: center;
-    background-image: none !important; }
-  .base-slider-container .marker-outer {
-    position: absolute;
-    top: 0px;
-    z-index: 2;
-    cursor: default;
-    font-family: Arial, sans-serif;
-    font-size: 10px; }
-    .base-slider-container .marker-outer .marker {
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      margin-left: -50%;
-      padding: 0; }
-    .base-slider-container .marker-outer.frame .marker:after {
-      position: absolute;
-      display: block;
-      top: 100%;
-      left: 0;
-      width: 0;
-      height: 0;
-      margin-left: -3px;
-      content: "";
-      overflow: hidden;
-      border: 3px solid transparent;
-      border-top-color: black; }
-    .base-slider-container .marker-outer .marker-text {
-      display: inline-block;
-      cursor: inherit;
-      box-sizing: border-box;
-      line-height: 1.333;
-      padding: 1px 5px;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      white-space: nowrap;
-      text-shadow: none; }
-    .base-slider-container .marker-outer.min-max .marker-text {
-      color: #555;
-      background-color: #d1d6e0;
-      border: 1px solid #afb3bb;
-      border-radius: 4px; }
-    .base-slider-container .marker-outer.single-from-to .marker-text {
-      color: #111; }
-    .base-slider-container .marker-outer.single-from-to.frame .marker-text {
-      background: white;
-      border: 1px solid black; }
+  box-sizing: border-box;
+}
+.base-slider-container .line-background {
+  position: absolute;
+  display: block;
+  width: 100%;
+  top: 0;
+}
+.base-slider-container .line {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 4px;
+  left: -1px;
+  overflow: hidden;
+  outline: none !important;
+  box-sizing: content-box;
+  background-color: transparent;
+  border: 1px solid rgb(175, 179, 187);
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.base-slider-container .line .line-color {
+  position: absolute;
+  display: block;
+  height: 100%;
+}
+.base-slider-container .line .line-color:first-child {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.base-slider-container .line .line-color:last-child:not(:first-child) {
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.base-slider-container .handle {
+  position: absolute;
+  display: block;
+  z-index: 10;
+  top: 20.33px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-attachment: local;
+  background-position: 0% 0%;
+}
+.base-slider-container .handle.type-last {
+  z-index: 12;
+}
+.base-slider-container .handle.pin {
+  position: absolute;
+  z-index: 100;
+  height: 10.2857142857px !important;
+  margin-top: -8.2285714286px;
+  width: 16px;
+  margin-left: -8px;
+  font-size: 10.2857142857px;
+  text-align: center;
+  background-image: none !important;
+}
+.base-slider-container .marker-outer {
+  position: absolute;
+  top: 0px;
+  z-index: 2;
+  cursor: default;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+}
+.base-slider-container .marker-outer .marker {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  margin-left: -50%;
+  padding: 0;
+}
+.base-slider-container .marker-outer.frame .marker:after {
+  position: absolute;
+  display: block;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 0;
+  margin-left: -3px;
+  content: "";
+  overflow: hidden;
+  border: 3px solid transparent;
+  border-top-color: black;
+}
+.base-slider-container .marker-outer .marker-text {
+  display: inline-block;
+  cursor: inherit;
+  box-sizing: border-box;
+  line-height: 1.333;
+  padding: 1px 5px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  white-space: nowrap;
+  text-shadow: none;
+}
+.base-slider-container .marker-outer.min-max .marker-text {
+  color: #555;
+  background-color: rgb(209, 214, 224);
+  border: 1px solid rgb(175, 179, 187);
+  border-radius: 4px;
+}
+.base-slider-container .marker-outer.single-from-to .marker-text {
+  color: #111;
+}
+.base-slider-container .marker-outer.single-from-to.frame .marker-text {
+  background: white;
+  border: 1px solid black;
+}
 
 .grid-canvas {
   position: absolute;
   bottom: 0;
   z-index: 3;
-  cursor: default; }
+  cursor: default;
+}
 
 .grid {
   position: absolute;
@@ -16569,37 +16588,43 @@ COMMON STYLE
   z-index: 2;
   width: 100%;
   height: 25px;
-  cursor: default; }
-  .grid.label-between-ticks {
-    height: 10px; }
-  .grid .grid-color {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    height: 9px;
-    font-size: 18px;
-    text-align: center;
-    line-height: 9px;
-    overflow: hidden; }
-    .grid .grid-color.gt-max {
-      left: 100%;
-      width: 0;
-      height: 0;
-      border: 0 solid transparent;
-      border-bottom-width: 4.5px;
-      border-top-width: 4.5px;
-      border-left: 9px solid black; }
-    .grid .grid-color.lt-min {
-      left: -9px;
-      width: 0;
-      height: 0;
-      border: 0 solid transparent;
-      border-top-width: 4.5px;
-      border-bottom-width: 4.5px;
-      border-right: 9px solid black; }
+  cursor: default;
+}
+.grid.label-between-ticks {
+  height: 10px;
+}
+.grid .grid-color {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  height: 9px;
+  font-size: 18px;
+  text-align: center;
+  line-height: 9px;
+  overflow: hidden;
+}
+.grid .grid-color.gt-max {
+  left: 100%;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-bottom-width: 4.5px;
+  border-top-width: 4.5px;
+  border-left: 9px solid black;
+}
+.grid .grid-color.lt-min {
+  left: -9px;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-top-width: 4.5px;
+  border-bottom-width: 4.5px;
+  border-right: 9px solid black;
+}
 
 .disabled {
-  opacity: 0.4; }
+  opacity: 0.4;
+}
 
 .hidden-input {
   position: absolute !important;
@@ -16616,330 +16641,466 @@ COMMON STYLE
   z-index: -9999 !important;
   background: none !important;
   border-style: solid !important;
-  border-color: transparent !important; }
+  border-color: transparent !important;
+}
 
 /***************************************************************
 STYLE FOR SPECIFIC TYPE
 ***************************************************************/
 .base-slider-container.horizontal {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.horizontal .line-background {
-    height: 44.33px; }
-  .base-slider-container.horizontal .line {
-    top: 29.33px; }
-  .base-slider-container.horizontal .handle {
-    box-sizing: border-box;
-    width: 16px;
-    height: 24px;
-    margin-left: -8px;
-    background-image: url("images/handle.horizontal.svg"); }
-  html.mouse-hover .base-slider-container.horizontal.active .handle:hover, html.mouse-hover .base-slider-container.horizontal.active .handle.hover {
-    background-image: url("images/handle.horizontal.hover.svg"); }
-  .base-slider-container.horizontal .pin {
-    top: 29.33px; }
-  .base-slider-container.horizontal .grid {
-    top: 44.33px; }
-  .base-slider-container.horizontal.ticks-on-line .grid {
-    top: 29.33px; }
-  .base-slider-container.horizontal.ticks-on-line.no-marker .grid {
-    top: 9px; }
-  .base-slider-container.horizontal.no-marker .line,
-  .base-slider-container.horizontal.no-marker .pin {
-    top: 9px !important; }
-  .base-slider-container.horizontal.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.horizontal.no-marker .grid {
-    top: 24px; }
-  .base-slider-container.horizontal.no-marker.has-pin {
-    margin-top: 0; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.horizontal .line {
+  top: 29.33px;
+}
+.base-slider-container.horizontal .handle {
+  box-sizing: border-box;
+  width: 16px;
+  height: 24px;
+  margin-left: -8px;
+  background-image: url("images/handle.horizontal.svg");
+}
+html.mouse-hover .base-slider-container.horizontal.active .handle:hover, html.mouse-hover .base-slider-container.horizontal.active .handle.hover {
+  background-image: url("images/handle.horizontal.hover.svg");
+}
+.base-slider-container.horizontal .pin {
+  top: 29.33px;
+}
+.base-slider-container.horizontal .grid {
+  top: 44.33px;
+}
+.base-slider-container.horizontal.ticks-on-line .grid {
+  top: 29.33px;
+}
+.base-slider-container.horizontal.ticks-on-line.no-marker .grid {
+  top: 9px;
+}
+.base-slider-container.horizontal.no-marker .line,
+.base-slider-container.horizontal.no-marker .pin {
+  top: 9px !important;
+}
+.base-slider-container.horizontal.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.horizontal.no-marker .grid {
+  top: 24px;
+}
+.base-slider-container.horizontal.no-marker.has-pin {
+  margin-top: 0;
+}
 
 .base-slider-container.vertical {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.vertical .line-background {
-    height: 36.33px; }
-  .base-slider-container.vertical .line {
-    top: 25.33px; }
-  .base-slider-container.vertical .handle {
-    box-sizing: border-box;
-    width: 24px;
-    height: 16px;
-    margin-left: -12px;
-    background-image: url("images/handle.vertical.svg"); }
-  html.mouse-hover .base-slider-container.vertical.active .handle:hover, html.mouse-hover .base-slider-container.vertical.active .handle.hover {
-    background-image: url("images/handle.vertical.hover.svg"); }
-  .base-slider-container.vertical .pin {
-    top: 25.33px; }
-  .base-slider-container.vertical .grid {
-    top: 36.33px; }
-  .base-slider-container.vertical.ticks-on-line .grid {
-    top: 25.33px; }
-  .base-slider-container.vertical.ticks-on-line.no-marker .grid {
-    top: 5px; }
-  .base-slider-container.vertical.no-marker .line,
-  .base-slider-container.vertical.no-marker .pin {
-    top: 5px !important; }
-  .base-slider-container.vertical.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.vertical.no-marker .grid {
-    top: 16px; }
-  .base-slider-container.vertical.no-marker.has-pin {
-    margin-top: 3.2285714286px; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.vertical .line {
+  top: 25.33px;
+}
+.base-slider-container.vertical .handle {
+  box-sizing: border-box;
+  width: 24px;
+  height: 16px;
+  margin-left: -12px;
+  background-image: url("images/handle.vertical.svg");
+}
+html.mouse-hover .base-slider-container.vertical.active .handle:hover, html.mouse-hover .base-slider-container.vertical.active .handle.hover {
+  background-image: url("images/handle.vertical.hover.svg");
+}
+.base-slider-container.vertical .pin {
+  top: 25.33px;
+}
+.base-slider-container.vertical .grid {
+  top: 36.33px;
+}
+.base-slider-container.vertical.ticks-on-line .grid {
+  top: 25.33px;
+}
+.base-slider-container.vertical.ticks-on-line.no-marker .grid {
+  top: 5px;
+}
+.base-slider-container.vertical.no-marker .line,
+.base-slider-container.vertical.no-marker .pin {
+  top: 5px !important;
+}
+.base-slider-container.vertical.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.vertical.no-marker .grid {
+  top: 16px;
+}
+.base-slider-container.vertical.no-marker.has-pin {
+  margin-top: 3.2285714286px;
+}
 
 .base-slider-container.down {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.down .line-background {
-    height: 44.33px; }
-  .base-slider-container.down .line {
-    top: 29.33px; }
-  .base-slider-container.down .handle {
-    box-sizing: border-box;
-    width: 16px;
-    height: 24px;
-    margin-left: -8px;
-    background-image: url("images/handle.down.svg"); }
-  html.mouse-hover .base-slider-container.down.active .handle:hover, html.mouse-hover .base-slider-container.down.active .handle.hover {
-    background-image: url("images/handle.down.hover.svg"); }
-  .base-slider-container.down .pin {
-    top: 29.33px; }
-  .base-slider-container.down .grid {
-    top: 44.33px; }
-  .base-slider-container.down.ticks-on-line .grid {
-    top: 29.33px; }
-  .base-slider-container.down.ticks-on-line.no-marker .grid {
-    top: 9px; }
-  .base-slider-container.down.no-marker .line,
-  .base-slider-container.down.no-marker .pin {
-    top: 9px !important; }
-  .base-slider-container.down.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.down.no-marker .grid {
-    top: 24px; }
-  .base-slider-container.down.no-marker.has-pin {
-    margin-top: 0; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.down .line {
+  top: 29.33px;
+}
+.base-slider-container.down .handle {
+  box-sizing: border-box;
+  width: 16px;
+  height: 24px;
+  margin-left: -8px;
+  background-image: url("images/handle.down.svg");
+}
+html.mouse-hover .base-slider-container.down.active .handle:hover, html.mouse-hover .base-slider-container.down.active .handle.hover {
+  background-image: url("images/handle.down.hover.svg");
+}
+.base-slider-container.down .pin {
+  top: 29.33px;
+}
+.base-slider-container.down .grid {
+  top: 44.33px;
+}
+.base-slider-container.down.ticks-on-line .grid {
+  top: 29.33px;
+}
+.base-slider-container.down.ticks-on-line.no-marker .grid {
+  top: 9px;
+}
+.base-slider-container.down.no-marker .line,
+.base-slider-container.down.no-marker .pin {
+  top: 9px !important;
+}
+.base-slider-container.down.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.down.no-marker .grid {
+  top: 24px;
+}
+.base-slider-container.down.no-marker.has-pin {
+  margin-top: 0;
+}
 
 .base-slider-container.up {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.up .line-background {
-    height: 44.33px; }
-  .base-slider-container.up .line {
-    top: 29.33px; }
-  .base-slider-container.up .handle {
-    box-sizing: border-box;
-    width: 16px;
-    height: 24px;
-    margin-left: -8px;
-    background-image: url("images/handle.up.svg"); }
-  html.mouse-hover .base-slider-container.up.active .handle:hover, html.mouse-hover .base-slider-container.up.active .handle.hover {
-    background-image: url("images/handle.up.hover.svg"); }
-  .base-slider-container.up .pin {
-    top: 29.33px; }
-  .base-slider-container.up .grid {
-    top: 44.33px; }
-  .base-slider-container.up.ticks-on-line .grid {
-    top: 29.33px; }
-  .base-slider-container.up.ticks-on-line.no-marker .grid {
-    top: 9px; }
-  .base-slider-container.up.no-marker .line,
-  .base-slider-container.up.no-marker .pin {
-    top: 9px !important; }
-  .base-slider-container.up.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.up.no-marker .grid {
-    top: 24px; }
-  .base-slider-container.up.no-marker.has-pin {
-    margin-top: 0; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.up .line {
+  top: 29.33px;
+}
+.base-slider-container.up .handle {
+  box-sizing: border-box;
+  width: 16px;
+  height: 24px;
+  margin-left: -8px;
+  background-image: url("images/handle.up.svg");
+}
+html.mouse-hover .base-slider-container.up.active .handle:hover, html.mouse-hover .base-slider-container.up.active .handle.hover {
+  background-image: url("images/handle.up.hover.svg");
+}
+.base-slider-container.up .pin {
+  top: 29.33px;
+}
+.base-slider-container.up .grid {
+  top: 44.33px;
+}
+.base-slider-container.up.ticks-on-line .grid {
+  top: 29.33px;
+}
+.base-slider-container.up.ticks-on-line.no-marker .grid {
+  top: 9px;
+}
+.base-slider-container.up.no-marker .line,
+.base-slider-container.up.no-marker .pin {
+  top: 9px !important;
+}
+.base-slider-container.up.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.up.no-marker .grid {
+  top: 24px;
+}
+.base-slider-container.up.no-marker.has-pin {
+  margin-top: 0;
+}
 
 .base-slider-container.right {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.right .line-background {
-    height: 36.33px; }
-  .base-slider-container.right .line {
-    top: 25.33px; }
-  .base-slider-container.right .handle {
-    box-sizing: border-box;
-    width: 24px;
-    height: 16px;
-    margin-left: -12px;
-    background-image: url("images/handle.right.svg"); }
-  html.mouse-hover .base-slider-container.right.active .handle:hover, html.mouse-hover .base-slider-container.right.active .handle.hover {
-    background-image: url("images/handle.right.hover.svg"); }
-  .base-slider-container.right .pin {
-    top: 25.33px; }
-  .base-slider-container.right .grid {
-    top: 36.33px; }
-  .base-slider-container.right.ticks-on-line .grid {
-    top: 25.33px; }
-  .base-slider-container.right.ticks-on-line.no-marker .grid {
-    top: 5px; }
-  .base-slider-container.right.no-marker .line,
-  .base-slider-container.right.no-marker .pin {
-    top: 5px !important; }
-  .base-slider-container.right.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.right.no-marker .grid {
-    top: 16px; }
-  .base-slider-container.right.no-marker.has-pin {
-    margin-top: 3.2285714286px; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.right .line {
+  top: 25.33px;
+}
+.base-slider-container.right .handle {
+  box-sizing: border-box;
+  width: 24px;
+  height: 16px;
+  margin-left: -12px;
+  background-image: url("images/handle.right.svg");
+}
+html.mouse-hover .base-slider-container.right.active .handle:hover, html.mouse-hover .base-slider-container.right.active .handle.hover {
+  background-image: url("images/handle.right.hover.svg");
+}
+.base-slider-container.right .pin {
+  top: 25.33px;
+}
+.base-slider-container.right .grid {
+  top: 36.33px;
+}
+.base-slider-container.right.ticks-on-line .grid {
+  top: 25.33px;
+}
+.base-slider-container.right.ticks-on-line.no-marker .grid {
+  top: 5px;
+}
+.base-slider-container.right.no-marker .line,
+.base-slider-container.right.no-marker .pin {
+  top: 5px !important;
+}
+.base-slider-container.right.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.right.no-marker .grid {
+  top: 16px;
+}
+.base-slider-container.right.no-marker.has-pin {
+  margin-top: 3.2285714286px;
+}
 
 .base-slider-container.left {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.left .line-background {
-    height: 36.33px; }
-  .base-slider-container.left .line {
-    top: 25.33px; }
-  .base-slider-container.left .handle {
-    box-sizing: border-box;
-    width: 24px;
-    height: 16px;
-    margin-left: -12px;
-    background-image: url("images/handle.left.svg"); }
-  html.mouse-hover .base-slider-container.left.active .handle:hover, html.mouse-hover .base-slider-container.left.active .handle.hover {
-    background-image: url("images/handle.left.hover.svg"); }
-  .base-slider-container.left .pin {
-    top: 25.33px; }
-  .base-slider-container.left .grid {
-    top: 36.33px; }
-  .base-slider-container.left.ticks-on-line .grid {
-    top: 25.33px; }
-  .base-slider-container.left.ticks-on-line.no-marker .grid {
-    top: 5px; }
-  .base-slider-container.left.no-marker .line,
-  .base-slider-container.left.no-marker .pin {
-    top: 5px !important; }
-  .base-slider-container.left.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.left.no-marker .grid {
-    top: 16px; }
-  .base-slider-container.left.no-marker.has-pin {
-    margin-top: 3.2285714286px; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.left .line {
+  top: 25.33px;
+}
+.base-slider-container.left .handle {
+  box-sizing: border-box;
+  width: 24px;
+  height: 16px;
+  margin-left: -12px;
+  background-image: url("images/handle.left.svg");
+}
+html.mouse-hover .base-slider-container.left.active .handle:hover, html.mouse-hover .base-slider-container.left.active .handle.hover {
+  background-image: url("images/handle.left.hover.svg");
+}
+.base-slider-container.left .pin {
+  top: 25.33px;
+}
+.base-slider-container.left .grid {
+  top: 36.33px;
+}
+.base-slider-container.left.ticks-on-line .grid {
+  top: 25.33px;
+}
+.base-slider-container.left.ticks-on-line.no-marker .grid {
+  top: 5px;
+}
+.base-slider-container.left.no-marker .line,
+.base-slider-container.left.no-marker .pin {
+  top: 5px !important;
+}
+.base-slider-container.left.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.left.no-marker .grid {
+  top: 16px;
+}
+.base-slider-container.left.no-marker.has-pin {
+  margin-top: 3.2285714286px;
+}
 
 .base-slider-container.round {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.round .line-background {
-    height: 40.33px; }
-  .base-slider-container.round .line {
-    top: 27.33px; }
-  .base-slider-container.round .handle {
-    box-sizing: border-box;
-    width: 20px;
-    height: 20px;
-    margin-left: -10px;
-    background-image: url("images/handle.round.svg"); }
-  html.mouse-hover .base-slider-container.round.active .handle:hover, html.mouse-hover .base-slider-container.round.active .handle.hover {
-    background-image: url("images/handle.round.hover.svg"); }
-  .base-slider-container.round .pin {
-    top: 27.33px; }
-  .base-slider-container.round .grid {
-    top: 40.33px; }
-  .base-slider-container.round.ticks-on-line .grid {
-    top: 27.33px; }
-  .base-slider-container.round.ticks-on-line.no-marker .grid {
-    top: 7px; }
-  .base-slider-container.round.no-marker .line,
-  .base-slider-container.round.no-marker .pin {
-    top: 7px !important; }
-  .base-slider-container.round.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.round.no-marker .grid {
-    top: 20px; }
-  .base-slider-container.round.no-marker.has-pin {
-    margin-top: 1.2285714286px; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.round .line {
+  top: 27.33px;
+}
+.base-slider-container.round .handle {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  background-image: url("images/handle.round.svg");
+}
+html.mouse-hover .base-slider-container.round.active .handle:hover, html.mouse-hover .base-slider-container.round.active .handle.hover {
+  background-image: url("images/handle.round.hover.svg");
+}
+.base-slider-container.round .pin {
+  top: 27.33px;
+}
+.base-slider-container.round .grid {
+  top: 40.33px;
+}
+.base-slider-container.round.ticks-on-line .grid {
+  top: 27.33px;
+}
+.base-slider-container.round.ticks-on-line.no-marker .grid {
+  top: 7px;
+}
+.base-slider-container.round.no-marker .line,
+.base-slider-container.round.no-marker .pin {
+  top: 7px !important;
+}
+.base-slider-container.round.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.round.no-marker .grid {
+  top: 20px;
+}
+.base-slider-container.round.no-marker.has-pin {
+  margin-top: 1.2285714286px;
+}
 
 .base-slider-container.fixed {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.fixed .line-background {
-    height: 40.33px; }
-  .base-slider-container.fixed .line {
-    top: 22.33px; }
-  .base-slider-container.fixed .handle {
-    box-sizing: border-box;
-    width: 13.3333333333px;
-    height: 20px;
-    margin-left: -6.6666666667px;
-    background-image: url("images/handle.fixed.svg"); }
-  .base-slider-container.fixed .pin {
-    top: 22.33px; }
-  .base-slider-container.fixed .grid {
-    top: 28.33px; }
-  .base-slider-container.fixed.ticks-on-line .grid {
-    top: 22.33px; }
-  .base-slider-container.fixed.ticks-on-line.no-marker .grid {
-    top: 2px; }
-  .base-slider-container.fixed.no-marker .line,
-  .base-slider-container.fixed.no-marker .pin {
-    top: 2px !important; }
-  .base-slider-container.fixed.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.fixed.no-marker .grid {
-    top: 20px; }
-  .base-slider-container.fixed.no-marker.has-pin {
-    margin-top: 6.2285714286px; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.fixed .line {
+  top: 22.33px;
+}
+.base-slider-container.fixed .handle {
+  box-sizing: border-box;
+  width: 13.3333333333px;
+  height: 20px;
+  margin-left: -6.6666666667px;
+  background-image: url("images/handle.fixed.svg");
+}
+.base-slider-container.fixed .pin {
+  top: 22.33px;
+}
+.base-slider-container.fixed .grid {
+  top: 28.33px;
+}
+.base-slider-container.fixed.ticks-on-line .grid {
+  top: 22.33px;
+}
+.base-slider-container.fixed.ticks-on-line.no-marker .grid {
+  top: 2px;
+}
+.base-slider-container.fixed.no-marker .line,
+.base-slider-container.fixed.no-marker .pin {
+  top: 2px !important;
+}
+.base-slider-container.fixed.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.fixed.no-marker .grid {
+  top: 20px;
+}
+.base-slider-container.fixed.no-marker.has-pin {
+  margin-top: 6.2285714286px;
+}
 
 .base-slider-container.range {
+  /* REMOVED
+  .line-background {
+      height: $handle-top + $handle-height;
+  }
+  */
   /****************************************************
-        Special case for no marker and pin:
-        Adjust all top-position by adding top-margin if the pin is heigher than the handle
-        ****************************************************/ }
-  .base-slider-container.range .line-background {
-    height: 26.33px; }
-  .base-slider-container.range .line {
-    top: 20.33px; }
-  .base-slider-container.range .handle {
-    box-sizing: border-box;
-    width: 6px;
-    height: 6px;
-    margin-left: -3px; }
-    .base-slider-container.range .handle.from {
-      background-image: url("images/handle.range.from.svg"); }
-    .base-slider-container.range .handle.to {
-      background-image: url("images/handle.range.to.svg"); }
-  .base-slider-container.range .pin {
-    top: 20.33px; }
-  .base-slider-container.range .grid {
-    top: 26.33px; }
-  .base-slider-container.range.ticks-on-line .grid {
-    top: 20.33px; }
-  .base-slider-container.range.ticks-on-line.no-marker .grid {
-    top: 0px; }
-  .base-slider-container.range.no-marker .line,
-  .base-slider-container.range.no-marker .pin {
-    top: 0px !important; }
-  .base-slider-container.range.no-marker .handle {
-    top: 0px; }
-  .base-slider-container.range.no-marker .grid {
-    top: 6px; }
-  .base-slider-container.range.no-marker.has-pin {
-    margin-top: 8.2285714286px; }
+  Special case for no marker and pin:
+  Adjust all top-position by adding top-margin if the pin is heigher than the handle
+  ****************************************************/
+}
+.base-slider-container.range .line {
+  top: 20.33px;
+}
+.base-slider-container.range .handle {
+  box-sizing: border-box;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+}
+.base-slider-container.range .handle.from {
+  background-image: url("images/handle.range.from.svg");
+}
+.base-slider-container.range .handle.to {
+  background-image: url("images/handle.range.to.svg");
+}
+.base-slider-container.range .pin {
+  top: 20.33px;
+}
+.base-slider-container.range .grid {
+  top: 26.33px;
+}
+.base-slider-container.range.ticks-on-line .grid {
+  top: 20.33px;
+}
+.base-slider-container.range.ticks-on-line.no-marker .grid {
+  top: 0px;
+}
+.base-slider-container.range.no-marker .line,
+.base-slider-container.range.no-marker .pin {
+  top: 0px !important;
+}
+.base-slider-container.range.no-marker .handle {
+  top: 0px;
+}
+.base-slider-container.range.no-marker .grid {
+  top: 6px;
+}
+.base-slider-container.range.no-marker.has-pin {
+  margin-top: 8.2285714286px;
+}
 
 .base-slider-container {
   width: calc(100% - 24px);
   margin-left: 12px;
-  margin-right: 12px; }
-
+  margin-right: 12px;
+}
 @charset "UTF-8";
 /***********************************************
     jquery-scroll-container.scss,
@@ -29749,6 +29910,10 @@ Bootstrap allready have the following classes
   font-size: 0.75em !important;
 }
 
+.font-size-0-9em {
+  font-size: 0.9em !important;
+}
+
 .font-size-1-1em {
   font-size: 1.1em !important;
 }
@@ -30633,8 +30798,15 @@ div.modal-dialog.modal-flex-width.modal-extra-width {
 div.modal-dialog.modal-flex-width.modal-mega-width {
   width: var(--jb-modal-xl-rem);
 }
-div.modal-dialog.modal-max-width {
+div.modal-dialog.modal-max-width:not(.modal-full-screen) {
   width: calc(100% - 20px);
+}
+div.modal-dialog.modal-full-screen {
+  width: 100%;
+}
+div.modal-dialog.modal-full-screen .modal-content {
+  border: none;
+  border-radius: 0px;
 }
 div.modal-dialog.modal-dialog-inline .modal-content {
   box-shadow: none;
@@ -31641,6 +31813,8 @@ CAROUSEL
   max-width: -moz-fit-content;
   max-height: fit-content;
   max-height: -moz-fit-content;
+  width: initial !important;
+  height: initial !important;
   margin: auto;
 }
 .carousel .carousel-indicators {
@@ -34503,7 +34677,6 @@ a.btn.mm-favorite-icons {
 
 
 ************************************************/
-@use "sass:color";
 /************************************************************
 INCLUDE-JQUERY-BOOTSTRAP-VARIABLES
 USED IN FOR OTHER PACKAGES TO INCLUDE ALL SCSS-FILES NEEDED
@@ -34660,7 +34833,8 @@ jquery-scroll-container-variables.scss
 :root {
   --jsc-scroll-size: 10px;
   --jsc-scroll-padding: 10px;
-  --jsc-scroll-auto-padding: 10px; }
+  --jsc-scroll-auto-padding: 10px;
+}
 
 /************************************************************
 VARIABLES
@@ -34736,7 +34910,8 @@ See _application-color-mixin.scss for description of application colors
   --_fcoo-default-app-shadow-color-50: #fff;
   --_fcoo-default-app-bg-color-63: #eaf1f0;
   --_fcoo-default-app-text-color-63: #000;
-  --_fcoo-default-app-shadow-color-63: #fff; }
+  --_fcoo-default-app-shadow-color-63: #fff;
+}
 
 .btn-fcoo-app-color .btn-jb.standard {
   --bs-btn-color: #fff;
@@ -34748,7 +34923,8 @@ See _application-color-mixin.scss for description of application colors
   --bs-btn-active-border-color: white;
   --bs-btn-bg: #3f5b58;
   --bs-btn-hover-bg: #5c7471;
-  --bs-btn-active-bg: #657c79; }
+  --bs-btn-active-bg: #657c79;
+}
 
 .btn-fcoo-app-color-25 .btn-jb.standard {
   --bs-btn-color: #000;
@@ -34760,7 +34936,8 @@ See _application-color-mixin.scss for description of application colors
   --bs-btn-active-border-color: #1a1a1a;
   --bs-btn-bg: #78a29d;
   --bs-btn-hover-bg: #8cb0ac;
-  --bs-btn-active-bg: #93b4b1; }
+  --bs-btn-active-bg: #93b5b1;
+}
 
 .btn-fcoo-app-color-50 .btn-jb.standard {
   --bs-btn-color: #000;
@@ -34772,13 +34949,15 @@ See _application-color-mixin.scss for description of application colors
   --bs-btn-active-border-color: #1a1a1a;
   --bs-btn-bg: #c3d6d4;
   --bs-btn-hover-bg: #ccdcda;
-  --bs-btn-active-bg: #cfdedc; }
+  --bs-btn-active-bg: #cfdedd;
+}
 
-[class*="btn-fcoo-app-color"] .btn-jb.standard {
+[class*=btn-fcoo-app-color] .btn-jb.standard {
   --bs-btn-disabled-color: var(--bs-btn-color);
   --bs-btn-disabled-bg: var(--bs-btn-bg);
   --bs-btn-disabled-border-color: var(--bs-btn-border-color);
-  --bs-btn-disabled-opacity: 0.4; }
+  --bs-btn-disabled-opacity: 0.4;
+}
 
 :root {
   --fcoo-app-bg-color: var(--_fcoo-app-bg-color-0, var(--_fcoo-default-app-bg-color-0));
@@ -34792,29 +34971,37 @@ See _application-color-mixin.scss for description of application colors
   --fcoo-app-bg-color-50: var(--_fcoo-app-bg-color-50, var(--_fcoo-default-app-bg-color-50));
   --fcoo-app-text-color-50: var(--_fcoo-app-text-color-50, var(--_fcoo-default-app-text-color-50));
   --fcoo-app-bg-color-63: var(--_fcoo-app-bg-color-63, var(--_fcoo-default-app-bg-color-63));
-  --fcoo-app-text-color-63: var(--_fcoo-app-text-color-63, var(--_fcoo-default-app-text-color-63)); }
+  --fcoo-app-text-color-63: var(--_fcoo-app-text-color-63, var(--_fcoo-default-app-text-color-63));
+}
 
 .fcoo-default-app-colors {
   color: var(--fcoo-default-app-text-color) !important;
-  background-color: var(--fcoo-default-app-bg-color) !important; }
+  background-color: var(--fcoo-default-app-bg-color) !important;
+}
 
 .fcoo-app-text-color {
-  color: var(--fcoo-app-text-color) !important; }
+  color: var(--fcoo-app-text-color) !important;
+}
 
 .fcoo-app-bg-color {
-  background-color: var(--fcoo-app-bg-color) !important; }
+  background-color: var(--fcoo-app-bg-color) !important;
+}
 
 .fcoo-app-text-color-25 {
-  color: var(--fcoo-app-text-color-25) !important; }
+  color: var(--fcoo-app-text-color-25) !important;
+}
 
 .fcoo-app-bg-color-25 {
-  background-color: var(--fcoo-app-bg-color-25) !important; }
+  background-color: var(--fcoo-app-bg-color-25) !important;
+}
 
 .fcoo-app-text-color-50 {
-  color: var(--fcoo-app-text-color-50) !important; }
+  color: var(--fcoo-app-text-color-50) !important;
+}
 
 .fcoo-app-bg-color-50 {
-  background-color: var(--fcoo-app-bg-color-50) !important; }
+  background-color: var(--fcoo-app-bg-color-50) !important;
+}
 
 /*****************************************************
 Adjust different parts in jquery-bootstrap and fcoo-application
@@ -34823,28 +35010,34 @@ Adjust different parts in jquery-bootstrap and fcoo-application
   --jb-header-color: var(--fcoo-app-text-color-25);
   --jb-header-bg: var(--fcoo-app-bg-color-25);
   --jb-inner-header-color: var(--fcoo-app-text-color-50);
-  --jb-inner-header-bg: var(--fcoo-app-bg-color-50); }
+  --jb-inner-header-bg: var(--fcoo-app-bg-color-50);
+}
 
 .accordion {
   --bs-accordion-btn-color: var(--fcoo-app-text-color-63);
   --bs-accordion-btn-bg: var(--fcoo-app-bg-color-63);
   --bs-accordion-active-color: var(--fcoo-app-text-color-50);
-  --bs-accordion-active-bg: var(--fcoo-app-bg-color-50); }
+  --bs-accordion-active-bg: var(--fcoo-app-bg-color-50);
+}
 
 .mm-menu {
   --mm-item-closed-color: var(--fcoo-app-text-color-63);
   --mm-item-closed-bg: var(--fcoo-app-bg-color-63);
   --mm-item-opened-color: var(--fcoo-app-text-color-50);
-  --mm-item-opened-bg: var(--fcoo-app-bg-color-50); }
+  --mm-item-opened-bg: var(--fcoo-app-bg-color-50);
+}
 
 .hide {
-  display: none !important; }
+  display: none !important;
+}
 
 .invisible {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 .bold {
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 /*****************************************************
 Global variables
@@ -34858,15 +35051,18 @@ WARIABLES
 Global scss-variables for fcoo-application
 *****************************************************/
 :root {
-  --fcoo-app-menu-padding: 0.375rem; }
+  --fcoo-app-menu-padding: 0.375rem;
+}
 
 .mm-menu {
   --mm-iconbar-button-dim: 2.375rem;
-  --mm-iconbar-size: calc( 2 * var(--fcoo-app-menu-padding) + var(--mm-iconbar-button-dim) ); }
+  --mm-iconbar-size: calc( 2 * var(--fcoo-app-menu-padding) + var(--mm-iconbar-button-dim) );
+}
 
 .touch-menu-container-sm, top-menu-container-sm, .mm-menu-sm {
   --mm-iconbar-button-dim: 1.9375rem;
-  --fcoo-app-menu-padding: 0.25rem; }
+  --fcoo-app-menu-padding: 0.25rem;
+}
 
 /*
 z-index for different layers:
@@ -34889,14 +35085,14 @@ icon-fcoo-logo-app-color = Logo in the application color
 See src/_application-color.scss for description of application colors
 *****************************************************/
 @font-face {
-  font-family: 'fcoo-logo';
+  font-family: "fcoo-logo";
   src: url("fonts/fcoo-logo.woff?ma2cie") format("woff");
   font-weight: normal;
-  font-style: normal; }
-
+  font-style: normal;
+}
 .icon-fcoo-logo-default, .icon-fcoo-logo-contrast, .icon-fcoo-logo-app-color {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'fcoo-logo' !important;
+  font-family: "fcoo-logo" !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -34906,34 +35102,40 @@ See src/_application-color.scss for description of application colors
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--fcoo-logo-color); }
-  .icon-fcoo-logo-default:before, .icon-fcoo-logo-contrast:before, .icon-fcoo-logo-app-color:before {
-    content: "\e900"; }
+  color: var(--fcoo-logo-color);
+}
+.icon-fcoo-logo-default:before, .icon-fcoo-logo-contrast:before, .icon-fcoo-logo-app-color:before {
+  content: "\e900";
+}
 
 .icon-fcoo-logo-default {
-  --fcoo-logo-color: white; }
+  --fcoo-logo-color: white;
+}
 
 .icon-fcoo-logo-contrast {
-  --fcoo-logo-color: $fcoo-app-text-color; }
+  --fcoo-logo-color: $fcoo-app-text-color;
+}
 
 .icon-fcoo-logo-app-color {
-  --fcoo-logo-color: $fcoo-app-bg-color; }
+  --fcoo-logo-color: $fcoo-app-bg-color;
+}
 
 /**********************************************************
 fcoo-name = the font used for the FCOO name in the logo - TODO
 **********************************************************/
 @font-face {
-  font-family: 'fcoo-name';
+  font-family: "fcoo-name";
   src: url("fonts/svenings.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-variant: normal;
   text-transform: none;
   speak: none;
-  line-height: 1; }
-
+  line-height: 1;
+}
 .fcoo-name {
-  font-family: fcoo-name; }
+  font-family: fcoo-name;
+}
 
 /*****************************************************
 Style for the <div> covering the page during loading
@@ -34943,10 +35145,12 @@ LOADING
 Style for the <div> covering the page during loading
 *****************************************************/
 html.loading .hide-for-loading {
-  display: none !important; }
+  display: none !important;
+}
 
 html.no-loading .show-for-loading {
-  display: none !important; }
+  display: none !important;
+}
 
 /* Not used
 @keyframes flashingLogo {
@@ -34958,12 +35162,15 @@ html.no-loading .show-for-loading {
 /* Blinking dots from https://martinwolf.org/before-2018/blog/2015/01/pure-css-savingloading-dots-animation/ */
 @keyframes blink {
   0% {
-    opacity: .2; }
+    opacity: 0.2;
+  }
   20% {
-    opacity: 1; }
+    opacity: 1;
+  }
   100% {
-    opacity: .2; } }
-
+    opacity: 0.2;
+  }
+}
 div.loading {
   position: absolute;
   left: 0;
@@ -34977,55 +35184,67 @@ div.loading {
   width: 100%;
   height: 100%;
   opacity: 1;
-  cursor: progress; }
-  div.loading > div {
-    position: absolute;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    cursor: inherit;
-    text-align: center; }
-    div.loading > div.version {
-      font-family: sans-serif;
-      font-size: 2rem;
-      top: 0;
-      height: 3rem;
-      margin-bottom: -3rem;
-      background-color: red;
-      color: white; }
-      div.loading > div.version:empty {
-        visibility: hidden; }
-    div.loading > div.logo {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center; }
-      div.loading > div.logo i[class^="icon-fcoo-logo"] {
-        font-size: 90vmin; }
-    div.loading > div.dots {
-      height: 1em;
-      bottom: 0;
-      display: flex;
-      align-items: end;
-      justify-content: center;
-      font-size: 6rem; }
-      div.loading > div.dots span {
-        animation-name: blink;
-        animation-duration: 1.4s;
-        animation-iteration-count: infinite;
-        animation-fill-mode: both;
-        width: .25em; }
-        div.loading > div.dots span:nth-child(2) {
-          animation-delay: .2s; }
-        div.loading > div.dots span:nth-child(3) {
-          animation-delay: .4s; }
-  html.no-loading div.loading {
-    width: 0;
-    height: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease-out 0s, width 0s ease-in-out 0.4s, height 0s ease-in-out 0.4s; }
-    html.no-loading div.loading:before, html.no-loading div.loading > div {
-      display: none !important; }
+  cursor: progress;
+}
+div.loading > div {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: inherit;
+  text-align: center;
+}
+div.loading > div.version {
+  font-family: sans-serif;
+  font-size: 2rem;
+  top: 0;
+  height: 3rem;
+  margin-bottom: -3rem;
+  background-color: red;
+  color: white;
+}
+div.loading > div.version:empty {
+  visibility: hidden;
+}
+div.loading > div.logo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div.loading > div.logo i[class^=icon-fcoo-logo] {
+  font-size: 90vmin;
+}
+div.loading > div.dots {
+  height: 1em;
+  bottom: 0;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  font-size: 6rem;
+}
+div.loading > div.dots span {
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  width: 0.25em;
+}
+div.loading > div.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+div.loading > div.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+html.no-loading div.loading {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease-out 0s, width 0s ease-in-out 0.4s, height 0s ease-in-out 0.4s;
+}
+html.no-loading div.loading:before, html.no-loading div.loading > div {
+  display: none !important;
+}
 
 /*****************************************************
 Style for offline.js
@@ -35034,13 +35253,16 @@ Style for offline.js
 OFFLINE-JS
 *****************************************************/
 .offline-ui {
-  display: none !important; }
+  display: none !important;
+}
 
 html.connected .hide-for-connected {
-  display: none !important; }
+  display: none !important;
+}
 
 html.no-connected .show-for-connected {
-  display: none !important; }
+  display: none !important;
+}
 
 .no-connected-shadow {
   position: absolute;
@@ -35049,14 +35271,17 @@ html.no-connected .show-for-connected {
   right: 0;
   bottom: 0;
   z-index: 2147483646;
-  box-shadow: inset 0px 0px 10px 5px red;
+  box-shadow: inset 0px 0px 10px 5px rgb(255, 0, 0);
   pointer-events: none;
-  opacity: 0; }
-  .no-connected .no-connected-shadow {
-    opacity: 1; }
+  opacity: 0;
+}
+.no-connected .no-connected-shadow {
+  opacity: 1;
+}
 
 .noty-on-top {
-  z-index: 2147483647; }
+  z-index: 2147483647;
+}
 
 /*****************************************************
 Style for html, body and main structure
@@ -35073,20 +35298,23 @@ devices and to fix the size and prevent any scrolling in body
 html, body {
   height: 100%;
   width: 100%;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 body {
   padding: 0;
   margin: 0;
   width: -webkit-calc(100% - 0px);
   height: -webkit-calc(100% - 0px);
-  position: fixed; }
-  body .outer-container, body .main-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0; }
+  position: fixed;
+}
+body .outer-container, body .main-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 
 /*****************************************************
 Style for top menu
@@ -35107,66 +35335,81 @@ confussions another name is used
   left: 0;
   z-index: 1030;
   opacity: 1;
-  transition: opacity .15s ease-in-out;
-  cursor: default; }
-
+  transition: opacity 0.15s ease-in-out;
+  cursor: default;
+}
 .top-menu-container .top-menu {
   margin-top: 0px;
   padding: var(--fcoo-app-menu-padding);
-  font-size: 0.875rem; }
-  .top-menu-container .top-menu .top-menu-header {
-    text-shadow: -1px 0 var(--fcoo-app-shadow-color), 0 1px var(--fcoo-app-shadow-color), 1px 0 var(--fcoo-app-shadow-color), 0 -1px var(--fcoo-app-shadow-color); }
-  .touchevents .top-menu-container .top-menu {
-    font-size: 1rem; }
-  .top-menu-container .top-menu .top-menu-element-hide {
-    display: none; }
-  .top-menu-container .top-menu > .top-menu-item {
-    flex-shrink: 0;
-    flex-grow: 0; }
-  .top-menu-container .top-menu > .top-menu-item:not(:first-child) {
-    margin-left: var(--fcoo-app-menu-padding) !important; }
-  .top-menu-container .top-menu .left-side {
-    margin-right: auto !important; }
-  .top-menu-container .top-menu .right-side {
-    margin-left: auto !important; }
-  .top-menu-container .top-menu .icon-fcoo-logo-contrast {
-    padding: 0;
-    margin: 0;
-    line-height: .5;
-    cursor: pointer;
-    font-size: 4em;
-    text-decoration-line: none;
-    text-shadow: -1px 0 var(--fcoo-app-shadow-color), 0 1px var(--fcoo-app-shadow-color), 1px 0 var(--fcoo-app-shadow-color), 0 -1px var(--fcoo-app-shadow-color);
-    --bs-btn-border-width: 0px; }
-  .top-menu-container .top-menu .top-menu-header {
-    flex-shrink: 1;
-    flex-grow: 1;
-    text-align: center;
-    font-family: "Verdana";
-    font-size: 1.5em;
-    line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
-    .top-menu-container .top-menu .top-menu-header.top-menu-element-hide {
-      display: block;
-      visibility: hidden; }
-  .top-menu-container .top-menu .form-inline .form-control {
-    padding: 0.25rem 0.25rem;
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-    border-right: none;
-    width: 6rem; }
-    .small-up .top-menu-container .top-menu .form-inline .form-control {
-      width: 10rem; }
-    .top-menu-container .top-menu .form-inline .form-control.top-menu-element-show + .btn {
-      border-left: none;
-      border-bottom-left-radius: 0;
-      border-top-left-radius: 0; }
+  font-size: 0.875rem;
+}
+.top-menu-container .top-menu .top-menu-header {
+  text-shadow: -1px 0 var(--fcoo-app-shadow-color), 0 1px var(--fcoo-app-shadow-color), 1px 0 var(--fcoo-app-shadow-color), 0 -1px var(--fcoo-app-shadow-color);
+}
+.touchevents .top-menu-container .top-menu {
+  font-size: 1rem;
+}
+.top-menu-container .top-menu .top-menu-element-hide {
+  display: none;
+}
+.top-menu-container .top-menu > .top-menu-item {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.top-menu-container .top-menu > .top-menu-item:not(:first-child) {
+  margin-left: var(--fcoo-app-menu-padding) !important;
+}
+.top-menu-container .top-menu .left-side {
+  margin-right: auto !important;
+}
+.top-menu-container .top-menu .right-side {
+  margin-left: auto !important;
+}
+.top-menu-container .top-menu .icon-fcoo-logo-contrast {
+  padding: 0;
+  margin: 0;
+  line-height: 0.5;
+  cursor: pointer;
+  font-size: 4em;
+  text-decoration-line: none;
+  text-shadow: -1px 0 var(--fcoo-app-shadow-color), 0 1px var(--fcoo-app-shadow-color), 1px 0 var(--fcoo-app-shadow-color), 0 -1px var(--fcoo-app-shadow-color);
+  --bs-btn-border-width: 0px;
+}
+.top-menu-container .top-menu .top-menu-header {
+  flex-shrink: 1;
+  flex-grow: 1;
+  text-align: center;
+  font-family: "Verdana";
+  font-size: 1.5em;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.top-menu-container .top-menu .top-menu-header.top-menu-element-hide {
+  display: block;
+  visibility: hidden;
+}
+.top-menu-container .top-menu .form-inline .form-control {
+  padding: 0.25rem 0.25rem;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-right: none;
+  width: 6rem;
+}
+.small-up .top-menu-container .top-menu .form-inline .form-control {
+  width: 10rem;
+}
+.top-menu-container .top-menu .form-inline .form-control.top-menu-element-show + .btn {
+  border-left: none;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
 
 a.all-read .hide-for-all-read,
 a.no-all-read .show-for-all-read {
-  opacity: 0 !important; }
+  opacity: 0 !important;
+}
 
 /*****************************************************
 TOP-MENU-BTN-SHAKE
@@ -35182,112 +35425,164 @@ animations and to apply to button even when no-hover
   animation-name: shake-little;
   animation-duration: 10000ms;
   animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite; }
+  animation-iteration-count: infinite;
+}
 
 @keyframes shake-little {
   .2% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   .4% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   .6% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   .8% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   1.0% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   1.2% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   1.4% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   1.6% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   1.8% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   2.0% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   2.2% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   2.4% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   2.6% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   2.8% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   3.0% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   3.2% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   3.4% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   3.6% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   3.8% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   4.0% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   4.2% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   4.4% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   4.6% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   4.8% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   5.0% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   5.2% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   5.4% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   5.6% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   5.8% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   6.0% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   6.2% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   6.4% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   6.6% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   6.8% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   7.0% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   7.2% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   7.4% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   7.6% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   7.8% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   8.0% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   8.2% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   8.4% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   8.6% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   8.8% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   9.0% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   9.2% {
-    transform: translate(0px, 0px) rotate(0.5deg); }
+    transform: translate(0px, 0px) rotate(0.5deg);
+  }
   9.4% {
-    transform: translate(2px, 2px) rotate(0.5deg); }
+    transform: translate(2px, 2px) rotate(0.5deg);
+  }
   9.6% {
-    transform: translate(0px, 2px) rotate(0.5deg); }
+    transform: translate(0px, 2px) rotate(0.5deg);
+  }
   9.8% {
-    transform: translate(2px, 0px) rotate(0.5deg); }
+    transform: translate(2px, 0px) rotate(0.5deg);
+  }
   10% {
-    transform: translate(0, 0) rotate(0); }
+    transform: translate(0, 0) rotate(0);
+  }
   0%, 100% {
-    transform: translate(0, 0) rotate(0); } }
-
+    transform: translate(0, 0) rotate(0);
+  }
+}
 /*
 @keyframes shake-rotate {
    .2% { transform: translate(0, 0) rotate(7.5deg); }
@@ -35354,19 +35649,22 @@ Style for 'About FCOO' modal-content
 .about-owner {
   text-align: center;
   font-size: 0.8rem;
-  font-family: "Verdana"; }
-  .about-owner .application-header {
-    margin: 0;
-    padding: 0.25rem;
-    text-align: center;
-    font-size: 1.3125rem;
-    line-height: 1.3125rem;
-    text-shadow: -1px 0 var(--fcoo-app-shadow-color), 0 1px var(--fcoo-app-shadow-color), 1px 0 var(--fcoo-app-shadow-color), 0 -1px var(--fcoo-app-shadow-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
-  .about-owner img {
-    margin: 1rem auto; }
+  font-family: "Verdana";
+}
+.about-owner .application-header {
+  margin: 0;
+  padding: 0.25rem;
+  text-align: center;
+  font-size: 1.3125rem;
+  line-height: 1.3125rem;
+  text-shadow: -1px 0 var(--fcoo-app-shadow-color), 0 1px var(--fcoo-app-shadow-color), 1px 0 var(--fcoo-app-shadow-color), 0 -1px var(--fcoo-app-shadow-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.about-owner img {
+  margin: 1rem auto;
+}
 
 /*****************************************************
 Style for touch menus
@@ -35383,67 +35681,91 @@ Two modes:
 */
 .touch-menu-container {
   position: absolute;
-  background-color: #fff; }
-  .touch-menu-container.left {
-    border-right: 1px solid var(--fcoo-app-bg-color); }
-  .touch-menu-container.right {
-    border-left: 1px solid var(--fcoo-app-bg-color); }
-  .touch-menu-container.top {
-    border-bottom: 1px solid var(--fcoo-app-bg-color); }
-  .touch-menu-container.bottom {
-    border-top: 1px solid var(--fcoo-app-bg-color); }
-  .touch-menu-container.mode-over {
-    z-index: 1054; }
-    .touch-menu-container.mode-over.closed {
-      z-index: 1048; }
-  .touch-menu-container.mode-side {
-    z-index: 1048; }
-  .touch-menu-container.opened {
-    transition-property: transform;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-out; }
-    .touch-menu-container.opened.no-animation {
-      transition: none !important; }
-  .touch-menu-container.closed {
-    transition-property: transform, z-index;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-out;
-    transform: none !important; }
-    .touch-menu-container.closed.no-animation {
-      transition: none !important; }
-  .touch-menu-container .touch-menu {
-    position: relative; }
-  .touch-menu-container.vertical-auto-width {
-    width: auto !important; }
-  .touch-menu-container.vertical-auto-height {
-    height: auto !important; }
+  background-color: var(--bs-body-bg);
+}
+.touch-menu-container.left {
+  border-right: 1px solid var(--fcoo-app-bg-color);
+}
+.touch-menu-container.right {
+  border-left: 1px solid var(--fcoo-app-bg-color);
+}
+.touch-menu-container.top {
+  border-bottom: 1px solid var(--fcoo-app-bg-color);
+}
+.touch-menu-container.bottom {
+  border-top: 1px solid var(--fcoo-app-bg-color);
+}
+.touch-menu-container.mode-over {
+  z-index: 1054;
+}
+.touch-menu-container.mode-over.closed {
+  z-index: 1048;
+}
+.touch-menu-container.mode-side {
+  z-index: 1048;
+}
+.touch-menu-container.opened {
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+}
+.touch-menu-container.opened.no-animation {
+  transition: none !important;
+}
+.touch-menu-container.closed {
+  transition-property: transform, z-index;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+  transform: none !important;
+}
+.touch-menu-container.closed.no-animation {
+  transition: none !important;
+}
+.touch-menu-container .touch-menu {
+  position: relative;
+}
+.touch-menu-container.vertical-auto-width {
+  width: auto !important;
+}
+.touch-menu-container.vertical-auto-height {
+  height: auto !important;
+}
 
 .touch-menu-handle {
-  position: absolute; }
-  .touch-menu-handle.left {
-    left: 0; }
-  .touch-menu-handle.right {
-    right: 0; }
-  .touch-menu-handle.top {
-    top: 0; }
-  .touch-menu-handle.bottom {
-    bottom: 0; }
-  .touch-menu-handle.hide-when-open.opened, .touch-menu-handle.hide-when-open.closing {
-    display: none; }
+  position: absolute;
+}
+.touch-menu-handle.left {
+  left: 0;
+}
+.touch-menu-handle.right {
+  right: 0;
+}
+.touch-menu-handle.top {
+  top: 0;
+}
+.touch-menu-handle.bottom {
+  bottom: 0;
+}
+.touch-menu-handle.hide-when-open.opened, .touch-menu-handle.hide-when-open.closing {
+  display: none;
+}
 
 .touch-menu-mask {
   position: absolute;
-  opacity: 0.0;
+  opacity: 0;
   z-index: -1;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  background-color: #000; }
-  .touch-menu-mask.opened, .touch-menu-mask.closed {
-    transition: opacity 0.3s ease-out; }
-  .touch-menu-mask.visible {
-    z-index: 1053; }
+  background-color: #000;
+}
+.touch-menu-mask.opened, .touch-menu-mask.closed {
+  transition: opacity 0.3s ease-out;
+}
+.touch-menu-mask.visible {
+  z-index: 1053;
+}
 
 .horizontal-bar {
   font-size: 2rem;
@@ -35451,19 +35773,23 @@ Two modes:
   line-height: 0.7;
   color: #343a40;
   text-shadow: -1px 0 rgba(255, 255, 255, 0.5), 0 1px rgba(255, 255, 255, 0.5), 1px 0 rgba(255, 255, 255, 0.5), 0 -1px rgba(255, 255, 255, 0.5);
-  background-color: transparent; }
+  background-color: transparent;
+}
 
 .vertical-pre-menu {
   border-bottom: 1px solid var(--fcoo-app-bg-color);
   background-color: var(--bs-gray-200);
-  padding: var(--fcoo-app-menu-padding); }
+  padding: var(--fcoo-app-menu-padding);
+}
 
 .neighbour-container {
   transition-property: margin-left, margin-right, margin-top, margin-bottom !important;
   transition-duration: 0.3s !important;
-  transition-timing-function: ease-out !important; }
-  .neighbour-container.no-animation {
-    transition-duration: 0s 4; }
+  transition-timing-function: ease-out !important;
+}
+.neighbour-container.no-animation {
+  transition-duration: 0s 4;
+}
 
 /*****************************************************
 Style for icons
@@ -35487,17 +35813,19 @@ Different versions of sub-icons can be created using different methods in namesp
 */
 .container-stacked-icons.fa-fw.fa-sub-icons-container {
   position: relative;
-  left: -0.125em; }
+  left: -0.125em;
+}
 
 .btn .fa-MAIN-small-right-bottom {
   position: relative;
   right: 0.125em;
-  bottom: 0.125em; }
-
+  bottom: 0.125em;
+}
 .btn.big-icon .fa-MAIN-small-right-bottom {
   font-size: 0.85em;
   right: 0.125em;
-  bottom: 0.21875em; }
+  bottom: 0.21875em;
+}
 
 .fa-circle-small-right-bottom,
 .fa-square-small-right-bottom {
@@ -35506,50 +35834,63 @@ Different versions of sub-icons can be created using different methods in namesp
   bottom: -0.3125em;
   font-size: 0.9em;
   color: var(--bs-modal-bg) !important;
-  text-shadow: none; }
-  .btn .fa-circle-small-right-bottom, .btn
-  .fa-square-small-right-bottom {
-    color: var(--bs-btn-bg) !important; }
-  .btn:hover .fa-circle-small-right-bottom, .btn:hover
-  .fa-square-small-right-bottom {
-    color: var(--bs-btn-hover-bg) !important; }
-  .header-content .fa-circle-small-right-bottom, .header-content
-  .fa-square-small-right-bottom {
-    color: var(--jb-header-bg) !important; }
-  .footer-content .fa-circle-small-right-bottom, .footer-content
-  .fa-square-small-right-bottom {
-    color: var(--jb-footer-bg) !important; }
-  .accordion-button.collapsed .fa-circle-small-right-bottom, .accordion-button.collapsed
-  .fa-square-small-right-bottom {
-    color: var(--bs-accordion-btn-bg) !important; }
-  .accordion-button:not(.collapsed) .fa-circle-small-right-bottom, .accordion-button:not(.collapsed)
-  .fa-square-small-right-bottom {
-    color: var(--bs-accordion-active-bg) !important; }
-  .semi-transparent .fa-circle-small-right-bottom, .semi-transparent
-  .fa-square-small-right-bottom {
-    color: #e6e6e6 !important; }
-  .btn .fa-circle-small-right-bottom, .btn
-  .fa-square-small-right-bottom {
-    right: -0.1875em;
-    bottom: -0.1875em; }
-  .btn.big-icon .fa-circle-small-right-bottom, .btn.big-icon
-  .fa-square-small-right-bottom {
-    font-size: 0.765em;
-    right: -0.1875em;
-    bottom: -0.09375em; }
+  text-shadow: none;
+}
+.btn .fa-circle-small-right-bottom,
+.btn .fa-square-small-right-bottom {
+  color: var(--bs-btn-bg) !important;
+}
+.btn:hover .fa-circle-small-right-bottom,
+.btn:hover .fa-square-small-right-bottom {
+  color: var(--bs-btn-hover-bg) !important;
+}
+.header-content .fa-circle-small-right-bottom,
+.header-content .fa-square-small-right-bottom {
+  color: var(--jb-header-bg) !important;
+}
+.footer-content .fa-circle-small-right-bottom,
+.footer-content .fa-square-small-right-bottom {
+  color: var(--jb-footer-bg) !important;
+}
+.accordion-button.collapsed .fa-circle-small-right-bottom,
+.accordion-button.collapsed .fa-square-small-right-bottom {
+  color: var(--bs-accordion-btn-bg) !important;
+}
+.accordion-button:not(.collapsed) .fa-circle-small-right-bottom,
+.accordion-button:not(.collapsed) .fa-square-small-right-bottom {
+  color: var(--bs-accordion-active-bg) !important;
+}
+.semi-transparent .fa-circle-small-right-bottom,
+.semi-transparent .fa-square-small-right-bottom {
+  color: rgb(230, 230, 230) !important;
+}
+.btn .fa-circle-small-right-bottom,
+.btn .fa-square-small-right-bottom {
+  right: -0.1875em;
+  bottom: -0.1875em;
+}
+.btn.big-icon .fa-circle-small-right-bottom,
+.btn.big-icon .fa-square-small-right-bottom {
+  font-size: 0.765em;
+  right: -0.1875em;
+  bottom: -0.09375em;
+}
 
 .fa-SUB-small-right-bottom {
   position: relative;
   right: -0.3125em;
   bottom: -0.3125em;
-  font-size: 0.9em; }
-  .btn .fa-SUB-small-right-bottom {
-    right: -0.1875em;
-    bottom: -0.1875em; }
-  .btn.big-icon .fa-SUB-small-right-bottom {
-    font-size: 0.765em;
-    right: -0.1875em;
-    bottom: -0.09375em; }
+  font-size: 0.9em;
+}
+.btn .fa-SUB-small-right-bottom {
+  right: -0.1875em;
+  bottom: -0.1875em;
+}
+.btn.big-icon .fa-SUB-small-right-bottom {
+  font-size: 0.765em;
+  right: -0.1875em;
+  bottom: -0.09375em;
+}
 
 /*****************************************************
 Classes to disable transition, transform, or animation
@@ -35565,21 +35906,24 @@ html.no-transition * {
   -moz-transition-property: none !important;
   -ms-transition-property: none !important;
   -webkit-transition-property: none !important;
-  transition-property: none !important; }
+  transition-property: none !important;
+}
 
 html.no-transform * {
   -o-transform: none !important;
   -moz-transform: none !important;
   -ms-transform: none !important;
   -webkit-transform: none !important;
-  transform: none !important; }
+  transform: none !important;
+}
 
 html.no-animation * {
   -webkit-animation: none !important;
   -moz-animation: none !important;
   -o-animation: none !important;
   -ms-animation: none !important;
-  animation: none !important; }
+  animation: none !important;
+}
 
 /*****************************************************
 Create classes invisible-for-XX a la hide-for-XX using
@@ -35595,34 +35939,43 @@ the break-points defined in fcoo-modernizr-mediaquery-device
 
 ************************************************/
 html.mini-down .invisible-for-mini-down {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 html.xsmall-port-down .invisible-for-xsmall-port-down {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 html.xsmall-land-down .invisible-for-xsmall-land-down {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 html.small-down .invisible-for-small-down {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 html.medium-down .invisible-for-medium-down {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 html.large-down .invisible-for-large-down {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 html.xlarge-down .invisible-for-xlarge-down {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 /*****************************************************
 Special claa for buttons in reset-list
 *****************************************************/
 .btn-reset {
   min-height: 4em;
-  line-height: 3; }
-  .btn-reset.multi-lines {
-    line-height: var(--bs-btn-line-height); }
+  line-height: 3;
+}
+.btn-reset.multi-lines {
+  line-height: var(--bs-btn-line-height);
+}
 
 /*****************************************************
 Special adjustments and bug fix
@@ -35633,8 +35986,8 @@ resulting in font-size = 0.65*0.65 = .4225
 This is fixed by overwriting the last size with "inherit"
 */
 .fa-inside-circle.fa-inside-circle {
-  font-size: inherit; }
-
+  font-size: inherit;
+}
 /***********************************************
 	fcoo-maps-colors.scss,
 

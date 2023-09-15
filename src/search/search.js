@@ -96,7 +96,6 @@ search.js
 
         //First: Search for position
         var latLngList = nsMap.text2LatLng(text);
-
         if (latLngList.length){
             var currentGroupHeaderId = null,
                 list = [];
@@ -131,7 +130,6 @@ search.js
             if (lang != 'en')
                 params['accept-language'] = lang + ',en';
             $.workingOn();
-
             Promise.getJSON( nsMap.setupOptions.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
         }
     };
