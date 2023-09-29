@@ -14,7 +14,8 @@ See src/fcoo-maps.js
 
     /****************************************************************************
     SETUP = {
-        applicationName: {da:STRING, en:STRING},
+        applicationName  : {da:STRING, en:STRING},  //applicationName or applicationHeader are used. Two options aavaiable for backward combability
+        applicationHeader: {da:STRING, en:STRING},
 
         topMenu: {
             See description in fcoo/fcoo-application and in nsMap.default_setup below

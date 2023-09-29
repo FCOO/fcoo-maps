@@ -90,7 +90,8 @@ See src/fcoo-maps.js
 
     /****************************************************************************
     SETUP = {
-        applicationName: {da:STRING, en:STRING},
+        applicationName  : {da:STRING, en:STRING},  //applicationName or applicationHeader are used. Two options aavaiable for backward combability
+        applicationHeader: {da:STRING, en:STRING},
 
         topMenu: {
             See description in fcoo/fcoo-application and in nsMap.default_setup below
@@ -1371,9 +1372,6 @@ dataset.js
 
         nsMap.setupOptions.bottomMenu = nsMap.setupOptions.bottomMenu || nsMap.BOTTOM_MENU;
 
-        //Add header to top-menu
-        options.topMenu.header = options.applicationName;
-
         //Adjust path
         $.each(['help', 'messages', 'warning'], function(index, id){
             var topMenuPath = options.topMenu[id];
@@ -1627,6 +1625,10 @@ dataset.js
         //Create main structure
         nsMap.main = ns.createMain({
             mainContainerAsHandleContainer: true,
+
+            applicationName     : setupOptions.applicationName,
+            applicationHeader   : setupOptions.applicationHeader,
+            header              : setupOptions.header,
 
             //top-, left-, right-, and bottom-menus
             topMenu            : setupOptions.topMenu,

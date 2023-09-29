@@ -116,9 +116,6 @@
 
         nsMap.setupOptions.bottomMenu = nsMap.setupOptions.bottomMenu || nsMap.BOTTOM_MENU;
 
-        //Add header to top-menu
-        options.topMenu.header = options.applicationName;
-
         //Adjust path
         $.each(['help', 'messages', 'warning'], function(index, id){
             var topMenuPath = options.topMenu[id];
@@ -372,6 +369,10 @@
         //Create main structure
         nsMap.main = ns.createMain({
             mainContainerAsHandleContainer: true,
+
+            applicationName     : setupOptions.applicationName,
+            applicationHeader   : setupOptions.applicationHeader,
+            header              : setupOptions.header,
 
             //top-, left-, right-, and bottom-menus
             topMenu            : setupOptions.topMenu,
