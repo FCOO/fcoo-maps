@@ -198,7 +198,7 @@ See src/fcoo-maps.js
 
                 //Add button before setting-button with settings for map(s)
                 preSetting: {
-                    icon   : ns.icons.mapSetting,
+                    icon   : ns.icons.mapSettingGlobal,
                     onClick: function(){
                                  if (nsMap.hasMultiMaps)
                                      nsMap.showMapSettingMain();

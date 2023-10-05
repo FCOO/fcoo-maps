@@ -342,6 +342,7 @@ Objects and methods to handle leaflet-maps
         //L.Control.Setting
         bsSettingControl: true,
         bsSettingOptions: {
+            show    : false,        //bsSettingControl is not shown on any maps.
             position: 'topcenter'
         },
 

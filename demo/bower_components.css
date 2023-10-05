@@ -29967,6 +29967,10 @@ Bootstrap allready have the following classes
   flex-shrink: 0;
   line-height: 1;
 }
+.container-stacked-icons.fa-extra-width:not(:last-child) {
+  width: 1.5em;
+  text-align: left;
+}
 .container-stacked-icons .stacked-icon {
   width: 1em;
 }

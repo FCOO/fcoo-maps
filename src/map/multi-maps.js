@@ -187,8 +187,8 @@ related issues in map sync
 
             nsMap.mapSettingModalForm = $.bsModalForm({
                 header    : {
-                    icon: ns.icons.mapSetting,
-                    text: ns.texts.mapSetting
+                    icon: ns.icons.numberOfMaps,
+                    text: ns.texts.numberOfMaps
                 },
                 static    : false,
                 keyboard  : true,
@@ -201,7 +201,8 @@ related issues in map sync
                     onClick: ns.reset.bind(null, {multiMaps: true})
                 }],
 
-                footer    : [{da:'Klik på', en:'Click on'}, {icon: ns.icons.mapSetting}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
+                //Removed since mapSetting-control is removed
+                //footer    : [{da:'Klik på', en:'Click on'}, {icon: ns.icons.mapSettingSingle}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
 
                 onChanging : function( data ){
                     mapSettingMiniMultiMap.set( getMultiMapId(data) );

@@ -101,7 +101,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     //Add reset of all map-options to ns.resetList
     ns.resetList.push({
         id     : 'allMapsSetting',
-        icon   : ns.icons.mapSetting,
+        icon   : ns.icons.mapSettingSingle,
         text   : allMapsSetting_text,
         subtext: allMapsSetting_subtext,
         subtextSeparator: allMapsSetting_subtextSeparator,
@@ -122,6 +122,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
     The settings are added in 4:
     *******************************************************/
+    // Including bsSettingControl require that map.options.bsSettingOptions.show == true. See src/leaflet/leaflet.js
+    var includeSettingControl = nsMap.mainMapOptions.bsSettingOptions.show;
+
     nsMap.bsControls = {
         //Zoom (L.Control.BsZoom@leaflet-latlng)
         'bsZoomControl': {
@@ -130,12 +133,12 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             position: ''
         },
 
-        //Map Setting
-        'bsSettingControl': {
-            icon    : ns.icons.mapSetting,
-            text    : ns.texts.mapSetting,
+    // Removed bsSettingControl to make room for compass.
+        'bsSettingControl': includeSettingControl ? {
+            icon    : ns.icons.mapSettingSingle,
+            text    : ns.texts.mapSettingSingle,
             position: ''
-        },
+        } : null,
 
         //Legend (L.Control.BsLegend@leaflet-latlng)
         'bsLegendControl': {
@@ -170,6 +173,10 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
     //Get the position from main-map settings in nsMap.mainMapOptions
     $.each(nsMap.bsControls, function(controlId, options){
+        if (!options){
+            delete nsMap.bsControls[controlId];
+            return;
+        }
         var optionsId = controlId.replace('Control', 'Options');
         options.position = nsMap.mainMapOptions[optionsId].position;
     });
@@ -550,8 +557,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             id           : 'NOT_USED',
             dontSave     : true,    //<-- MUST be true!!
             modalHeader  : {
-                icon: ns.icons.mapSetting,
-                text: ns.texts.mapSetting
+                icon: ns.icons.mapSettingSingle,
+                text: ns.texts.mapSettingSingle
             },
             modalOptions : {
                 static             : false,
@@ -1041,8 +1048,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
             mapSettingModal = $.bsModal({
                 header    : {
-                    icon: ns.icons.mapSetting,
-                    text: ns.texts.mapSetting
+                    icon: ns.icons.mapSettingSingle,
+                    text: ns.texts.mapSettingSingle
                 },
                 helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
                 helpButton: true,
@@ -1073,10 +1080,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 id     : 'multiMapSetting',
                 content: $._bsBigIconButtonContent({
                     icon: ns.icons.numberOfMaps,
-                    text: {
-                        da:'Antal kort',
-                        en:'Number of Maps'
-                    },
+                    text: ns.texts.numberOfMaps,
                     subtext: {
                         da:'Vis 1-'+nsMap.setupOptions.multiMaps.maxMaps+' kort samtidig<br>Klik for at vælge...',
                         en:'View 1-'+nsMap.setupOptions.multiMaps.maxMaps+' maps at the same time<br>Click to select...'
@@ -1107,7 +1111,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             list.push({
                 id     : 'allMapSettings',
                 content: $._bsBigIconButtonContent({
-                    icon   : ns.icons.mapSetting,
+                    icon   : ns.icons.mapSettingSingle,
                     text   : allMapsSetting_text,
                     subtext: allMapsSetting_subtext,
                     subtextSeparator: allMapsSetting_subtextSeparator,
@@ -1131,8 +1135,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             mapSettingMainModal = $.bsModal({
                 noHorizontalPadding: true,
                 header    : {
-                    icon: ns.icons.mapSetting,
-                    text: ns.texts.mapSetting
+                    icon: ns.icons.mapSettingGlobal,
+                    text: ns.texts.mapSettingGlobal
                 },
                 closeButton: true,
                 helpId     : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
