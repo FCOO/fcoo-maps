@@ -17430,7 +17430,7 @@ Modal
 ************************************************/
 /***********************************************
 Button And Modal
-Opacity for semi-transparent and transparent content
+Opacity for semi-transparent and transparent content using color-mix
 ************************************************/
 :root,
 [data-bs-theme=light] {
@@ -31053,7 +31053,7 @@ div.modal-dialog .modal-content.modal-minimized.modal-minimized-semi-transparent
   background: none;
 }
 div.modal-dialog .modal-content.modal-minimized.modal-minimized-semi-transparent .modal-body, div.modal-dialog .modal-content.modal-minimized.modal-minimized-semi-transparent .modal-body-fixed, div.modal-dialog .modal-content.modal-minimized.modal-minimized-semi-transparent .modal-footer, div.modal-dialog .modal-content.modal-normal.modal-normal-semi-transparent .modal-body, div.modal-dialog .modal-content.modal-normal.modal-normal-semi-transparent .modal-body-fixed, div.modal-dialog .modal-content.modal-normal.modal-normal-semi-transparent .modal-footer, div.modal-dialog .modal-content.modal-extended.modal-extended-semi-transparent .modal-body, div.modal-dialog .modal-content.modal-extended.modal-extended-semi-transparent .modal-body-fixed, div.modal-dialog .modal-content.modal-extended.modal-extended-semi-transparent .modal-footer {
-  background: rgba(var(--bs-body-bg), 0.5);
+  background: color-mix(in srgb, var(--bs-body-bg), transparent 50%);
 }
 div.modal-dialog .modal-content.modal-minimized.modal-minimized-clickable .modal-body, div.modal-dialog .modal-content.modal-minimized.modal-minimized-clickable .modal-body-fixed, div.modal-dialog .modal-content.modal-normal.modal-normal-clickable .modal-body, div.modal-dialog .modal-content.modal-normal.modal-normal-clickable .modal-body-fixed, div.modal-dialog .modal-content.modal-extended.modal-extended-clickable .modal-body, div.modal-dialog .modal-content.modal-extended.modal-extended-clickable .modal-body-fixed {
   cursor: pointer;
@@ -38260,7 +38260,7 @@ Modal
 ************************************************/
 /***********************************************
 Button And Modal
-Opacity for semi-transparent and transparent content
+Opacity for semi-transparent and transparent content using color-mix
 ************************************************/
 /************************************************************
 MIXIN
@@ -38511,10 +38511,10 @@ leaflet-bootstrap-control-attribution.scss
   height: 11px;
   margin: 0 !important;
   cursor: default;
-  background: rgba(var(--bs-body-bg), 0.5);
+  background: color-mix(in srgb, var(--bs-body-bg), transparent 50%);
 }
 .mouse-hover .leaflet-control-container .leaflet-control-attribution.leaflet-control-attribution-bs:hover {
-  background: rgba(var(--bs-body-bg), 0.75);
+  background: color-mix(in srgb, var(--bs-body-bg), transparent 75%);
 }
 
 /***********************************************
@@ -38575,11 +38575,11 @@ leaflet-bootstrap-control-scale.scss
   display: none;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner {
-  font-size: 6px;
+  font-size: 8px;
   line-height: 1;
   margin-top: 0;
   margin-bottom: 0;
-  margin-left: 5px;
+  margin-left: 6px;
   margin-right: 0;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner .units {
@@ -38590,18 +38590,18 @@ leaflet-bootstrap-control-scale.scss
   text-align: center;
   position: absolute;
   opacity: 1;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1;
   transition: opacity 0.4s linear;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner.labelPlacement-top {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner.labelPlacement-top .label {
-  bottom: 6px;
+  bottom: 8px;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner.labelPlacement-bottom {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner .divisionLabel {
   right: 0;
@@ -38626,7 +38626,7 @@ leaflet-bootstrap-control-scale.scss
   border-width: 0;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner .division .line {
-  height: 6px;
+  height: 8px;
   border-width: 1px 1px 1px 0;
 }
 .leaflet-control-singlescale .leaflet-control-singlescale-inner .units .division:first-child .line {

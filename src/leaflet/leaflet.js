@@ -240,7 +240,7 @@ Objects and methods to handle leaflet-maps
         bsPositionControl: true,
         bsPositionOptions: {
             position       : "bottomright",
-            semiTransparent: true,
+            semiTransparent: false, //true,
             content: {
                 semiTransparent: false
             },

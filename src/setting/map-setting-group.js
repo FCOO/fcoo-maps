@@ -757,7 +757,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             position       : "topcenter",
             icon           : nsMap.mapSettingIconWithStatus('font-size-0-65em'),
             bigIcon        : true,
-            semiTransparent: true,
+            semiTransparent: false, //true,
         },
 
         initialize: function(options) {
