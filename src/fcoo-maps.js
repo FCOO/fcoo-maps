@@ -96,6 +96,9 @@
     var whenFinish = null;
 
     nsMap.createApplication = function(options, layerMenu = {subDir: 'setup', fileName:'fcoo-maps-menu.json'}){
+        //Set viewpoint to no-scalable
+        ns.viewport_no_scalable = true;
+
         //1: "Load" setup and proccess the options
         nsMap.layerMenu = layerMenu;
 

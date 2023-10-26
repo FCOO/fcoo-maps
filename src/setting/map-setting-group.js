@@ -343,10 +343,11 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     noPadding        : true,
                     content : [{
                         id      : 'show',
-                        type    : 'checkboxbutton',
+                        type    : 'standardcheckboxbutton',
                         icon    : options.icon,
                         text    : options.text,
                         class   : 'flex-grow-1',
+                        checkboxAtLeft      : true,
                         insideFormGroup     : true,
                         noVerticalPadding   : true,
                         //smallBottomPadding  : true,

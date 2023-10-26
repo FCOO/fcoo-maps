@@ -14,16 +14,16 @@ Create and set different global variables and methods
     ICONS
     ***********************************************************/
     //Icon and header for map-settings (global)
-    ns.icons.mapSettingGlobal = ns.settingIcon('fa-map');
+    ns.icons.mapSettingGlobal = ns.iconSub('fa-map width-1-2em', 'fa-cog');
     ns.texts.mapSettingGlobal = {da:'Kortindstillinger', en:'Maps Settings'};
 
     //Icon and header for single map-settings
-    ns.icons.mapSettingSingle = ns.iconSub('fa-map fa-extra-width', 'fa-square-check'); //Alternative = fa-cog fa-sliders fa-ballot-check
+    ns.icons.mapSettingSingle = ns.iconSub('fa-map width-1-1em', 'fa-square-check'); //Alternative = fa-cog fa-sliders fa-ballot-check
     ns.texts.mapSettingSingle = {da:'Kortindstillinger', en: 'Map Settings'};
 
 
     //Icon for Number of Maps
-    ns.icons.numberOfMaps = ns.iconSub('fa-map fa-extra-width', 'fa-tally', true);
+    ns.icons.numberOfMaps = ns.iconSub('fa-map width-1-5em', 'fa-tally', true);
     ns.texts.numberOfMaps = {da:'Antal kort', en:'Number of Maps'},
 
     //Icon and header for legend
@@ -35,6 +35,7 @@ Create and set different global variables and methods
     };
 
     nsMap.mapSettingIconWithStatus = function(fontSizeClass){
+        //Return a icon with
         return [ns.icons.mapSettingSingle, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
     };
 

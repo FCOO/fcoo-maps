@@ -976,6 +976,166 @@ path:focus {
 
 @charset "UTF-8";
 /***********************************************
+fcoo-application-logo-and-color.scss,
+
+Defines default application-color
+************************************************/
+/*****************************************************
+LOADING
+Style for the <div> covering the page during loading
+*****************************************************/
+html.loading .hide-for-loading {
+  display: none !important;
+}
+
+html.no-loading .show-for-loading {
+  display: none !important;
+}
+
+/* Blinking dots from https://martinwolf.org/before-2018/blog/2015/01/pure-css-savingloading-dots-animation/ */
+@keyframes blink {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+div.loading {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2147483647;
+  background-color: var(--fcoo-app-base-color);
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: progress;
+}
+div.loading > div {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: inherit;
+  text-align: center;
+}
+div.loading > div.version {
+  font-family: sans-serif;
+  font-size: 2rem;
+  top: 0;
+  height: 3rem;
+  line-height: 3rem;
+  margin-bottom: -3rem;
+  background-color: red;
+  color: white;
+}
+div.loading > div.version:empty {
+  visibility: hidden;
+}
+div.loading > div.logo {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+html.logo-portrait div.loading > div.logo {
+  height: 80vmin;
+  width: 100%;
+}
+html.no-logo-portrait div.loading > div.logo {
+  height: 100%;
+  width: 80vmin;
+}
+html.fab-text-color-is-white div.loading > div.logo {
+  background-image: var(--fcoo-app-logo_black-url) !important;
+  background-image: var(--fcoo-app-logo_white-url);
+}
+html.no-fab-text-color-is-white div.loading > div.logo {
+  background-image: var(--fcoo-app-logo_white-url) !important;
+  background-image: var(--fcoo-app-logo_black-url);
+}
+div.loading > div.dots {
+  height: 1em;
+  bottom: 0;
+  font-size: 6rem;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+div.loading > div.dots span {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+  color: var(--fcoo-app-base-text-color);
+  width: 0.25em;
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+div.loading > div.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+div.loading > div.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+html.no-loading div.loading {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease-out 0s, width 0s ease-in-out 0.4s, height 0s ease-in-out 0.4s;
+}
+html.no-loading div.loading:before, html.no-loading div.loading > div {
+  display: none !important;
+}
+
+/*****************************************************
+
+*****************************************************/
+:root {
+  --fcoo-app-logo-wh-ratio: var(--_fcoo-app-logo-wh-ratio, 1);
+}
+
+.fcoo-app-standard-logo {
+  width: 200px;
+  height: 160px;
+  background-image: var(--fcoo-app-logo-url);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+html.logo-portrait .fcoo-app-standard-logo {
+  width: calc(160px * var(--fcoo-app-logo-wh-ratio));
+  height: 160px;
+}
+html.no-logo-portrait .fcoo-app-standard-logo {
+  width: 200px;
+  height: calc(200px / var(--fcoo-app-logo-wh-ratio));
+}
+
+/*****************************************************
+Defines --fcoo-app-base-color and --fcoo-app-base-text-color
+Defaults is = DALO color in "Forsvarsministeriets koncernfælles Designmanual 2018"
+Can be changed by mixin application-base-color( new-color ) in src/_fcoo-application-base-color-mixin.scss
+*****************************************************/
+/***********************************************
+fcoo-application-base-color-mixin
+
+Defines application-base-color = Background color for loading etc.
+************************************************/
+:root {
+  --_fcoo-default-app-base-color: #3f5b58;
+  --fcoo-app-base-color: var(--_fcoo-app-base-color, var(--_fcoo-default-app-base-color));
+  --_fcoo-default-app-base-text-color: #ffffff;
+  --fcoo-app-base-text-color: var(--_fcoo-app-base-text-color, var(--_fcoo-default-app-base-text-color));
+}
+@charset "UTF-8";
+/***********************************************
     fcoo-fontawesome.scss,
 
     (c) 2016, FCOO
@@ -29967,7 +30127,23 @@ Bootstrap allready have the following classes
   flex-shrink: 0;
   line-height: 1;
 }
-.container-stacked-icons.fa-extra-width:not(:last-child) {
+.container-stacked-icons.width-1-1em:not(:last-child) {
+  width: 1.1em;
+  text-align: left;
+}
+.container-stacked-icons.width-1-2em:not(:last-child) {
+  width: 1.2em;
+  text-align: left;
+}
+.container-stacked-icons.width-1-3em:not(:last-child) {
+  width: 1.3em;
+  text-align: left;
+}
+.container-stacked-icons.width-1-4em:not(:last-child) {
+  width: 1.4em;
+  text-align: left;
+}
+.container-stacked-icons.width-1-5em:not(:last-child) {
   width: 1.5em;
   text-align: left;
 }
@@ -30052,6 +30228,9 @@ Also overwrite default bootstrap behaviour
 
 */
 .btn-jb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   --bs-btn-border-color: #adb5bd;
   --bs-btn-hover-border-color: #b5bcc4;
   --bs-btn-active-border-color: #b5bcc4;
@@ -30096,6 +30275,13 @@ Also overwrite default bootstrap behaviour
 }
 .btn-jb.standard-checkbox .standard-checkbox-checked-color {
   color: rgb(30, 144, 255);
+}
+.btn-jb.standard-checkbox.checkbox-at-left {
+  position: relative;
+}
+.btn-jb.standard-checkbox.checkbox-at-left > .container-stacked-icons:first-child {
+  position: absolute;
+  left: var(--bs-btn-padding-x);
 }
 .btn-jb.standard-checkbox.semi-selected .standard-checkbox-checked-color {
   color: #fd7e14;
@@ -30154,9 +30340,6 @@ Also overwrite default bootstrap behaviour
   vertical-align: top;
 }
 .btn-jb.square {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   --bs-btn-padding-y: 0;
   --bs-btn-padding-x: 0;
   height: var(--bs-btn-square-dimention);
@@ -34851,7 +35034,7 @@ Modal
 ************************************************/
 /***********************************************
 Button And Modal
-Opacity for semi-transparent and transparent content
+Opacity for semi-transparent and transparent content using color-mix
 ************************************************/
 /************************************************************
 MIXIN
@@ -34871,6 +35054,11 @@ button-border-color-variant
 button-background-color-variant
 Adjust text-, border-, and background-color for a button
 ************************************************************/
+/***********************************************
+fcoo-application-base-color-mixin
+
+Defines application-base-color = Background color for loading etc.
+************************************************/
 /*****************************************************
 APPLICATION-COLOR-MIXIN
 Mixin for creating specific application-color
@@ -35068,182 +35256,6 @@ z-index for different layers:
     $z-index-top-N: Level N below the top-layer
 
 */
-/*****************************************************
-Style for FCOO logo as font
-*****************************************************/
-/*****************************************************
-FCOO-LOGO
-
-Style for FCOO logo as font
-
-icon-fcoo-logo-default   = Default FCOO logo (white)
-icon-fcoo-logo-contrast  = Logo in contrast color to application color ($fcoo-app-bg-color) = white or black
-icon-fcoo-logo-app-color = Logo in the application color
-
-See src/_application-color.scss for description of application colors
-*****************************************************/
-@font-face {
-  font-family: "fcoo-logo";
-  src: url("fonts/fcoo-logo.woff?ma2cie") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-.icon-fcoo-logo-default, .icon-fcoo-logo-contrast, .icon-fcoo-logo-app-color {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: "fcoo-logo" !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: var(--fcoo-logo-color);
-}
-.icon-fcoo-logo-default:before, .icon-fcoo-logo-contrast:before, .icon-fcoo-logo-app-color:before {
-  content: "\e900";
-}
-
-.icon-fcoo-logo-default {
-  --fcoo-logo-color: white;
-}
-
-.icon-fcoo-logo-contrast {
-  --fcoo-logo-color: $fcoo-app-text-color;
-}
-
-.icon-fcoo-logo-app-color {
-  --fcoo-logo-color: $fcoo-app-bg-color;
-}
-
-/**********************************************************
-fcoo-name = the font used for the FCOO name in the logo - TODO
-**********************************************************/
-@font-face {
-  font-family: "fcoo-name";
-  src: url("fonts/svenings.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-variant: normal;
-  text-transform: none;
-  speak: none;
-  line-height: 1;
-}
-.fcoo-name {
-  font-family: fcoo-name;
-}
-
-/*****************************************************
-Style for the <div> covering the page during loading
-*****************************************************/
-/*****************************************************
-LOADING
-Style for the <div> covering the page during loading
-*****************************************************/
-html.loading .hide-for-loading {
-  display: none !important;
-}
-
-html.no-loading .show-for-loading {
-  display: none !important;
-}
-
-/* Not used
-@keyframes flashingLogo {
-    0%   {opacity: 1;  }
-    50%  {opacity:  .5;}
-    100% {opacity: 1;  }
-}
-*/
-/* Blinking dots from https://martinwolf.org/before-2018/blog/2015/01/pure-css-savingloading-dots-animation/ */
-@keyframes blink {
-  0% {
-    opacity: 0.2;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.2;
-  }
-}
-div.loading {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 2147483645;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  opacity: 1;
-  cursor: progress;
-}
-div.loading > div {
-  position: absolute;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  cursor: inherit;
-  text-align: center;
-}
-div.loading > div.version {
-  font-family: sans-serif;
-  font-size: 2rem;
-  top: 0;
-  height: 3rem;
-  margin-bottom: -3rem;
-  background-color: red;
-  color: white;
-}
-div.loading > div.version:empty {
-  visibility: hidden;
-}
-div.loading > div.logo {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-div.loading > div.logo i[class^=icon-fcoo-logo] {
-  font-size: 90vmin;
-}
-div.loading > div.dots {
-  height: 1em;
-  bottom: 0;
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  font-size: 6rem;
-}
-div.loading > div.dots span {
-  animation-name: blink;
-  animation-duration: 1.4s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: both;
-  width: 0.25em;
-}
-div.loading > div.dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-div.loading > div.dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-html.no-loading div.loading {
-  width: 0;
-  height: 0;
-  opacity: 0;
-  transition: opacity 0.4s ease-out 0s, width 0s ease-in-out 0.4s, height 0s ease-in-out 0.4s;
-}
-html.no-loading div.loading:before, html.no-loading div.loading > div {
-  display: none !important;
-}
-
 /*****************************************************
 Style for offline.js
 *****************************************************/
@@ -35661,8 +35673,17 @@ Style for 'About FCOO' modal-content
   white-space: nowrap;
   min-height: calc(1em + 2 * 0.25rem);
 }
-.about-owner img {
-  margin: 1rem auto;
+.about-owner .application-logo-container {
+  width: 100%;
+  margin: 20px auto;
+}
+.about-owner .application-owner {
+  color: rgb(33, 37, 41);
+  font-family: Verdana, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 15.0589px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
 }
 
 /*****************************************************

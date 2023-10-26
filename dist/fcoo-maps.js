@@ -13,12 +13,18 @@ Create and set different global variables and methods
     /***********************************************************
     ICONS
     ***********************************************************/
-    //Icon and header for map-settings
-    ns.icons.mapSetting = ns.settingIcon('fa-map');
-    ns.texts.mapSetting = {da:'Kortindstillinger', en:'Map Settings'};
+    //Icon and header for map-settings (global)
+    ns.icons.mapSettingGlobal = ns.iconSub('fa-map width-1-2em', 'fa-cog');
+    ns.texts.mapSettingGlobal = {da:'Kortindstillinger', en:'Maps Settings'};
+
+    //Icon and header for single map-settings
+    ns.icons.mapSettingSingle = ns.iconSub('fa-map width-1-1em', 'fa-square-check'); //Alternative = fa-cog fa-sliders fa-ballot-check
+    ns.texts.mapSettingSingle = {da:'Kortindstillinger', en: 'Map Settings'};
+
 
     //Icon for Number of Maps
-    ns.icons.numberOfMaps = ns.iconSub('fa-map', 'fa-tally', true);
+    ns.icons.numberOfMaps = ns.iconSub('fa-map width-1-5em', 'fa-tally', true);
+    ns.texts.numberOfMaps = {da:'Antal kort', en:'Number of Maps'},
 
     //Icon and header for legend
     ns.icons.mapLegend = 'fa-list';     //TODO fa-th-list when forecast@mouse-position is implemented <-- ??????? (remove line?)
@@ -29,7 +35,8 @@ Create and set different global variables and methods
     };
 
     nsMap.mapSettingIconWithStatus = function(fontSizeClass){
-        return [ns.icons.mapSetting, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
+        //Return a icon with
+        return [ns.icons.mapSettingSingle, ns.iconSub('fa-map', 'fa-sync icon-active fw-bold ' + fontSizeClass)];
     };
 
     nsMap.updateMapSettingIconWithStatus = function($parent, inSync){
@@ -274,7 +281,7 @@ See src/fcoo-maps.js
 
                 //Add button before setting-button with settings for map(s)
                 preSetting: {
-                    icon   : ns.icons.mapSetting,
+                    icon   : ns.icons.mapSettingGlobal,
                     onClick: function(){
                                  if (nsMap.hasMultiMaps)
                                      nsMap.showMapSettingMain();
@@ -1352,6 +1359,9 @@ dataset.js
     var whenFinish = null;
 
     nsMap.createApplication = function(options, layerMenu = {subDir: 'setup', fileName:'fcoo-maps-menu.json'}){
+        //Set viewpoint to no-scalable
+        ns.viewport_no_scalable = true;
+
         //1: "Load" setup and proccess the options
         nsMap.layerMenu = layerMenu;
 
@@ -1922,6 +1932,45 @@ global-events.js
 
     //routeControl = L.Control.Route
     ns.controlGlobalEvents.add('routeControl', [ns.events.UNITCHANGED, ns.events.LANGUAGECHANGED], 'onGlobalEvents');
+
+}(jQuery, L, this, document));
+
+
+
+
+;
+/****************************************************************************
+L.Control.bsToggleBottomMenu.js
+****************************************************************************/
+(function ($, L, window/*, document, undefined*/) {
+    "use strict";
+
+    var ns = window.fcoo = window.fcoo || {},
+        nsMap = ns.map = ns.map || {};
+
+        L.Control.BsToggleBottomMenu = L.Control.BsButton.extend({
+            options: {
+                bigIcon     : true,
+                icon        : ['far fa-circle-chevron-up hide-for-bottom-menu-open fa-no-margin', 'far fa-circle-chevron-down show-for-bottom-menu-open'],
+                position    : 'bottomcenter',
+                transparent : true,
+                //semiTransparent : true,
+                onClick     : function(){ nsMap.main.bottomMenu.toggle(); }
+            }
+        });
+
+    //Install L.Control.BsCompass
+    L.Map.mergeOptions({
+        bsToggleBottomMenuControl: false,
+        bsToggleBottomMenuOptions: {}
+    });
+
+    L.Map.addInitHook(function () {
+        if (this.options.bsToggleBottomMenuControl){
+            this.bsToggleBottomMenuControl = new L.Control.BsToggleBottomMenu( this.options.bsToggleBottomMenuOptions );
+            this.addControl(this.bsToggleBottomMenuControl);
+        }
+    });
 
 }(jQuery, L, this, document));
 
@@ -2845,7 +2894,7 @@ Objects and methods to handle leaflet-maps
         bsPositionControl: true,
         bsPositionOptions: {
             position       : "bottomright",
-            semiTransparent: true,
+            semiTransparent: false, //true,
             content: {
                 semiTransparent: false
             },
@@ -2947,6 +2996,7 @@ Objects and methods to handle leaflet-maps
         //L.Control.Setting
         bsSettingControl: true,
         bsSettingOptions: {
+            show    : false,        //bsSettingControl is not shown on any maps.
             position: 'topcenter'
         },
 
@@ -3173,8 +3223,8 @@ Global context-menu for all maps
 
     map_contextmenu_itemList.push({
         //Map-setting
-        icon       : ns.icons.mapSetting,
-        text       : ns.texts.mapSetting,
+        icon       : ns.icons.mapSettingSingle,
+        text       : ns.texts.mapSettingSingle,
         spaceBefore: true,
         width      : '11em',
         onClick: function(id, latlng, $button, map){
@@ -4884,7 +4934,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     //Add reset of all map-options to ns.resetList
     ns.resetList.push({
         id     : 'allMapsSetting',
-        icon   : ns.icons.mapSetting,
+        icon   : ns.icons.mapSettingSingle,
         text   : allMapsSetting_text,
         subtext: allMapsSetting_subtext,
         subtextSeparator: allMapsSetting_subtextSeparator,
@@ -4905,6 +4955,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
     The settings are added in 4:
     *******************************************************/
+    // Including bsSettingControl require that map.options.bsSettingOptions.show == true. See src/leaflet/leaflet.js
+    var includeSettingControl = nsMap.mainMapOptions.bsSettingOptions.show;
+
     nsMap.bsControls = {
         //Zoom (L.Control.BsZoom@leaflet-latlng)
         'bsZoomControl': {
@@ -4913,12 +4966,12 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             position: ''
         },
 
-        //Map Setting
-        'bsSettingControl': {
-            icon    : ns.icons.mapSetting,
-            text    : ns.texts.mapSetting,
+    // Removed bsSettingControl to make room for compass.
+        'bsSettingControl': includeSettingControl ? {
+            icon    : ns.icons.mapSettingSingle,
+            text    : ns.texts.mapSettingSingle,
             position: ''
-        },
+        } : null,
 
         //Legend (L.Control.BsLegend@leaflet-latlng)
         'bsLegendControl': {
@@ -4953,6 +5006,10 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
     //Get the position from main-map settings in nsMap.mainMapOptions
     $.each(nsMap.bsControls, function(controlId, options){
+        if (!options){
+            delete nsMap.bsControls[controlId];
+            return;
+        }
         var optionsId = controlId.replace('Control', 'Options');
         options.position = nsMap.mainMapOptions[optionsId].position;
     });
@@ -5119,10 +5176,11 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     noPadding        : true,
                     content : [{
                         id      : 'show',
-                        type    : 'checkboxbutton',
+                        type    : 'standardcheckboxbutton',
                         icon    : options.icon,
                         text    : options.text,
                         class   : 'flex-grow-1',
+                        checkboxAtLeft      : true,
                         insideFormGroup     : true,
                         noVerticalPadding   : true,
                         //smallBottomPadding  : true,
@@ -5333,8 +5391,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             id           : 'NOT_USED',
             dontSave     : true,    //<-- MUST be true!!
             modalHeader  : {
-                icon: ns.icons.mapSetting,
-                text: ns.texts.mapSetting
+                icon: ns.icons.mapSettingSingle,
+                text: ns.texts.mapSettingSingle
             },
             modalOptions : {
                 static             : false,
@@ -5540,7 +5598,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             position       : "topcenter",
             icon           : nsMap.mapSettingIconWithStatus('font-size-0-65em'),
             bigIcon        : true,
-            semiTransparent: true,
+            semiTransparent: false, //true,
         },
 
         initialize: function(options) {
@@ -5824,8 +5882,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
             mapSettingModal = $.bsModal({
                 header    : {
-                    icon: ns.icons.mapSetting,
-                    text: ns.texts.mapSetting
+                    icon: ns.icons.mapSettingSingle,
+                    text: ns.texts.mapSettingSingle
                 },
                 helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
                 helpButton: true,
@@ -5856,10 +5914,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 id     : 'multiMapSetting',
                 content: $._bsBigIconButtonContent({
                     icon: ns.icons.numberOfMaps,
-                    text: {
-                        da:'Antal kort',
-                        en:'Number of Maps'
-                    },
+                    text: ns.texts.numberOfMaps,
                     subtext: {
                         da:'Vis 1-'+nsMap.setupOptions.multiMaps.maxMaps+' kort samtidig<br>Klik for at vælge...',
                         en:'View 1-'+nsMap.setupOptions.multiMaps.maxMaps+' maps at the same time<br>Click to select...'
@@ -5890,7 +5945,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             list.push({
                 id     : 'allMapSettings',
                 content: $._bsBigIconButtonContent({
-                    icon   : ns.icons.mapSetting,
+                    icon   : ns.icons.mapSettingSingle,
                     text   : allMapsSetting_text,
                     subtext: allMapsSetting_subtext,
                     subtextSeparator: allMapsSetting_subtextSeparator,
@@ -5914,8 +5969,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             mapSettingMainModal = $.bsModal({
                 noHorizontalPadding: true,
                 header    : {
-                    icon: ns.icons.mapSetting,
-                    text: ns.texts.mapSetting
+                    icon: ns.icons.mapSettingGlobal,
+                    text: ns.texts.mapSettingGlobal
                 },
                 closeButton: true,
                 helpId     : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
@@ -6338,8 +6393,8 @@ related issues in map sync
 
             nsMap.mapSettingModalForm = $.bsModalForm({
                 header    : {
-                    icon: ns.icons.mapSetting,
-                    text: ns.texts.mapSetting
+                    icon: ns.icons.numberOfMaps,
+                    text: ns.texts.numberOfMaps
                 },
                 static    : false,
                 keyboard  : true,
@@ -6352,7 +6407,8 @@ related issues in map sync
                     onClick: ns.reset.bind(null, {multiMaps: true})
                 }],
 
-                footer    : [{da:'Klik på', en:'Click on'}, {icon: ns.icons.mapSetting}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
+                //Removed since mapSetting-control is removed
+                //footer    : [{da:'Klik på', en:'Click on'}, {icon: ns.icons.mapSettingSingle}, {da:'&nbsp;i kortet for at sætte synkronisering', en:'&nbsp;in the map to set synchronization'}],
 
                 onChanging : function( data ){
                     mapSettingMiniMultiMap.set( getMultiMapId(data) );
