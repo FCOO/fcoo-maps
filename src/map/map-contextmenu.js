@@ -28,7 +28,6 @@ Global context-menu for all maps
             //Center map
             icon   : 'fa-crosshairs',
             text   : {da:'Centrér her', en:'Center here'},
-            _width : 180,
             closeOnClick: false,
 
             onClick: function(id, latLng, $button, map){
