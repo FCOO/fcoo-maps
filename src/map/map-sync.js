@@ -108,7 +108,7 @@ Objects and methods to handle map-sync
                 if (zoomOffset == 0)
                     text = {da: 'Samme som hovedkort', en:'Same as main map'};
                 else
-                    text = {da: zoomOffset+ ' x zoom ind', en: zoomOffset+ ' x zoom ind'};
+                    text = {da: zoomOffset+ ' x zoom ind', en: zoomOffset+ ' x zoom in'};
             zoomItems.push( {id: 'zoomOffset_'+zoomOffset, text: text} );
         }
         content.push({
