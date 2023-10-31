@@ -29,6 +29,10 @@ Methods to adjust and display latLng-values
                     icon: 'fa-copy',
                     text: {da:'Kopier til udklipsholder', en:'Copy to Clipboard'},
                 }],
+                footer: window.bsIsTouch ? null : {
+                    icon: 'far fa-computer-mouse',
+                    text: {da: 'Dobbelt-klik på format for at kopier', en: 'Double click on format to copy'}
+                },
                 show: false
             };
 
@@ -52,18 +56,24 @@ Methods to adjust and display latLng-values
             formatItems = [];
 
         for (var formatId = window.latLngFormat.LATLNGFORMAT_FIRST; formatId <= window.latLngFormat.LATLNGFORMAT_LAST; formatId++){
-
             window.latLngFormat.setTempFormat(formatId);
             formatItems.push({ text: window.latLngFormat.options.text[formatId] });
-
 
             var formatList = latLng.outputs();
             $.each(formatList, function(index, format){
                 var id = 'format'+formatId+index;
                 latLngFormats[id] = format;
-                formatItems.push({id: id, text: format});
+                formatItems.push({
+                    id: id,
+                    text: format,
+                    onDblClick: function(){
+                        //Trigger copy to clipboard
+                        clipboard.onClick( {currentTarget: $('#btn_copy_to_clipboard').get(0)} );
+                    }
+                });
             });
         }
+
 
         window.latLngFormat.setTempFormat(saveCurrentFormatId);
 
