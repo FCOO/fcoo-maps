@@ -80,6 +80,10 @@
         //window.fcoo.LOCAL_DATA = true;
         window.fcoo.DEMO_VERSION = true;
 
+        //TEMP: No access to data-files on AWS. Read from old location instead 
+        window.fcoo.path.setPath({host: 'bal.fcoo.dk'});
+
+
 /*
         //* Test setupFileVersion
         window.fcoo.setupFileVersion = {
@@ -143,9 +147,9 @@
                         save    : true,
                         reset   : true,
                         setting : true
-                    }
-
+                    },
                 },
+                
                 _rightMenu: { 
                     content: [{icon:'fa-home', text:{da:'Dette er content', en:'This is content'}},{icon:'fa-car', text:{da:'Dette er content2', en:'This is content2'}}],
                     _data: ['item1', 'item2'],

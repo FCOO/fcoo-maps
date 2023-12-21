@@ -381,9 +381,11 @@
             topMenu            : setupOptions.topMenu,
 
             leftMenu           : setupOptions.leftMenu,
+            leftMenuIcon       : setupOptions.leftMenuIcon,
             keepLeftMenuButton : setupOptions.keepLeftMenuButton,
 
             rightMenu          : setupOptions.rightMenu,
+            rightMenuIcon      : setupOptions.rightMenuIcon,
             keepRightMenuButton: setupOptions.keepRightMenuButton,
 
             bottomMenu         : setupOptions.bottomMenu,

@@ -234,6 +234,7 @@ See src/fcoo-maps.js
                 content    : '',
                 resolve    : null
             },
+            leftMenuIcon      : 'fa-layer-group',
             keepLeftMenuButton: false,
 
             rightMenu          : false,
