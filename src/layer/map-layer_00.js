@@ -180,13 +180,12 @@ L.Layer.addInitHook(function(){
             gettext : function(/*options*/){ return '';               },
         };
 
-
     //Adjust default options for legend
-    L.BsLegend_defaultOptions.closeIconOptions = {
-        icon : [['show-for-single-maps-selected fa-circle-trash'], ['show-for-multi-maps-selected fa-circle-check']],
-        title: {da: 'Skjul/Vælg', en: 'Hide/Select'}
-    };
-
+    L.BsLegend_close_icon = [
+        ['show-for-single-maps-selected far fa-map fa-scale-x-08', 'show-for-single-maps-selected fas fa-slash fa-scale-x-08'],
+        ['show-for-multi-maps-selected fa-square-check']
+    ];
+    L.BsLegend_close_title = {da: 'Skjul/Vælg', en: 'Hide/Select'};
 
 
     //Overwrite L.BsLegend.remove to select for all maps if multi maps
