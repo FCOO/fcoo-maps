@@ -503,6 +503,7 @@ L.Layer.addInitHook(function(){
                     legendOptions = $.extend(true, {}, {
                         index       : parseInt(indexAsStr), //this.index,
                         icon        : this.options.legendIcon || this.options.icon,
+iconClass: 'NIELS',
                         text        : this.options.text || null,
 
                         //content            : this.options.content,

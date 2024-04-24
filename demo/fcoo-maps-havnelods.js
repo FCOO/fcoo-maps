@@ -195,7 +195,7 @@ location.js,
         getIcon - Is set for each group (DK, GL, Bridge)
         *********************************************/
         getIcon: function(){
-            return [['fas fa-square fa-lbm-color-' + this.colorName, 'far fa-square']];
+            return [['fas fa-square-full fa-lbm-color-' + this.colorName, 'far fa-square-full']];
         },
 
         /*********************************************

@@ -154,7 +154,7 @@ See src/fcoo-maps.js
 
         var result      = '',
             iconOptions = {
-                faClassName   : options.faClassName ? options.faClassName : options.round ? 'fa-circle' : 'fa-square',
+                faClassName   : options.faClassName ? options.faClassName : options.round ? 'fa-circle' : 'fa-square-full',
                 extraClassName: options.extraClassName
             };
 
