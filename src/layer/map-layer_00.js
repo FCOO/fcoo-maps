@@ -1069,11 +1069,13 @@ iconClass: 'NIELS',
                 result = $.extend({
                     id        : this.id,
                     icon      : this.options.icon,
+                    iconClass : this.options.iconClass,
                     text      : this.options.text,
                     type      : this.options.radioGroup ? 'radio' : 'check',
                     mapLayerId: this.id,
                     onClick   : $.proxy(this.selectMaps, this)
                 }, menuOptions);
+
 
             //Use legend-buttons if no direct menu-button is given
             if (!result.buttonList && menuOptions.useLegendButtonList && legendOptions.buttonList)
