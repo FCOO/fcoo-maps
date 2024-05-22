@@ -215,21 +215,17 @@ L.Layer.addInitHook(function(){
 
     /***********************************************************
     nsMap.createMapLayer = {MAPLAYER_ID: CREATE_MAPLAYER_AND_MENU_FUNCTION}
-    MAPLAYER_ID:
+    MAPLAYER_ID: STRING
     CREATE_MAPLAYER_AND_MENU_FUNCTION: function(options, addMenu: function(menuItem or []menuItem)
     Each mapLayer must add a CREATE_MAPLAYER_AND_MENU_FUNCTION-function to nsMap.createMapLayer:
 
         nsMap.createMapLayer[ID] = function(options, addMenu){
-
             //Somewhere inside the function or inside a response call
             //addMenu({id:ID, icon:..., text:..., type:...}, or
             //addMenu(this.menuItemOptions())
         };
 
-
-    nsMap.createMapLayerAndMenu(list) will create the mapLayer and replace/add menu-item-options to list
-
-    Eq. list[3] = {id: 'NAVIGATION_WARNING', isMapLayerMenu: true}
+    Eq. list[3] = {id: 'NAVIGATION_WARNING'}
     Some mapLayer "creator" has set nsMap.createMapLayer['NAVIGATION_WARNING'] = function(options, addMenu){...}
     This function is called to create the mapLayer and set the new menu-item-options (via addMenu-function)
     The code for nsMap.createMapLayerAndMenu is in src/layer/map-layer_00.js
@@ -242,79 +238,7 @@ L.Layer.addInitHook(function(){
     ***********************************************************/
     nsMap.createMapLayer = nsMap.createMapLayer || {};
 
-    var mapLayerAdded, mapLayerMenulist,
-        replaceMenuItems = {};
 
-
-    nsMap.createMapLayerAndMenu = function(menuList){
-        mapLayerAdded    = false,
-        mapLayerMenulist = menuList;
-
-        _createMapLayerAndMenu(mapLayerMenulist, {});
-
-        //Add promise to check and finish the creation of the mapLayer-menu
-        ns.promiseList.append({
-            data   : 'NONE',
-            resolve: _finishMapLayerAndMenu,
-            wait   : true
-        });
-    };
-
-
-    function _createMapLayerAndMenu(menuList, parentMenuOptions){
-        $.each(menuList, function(index, menuOptions){
-            var createMapLayerFunc = menuOptions.isMapLayerMenu ? nsMap.createMapLayer[menuOptions.id] : null;
-
-            if (createMapLayerFunc)
-                createMapLayerFunc(
-                    menuOptions.options || {},
-                    function(menuItemOrList)                     { _addMenu(menuItemOrList, menuList, menuOptions.id);          },  //addMenu
-                    function(adjustmentsToParentMenuOptions = {}){ $.extend(parentMenuOptions, adjustmentsToParentMenuOptions); }   //adjustParentMenuOptions
-                );
-
-            if (menuOptions.list)
-                _createMapLayerAndMenu(menuOptions.list, menuOptions);
-        });
-    }
-
-    function _addMenu(menuItemOrList, parentList, id){
-        //Append menuItemOrList to replaceMenuItems to be replaced in _updateMenuList
-        replaceMenuItems[id] = $.isArray(menuItemOrList) ? menuItemOrList : [menuItemOrList];
-    }
-
-
-    function _finishMapLayerAndMenu(){
-        //If any MapLayer was added => Check again since some MapLayer may have just added new MapLayer-constructor to nsMap.createMapLayer
-        if (mapLayerAdded)
-            nsMap.createMapLayerAndMenu(mapLayerMenulist);
-        else
-            //Remove any empty menu-items
-            _updateMenuList(mapLayerMenulist);
-    }
-
-    function _updateMenuList(menuList){
-        var index, menuOptions;
-        if (!menuList) return;
-
-        //Replace menu-item from replaceMenuItems
-        for (index=menuList.length-1; index>=0; index--){
-            menuOptions = menuList[index];
-            if (menuOptions && menuOptions.id && replaceMenuItems[menuOptions.id])
-                menuList.splice(index, 1, ...replaceMenuItems[menuOptions.id]);
-        }
-
-        for (index=menuList.length-1; index>=0; index--){
-            menuOptions = menuList[index];
-
-            if (menuOptions && menuOptions.list)
-                _updateMenuList(menuOptions.list);
-
-            if (menuOptions && !menuOptions.isMapLayerMenu && ((menuOptions.list && menuOptions.list.length) || menuOptions.type))
-                /* Keep menu-item*/;
-            else
-                menuList.splice(index, 1);
-        }
-    }
 
     /***********************************************************
     MapLayer
@@ -503,7 +427,6 @@ L.Layer.addInitHook(function(){
                     legendOptions = $.extend(true, {}, {
                         index       : parseInt(indexAsStr), //this.index,
                         icon        : this.options.legendIcon || this.options.icon,
-iconClass: 'NIELS',
                         text        : this.options.text || null,
 
                         //content            : this.options.content,
