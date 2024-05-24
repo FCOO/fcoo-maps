@@ -232,6 +232,8 @@ The default options are an extended version of the defalut application options f
             inclBar     : true,
             barCloseAll : true,
 
+            favorites: true,
+
             resetIcon: 'far fa-layer-group',
             reset: {
                 resetState  : "RESET",
@@ -274,6 +276,7 @@ The default options are an extended version of the defalut application options f
             //time: {subDir, fileName} - options for time-dimention See github/fcoo/fcoo-maps-time
         }
     });
+
 }(jQuery, window.moment, L, this, document));
 
 
@@ -1333,6 +1336,10 @@ dataset.js
 
         if (options.layerMenuOptions)
             options.layerMenuOptions.resetText = resetLayerText;
+
+        if (options.standardMenuOptions.reset)
+            options.standardMenuOptions.resetText = resetLayerText;
+
 
         //Do not create MapLayer with search-results if search is not pressent AND only include search if MapLayer with is included
         if (!options.topMenu.search)

@@ -157,7 +157,7 @@
         if (options.layerMenuOptions)
             options.layerMenuOptions.resetText = resetLayerText;
 
-        if (options.standardMenuOptions)
+        if (options.standardMenuOptions.reset)
             options.standardMenuOptions.resetText = resetLayerText;
 
 
