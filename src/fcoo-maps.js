@@ -157,6 +157,10 @@
         if (options.layerMenuOptions)
             options.layerMenuOptions.resetText = resetLayerText;
 
+        if (options.standardMenuOptions)
+            options.standardMenuOptions.resetText = resetLayerText;
+
+
         //Do not create MapLayer with search-results if search is not pressent AND only include search if MapLayer with is included
         if (!options.topMenu.search)
             delete nsMap.createMapLayer[nsMap.searchMapLayerId];
