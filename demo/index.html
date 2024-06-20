@@ -113,6 +113,17 @@
         window.fcoo.map.mainMapOptions.bsToggleBottomMenuControl = true;
 
 
+        window.fcoo.map._addMapContextmenu( 
+            {icon: 'fa-map', text:'Console latlng 2'},
+            function(latLng, map){  console.log('>>>>', latLng, map);  }, 2
+        );                
+        window.fcoo.map._addMapContextmenu( 
+            {icon: 'fas fa-map', text:'Console latlng 1'},
+            function(latLng, map){  console.log('>>>>', latLng, map);  }, 1
+        );                
+            
+
+
         window.fcoo.map.createApplication({
             //options
             applicationName: {da:'fcoo-maps - Overskriften', en:'fcoo-maps - The Header'},
@@ -143,6 +154,7 @@
                     reset   : true,
                     setting : true
                 },
+                menuOptions: {keepAll: true}                
             },
                 
             _rightMenu: { 
