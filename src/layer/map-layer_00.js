@@ -427,7 +427,8 @@ L.Layer.addInitHook(function(){
                     legendOptions = $.extend(true, {}, {
                         index       : parseInt(indexAsStr), //this.index,
                         icon        : this.options.legendIcon || this.options.icon,
-                        text        : this.options.text || null,
+                        iconClass   : this.options.legendIconClass || this.options.iconClass || null,
+                        text        : this.options.legendText || this.options.text || null,
 
                         //content            : this.options.content,
                         contentArg         : [_this, map],
