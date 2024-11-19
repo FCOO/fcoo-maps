@@ -117,7 +117,11 @@
                 format      : 'image/png',
                 transparent : true,
                 crs         : "L.CRS.EPSG3857",
-                uppercase   : false
+                uppercase   : false,
+
+                //leaflet.edgebuffer disabled
+                edgeBufferTiles: 0,
+
             },
             staticUrl: "{protocol}//{s}.fcoo.dk/mapproxy/service",
             staticOptions: {

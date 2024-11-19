@@ -2046,7 +2046,11 @@ that includes current position, and use this other map to get the color
                 format      : 'image/png',
                 transparent : true,
                 crs         : "L.CRS.EPSG3857",
-                uppercase   : false
+                uppercase   : false,
+
+                //leaflet.edgebuffer disabled
+                edgeBufferTiles: 0,
+
             },
             staticUrl: "{protocol}//{s}.fcoo.dk/mapproxy/service",
             staticOptions: {
@@ -3324,7 +3328,8 @@ L.Layer.addInitHook(function(){
                     legendOptions = $.extend(true, {}, {
                         index       : parseInt(indexAsStr), //this.index,
                         icon        : this.options.legendIcon || this.options.icon,
-                        text        : this.options.text || null,
+                        iconClass   : this.options.legendIconClass || this.options.iconClass || null,
+                        text        : this.options.legendText || this.options.text || null,
 
                         //content            : this.options.content,
                         contentArg         : [_this, map],
