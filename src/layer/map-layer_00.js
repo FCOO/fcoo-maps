@@ -110,7 +110,7 @@ function findLayer( layer ){
         result = result || findLayer( _layer );
     });
 
-    $.each(['_source', '_parentPolyline'], function(index, id){
+    ['_source', '_parentPolyline'].forEach( id => {
         result = result || findLayer( layer[id] );
     });
 
@@ -247,14 +247,15 @@ L.Layer.addInitHook(function(){
         this.options = $.extend(true, {}, defaultOptions, options || {});
 
         //A list of options can for backward combability reasons be found both in options and in options.legendOptions
-        var _options = this.options,
-            _legendOptions = this.options.legendOptions;
-        $.each(['buttonList', 'buttons', 'content', 'noVerticalPadding', 'noHorizontalPadding', 'onInfo', 'onWarning'], function(index, id){
-            if ((_legendOptions[id] === undefined) && (_options[id] !== undefined)){
-                _legendOptions[id] = _options[id];
-                delete _options[id];
+        ['buttonList', 'buttons', 'content', 'noVerticalPadding', 'noHorizontalPadding', 'onInfo', 'onWarning'].forEach( id => {
+            let options = this.options,
+                legendOptions = this.options.legendOptions;
+
+            if ((legendOptions[id] === undefined) && (options[id] !== undefined)){
+                legendOptions[id] = options[id];
+                delete options[id];
             }
-        });
+        }, this);
 
         this.index = this.options.index || maxLayerIndex + 1;
         maxLayerIndex = Math.max(maxLayerIndex, this.index);
@@ -1038,117 +1039,28 @@ L.Layer.addInitHook(function(){
         /******************************************************************
         selectMaps
         Show modal window with checkbox or radio for each map
-        Select/unseelct the layer in all visible maps
+        Select/unselect the layer in all visible maps
         *******************************************************************/
-        selectMaps: function( map, state ){
+        selectMaps: function( currentMap, state ){
             //If it is rest all selected => do that
             if (state == 'RESET'){
                 this.removeFromAll();
                 return this;
             }
 
-            //If only one map is vissible => simple toggle
-            if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
-                if (this.isAddedToMap(0))
-                    this.removeFrom(0);
-                else
-                    this.addTo(0);
-                return this;
-            }
-
-            var _this = this,
-                currentMapIndex = map && map instanceof L.Map ? map.fcooMapIndex : null,
-                maxMaps = nsMap.setupOptions.multiMaps.maxMaps,
-                checkboxType = this.options.radioGroup ? 'radio' : 'checkbox',
-                selectedOnMap = [],
-                buttonList = [],
-                $checkbox = $.bsCheckbox({
-                    text: {da:'Vis på alle synlige kort', en:'Show on all visible maps'},
-                    type: checkboxType,
-                    onChange: function(id, selected){
-                        $.each(buttonList, function(index, $button){
-                            selectedOnMap[index] = selected;
-                            $button._cbxSet(selected, true);
-                        });
-                        updateCheckbox();
-                    }
-                });
-
-            //Get current selected state from all maps
-            for (var i=0; i<maxMaps; i++)
-                selectedOnMap[i] = this.isAddedToMap(i);
-
-            //updateCheckbox: Update common checkbox when single map is selected/unselected
-            function updateCheckbox(){
-                var allSelected = true, semiSelected = false;
-                $.each(buttonList, function(index/*, button*/){
-                    if (!selectedOnMap[index])
-                        allSelected = false;
-                    if (selectedOnMap[index] != selectedOnMap[0])
-                        semiSelected = true;
-                });
-
-                $checkbox.find('input')
-                    ._cbxSet(allSelected || semiSelected, true)
-                    .prop('checked', allSelected || semiSelected)
-                    .toggleClass('semi-selected', semiSelected);
-            }
-
-            function miniMapContent($contentContainer){
-                var $div =
-                        $('<div/>')
-                            .windowRatio(1.2*120, 1.2*180)
-                            .addClass('mx-auto')
-                            .css('margin', '5px')
-                            .appendTo($contentContainer);
-
-                //Append a mini-multi-map to the container
-                L.multiMaps($div, {
-                    id    : nsMap.multiMaps.setup.id,
-                    local : true,
-                    border: false,
-                    update: function( index, map, $container ){
-                        $container.empty();
-
-                        //Create checkbox- or radio-button inside the mini-map
-                        buttonList[index] =
-                            $.bsStandardCheckboxButton({
-                                square  : true,
-                                selected: selectedOnMap[index],
-                                class   : index === currentMapIndex ? 'active' : '',
-                                type    : checkboxType,
-                                onChange: function(id, selected){
-                                    selectedOnMap[index] = selected;
-                                    updateCheckbox();
-                                }
-                            })
-                            .addClass('font-size-1-2rem w-100 h-100 ' + (index ? '' : 'border-multi-maps-main'))
-                            .appendTo( $container );
-                    }
-                });
-            }
-
-            var mapLayerModalForm = $.bsModalForm({
-                width     : 240,
+            //Use nsMap.selectMap(...) to select maps
+            nsMap.selectMaps({
                 header    : {icon: this.options.icon, text:  this.options.text},
-                static    : false,
-                keyboard  : true,
-                closeWithoutWarning: true,
 
-                content   : [$checkbox, miniMapContent],
-                onSubmit  : function(){
-                                nsMap.visitAllVisibleMaps( function(map){
-                                    if (selectedOnMap[map.fcooMapIndex])
-                                        _this.addTo(map);
-                                    else
-                                        _this.removeFrom(map);
-                                });
-                            },
-                remove: true
+                isSelected: this.isAddedToMap.bind(this),
+                select    : this.addTo.bind(this),
+                unselect  : this.removeFrom.bind(this),
+
+                singleMapAction: 'toggle',
+                showAsRadio    : this.options.radioGroup,
+                currentMap     : currentMap
             });
-
-            updateCheckbox();
-            mapLayerModalForm.edit({});
+            return this;
         }
     };
 

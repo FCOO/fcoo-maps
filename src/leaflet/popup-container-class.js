@@ -40,9 +40,7 @@ or any of its 'parent' layer has options._popupContainerClass
         });
 
         //Special case when layer is a element on the map (Popup, Polygon etc.)
-        $.each(['_source', '_parentPolyline'], function(index, id){
-            result = result || findOptions( layer[id], optionsId );
-        });
+        ['_source', '_parentPolyline'].forEach( id => result = result || findOptions( layer[id], optionsId ) );
 
         return result;
     }

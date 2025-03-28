@@ -9,19 +9,18 @@ If the application has time-depend layers include [`fcoo-maps-time`](https://git
 
 The different layers are in separate packages named `fcoo-maps-LAYER-NAME`
 
-Each layer using `fcoo-maps` or [`fcoo-maps-time`](https://github.com/FCOO/fcoo-maps-time.git)  
+Each layer using `fcoo-maps` or [`fcoo-maps-time`](https://github.com/FCOO/fcoo-maps-time.git)
 
 ## Installation
 ### bower
 `bower install https://github.com/FCOO/fcoo-maps.git --save`
 
 ## Demo
-http://FCOO.github.io/fcoo-maps/demo/ 
+http://FCOO.github.io/fcoo-maps/demo/
 
 <!--
 
 ## Usage
-```var myFcooMaps = new FcooMaps( options );```
 
 
 ### options

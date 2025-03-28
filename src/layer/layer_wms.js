@@ -241,9 +241,7 @@
 
         //Remove none-wms-options from options
         options = $.extend(true, {}, options);
-        $.each(['protocol', 'dataset'], function(index, id){
-            delete options[id];
-        });
+        ['protocol', 'dataset'].forEach( id => delete options[id] );
 
         return new LayerConstructor(url, options );
     };

@@ -29,7 +29,7 @@ Classes to creraet static and dynamic WMS-layers
     function MapLayer_wms(options) {
         //Move options regarding tileLayer into layerOptions
         options.layerOptions = options.layerOptions || {};
-        $.each(['layers', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'], function(index, id){
+        ['layers', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
             options.layerOptions[id] = options[id];
             delete options[id];
         });

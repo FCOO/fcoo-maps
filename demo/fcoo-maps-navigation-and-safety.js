@@ -34,8 +34,6 @@
                             $.extend({
                                 id    : id,
                                 icon  : 'fas fa-slash fa-navigation',
-legendIcon: 'fa-home',
-legendText: 'HEJ',
                                 zIndex: nsMap.zIndex.STATIC_LAYER_WATER,
                             },
                             options
