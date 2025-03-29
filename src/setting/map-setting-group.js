@@ -27,8 +27,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     };
 
     var msgSync = nsMap.msgAccordionAdd({
-            accordionId: 'sync',
-            excludeFromCommon: true,
+            accordionId  : 'sync',
+            editCommon   : nsMap.mapSettingGroup_editCommonMapSyncSetting,
+            onlyMultiMaps: true,
             header  : {
                 icon      : 'fa-sync',
                 text      : {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'},
@@ -694,7 +695,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 this.options.simpleMode = true;
                 SettingGroup_onSubmit.call(this, data); //Sets this.data = data
                 this.options.simpleMode = false;
-
                 this.saveParent(data);
             };
         }(ns.SettingGroup.prototype.onSubmit),
@@ -711,10 +711,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             if (this.modalForm)
                 this.modalForm.$bsModal.close();
 
-// HER>             this.save(data);
             this.saveParent(data);
-
-
         },
 
         //saveParent - Save data in 'parent' = appSetting
@@ -825,12 +822,12 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     /*****************************************************************************
     resetMapSetting(mapOrMapIndexOrMapId, accordionId)
     *****************************************************************************/
-    function getMapSettingGroup(mapOrMapIndexOrMapId){
+    let getMapSettingGroup = nsMap.getMapSettingGroup = function(mapOrMapIndexOrMapId){
         var map = nsMap.getMap(mapOrMapIndexOrMapId),
             bsSettingControl = map ? map.bsSettingControl : null,
             mapSettingGroup = bsSettingControl ? bsSettingControl.mapSettingGroup : null;
         return mapSettingGroup;
-    }
+    };
 
     nsMap.resetMapSetting = function(mapOrMapIndexOrMapId, accordionId){
         //accordionId is given direct i call or once by editMapSetting_options
@@ -1024,14 +1021,16 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
             //button-group for setting same settings for all maps
             var itemContent = [];
-            $.each(nsMap.msgAccordionList, function(index, options){
-                if (!options.excludeFromCommon)
+            nsMap.msgAccordionList.forEach( (options,index) => {
+                if (!options.excludeFromCommon){
+                    let editFunc = options.editCommon || nsMap.editMapSetting;
                     itemContent.push({
                         id      : 'msgId_'+index,
                         icon    : options.header.icon,
                         text    : options.header.text,
-                        onClick : function(){ nsMap.editMapSetting(0, {applyToAll: true, msgAccordionId: options.accordionId} ); }
+                        onClick : editFunc.bind(null, 0, {applyToAll: true, msgAccordionId: options.accordionId})
                     });
+                }
             });
 
             content.push({

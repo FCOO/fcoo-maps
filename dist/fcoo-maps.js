@@ -2170,9 +2170,7 @@ that includes current position, and use this other map to get the color
 
         //Remove none-wms-options from options
         options = $.extend(true, {}, options);
-        $.each(['protocol', 'dataset'], function(index, id){
-            delete options[id];
-        });
+        ['protocol', 'dataset'].forEach( id => delete options[id] );
 
         return new LayerConstructor(url, options );
     };
@@ -3011,7 +3009,7 @@ function findLayer( layer ){
         result = result || findLayer( _layer );
     });
 
-    $.each(['_source', '_parentPolyline'], function(index, id){
+    ['_source', '_parentPolyline'].forEach( id => {
         result = result || findLayer( layer[id] );
     });
 
@@ -3148,14 +3146,15 @@ L.Layer.addInitHook(function(){
         this.options = $.extend(true, {}, defaultOptions, options || {});
 
         //A list of options can for backward combability reasons be found both in options and in options.legendOptions
-        var _options = this.options,
-            _legendOptions = this.options.legendOptions;
-        $.each(['buttonList', 'buttons', 'content', 'noVerticalPadding', 'noHorizontalPadding', 'onInfo', 'onWarning'], function(index, id){
-            if ((_legendOptions[id] === undefined) && (_options[id] !== undefined)){
-                _legendOptions[id] = _options[id];
-                delete _options[id];
+        ['buttonList', 'buttons', 'content', 'noVerticalPadding', 'noHorizontalPadding', 'onInfo', 'onWarning'].forEach( id => {
+            let options = this.options,
+                legendOptions = this.options.legendOptions;
+
+            if ((legendOptions[id] === undefined) && (options[id] !== undefined)){
+                legendOptions[id] = options[id];
+                delete options[id];
             }
-        });
+        }, this);
 
         this.index = this.options.index || maxLayerIndex + 1;
         maxLayerIndex = Math.max(maxLayerIndex, this.index);
@@ -3939,117 +3938,28 @@ L.Layer.addInitHook(function(){
         /******************************************************************
         selectMaps
         Show modal window with checkbox or radio for each map
-        Select/unseelct the layer in all visible maps
+        Select/unselect the layer in all visible maps
         *******************************************************************/
-        selectMaps: function( map, state ){
+        selectMaps: function( currentMap, state ){
             //If it is rest all selected => do that
             if (state == 'RESET'){
                 this.removeFromAll();
                 return this;
             }
 
-            //If only one map is vissible => simple toggle
-            if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
-                if (this.isAddedToMap(0))
-                    this.removeFrom(0);
-                else
-                    this.addTo(0);
-                return this;
-            }
-
-            var _this = this,
-                currentMapIndex = map && map instanceof L.Map ? map.fcooMapIndex : null,
-                maxMaps = nsMap.setupOptions.multiMaps.maxMaps,
-                checkboxType = this.options.radioGroup ? 'radio' : 'checkbox',
-                selectedOnMap = [],
-                buttonList = [],
-                $checkbox = $.bsCheckbox({
-                    text: {da:'Vis på alle synlige kort', en:'Show on all visible maps'},
-                    type: checkboxType,
-                    onChange: function(id, selected){
-                        $.each(buttonList, function(index, $button){
-                            selectedOnMap[index] = selected;
-                            $button._cbxSet(selected, true);
-                        });
-                        updateCheckbox();
-                    }
-                });
-
-            //Get current selected state from all maps
-            for (var i=0; i<maxMaps; i++)
-                selectedOnMap[i] = this.isAddedToMap(i);
-
-            //updateCheckbox: Update common checkbox when single map is selected/unselected
-            function updateCheckbox(){
-                var allSelected = true, semiSelected = false;
-                $.each(buttonList, function(index/*, button*/){
-                    if (!selectedOnMap[index])
-                        allSelected = false;
-                    if (selectedOnMap[index] != selectedOnMap[0])
-                        semiSelected = true;
-                });
-
-                $checkbox.find('input')
-                    ._cbxSet(allSelected || semiSelected, true)
-                    .prop('checked', allSelected || semiSelected)
-                    .toggleClass('semi-selected', semiSelected);
-            }
-
-            function miniMapContent($contentContainer){
-                var $div =
-                        $('<div/>')
-                            .windowRatio(1.2*120, 1.2*180)
-                            .addClass('mx-auto')
-                            .css('margin', '5px')
-                            .appendTo($contentContainer);
-
-                //Append a mini-multi-map to the container
-                L.multiMaps($div, {
-                    id    : nsMap.multiMaps.setup.id,
-                    local : true,
-                    border: false,
-                    update: function( index, map, $container ){
-                        $container.empty();
-
-                        //Create checkbox- or radio-button inside the mini-map
-                        buttonList[index] =
-                            $.bsStandardCheckboxButton({
-                                square  : true,
-                                selected: selectedOnMap[index],
-                                class   : index === currentMapIndex ? 'active' : '',
-                                type    : checkboxType,
-                                onChange: function(id, selected){
-                                    selectedOnMap[index] = selected;
-                                    updateCheckbox();
-                                }
-                            })
-                            .addClass('font-size-1-2rem w-100 h-100 ' + (index ? '' : 'border-multi-maps-main'))
-                            .appendTo( $container );
-                    }
-                });
-            }
-
-            var mapLayerModalForm = $.bsModalForm({
-                width     : 240,
+            //Use nsMap.selectMap(...) to select maps
+            nsMap.selectMaps({
                 header    : {icon: this.options.icon, text:  this.options.text},
-                static    : false,
-                keyboard  : true,
-                closeWithoutWarning: true,
 
-                content   : [$checkbox, miniMapContent],
-                onSubmit  : function(){
-                                nsMap.visitAllVisibleMaps( function(map){
-                                    if (selectedOnMap[map.fcooMapIndex])
-                                        _this.addTo(map);
-                                    else
-                                        _this.removeFrom(map);
-                                });
-                            },
-                remove: true
+                isSelected: this.isAddedToMap.bind(this),
+                select    : this.addTo.bind(this),
+                unselect  : this.removeFrom.bind(this),
+
+                singleMapAction: 'toggle',
+                showAsRadio    : this.options.radioGroup,
+                currentMap     : currentMap
             });
-
-            updateCheckbox();
-            mapLayerModalForm.edit({});
+            return this;
         }
     };
 
@@ -4135,7 +4045,7 @@ Classes to creraet static and dynamic WMS-layers
     function MapLayer_wms(options) {
         //Move options regarding tileLayer into layerOptions
         options.layerOptions = options.layerOptions || {};
-        $.each(['layers', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'], function(index, id){
+        ['layers', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
             options.layerOptions[id] = options[id];
             delete options[id];
         });
@@ -4413,6 +4323,142 @@ coast-lines, and name of cites and places
 
 ;
 /****************************************************************************
+map-select
+
+Objects and methods to handle to select maps
+****************************************************************************/
+(function ($, L, window/*, document, undefined*/) {
+    "use strict";
+
+    var ns = window.fcoo = window.fcoo || {},
+        nsMap = ns.map = ns.map || {};
+
+    /*********************************************************************
+    selectMaps
+    Show modal window with checkbox or radio for each map
+    Select/unselect the layer in all visible maps
+    options = {
+        header,
+        text,
+        isSelected: function(mapOrMapIndex) return BOOLEAN
+        select    : function(mapOrMapIndex)
+        unselect  : function(mapOrMapIndex)
+
+        singleMapAction: 'toggle', 'select' or 'unselect'
+        showAsRadio    : BOOLEAN, true => show checkbox as radio
+        currentMap     : map or mapIndex for map to be highlighted
+    }
+    *********************************************************************/
+    nsMap.selectMaps = function( options ){
+        let o = $.extend(true, {
+                    text      : {da:'Vis på alle synlige kort', en:'Show on all visible maps'},
+                    modalWidth: 240,
+                }, options);
+
+        //If only one map is vissible => simple toggle or select or unselect
+        if (!nsMap.hasMultiMaps || (nsMap.multiMaps.setup.maps == 1)){
+            if (o.singleMapAction)
+                switch (o.singleMapAction.toLowerCase()){
+                    case 'toggle'  :  o.isSelected(0) ? o.unselect(0) : o.select(0); break;
+                    case 'select'  :  o.select(0); break;
+                    case 'unselect':  o.unselect(0); break;
+                }
+            return;
+        }
+
+        let currentMapIndex = o.currentMap && o.currentMap instanceof L.Map ? o.currentMap.fcooMapIndex : null,
+            maxMaps         = nsMap.setupOptions.multiMaps.maxMaps,
+            checkboxType    = o.showAsRadio ? 'radio' : 'checkbox',
+            selectedOnMap  = [],
+            buttonList     = [],
+
+            $checkbox = $.bsCheckbox({
+                text    : o.text,
+                type    : checkboxType,
+                onChange: function(id, selected){
+                    $.each(buttonList, (index, $button) => {
+                        selectedOnMap[index] = selected;
+                        $button._cbxSet(selected, true);
+                    });
+                    updateCheckbox();
+                }
+            });
+
+        //Get current selected state from all maps
+        for (var mapIndex=0; mapIndex<maxMaps; mapIndex++)
+            selectedOnMap[mapIndex] = o.isSelected(mapIndex);
+
+        //updateCheckbox: Update common checkbox when single map is selected/unselected
+        function updateCheckbox(){
+            var allSelected = true, semiSelected = false;
+            $.each(buttonList, (index/*, button*/) => {
+                if (!selectedOnMap[index])
+                    allSelected = false;
+                if (selectedOnMap[index] != selectedOnMap[0])
+                    semiSelected = true;
+            });
+
+            $checkbox.find('input')
+                ._cbxSet(allSelected || semiSelected, true)
+                .prop('checked', allSelected || semiSelected)
+                .toggleClass('semi-selected', semiSelected);
+        }
+
+        //miniMapContent: Create content with checkbox inside each map-frame
+        function miniMapContent($contentContainer){
+            let $div = $('<div/>')
+                    .windowRatio(1.2*120, 1.2*180)
+                    .addClass('mx-auto')
+                    .css('margin', '5px')
+                    .appendTo($contentContainer);
+
+            //Append a mini-multi-map to the container
+            L.multiMaps($div, {
+                id    : nsMap.multiMaps.setup.id,
+                local : true,
+                border: false,
+                update: function( index, map, $container ){
+                    $container.empty();
+
+                    //Create checkbox- or radio-button inside the mini-map
+                    buttonList[index] =
+                        $.bsStandardCheckboxButton({
+                            square  : true,
+                            selected: selectedOnMap[index],
+                            class   : index === currentMapIndex ? 'active' : '',
+                            type    : checkboxType,
+                            onChange: function(id, selected){
+                                selectedOnMap[index] = selected;
+                                updateCheckbox();
+                            }
+                        })
+                        .addClass('font-size-1-2rem w-100 h-100 ' + (index ? '' : 'border-multi-maps-main'))
+                        .appendTo( $container );
+                }
+            });
+        }
+
+        var mapLayerModalForm = $.bsModalForm({
+                width     : o.modalWidth,
+                header    : o.header,
+                static    : false,
+                keyboard  : true,
+                closeWithoutWarning: true,
+                remove    : true,
+
+                content   : [$checkbox, miniMapContent],
+                onSubmit  : () => nsMap.visitAllVisibleMaps( (map) => selectedOnMap[map.fcooMapIndex] ? o.select(map) : o.unselect(map) )
+            });
+
+        updateCheckbox();
+        mapLayerModalForm.edit({});
+    };
+
+
+}(jQuery, L, this, document));
+
+;
+/****************************************************************************
 map-setting-group.js,
 Create mapSettingGroup = setting-group for each maps with settings for the map
 ****************************************************************************/
@@ -4441,8 +4487,9 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     };
 
     var msgSync = nsMap.msgAccordionAdd({
-            accordionId: 'sync',
-            excludeFromCommon: true,
+            accordionId  : 'sync',
+            editCommon   : nsMap.mapSettingGroup_editCommonMapSyncSetting,
+            onlyMultiMaps: true,
             header  : {
                 icon      : 'fa-sync',
                 text      : {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'},
@@ -5108,7 +5155,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 this.options.simpleMode = true;
                 SettingGroup_onSubmit.call(this, data); //Sets this.data = data
                 this.options.simpleMode = false;
-
                 this.saveParent(data);
             };
         }(ns.SettingGroup.prototype.onSubmit),
@@ -5125,10 +5171,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
             if (this.modalForm)
                 this.modalForm.$bsModal.close();
 
-// HER>             this.save(data);
             this.saveParent(data);
-
-
         },
 
         //saveParent - Save data in 'parent' = appSetting
@@ -5239,12 +5282,12 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     /*****************************************************************************
     resetMapSetting(mapOrMapIndexOrMapId, accordionId)
     *****************************************************************************/
-    function getMapSettingGroup(mapOrMapIndexOrMapId){
+    let getMapSettingGroup = nsMap.getMapSettingGroup = function(mapOrMapIndexOrMapId){
         var map = nsMap.getMap(mapOrMapIndexOrMapId),
             bsSettingControl = map ? map.bsSettingControl : null,
             mapSettingGroup = bsSettingControl ? bsSettingControl.mapSettingGroup : null;
         return mapSettingGroup;
-    }
+    };
 
     nsMap.resetMapSetting = function(mapOrMapIndexOrMapId, accordionId){
         //accordionId is given direct i call or once by editMapSetting_options
@@ -5438,14 +5481,16 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
 
             //button-group for setting same settings for all maps
             var itemContent = [];
-            $.each(nsMap.msgAccordionList, function(index, options){
-                if (!options.excludeFromCommon)
+            nsMap.msgAccordionList.forEach( (options,index) => {
+                if (!options.excludeFromCommon){
+                    let editFunc = options.editCommon || nsMap.editMapSetting;
                     itemContent.push({
                         id      : 'msgId_'+index,
                         icon    : options.header.icon,
                         text    : options.header.text,
-                        onClick : function(){ nsMap.editMapSetting(0, {applyToAll: true, msgAccordionId: options.accordionId} ); }
+                        onClick : editFunc.bind(null, 0, {applyToAll: true, msgAccordionId: options.accordionId})
                     });
+                }
             });
 
             content.push({
@@ -5667,11 +5712,19 @@ Objects and methods to handle map-sync
     mapSettingGroup_mapSyncOptions
     Return the options used in mapSetting regarding mapSync
     *********************************************************************/
-    nsMap.mapSettingGroup_mapSyncOptions = function(accordionId, header){
+    function mapSync_ModalFooter(noSpace){
+        return [
+            {icon:'fas fa-square-full text-multi-maps-current', text:{da:':&nbsp;Dette kort', en:':&nbsp;This map'}},
+            noSpace ? null : {text:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'},
+            {icon:'far fa-square-full text-multi-maps-main', text:{da:':&nbsp;Hovedkort',  en:':&nbsp;Main map'}}
+        ];
+    }
+
+    function mapSyncOptions_singleMap(checkboxId, zoomOffsetId, controlId=''){
         var content = [];
         //Checkbox with "Sync with main map"
         content.push({
-            id  :'enabled',
+            id  : checkboxId,
             text: {da:'Synk. position/zoom med hovedkort', en:'Sync. position/zoom with main map'},
             type: 'checkbox'
         });
@@ -5690,13 +5743,22 @@ Objects and methods to handle map-sync
                     text = {da: zoomOffset+ ' x zoom ind', en: zoomOffset+ ' x zoom in'};
             zoomItems.push( {id: 'zoomOffset_'+zoomOffset, text: text} );
         }
+        let showWhen = {};
+        showWhen[controlId + (controlId?'_':'')+checkboxId] = true;
         content.push({
-            id      : 'zoomOffset',
+            id      : zoomOffsetId,
             label   : {da:'Zoom-niveau', en:'Zoom level'},
             type    : 'select',
             items   : zoomItems,
-            showWhen: {"mapSyncControl_enabled": true}
+            showWhen: showWhen
         });
+
+        return content;
+    }
+
+
+    nsMap.mapSettingGroup_mapSyncOptions = function(accordionId, header){
+        let content = mapSyncOptions_singleMap('enabled', 'zoomOffset', 'mapSyncControl');
         content.push({
             type: 'textbox',
             icon: 'map-sync-zoom-offset',
@@ -5709,7 +5771,8 @@ Objects and methods to handle map-sync
             id          : ['enabled', 'zoomOffset'],
             header      : header,
             modalContent: content,
-            modalFooter : [
+            modalFooter : mapSync_ModalFooter(),
+            _modalFooter : [
                 {icon:'fas fa-square-full text-multi-maps-current', text:{da:':&nbsp;Dette kort', en:':&nbsp;This map'}},
                 {text:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'},
                 {icon:'far fa-square-full text-multi-maps-main', text:{da:':&nbsp;Hovedkort',  en:':&nbsp;Main map'}}
@@ -5782,6 +5845,138 @@ Objects and methods to handle map-sync
             .css( css )
             .toggle( currentMapInMainMap < 100  );
     }
+
+
+
+
+    /*********************************************************************
+    **********************************************************************
+    mapSettingGroup_mapSyncForm
+    A form to edit any sync options for all maps at the same time
+    **********************************************************************
+    *********************************************************************/
+    function buildMultiMaps( mapIndex ){
+        let miniMapDim = 36,
+            $outer = $('<div/>')
+                        .width(1.5*miniMapDim)
+                        .css('margin', '8px'),
+            $div  =  $('<div/>')
+                        .windowRatio(miniMapDim, 1.5*miniMapDim)
+                        .addClass('mx-auto')
+                        .appendTo($outer);
+
+        L.multiMaps($div, {
+            local : true,
+            border: true,
+            update: function( index, map, $container ){
+                //Main map
+                if (index == 0)
+                    $container.addClass('border-multi-maps-main');
+
+                //Current map
+                if (index == mapIndex)
+                    $container.addClass('bg-multi-maps-current');
+            }
+        }).set( nsMap.multiMaps.setup.id );
+
+        return $outer;
+    }
+
+
+    nsMap.mapSettingGroup_mapSyncForm = function(options){
+        let mapList = [];
+        nsMap.mapIndex.forEach( map => {
+            if (map && map.isVisibleInMultiMaps && !map.options.isMainMap)
+                mapList.push(map);
+        });
+
+        //Create content
+        let contentList = [];
+        mapList.forEach( map => {
+            let mapIndex = map.fcooMapIndex;
+            contentList.push({
+                type      : 'inputgroup',
+                label     : {da:'Kort #'+mapIndex, en:'Map #'+mapIndex},
+                horizontal: true,
+                noPadding : true,
+                class     : 'align-items-center',
+                content   : [{
+                    type: 'content',
+                    content: buildMultiMaps( mapIndex )
+                },{
+                    type     : 'inputgroup',
+                    noBorder : true,
+                    class    :'flex-grow-1 p-0',
+                    content  : options.getMapContent(mapIndex)
+                }]
+            });
+        });
+
+        if (options.desc || options.help ){
+            contentList.push({
+                label: {da: 'Vejledning', en:'Guidance'},
+                type : 'text',
+                small: window.bsIsTouch,
+                textClass: 'font-size-0-9em',
+                text : options.desc || options.help
+            });
+        }
+
+        //Get data
+        let data = {};
+        mapList.forEach( map => $.extend(data, options.getMapSetting(map.fcooMapIndex, map)) );
+
+        //Create form and edit data
+        $.bsModalForm({
+            header: options.header,
+            content: contentList,
+            footer : mapSync_ModalFooter(),
+
+            flexWidth   : true,
+            noValidation: true,
+            remove      : true,
+
+            onSubmit: function( data ){
+                mapList.forEach( map => {
+                    //let mapSettingGroup = nsMap.getMapSettingGroup(map); //@TODO måske skal saving generaliceres vha options.controlId
+                    options.setMapSetting(map.fcooMapIndex, map, data);
+                });
+            },
+        }).edit( data );
+    };
+
+    /*********************************************************************
+    mapSettingGroup_editCommonMapSyncSetting
+    Edit map sync (zoom and center) for all maps in one form
+    *********************************************************************/
+    nsMap.mapSettingGroup_editCommonMapSyncSetting = function(){
+        nsMap.mapSettingGroup_mapSyncForm({
+            controlId: 'mapSyncControl',
+            header   : {ison: 'fa-sync', text: {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'}},
+
+            getMapContent: function( mapIndex ){
+                return mapSyncOptions_singleMap('enabled'+mapIndex, 'zoomOffset'+mapIndex);
+            },
+
+            getMapSetting: function(mapIndex, map){
+                let state = map.mapSyncControl.getState(),
+                    data  = {};
+                data['enabled'+mapIndex]    = state.enabled;
+                data['zoomOffset'+mapIndex] = state.zoomOffset;
+                return data;
+            },
+
+            setMapSetting: function(mapIndex, map, data){
+                nsMap.getMapSettingGroup(map).saveParent({
+                    mapSyncControl: {
+                        enabled   : data['enabled'+mapIndex],
+                        zoomOffset: data['zoomOffset'+mapIndex]
+                    }
+                });
+            }
+        });
+    };
+
 }(jQuery, L, this, document));
 
 ;
@@ -6168,9 +6363,7 @@ or any of its 'parent' layer has options._popupContainerClass
         });
 
         //Special case when layer is a element on the map (Popup, Polygon etc.)
-        $.each(['_source', '_parentPolyline'], function(index, id){
-            result = result || findOptions( layer[id], optionsId );
-        });
+        ['_source', '_parentPolyline'].forEach( id => result = result || findOptions( layer[id], optionsId ) );
 
         return result;
     }
