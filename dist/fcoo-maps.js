@@ -179,11 +179,11 @@ Objects and methods to handle map-sync
         ];
     }
 
-    function mapSyncOptions_singleMap(checkboxId, zoomOffsetId, controlId=''){
+    function mapSyncOptions_singleMap(idPostfix='', controlId=''){
         var content = [];
         //Checkbox with "Sync with main map"
         content.push({
-            id  : checkboxId,
+            id  : 'enabled'+idPostfix,
             text: {da:'Synk. position/zoom med hovedkort', en:'Sync. position/zoom with main map'},
             type: 'checkbox'
         });
@@ -203,9 +203,9 @@ Objects and methods to handle map-sync
             zoomItems.push( {id: 'zoomOffset_'+zoomOffset, text: text} );
         }
         let showWhen = {};
-        showWhen[controlId + (controlId?'_':'')+checkboxId] = true;
+        showWhen[controlId + (controlId?'_':'')+'enabled'+idPostfix] = true;
         content.push({
-            id      : zoomOffsetId,
+            id      : 'zoomOffset'+idPostfix,
             label   : {da:'Zoom-niveau', en:'Zoom level'},
             type    : 'select',
             items   : zoomItems,
@@ -217,7 +217,7 @@ Objects and methods to handle map-sync
 
 
     nsMap.mapSettingGroup_mapSyncOptions = function(accordionId, header){
-        let content = mapSyncOptions_singleMap('enabled', 'zoomOffset', 'mapSyncControl');
+        let content = mapSyncOptions_singleMap('', 'mapSyncControl');
         content.push({
             type: 'textbox',
             icon: 'map-sync-zoom-offset',
@@ -343,11 +343,36 @@ Objects and methods to handle map-sync
 
 
     nsMap.mapSettingGroup_mapSyncForm = function(options){
+        let bsModalForm = null;
         let mapList = [];
         nsMap.mapIndex.forEach( map => {
             if (map && map.isVisibleInMultiMaps && !map.options.isMainMap)
                 mapList.push(map);
         });
+
+        if (!mapList.length)
+            return;
+
+        //Get the default value
+        let mapSettingGroup = nsMap.getMapSettingGroup(mapList[0]),
+            settings        = mapSettingGroup ? mapSettingGroup.settings[options.controlId] : null,
+            settingsOptions = settings ? settings.options : null,
+            defaultValue    = settingsOptions ? settingsOptions.defaultValue : null,
+            defaultValues   = {};
+
+        //Create defaylt values = copy of defaultValue
+        mapList.forEach( map => {
+            let mapIndex = map.fcooMapIndex;
+            $.each( defaultValue, (id, value) => defaultValues[id+mapIndex] = value );
+        });
+
+        let buttons = defaultValue ? [{
+                icon   : ns.icons.reset,
+                text   : ns.texts.reset,
+                onClick: () => { bsModalForm.setValues(defaultValues); }
+            }] : [];
+
+        buttons = buttons.concat(options.buttons || []);
 
         //Create content
         let contentList = [];
@@ -386,22 +411,21 @@ Objects and methods to handle map-sync
         mapList.forEach( map => $.extend(data, options.getMapSetting(map.fcooMapIndex, map)) );
 
         //Create form and edit data
-        $.bsModalForm({
+        bsModalForm = $.bsModalForm({
             header: options.header,
             content: contentList,
             footer : mapSync_ModalFooter(),
+            buttons: buttons,
 
-            flexWidth   : true,
+            flexWidth   : options.flexWidth,
             noValidation: true,
             remove      : true,
 
             onSubmit: function( data ){
-                mapList.forEach( map => {
-                    //let mapSettingGroup = nsMap.getMapSettingGroup(map); //@TODO måske skal saving generaliceres vha options.controlId
-                    options.setMapSetting(map.fcooMapIndex, map, data);
-                });
+                mapList.forEach( map => options.setMapSetting(map.fcooMapIndex, map, data) );
             },
-        }).edit( data );
+        });
+        bsModalForm.edit( data );
     };
 
     /*********************************************************************
@@ -412,26 +436,21 @@ Objects and methods to handle map-sync
         nsMap.mapSettingGroup_mapSyncForm({
             controlId: 'mapSyncControl',
             header   : {ison: 'fa-sync', text: {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'}},
+            flexWidth: true,
 
-            getMapContent: function( mapIndex ){
-                return mapSyncOptions_singleMap('enabled'+mapIndex, 'zoomOffset'+mapIndex);
-            },
+            getMapContent: mapSyncOptions_singleMap,
 
             getMapSetting: function(mapIndex, map){
                 let state = map.mapSyncControl.getState(),
                     data  = {};
-                data['enabled'+mapIndex]    = state.enabled;
-                data['zoomOffset'+mapIndex] = state.zoomOffset;
+                ['enabled', 'zoomOffset'].forEach( id => data[id+mapIndex] = state[id] );
                 return data;
             },
 
             setMapSetting: function(mapIndex, map, data){
-                nsMap.getMapSettingGroup(map).saveParent({
-                    mapSyncControl: {
-                        enabled   : data['enabled'+mapIndex],
-                        zoomOffset: data['zoomOffset'+mapIndex]
-                    }
-                });
+                let state = {};
+                ['enabled', 'zoomOffset'].forEach( id => state[id] = data[id+mapIndex] );
+                nsMap.getMapSettingGroup(map).saveParent({ mapSyncControl: state });
             }
         });
     };
