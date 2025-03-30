@@ -277,10 +277,10 @@ Objects and methods to handle map-sync
             defaultValue    = settingsOptions ? settingsOptions.defaultValue : null,
             defaultValues   = {};
 
-        //Create defaylt values = copy of defaultValue
+        //Create default values = copy of defaultValue
         mapList.forEach( map => {
             let mapIndex = map.fcooMapIndex;
-            $.each( defaultValue, (id, value) => defaultValues[id+mapIndex] = value );
+            $.each( defaultValue, (id, value) => { defaultValues[id+mapIndex] = value; } );
         });
 
         let buttons = defaultValue ? [{
