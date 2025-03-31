@@ -436,7 +436,7 @@ Objects and methods to handle map-sync
         nsMap.mapSettingGroup_mapSyncForm({
             controlId: 'mapSyncControl',
             header   : {ison: 'fa-sync', text: {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'}},
-            flexWidth: true,
+            flexWidth: window.bsIsTouch,
 
             getMapContent: mapSyncOptions_singleMap,
 
