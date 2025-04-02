@@ -385,13 +385,14 @@ Objects and methods to handle map-sync
                 noPadding : true,
                 class     : 'align-items-center',
                 content   : [{
-                    type: 'content',
+                    type   : 'content',
                     content: buildMultiMaps( mapIndex )
                 },{
-                    type     : 'inputgroup',
-                    noBorder : true,
-                    class    :'flex-grow-1 p-0',
-                    content  : options.getMapContent(mapIndex)
+                    type             : 'inputgroup',
+                    noBorder         : true,
+                    horizontalPadding: true,
+                    class            :'flex-grow-1 p-0',
+                    content          : options.getMapContent(mapIndex)
                 }]
             });
         });
@@ -422,8 +423,11 @@ Objects and methods to handle map-sync
             remove      : true,
 
             onSubmit: function( data ){
-                mapList.forEach( map => options.setMapSetting(map.fcooMapIndex, map, data) );
-            },
+                mapList.forEach( map => {
+                    options.setMapSetting(map.fcooMapIndex, map, data);
+                    options.onSubmit ? options.onSubmit(map) : null;
+                });
+            }
         });
         bsModalForm.edit( data );
     };
@@ -437,6 +441,8 @@ Objects and methods to handle map-sync
             controlId: 'mapSyncControl',
             header   : {ison: 'fa-sync', text: {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'}},
             flexWidth: window.bsIsTouch,
+
+            onSubmit: nsMap._onSubmit_mapSync,
 
             getMapContent: mapSyncOptions_singleMap,
 
@@ -452,6 +458,7 @@ Objects and methods to handle map-sync
                 ['enabled', 'zoomOffset'].forEach( id => state[id] = data[id+mapIndex] );
                 nsMap.getMapSettingGroup(map).saveParent({ mapSyncControl: state });
             }
+
         });
     };
 
@@ -4802,7 +4809,7 @@ Objects and methods to handle to select maps
                         $.bsStandardCheckboxButton({
                             square  : true,
                             selected: selectedOnMap[index],
-                            class   : index === currentMapIndex ? 'active' : '',
+                            class   : 'rounded-0 ' + (index === currentMapIndex ? 'active' : ''),
                             type    : checkboxType,
                             onChange: function(id, selected){
                                 selectedOnMap[index] = selected;
@@ -5703,9 +5710,15 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     var editMapSetting_options = {},
         clear_editMapSetting_options = function(){
             editMapSetting_options = {};
-        };
+        },
 
-    nsMap.editMapSetting = function(mapOrMapIndexOrMapId, options = {}){
+		editMapSetting_onSubmit = function(){
+			clear_editMapSetting_options();
+            nsMap._onSubmit_mapSync( this.map );
+		};
+
+
+	nsMap.editMapSetting = function(mapOrMapIndexOrMapId, options = {}){
         var mapSettingGroup = getMapSettingGroup(mapOrMapIndexOrMapId);
         editMapSetting_options = options;
         if (!mapSettingGroup) return;
@@ -5777,10 +5790,8 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                 clear_editMapSetting_options();
             };
         }
-        else {
-            mapSettingGroup.options.onSubmit = clear_editMapSetting_options; //null;
-            mapSettingGroup.options.onClose  = clear_editMapSetting_options; //null;
-        }
+        else
+            mapSettingGroup.options.onClose  = editMapSetting_onSubmit.bind(mapSettingGroup);
 
         //Reset all accordions to be visible
         if (mapSettingGroup.modalForm)
@@ -5802,7 +5813,6 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                         controlOptionsForm_preEdit.apply(this, arguments);
                     } :
                     controlOptionsForm_preEdit;
-
         mapSettingGroup.edit( msgAccordion ? msgAccordion.id : null, editData, fullPreEdit );
     };
 
@@ -5812,6 +5822,13 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
     *****************************************************************************/
     var mapSettingModal        = null,
         mapSettingMiniMultiMap = null;
+
+
+    nsMap._onSubmit_mapSync = function( map ){
+        if (map.mapSyncControl && map.mapSyncControl.$buttonInEditAll)
+            nsMap.updateMapSettingIconWithStatus( map.mapSyncControl.$buttonInEditAll, map.mapSyncControl.getState().enabled );
+    };
+
 
     function editAllMapSettings(){
         if (!mapSettingModal){
@@ -5837,7 +5854,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                                 var $button = $.bsButton({
                                         icon   : nsMap.mapSettingIconWithStatus('font-size-0-75em'),
                                         square : true,
-                                        class  : 'w-100 h-100 ' + (index ? '' : 'border-multi-maps-main'),
+                                        class  : 'rounded-0 w-100 h-100 ' + (index ? '' : 'border-multi-maps-main'),
                                         onClick: function(){
                                             nsMap.editMapSetting(index, {multiMapSetupId: mapSettingMiniMultiMap.setup.id});
                                         }

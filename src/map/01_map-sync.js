@@ -302,13 +302,14 @@ Objects and methods to handle map-sync
                 noPadding : true,
                 class     : 'align-items-center',
                 content   : [{
-                    type: 'content',
+                    type   : 'content',
                     content: buildMultiMaps( mapIndex )
                 },{
-                    type     : 'inputgroup',
-                    noBorder : true,
-                    class    :'flex-grow-1 p-0',
-                    content  : options.getMapContent(mapIndex)
+                    type             : 'inputgroup',
+                    noBorder         : true,
+                    horizontalPadding: true,
+                    class            :'flex-grow-1 p-0',
+                    content          : options.getMapContent(mapIndex)
                 }]
             });
         });
@@ -339,8 +340,11 @@ Objects and methods to handle map-sync
             remove      : true,
 
             onSubmit: function( data ){
-                mapList.forEach( map => options.setMapSetting(map.fcooMapIndex, map, data) );
-            },
+                mapList.forEach( map => {
+                    options.setMapSetting(map.fcooMapIndex, map, data);
+                    options.onSubmit ? options.onSubmit(map) : null;
+                });
+            }
         });
         bsModalForm.edit( data );
     };
@@ -354,6 +358,8 @@ Objects and methods to handle map-sync
             controlId: 'mapSyncControl',
             header   : {ison: 'fa-sync', text: {da:'Synkronisering med hovedkort', en:'Synchronizing with main map'}},
             flexWidth: window.bsIsTouch,
+
+            onSubmit: nsMap._onSubmit_mapSync,
 
             getMapContent: mapSyncOptions_singleMap,
 
@@ -369,6 +375,7 @@ Objects and methods to handle map-sync
                 ['enabled', 'zoomOffset'].forEach( id => state[id] = data[id+mapIndex] );
                 nsMap.getMapSettingGroup(map).saveParent({ mapSyncControl: state });
             }
+
         });
     };
 

@@ -101,7 +101,7 @@ Objects and methods to handle to select maps
                         $.bsStandardCheckboxButton({
                             square  : true,
                             selected: selectedOnMap[index],
-                            class   : index === currentMapIndex ? 'active' : '',
+                            class   : 'rounded-0 ' + (index === currentMapIndex ? 'active' : ''),
                             type    : checkboxType,
                             onChange: function(id, selected){
                                 selectedOnMap[index] = selected;
