@@ -397,6 +397,27 @@ EDIT SYNC MAPS SETTINGS
   height: 50%;
 }
 
+.container-stacked-icons .stacked-icon {
+  /*
+  fa-2xs	0.625em	10px
+  fa-xs	0.75em	12px
+  fa-sm	0.875em	14px
+  fa-lg	1.25em	20px
+  fa-xl	1.5em	24px
+  fa-2xl	2em	32px
+  */
+}
+.container-stacked-icons .stacked-icon.fa-1xzoom {
+  font-size: 0.8em;
+  margin-left: -1.125em;
+  vertical-align: 0.05em;
+}
+.container-stacked-icons .stacked-icon.fa-2xzoom {
+  font-size: 0.625em;
+  margin-left: -1.3em;
+  vertical-align: 0.2em;
+}
+
 /**********************************************************
 EDIT BACKGROUND MAP SETTINGS
 **********************************************************/

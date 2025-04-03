@@ -117,16 +117,44 @@ Objects and methods to handle map-sync
                     text = {da: 'Samme som hovedkort', en:'Same as main map'};
                 else
                     text = {da: zoomOffset+ ' x zoom ind', en: zoomOffset+ ' x zoom in'};
-            zoomItems.push( {id: 'zoomOffset_'+zoomOffset, text: text} );
+
+            //Create zoom-mode-icon
+            let outerIcon = 'fa-square-full', 
+                innerIcon = '';
+            switch (Math.abs(zoomOffset)){
+                case 0:  innerIcon = outerIcon; break;
+                case 1:  innerIcon = 'fa-square fa-1xzoom'; break;
+                case 2:  innerIcon = 'fa-square-small fa-2xzoom'; break;
+            }                
+
+            if (zoomOffset < 0){
+                outerIcon = 'fas text-multi-maps-current '  + outerIcon;
+                innerIcon = 'far text-multi-maps-main '     + innerIcon;                
+            }
+            else {
+                outerIcon = 'far text-multi-maps-main '     + outerIcon;
+                innerIcon = 'fas text-multi-maps-current  ' + innerIcon;                
+            }
+                
+            zoomItems.push({
+                id: 'zoomOffset_'+zoomOffset, 
+                icon: [[
+                    zoomOffset ? outerIcon : innerIcon, 
+                    zoomOffset ? innerIcon : outerIcon
+                ]],
+                text: text
+            });
         }
+        
         let showWhen = {};
         showWhen[controlId + (controlId?'_':'')+'enabled'+idPostfix] = true;
         content.push({
-            id      : 'zoomOffset'+idPostfix,
-            label   : {da:'Zoom-niveau', en:'Zoom level'},
-            type    : 'select',
-            items   : zoomItems,
-            showWhen: showWhen
+            id       : 'zoomOffset'+idPostfix,
+            label    : {da:'Zoom-niveau', en:'Zoom level'},
+            type     : 'selectbutton',
+            fullWidth: true,            
+            items    : zoomItems,
+            showWhen : showWhen
         });
 
         return content;
