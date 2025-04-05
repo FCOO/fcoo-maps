@@ -149,7 +149,7 @@ Objects and methods to handle leaflet-maps
         maxZoom: 12,
 
         zoomSnap: 0.25,
-
+            
         //Hide attribution
         attributionControl: false,
 

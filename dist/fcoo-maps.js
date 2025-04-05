@@ -2845,7 +2845,7 @@ Objects and methods to handle leaflet-maps
         maxZoom: 12,
 
         zoomSnap: 0.25,
-
+            
         //Hide attribution
         attributionControl: false,
 
@@ -3333,7 +3333,7 @@ options = {
 
     //Menu
     menuOptions: {
-        buttonList : []bsButton-options
+        buttonList : []bsButton-options. options.onClick = function( id, selected, $button, map ). If useLegendButtonList = true map is null if the button is clicked from the menu
         useLegendButtonList: BOOLEAN, if true and menuOptions.buttonList is not given => use legendOptions.buttonList as in menu
     },
 
@@ -7057,7 +7057,10 @@ search-mapLayer.js
         /*****************************************************
         searchButton and buttonList = ´Buttons for legend, menu etc.
         *****************************************************/
-        _searchButton_onClick: function(id, selected, $button, map){
+        _searchButton_onClick: function(id, selected, $button, map){ 
+            
+//console.log('_searchButton_onClick', id, selected, $button, map);
+    
             if (this.searchResultListModal)
                 this.searchResultListModal.close();
             nsMap.showSearchModalForm('', map || ns.showSearchResultInMap );
@@ -7430,6 +7433,10 @@ search-result.js
     var ns = window.fcoo = window.fcoo || {},
         nsMap = ns.map = ns.map || {};
 
+    function removeDuplicates(arr){
+        return arr.filter(function(item, pos, self) { return self.indexOf(item) == pos; });
+    }
+
 
     var searchResultLineColor = 'black',
         searchResultColor     = 'search-result';
@@ -7597,16 +7604,29 @@ search-result.js
         _getModalOptions: function(options){
             this.update(options[0]);
 
-            //Create the dynamic part of the modal-options
-            var lang = ns.globalSetting.get('language'),
-                content = [{
-                    label    : {da:'Navn(e)', en:'Name(s)'},
-                    type     : 'text',
-                    text     : this.names[lang].split('&nbsp;/&nbsp;').join('<br>'),
-                    center   : true,
-                    textStyle: 'fw-bold'
-                }];
+            const lang = ns.globalSetting.get('language');
 
+
+            //Create the dynamic part of the modal-options
+            let langList = [lang, 'en', this.localLang],
+                nameList = [];
+            
+            langList.forEach( lang => {
+                if (lang && this.name[lang])
+                    nameList.push(this.name[lang]);
+            }, this);                
+
+            nameList = removeDuplicates(nameList);
+            nameList[0] = '<strong>' + nameList[0] + '</strong>';
+            
+            let content = [{
+                    label    : nameList.length == 1 ? {da:'Navn', en:'Name'} : {da:'Navne', en:'Names'},
+                    type     : 'text',
+                    text     : nameList.join('<br>'),
+                    center   : true,
+                    //textStyle: 'fw-bold'
+                }];
+            
             //Add position.
             if (this.inclPositionIsDetails)
                 content.push({
@@ -7624,14 +7644,16 @@ search-result.js
             //Add content from details
             content = content.concat( nsMap.osm_details_list(this, {type: 'text', center: true} ) );
 
-            //Special case: Add flag
-            if (this.options.extratags && this.options.extratags.flag)
+
+            //Add flag lang-flag-icon
+            if (this.countryCode && (this.options.addresstype == "country"))
                 content.push({
                     label    : {da:'Flag', en:'Flag'},
                     type     : 'text',
-                    text     : '<img src="'+this.options.extratags.flag+'" style="border: 1px solid gray; height:100px"/>',
+                    text     : '<img src="images/'+this.countryCode+'_4x3.svg" style="border: 1px solid gray; height:100px"/>',
                     center   : true
                 });
+
 
             this.langDetails = this.langDetails || {};
             this.langDetails[lang] = this.langDetails[lang] || {
@@ -7645,8 +7667,6 @@ search-result.js
         //update - append new options and update object
         **********************************************/
         update: function(newOptions){
-            var _this = this;
-
             this.optionsLang = ns.globalSetting.get('language'); //The lang used to get the new options
 
             this.options = this.options || {};
@@ -7655,53 +7675,60 @@ search-result.js
             var opt = this.options;
 
             this.countryCode = opt.address && opt.address.country_code ? opt.address.country_code : '';
-            this.flagIcon = this.countryCode ? 'fa fa-flag-' + this.countryCode : '';
-            this.typeText = nsMap.osm_type_text(opt) || opt.type;
-            this.name = opt.name || '';
+            this.localLang   = ns.country2lang(this.countryCode),
+            this.flagIcon    = this.countryCode ? 'fa fa-flag-' + this.countryCode : '';
+            this.typeText    = nsMap.osm_type_text(opt) || opt.type;
+            this.name        = opt.name || '';
             this.displayName = nsMap.osm_display_name(opt);
 
-            if (opt.isPosition)
+            if (opt.isPosition){
                 this.names = this.name;
+            }                
             else {
-                if (!this.name && opt.namedetails){
-                    //Construct name and name = {lang:STRING} for all lang in i18next.languages and the local language (if found)
-                    var localLang = ns.country2lang(this.countryCode),
-                        localName = opt.namedetails.name || opt.namedetails['name:'+localLang] || '',
+                if (opt.namedetails){
+                    //There are multi-language names for the Search-Result
+                    
+                    let localName   = opt.namedetails.name || opt.namedetails['name:'+this.localLang] || '',
                         defaultName = opt.namedetails['name:en'] || '';
 
                     //Set local name (if not allerady set)
-                    opt.namedetails['name:'+localLang] = opt.namedetails['name:'+localLang] || localName;
-                    $.each(i18next.languages, function(index, lang){
-                        //Create list of language-code with localLang, lang, all other
-                        var namedetailsId = [localLang, lang].concat(i18next.languages);
+                    opt.namedetails['name:'+this.localLang] = opt.namedetails['name:'+this.localLang] || localName;
 
-                        //Find all names in namedetils with language-code in namedetailsId
-                        var nameList = [];
-                        $.each(namedetailsId, function(index, id){
-                            var name = opt.namedetails['name:'+id];
-                            if (name && (nameList.indexOf(name) == -1))
-                                nameList.push(name);
+                    //langList = []Language-code for lang in i18next.languages and the local language (if found)
+                    let langList = [];
+                    i18next.languages.forEach( lang => langList.push(lang) );
+                    if (this.localLang){
+                        langList.push(this.localLang);
+                        langList = removeDuplicates(langList);
+                    }                        
+                     
+                    //Set name = {lang:STRING}
+                    this.name = {};
+                    langList.forEach( lang => {
+                        this.name[lang] = opt.namedetails['name:'+lang] || opt.name || defaultName;                         
+                    }, this);                        
 
-                            _this.name = _this.name || {};
-                            name = name || defaultName;
-                            if (name){
-                                //Add [localname / ]name/defaultNme as name[id]
-                                if (localName && (localName != name))
-                                    _this.name[id] = localName + ' / ' + name;
-                                else
-                                    _this.name[id] = name;
-                            }
-                        });
-                        _this.names = _this.names || {};
-                        _this.names[lang] = nameList.join('&nbsp;/&nbsp;');
-                    });
+                    /*
+                    Construct names = {lang:STRING} for all lang in i18next.languages
+                    The STRING = name in language + (localName) - if any
+                    Eq. names = {
+                            da: "Danmark",
+                            en: "Denmark (Danmark)"
+                        }                            
+                    */
+                    const localNameStr = localName ? ' (' + localName + ')' : '';
+                    this.names = {};
+                    i18next.languages.forEach( lang => {
+                        const nextName = this.name[lang];
+                        this.names[lang] = nextName + (nextName != localName ? localNameStr : '');
+                    }, this);
                 }
 
                 //If only one name is given => convert to {lang:name}
                 if (this.name && (typeof this.name == 'string')){
                     var nameStr = this.name;
                     this.name = {};
-                    this.name[this.optionsLang] =  nameStr;
+                    this.name[this.optionsLang] = nameStr;
                 }
 
                 //Sync between name and names
@@ -7709,13 +7736,13 @@ search-result.js
                 this.names = this.names || {};
 
                 $.each(this.names, function(lang, names){
-                    if (!_this.name[lang])
-                        _this.name[lang] = names.split('&nbsp;/&nbsp;')[0];
-                });
+                    if (!this.name[lang])
+                        this.name[lang] = names.split('&nbsp;/&nbsp;')[0];
+                }.bind(this));
                 $.each(this.name, function(lang, name){
-                    if (!_this.names[lang])
-                        _this.names[lang] = name;
-                });
+                    if (!this.names[lang])
+                        this.names[lang] = name;
+                }.bind(this));
             }
 
             //Remove display_name if if it is contained in names
@@ -7732,7 +7759,7 @@ search-result.js
 		listContent - Return content for the list of results
         **********************************************/
 		listContent: function( listIndex ){
-            var thisOpt     = this.options,
+            var thisOpt = this.options,
                 options = {
                     id       : 'item_'+listIndex,
                     selected : !listIndex,

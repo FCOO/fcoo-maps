@@ -65,7 +65,10 @@ search-mapLayer.js
         /*****************************************************
         searchButton and buttonList = ´Buttons for legend, menu etc.
         *****************************************************/
-        _searchButton_onClick: function(id, selected, $button, map){
+        _searchButton_onClick: function(id, selected, $button, map){ 
+            
+//console.log('_searchButton_onClick', id, selected, $button, map);
+    
             if (this.searchResultListModal)
                 this.searchResultListModal.close();
             nsMap.showSearchModalForm('', map || ns.showSearchResultInMap );

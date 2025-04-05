@@ -22,7 +22,7 @@ options = {
 
     //Menu
     menuOptions: {
-        buttonList : []bsButton-options
+        buttonList : []bsButton-options. options.onClick = function( id, selected, $button, map ). If useLegendButtonList = true map is null if the button is clicked from the menu
         useLegendButtonList: BOOLEAN, if true and menuOptions.buttonList is not given => use legendOptions.buttonList as in menu
     },
 
