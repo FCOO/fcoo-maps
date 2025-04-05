@@ -7654,11 +7654,30 @@ search-result.js
                     center   : true
                 });
 
+            //@TODO Test if it should be a accordion
+            //Convert conternt to accordion-content
+            content.forEach( (part, index) => {
+                let newPart = {
+                        text: part.label
+                    };
+                part.noLabel = true;
+                part.type = null;
+                newPart.content = part;
+                content[index] = newPart;
+            });                
+
+            content = {
+                type        : 'accordion',
+                list        : content,
+                neverClose  : true,                      
+                multiOpen   : true,                     
+                allOpen     : true,
+            };
 
             this.langDetails = this.langDetails || {};
             this.langDetails[lang] = this.langDetails[lang] || {
-                header      : this.header,
-                content     : content,
+                header : this.header,
+                content: content    
             };
             return this.langDetails[lang];
         },
