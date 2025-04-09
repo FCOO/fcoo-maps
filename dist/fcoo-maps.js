@@ -2054,6 +2054,16 @@ Methods to adjust and display latLng-values
         latLngFormats,
         clipboard;
 
+/*
+@todo Add link to Google maps
+https://www.google.com/maps/@?api=1&map_action=map&center=latitude,longitude&zoom=<zoom level
+Måske som knap i context-menu og/eller knap i latLngModal
+
+
+
+
+
+*/
     nsMap.latLngAsModal = function(latLng, options){
         options = options || {};
         var modalOptions = {
@@ -3333,8 +3343,15 @@ options = {
 
     //Menu
     menuOptions: {
-        buttonList : []bsButton-options. options.onClick = function( id, selected, $button, map ). If useLegendButtonList = true map is null if the button is clicked from the menu
+        buttonList         : []bsButton-options. options.onClick = function( id, selected, $button, map ). If useLegendButtonList = true map is null if the button is clicked from the menu
         useLegendButtonList: BOOLEAN, if true and menuOptions.buttonList is not given => use legendOptions.buttonList as in menu
+
+        showAllways        : BOOLOAN. When true the buttons are visible even when the layer is not visible in any maps. Can also be set directly in buttonOptions
+        buttonListMode     : {button-id: MODE} or MODE. When useLegendButtonList = true => 
+                                buttonListMode[id]/buttonListMode = "allMaps", "selectedMaps", "mainMap", or "noMaps" (default)
+                                The mode sets witch maps to be called with the onClick-method for the legend-button-list
+                                The mode can also be set direct in the options for the button in buttonList as options.menuButtonMode
+        
     },
 
     //Legend
@@ -3622,8 +3639,6 @@ L.Layer.addInitHook(function(){
         },
 
         _applySetting: function(data){
-            var _this = this;
-
             //Apply common setting
             this.applyCommonSetting(data.common || null);
 
@@ -3632,15 +3647,15 @@ L.Layer.addInitHook(function(){
                 var mapIndex = map.fcooMapIndex,
                     setting = data[mapIndex] || {};
                 if (setting.show)
-                    _this.addTo(map);
+                    this.addTo(map);
                 else
-                    _this.removeFrom(map);
+                    this.removeFrom(map);
 
                 //colorInfo - TODO
 
                 //Individual setting
-                _this.applySetting(setting, map, _this.info[mapIndex], mapIndex);
-            });
+                this.applySetting(setting, map, this.info[mapIndex], mapIndex);
+            }.bind(this));
         },
 
         //saveSetting: function() - Return individuel setting for the Map_layer at map
@@ -3653,8 +3668,7 @@ L.Layer.addInitHook(function(){
         },
 
         _saveSetting: function(){
-            var _this = this,
-                data = {},
+            var data = {},
                 commonSetting = this.saveCommonSetting() || null;
 
             if (commonSetting !== null)
@@ -3663,12 +3677,12 @@ L.Layer.addInitHook(function(){
             $.each(this.info, function(index, info){
                 data[index] =
                     $.extend({
-                        show: _this.isAddedToMap(index)
+                        show: this.isAddedToMap(index)
                         //colorInfo - TODO
                     },
-                        _this.saveSetting(info ? info.map : null, info, index) || {}
+                        this.saveSetting(info ? info.map : null, info, index) || {}
                     );
-            });
+            }.bind(this));
             ns.appSetting.set(this.id, data);
             return ns.appSetting.save();
         },
@@ -3677,11 +3691,9 @@ L.Layer.addInitHook(function(){
         addTo
         *********************************************************/
         addTo: function(mapOrIndex){
-
-            var _this = this;
-            if ($.isArray(mapOrIndex)){
-                $.each(mapOrIndex, function(index, _map){ _this.addTo(_map); });
-                return _this;
+            if (Array.isArray(mapOrIndex)){
+                mapOrIndex.forEach(map => this.addTo(map), this);
+                return this;
             }
 
             var map = nsMap.getMap(mapOrIndex),
@@ -3715,10 +3727,10 @@ L.Layer.addInitHook(function(){
                         buttonList = legendOptions.buttonList || legendOptions.buttons || [];
 
                     //If a button has onlyShowWhenLayer = true => the button is only visible if the layer is visible/shown
-                    $.each(buttonList, function(dummy, buttonOptions){
+                    buttonList.forEach( buttonOptions => {
                         if (buttonOptions.onlyShowWhenLayer)
-                            buttonOptions.class = (buttonOptions.class || '') + ' ' + _this.showAndHideClasses + '-visibility';
-                    });
+                            buttonOptions.class = (buttonOptions.class || '') + ' ' + this.showAndHideClasses + '-visibility';
+                    }, this);
 
 
                     //Find index for legend
@@ -3737,13 +3749,13 @@ L.Layer.addInitHook(function(){
                     }
 
                     legendOptions = $.extend(true, {}, {
-                        index       : parseInt(indexAsStr), //this.index,
+                        index       : parseInt(indexAsStr), 
                         icon        : this.options.legendIcon || this.options.icon,
                         iconClass   : this.options.legendIconClass || this.options.iconClass || null,
                         text        : this.options.legendText || this.options.text || null,
 
                         //content            : this.options.content,
-                        contentArg         : [_this, map],
+                        contentArg         : [this, map],
                         //noVerticalPadding  : this.options.noVerticalPadding,
                         //noHorizontalPadding: this.options.noHorizontalPadding,
 
@@ -3882,13 +3894,13 @@ L.Layer.addInitHook(function(){
             if ( this.hasColorInfo && !info.colorInfoLayer ){
                 this.hasColorInfo = false;
                 //Get the tileLayer used for colorInfo (if any)
-                $.each(layer.getLayers ? layer.getLayers() : [layer], function(index, singleLayer){
+                (layer.getLayers ? layer.getLayers() : [layer]).forEach( singleLayer => {
                     //The layre used for color-info is the first GridLayer or the GridLayer with options.useForColorInfo
                     if  ( (singleLayer instanceof L.GridLayer) && (!info.colorInfoLayer || singleLayer.options.useForColorInfo) ){
                         info.colorInfoLayer = singleLayer;
-                        _this.hasColorInfo = true;
+                        this.hasColorInfo = true;
                     }
-                });
+                }, this);
 
                 //Add id and loading and load events to update legend and/or colorInfo icon
                 var colorInfoLayer = info.colorInfoLayer;
@@ -3918,9 +3930,9 @@ L.Layer.addInitHook(function(){
             //If it is a radio-group layer => remove all other layers with same radioGroup
             if (this.options.radioGroup)
                 $.each(nsMap.mapLayers, function(id, mapLayer){
-                    if ((mapLayer.options.radioGroup == _this.options.radioGroup) && (mapLayer.id != _this.id))
+                    if ((mapLayer.options.radioGroup == this.options.radioGroup) && (mapLayer.id != this.id))
                         mapLayer.removeFrom(mapOrIndex);
-                });
+                }.bind(this));
 
 
             //Update checkbox/radio in menuItem
@@ -4031,10 +4043,9 @@ L.Layer.addInitHook(function(){
 
         //visitAllLayers: Call method( layer, mapLayer) for all layer
         visitAllLayers: function(method, onlyIndexOrMapId){
-            var _this = this;
-            $.each( this._getAllInfoChild('layer', onlyIndexOrMapId), function(index, layer){
-                method(layer, _this);
-            });
+            this._getAllInfoChild('layer', onlyIndexOrMapId).forEach(layer => {
+                method(layer, this);
+            }, this);
             return this;
         },
 
@@ -4115,9 +4126,8 @@ L.Layer.addInitHook(function(){
         },
 
         removeFrom: function(mapOrIndex){
-            var _this = this;
             if ($.isArray(mapOrIndex)){
-                $.each(mapOrIndex, function(index, _map){ _this.removeFrom(_map); });
+                mapOrIndex.forEach( map => this.removeFrom(map), this);
                 return this;
             }
 
@@ -4223,13 +4233,12 @@ L.Layer.addInitHook(function(){
         },
 
         _updateLoadingStatus: function(event, loading){
-            var _this = this,
-                mapIndex = this._getMapIndex(event),
+            var mapIndex = this._getMapIndex(event),
                 info = this.info[mapIndex];
             info.loading = loading;
 
             window.clearTimeout(info.timeout);
-            info.timeout = window.setTimeout( function(){ _this._updateLoadingIcon(mapIndex); }, 400);
+            info.timeout = window.setTimeout( function(){ this._updateLoadingIcon(mapIndex); }.bind(this), 400);
 
         },
         _updateLoadingIcon: function(mapIndex){
@@ -4275,10 +4284,9 @@ L.Layer.addInitHook(function(){
         hideColorInfo: function(mapOrIndex){ return this.toggleColorInfo(mapOrIndex, false); },
 
         toggleColorInfo: function(mapOrIndex, show){
-            var _this = this;
             if ($.isArray(mapOrIndex)){
-                $.each(mapOrIndex, function(index, _map){ _this.toggleColorInfo(_map, show); });
-                return _this;
+                mapOrIndex.forEach( map => this.toggleColorInfo(map, show), this);
+                return this;
             }
             var map = nsMap.getMap(mapOrIndex),
                 mapIndex = map.fcooMapIndex,
@@ -4314,11 +4322,64 @@ L.Layer.addInitHook(function(){
 
 
             //Use legend-buttons if no direct menu-button is given
-            if (!result.buttonList && menuOptions.useLegendButtonList && legendOptions.buttonList)
-                result.buttonList = legendOptions.buttonList;
+            if (!result.buttonList && menuOptions.useLegendButtonList && legendOptions.buttonList){
 
+                let menuButtonList = [];
+                legendOptions.buttonList.forEach( (buttonOptions, index) => {
+                    let menuButtonOptions = $.extend(true, {}, buttonOptions );
+                    
+                    menuButtonOptions.legendOnClick = menuButtonOptions.onClick;
+                    menuButtonOptions.onClick = this._menuButton_onClick.bind(this, index);
+                    
+                    menuButtonList.push(menuButtonOptions);
+                });                    
+                result.buttonList = menuButtonList;
+            }            
+            
+            if (result.buttonList){
+                //Add class to buttons to control if the button is enabled/disabled when the layer is visible in any maps
+                result.buttonList.forEach( buttonOptions => {
+                    const showAllways = typeof buttonOptions.showAllways !== undefined ? buttonOptions.showAllways : menuOptions.showAllways;
+                    buttonOptions.class = (buttonOptions.class || '') + (showAllways ? '' : ' disabled-when-no-selected'); 
+                }); 
+            }
+            
             return result;
         },
+
+        _menuButton_onClick: function(buttonIndex, id, selected, $button/*, map*/){
+            const buttonOptions = this.options && this.options.legendOptions && this.options.legendOptions.buttonList ? this.options.legendOptions.buttonList[buttonIndex] : null;            
+            
+            if (!buttonOptions) 
+                return this;
+                
+            /*
+            buttonListMode: {button-id: MODE}. When useLegendButtonList = true => buttonListMode[id] = "allMaps", "selectedMaps", "mainMap", or "noMaps" (default)
+                                               The mode sets witch maps to be called with the onClick-method for the legend-button-list
+                                            The mode can also be set direct in the options for the button in buttonList as options.menuButtonMode
+            */                                            
+            const menuOptions = this.options.menuOptions;
+
+            let mode = buttonOptions.menuButtonMode;
+            
+            if (!mode && menuOptions.buttonListMode);
+                mode = Array.isArray(menuOptions.buttonListMode) ? menuOptions.buttonListMode[buttonIndex] : menuOptions.buttonListMode;
+            mode = mode || "noMaps";
+            
+            let mapList = [];
+            switch (mode.toUpperCase()){
+                case "ALLMAPS"      :   nsMap.visitAllVisibleMaps( map => mapList.push(map) ); break;
+                case "SELECTEDMAPS" :   nsMap.visitAllVisibleMaps( function(map){ if (this.isAddedToMap(map)) mapList.push(map); }.bind(this) ); break;
+                case "MAINMAP"      :   mapList = [nsMap.mainMap]; break;
+                default             :   mapList = [null];
+            }
+
+            let onClick = buttonOptions.onClick.bind(buttonOptions.context);
+            mapList.forEach( map => onClick(id, selected, $button, map) );
+
+            return this;
+        },                
+
 
         /******************************************************************
         updateMenuItem
@@ -4327,24 +4388,34 @@ L.Layer.addInitHook(function(){
         updateMenuItem: function(){
             if (!this.menuItem) return;
 
+                let notAdded = true;
+
             if (nsMap.hasMultiMaps){
-                var _this       = this,
-                    maps        = nsMap.multiMaps.setup.maps,
+                var maps        = nsMap.multiMaps.setup.maps,
                     addedToMaps = 0;
 
-                $.each(nsMap.multiMaps.mapList, function(index, map){
-                    if (map.isVisibleInMultiMaps && _this.isAddedToMap(index))
+                nsMap.multiMaps.mapList.forEach( (map, index) => {
+                    if (map.isVisibleInMultiMaps && this.isAddedToMap(index))
                         addedToMaps++;
-                });
+                }, this);
 
                 this.menuItem.setState(
                     addedToMaps == 0 ? false :
                     addedToMaps == maps ? true :
                     'semi'
                );
+               notAdded = (addedToMaps == 0);
             }
-            else
+            else {
                 this.menuItem.setState(!!this.isAddedToMap(0));
+                notAdded = !this.isAddedToMap(0);
+            }
+            
+            this.menuItem.$li.toggleClass('not-shown-in-any-maps', !!notAdded);
+            this.menuItem.$li.find('.disabled-when-no-selected').toggleClass('disabled', !!notAdded);
+            if (this.menuItem.favoriteItem && this.menuItem.favoriteItem.$li)
+                this.menuItem.favoriteItem.$li.find('.disabled-when-no-selected').toggleClass('disabled', !!notAdded);
+            
         },
 
         /******************************************************************
@@ -7042,7 +7113,7 @@ search-mapLayer.js
             buttonList : this.buttonList(),
         };
         options.menuOptions = {
-            useLegendButtonList: true
+            useLegendButtonList: true,
         };
 
         nsMap.MapLayer.call(this, options);
@@ -7058,9 +7129,6 @@ search-mapLayer.js
         searchButton and buttonList = ´Buttons for legend, menu etc.
         *****************************************************/
         _searchButton_onClick: function(id, selected, $button, map){ 
-            
-//console.log('_searchButton_onClick', id, selected, $button, map);
-    
             if (this.searchResultListModal)
                 this.searchResultListModal.close();
             nsMap.showSearchModalForm('', map || ns.showSearchResultInMap );
@@ -7068,12 +7136,13 @@ search-mapLayer.js
 
         searchButton: function(){
             return {
-                type   : 'button',
-                icon   : 'fa-search',
-                class  : 'min-width',
-                text   : {da:'Søg', en:'Search'},
-                onClick: this._searchButton_onClick,
-                context: this
+                type        : 'button',
+                icon        : 'fa-search',
+                class       : 'min-width',
+                text        : {da:'Søg', en:'Search'},
+                showAllways : true,                    
+                onClick     : this._searchButton_onClick,
+                context     : this
             };
         },
         removeAllButton: function(){
@@ -7827,8 +7896,9 @@ search-result.js
         addTo(layerGroup, map) - Create marker and/or polyline and add them to layerGroup
         **********************************************/
         addTo: function(layerGroup, map){
-            var mapIndex = map ? map.fcooMapIndex : layerGroup.fcooMapIndex,
-                markerClassName = '';
+            let mapIndex = map ? map.fcooMapIndex : layerGroup.fcooMapIndex,
+                markerClassName = '',
+                poly = null;
 
             if (this.showPoly){
                 markerClassName = 'show-for-leaflet-zoom-'+this.visibleAtZoom+'-down';
@@ -7837,22 +7907,25 @@ search-result.js
                     poly = this.polys[mapIndex];
                 else {
                     //Create polyline
-                    var poly = L.polyline(this.latLngs, {
-                            fill         : false,
-                            lineColorName: searchResultColor,
-                            weight       : 5,
-                            border       : true,
-                            shadow       : true,
-                            hover        : true,
-                            transparent  : true,
+                    poly = L.polyline(this.latLngs, {
+                        fill         : false,
+                        lineColorName: searchResultColor,
+                        weight       : 5,
+                        border       : true,
+                        shadow       : true,
+                        hover        : true,
+                        transparent  : true,
 
-                            tooltipHideWhenPopupOpen: true,
-                            shadowWhenPopupOpen     : true,
-                            shadowWhenInteractive   : true,
+                        tooltipHideWhenPopupOpen: true,
+                        shadowWhenPopupOpen     : true,
+                        shadowWhenInteractive   : true,
 
-                            addInteractive     : true,
-                            interactive        : true,
-                        });
+                        addInteractive     : true,
+                        interactive        : true,
+
+                        className: 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-down'
+                            
+                    });
 
                     poly.bindTooltip(this.header);
                     this._addPopupAndContextMenu(poly, layerGroup);
@@ -7861,11 +7934,6 @@ search-result.js
                 }
 
                 layerGroup.addLayer( this.polys[mapIndex] );
-
-                //Add class to hide  on when marker is visible - done after the poly is added
-                poly._addClass(null, 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-down');
-
-
             }
 
             //Create the marker - is allways created to be used for initial popup

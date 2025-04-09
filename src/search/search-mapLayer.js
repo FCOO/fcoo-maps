@@ -50,7 +50,7 @@ search-mapLayer.js
             buttonList : this.buttonList(),
         };
         options.menuOptions = {
-            useLegendButtonList: true
+            useLegendButtonList: true,
         };
 
         nsMap.MapLayer.call(this, options);
@@ -66,9 +66,6 @@ search-mapLayer.js
         searchButton and buttonList = ´Buttons for legend, menu etc.
         *****************************************************/
         _searchButton_onClick: function(id, selected, $button, map){ 
-            
-//console.log('_searchButton_onClick', id, selected, $button, map);
-    
             if (this.searchResultListModal)
                 this.searchResultListModal.close();
             nsMap.showSearchModalForm('', map || ns.showSearchResultInMap );
@@ -76,12 +73,13 @@ search-mapLayer.js
 
         searchButton: function(){
             return {
-                type   : 'button',
-                icon   : 'fa-search',
-                class  : 'min-width',
-                text   : {da:'Søg', en:'Search'},
-                onClick: this._searchButton_onClick,
-                context: this
+                type        : 'button',
+                icon        : 'fa-search',
+                class       : 'min-width',
+                text        : {da:'Søg', en:'Search'},
+                showAllways : true,                    
+                onClick     : this._searchButton_onClick,
+                context     : this
             };
         },
         removeAllButton: function(){

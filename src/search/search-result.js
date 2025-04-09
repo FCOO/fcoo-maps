@@ -401,8 +401,9 @@ search-result.js
         addTo(layerGroup, map) - Create marker and/or polyline and add them to layerGroup
         **********************************************/
         addTo: function(layerGroup, map){
-            var mapIndex = map ? map.fcooMapIndex : layerGroup.fcooMapIndex,
-                markerClassName = '';
+            let mapIndex = map ? map.fcooMapIndex : layerGroup.fcooMapIndex,
+                markerClassName = '',
+                poly = null;
 
             if (this.showPoly){
                 markerClassName = 'show-for-leaflet-zoom-'+this.visibleAtZoom+'-down';
@@ -411,22 +412,25 @@ search-result.js
                     poly = this.polys[mapIndex];
                 else {
                     //Create polyline
-                    var poly = L.polyline(this.latLngs, {
-                            fill         : false,
-                            lineColorName: searchResultColor,
-                            weight       : 5,
-                            border       : true,
-                            shadow       : true,
-                            hover        : true,
-                            transparent  : true,
+                    poly = L.polyline(this.latLngs, {
+                        fill         : false,
+                        lineColorName: searchResultColor,
+                        weight       : 5,
+                        border       : true,
+                        shadow       : true,
+                        hover        : true,
+                        transparent  : true,
 
-                            tooltipHideWhenPopupOpen: true,
-                            shadowWhenPopupOpen     : true,
-                            shadowWhenInteractive   : true,
+                        tooltipHideWhenPopupOpen: true,
+                        shadowWhenPopupOpen     : true,
+                        shadowWhenInteractive   : true,
 
-                            addInteractive     : true,
-                            interactive        : true,
-                        });
+                        addInteractive     : true,
+                        interactive        : true,
+
+                        className: 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-down'
+                            
+                    });
 
                     poly.bindTooltip(this.header);
                     this._addPopupAndContextMenu(poly, layerGroup);
@@ -435,11 +439,6 @@ search-result.js
                 }
 
                 layerGroup.addLayer( this.polys[mapIndex] );
-
-                //Add class to hide  on when marker is visible - done after the poly is added
-                poly._addClass(null, 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-down');
-
-
             }
 
             //Create the marker - is allways created to be used for initial popup

@@ -242,6 +242,15 @@ Each of the sub-icons may need a individual class to adjust size and position
 
 
 /**********************************************************
+STYLE FOR MAPLAYER MENU
+**********************************************************/
+li.not-shown-in-any-maps {
+    .btn.disabled-when-no-selected {
+    }        
+}
+
+
+/**********************************************************
 STYLE FOR SEARCH RESULTS
 **********************************************************/
 .search-result-row {

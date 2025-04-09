@@ -15,6 +15,16 @@ Methods to adjust and display latLng-values
         latLngFormats,
         clipboard;
 
+/*
+@todo Add link to Google maps
+https://www.google.com/maps/@?api=1&map_action=map&center=latitude,longitude&zoom=<zoom level
+Måske som knap i context-menu og/eller knap i latLngModal
+
+
+
+
+
+*/
     nsMap.latLngAsModal = function(latLng, options){
         options = options || {};
         var modalOptions = {
