@@ -4339,7 +4339,7 @@ L.Layer.addInitHook(function(){
             if (result.buttonList){
                 //Add class to buttons to control if the button is enabled/disabled when the layer is visible in any maps
                 result.buttonList.forEach( buttonOptions => {
-                    const showAllways = typeof buttonOptions.showAllways !== undefined ? buttonOptions.showAllways : menuOptions.showAllways;
+                    const showAllways = buttonOptions.showAllways !== undefined ? buttonOptions.showAllways : menuOptions.showAllways;
                     buttonOptions.class = (buttonOptions.class || '') + (showAllways ? '' : ' disabled-when-no-selected'); 
                 }); 
             }
