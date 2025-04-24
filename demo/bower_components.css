@@ -37396,6 +37396,9 @@ div.modal-dialog.modal-full-screen:not(.modal-full-screen-with-border) .modal-co
   border: none;
   border-radius: 0px;
 }
+div.modal-dialog.modal-fit-width {
+  width: fit-content;
+}
 div.modal-dialog.modal-dialog-inline .modal-content {
   box-shadow: none;
   max-height: inherit;
@@ -37413,6 +37416,42 @@ div.modal-dialog .modal-content {
   word-wrap: break-word;
   overflow: hidden;
   --display: block;
+  /* @todo: Need testing, but it seams that it is not needed
+              //Special version for direct child when always-max-height to force display:flex (not so pitty :-))
+              @include show-and-hide-for-modernizr-test(
+                  $modernizr-test      : unquote("modal-minimized"),
+                  $parent-element-type : unquote("&.modal-minimized-always-max-height"),
+                  $incl-no-selector    : false,
+                  $incl-table-display  : false,
+                  $only-direct-children: true,
+                  $display-value       : 'flex !important',
+                  $class-postfix       :':not(:empty)'
+              );
+  */
+  /* @todo: Need testing, but it seams that it is not needed
+              //Special version for direct child when always-max-height to force display:flex (not so pitty :-))
+              @include show-and-hide-for-modernizr-test(
+                  $modernizr-test      : unquote("modal-normal"),
+                  $parent-element-type : unquote("&.modal-normal-always-max-height"),
+                  $incl-no-selector    : false,
+                  $incl-table-display  : false,
+                  $only-direct-children: true,
+                  $display-value       : 'flex !important',
+                  $class-postfix       :':not(:empty)'
+              );
+  */
+  /* @todo: Need testing, but it seams that it is not needed
+              //Special version for direct child when always-max-height to force display:flex (not so pitty :-))
+              @include show-and-hide-for-modernizr-test(
+                  $modernizr-test      : unquote("modal-extended"),
+                  $parent-element-type : unquote("&.modal-extended-always-max-height"),
+                  $incl-no-selector    : false,
+                  $incl-table-display  : false,
+                  $only-direct-children: true,
+                  $display-value       : 'flex !important',
+                  $class-postfix       :':not(:empty)'
+              );
+  */
   /*
   Special header version for minimized modal windows
   There are tree modes for minimized-content:
@@ -37472,18 +37511,6 @@ div.modal-dialog .modal-content.no-modal-minimized > .modal-header .hide-for-mod
 div.modal-dialog .modal-content.no-modal-minimized > .modal-header .show-for-modal-minimized {
   display: none !important;
 }
-div.modal-dialog .modal-content.modal-minimized-always-max-height.modal-minimized > .show-for-modal-minimized:not(:empty) {
-  display: flex !important;
-}
-div.modal-dialog .modal-content.modal-minimized-always-max-height.modal-minimized > .hide-for-modal-minimized:not(:empty) {
-  display: none !important;
-}
-div.modal-dialog .modal-content.modal-minimized-always-max-height.no-modal-minimized > .hide-for-modal-minimized:not(:empty) {
-  display: flex !important;
-}
-div.modal-dialog .modal-content.modal-minimized-always-max-height.no-modal-minimized > .show-for-modal-minimized:not(:empty) {
-  display: none !important;
-}
 div.modal-dialog .modal-content.modal-normal .show-for-modal-normal {
   display: var(--display) !important;
 }
@@ -37532,18 +37559,6 @@ div.modal-dialog .modal-content.no-modal-normal > .modal-header .hide-for-modal-
 div.modal-dialog .modal-content.no-modal-normal > .modal-header .show-for-modal-normal {
   display: none !important;
 }
-div.modal-dialog .modal-content.modal-normal-always-max-height.modal-normal > .show-for-modal-normal:not(:empty) {
-  display: flex !important;
-}
-div.modal-dialog .modal-content.modal-normal-always-max-height.modal-normal > .hide-for-modal-normal:not(:empty) {
-  display: none !important;
-}
-div.modal-dialog .modal-content.modal-normal-always-max-height.no-modal-normal > .hide-for-modal-normal:not(:empty) {
-  display: flex !important;
-}
-div.modal-dialog .modal-content.modal-normal-always-max-height.no-modal-normal > .show-for-modal-normal:not(:empty) {
-  display: none !important;
-}
 div.modal-dialog .modal-content.modal-extended .show-for-modal-extended {
   display: var(--display) !important;
 }
@@ -37590,18 +37605,6 @@ div.modal-dialog .modal-content.no-modal-extended > .modal-header .hide-for-moda
   display: initial !important;
 }
 div.modal-dialog .modal-content.no-modal-extended > .modal-header .show-for-modal-extended {
-  display: none !important;
-}
-div.modal-dialog .modal-content.modal-extended-always-max-height.modal-extended > .show-for-modal-extended:not(:empty) {
-  display: flex !important;
-}
-div.modal-dialog .modal-content.modal-extended-always-max-height.modal-extended > .hide-for-modal-extended:not(:empty) {
-  display: none !important;
-}
-div.modal-dialog .modal-content.modal-extended-always-max-height.no-modal-extended > .hide-for-modal-extended:not(:empty) {
-  display: flex !important;
-}
-div.modal-dialog .modal-content.modal-extended-always-max-height.no-modal-extended > .show-for-modal-extended:not(:empty) {
   display: none !important;
 }
 div.modal-dialog .modal-content.modal-pinned .hide-for-modal-pinned {
@@ -38210,6 +38213,9 @@ fixed-first-column-selected : First column when it is fixed and selected
 .table.jb-table.table-bordered td, .table.jb-table.table-bordered th {
   border-width: 1px !important;
   border-color: black !important;
+}
+.table.jb-table thead.no-header {
+  display: none;
 }
 .table.jb-table thead tr {
   position: sticky;
@@ -42849,10 +42855,34 @@ a.btn.mm-favorite-icons {
 
 .mm-listitem.only-buttons {
   --mm-line-height: 0;
+}
+.mm-menu:not(.mm-menu-no-button) .mm-listitem.only-buttons {
   padding-top: 2px;
 }
 .mm-listitem.only-buttons.no-padding-right .mm-listitem__text {
   padding-right: 0;
+}
+
+/*************************************
+Adjust css for mmenus inside bsModal
+*************************************/
+.modal-body .mm-menu-modal-content {
+  width: 100%;
+}
+.modal-body .mm-menu-modal-content .mm-menu {
+  position: relative;
+}
+.modal-body .mm-menu-modal-content .mm-panel:after {
+  background-color: green;
+  height: 0;
+}
+.modal-body .mm-listview {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.modal-body .mm-panels > .mm-panel {
+  position: relative;
+  overflow-y: hidden;
 }
 @charset "UTF-8";
 /***********************************************

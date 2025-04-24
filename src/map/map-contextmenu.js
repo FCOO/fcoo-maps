@@ -50,9 +50,17 @@ Global context-menu for all maps
 
 
 
-
+    //Selct layer
     map_contextmenu_itemList.push({
-        //Map-setting
+        icon       : 'fa-layer-group',
+        text       : {da:'Vælg lag...', en:'Select layers...'},
+        spaceBefore: true,
+        onClick    : (id, latlng, $button, map) => nsMap.selectLayerInModal(map)
+    });
+
+    
+    //Map setting
+    map_contextmenu_itemList.push({
         icon       : ns.icons.mapSettingSingle,
         text       : ns.texts.mapSettingSingle,
         spaceBefore: true,
@@ -62,6 +70,7 @@ Global context-menu for all maps
                 nsMap.editMapSetting(map.fcooMapIndex);
         }
     });
+
 
 
     L.Map.addInitHook(function () {
