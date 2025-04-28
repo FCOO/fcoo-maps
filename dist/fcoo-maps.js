@@ -4890,12 +4890,7 @@ Objects and methods to show a modal with select of layer for one map
                 text    : ns.texts.reset,
                 onClick : map_reset.bind(map)
             }]
-        });
-
-        //Destroy the cloned menu on close + show it!
-        clonedBsMenu.bsModal
-            .on({'hidden.bs.modal': () => clonedBsMenu.destroy()})
-            .show();
+        }, true);
     };
 
 }(jQuery, L, this, document));
