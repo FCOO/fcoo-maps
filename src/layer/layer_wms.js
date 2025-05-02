@@ -264,6 +264,7 @@
         //Adjust url to include eq. dataset
         url = adjustString(url, options);
 
+
         return nsMap.layer_wms(options, map, defaultOptions, url, LayerConstructor);
     };
 

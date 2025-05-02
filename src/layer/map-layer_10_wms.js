@@ -4,7 +4,7 @@ layer_wms.js
 Classes to creraet static and dynamic WMS-layers
 
 ****************************************************************************/
-(function ($, L, window/*, document, undefined*/) {
+(function ($, L, window, document, undefined) {
     "use strict";
 
     //Create namespaces
@@ -27,11 +27,14 @@ Classes to creraet static and dynamic WMS-layers
     }
     ***********************************************************/
     function MapLayer_wms(options) {
-        //Move options regarding tileLayer into layerOptions
+        //Move options regarding tileLayer into layerOptions (if any)
         options.layerOptions = options.layerOptions || {};
-        ['layers', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
-            options.layerOptions[id] = options[id];
-            delete options[id];
+
+        ['dataset', 'layers', 'styles', 'cmap', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
+            if (options[id] !== undefined){
+                options.layerOptions[id] = options.layerOptions[id] || options[id];
+                delete options[id];
+            }
         });
         nsMap.MapLayer.call(this, options);
     }
