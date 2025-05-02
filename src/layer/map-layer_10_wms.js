@@ -18,19 +18,29 @@ Classes to creraet static and dynamic WMS-layers
         text,
         static      : BOOLEAN
         creatLayer  : FUNCTION - Create the Leaflet-layer
-        layerOptions: OBJECT
-        layers      : STRING,
+        layerOptions: {
+            service     : STRING ("WMS")            (1)
+            request     : STRING ("GetMap")         (1)
+            dataset     : STRING,                   (1)
+            layers      : STRING, OBJECT or ARRAY   (1)
+            styles      : STRING, OBJECT or ARRAY   (1)
+            cmap        : STRING,                   (1)
+            LayerConstructor                        (1)
+            etc.
+        }
+
         zIndex      : NUMBER
         deltaZIndex : NUMBER (optional)
         minZoom     : NUMBER (optional)
         maxZoom     : NUMBER (optional)
     }
+    (1) Can for convenience also be set direct in options
     ***********************************************************/
     function MapLayer_wms(options) {
         //Move options regarding tileLayer into layerOptions (if any)
         options.layerOptions = options.layerOptions || {};
 
-        ['dataset', 'layers', 'styles', 'cmap', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
+        ['service', 'request', 'dataset', 'layers', 'styles', 'cmap', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
             if (options[id] !== undefined){
                 options.layerOptions[id] = options.layerOptions[id] || options[id];
                 delete options[id];
@@ -46,15 +56,6 @@ Classes to creraet static and dynamic WMS-layers
     /***********************************************************
     MapLayer_wms_static - Creates a MapLayer with static WMS-layer
     Also as MapLayer_static for backward combability
-    options = {
-        icon,
-        text,
-        layers     : STRING,
-        zIndex     : NUMBER
-        deltaZIndex: NUMBER (optional)
-        minZoom    : NUMBER (optional)
-        maxZoom    : NUMBER (optional)
-    }
     ***********************************************************/
     function MapLayer_wms_static(options) {
         nsMap.MapLayer_wms.call(this, options);

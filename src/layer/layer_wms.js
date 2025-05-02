@@ -82,7 +82,7 @@
         bbox=-626172.1357121639,8766409.899970293,0,9392582.035682464
 
 
-    https://wms02.fcoo.dk/webmap/v2/data/DMI/HARMONIE/DMI_NEA_MAPS_v005C.nc.wms?
+    https://wms02.fcoo.dk/webmap/v3/data/DMI/HARMONIE/DMI_NEA_MAPS_v005C.nc.wms?
         service=WMS&
         request=GetMap&
         version=1.3.0&
@@ -127,7 +127,7 @@
             staticOptions: {
                 version: '1.1.1'
             },
-            dynamicUrl: "{protocol}//{s}.fcoo.dk/webmap/v2/data/{dataset}.wms",
+            dynamicUrl: "{protocol}//{s}.fcoo.dk/webmap/v3/data/{dataset}.wms",
             dynamicOptions: {
                 updateInterval: 50,
                 transparent   : 'TRUE',
@@ -205,6 +205,12 @@
         service         : STRING ("WMS")
         request         : STRING ("GetMap")
         layers          : STRING,
+
+        dataset     : STRING,
+        styles      : STRING, OBJECT or ARRAY
+        cmap        : STRING,
+
+
         zIndex          : NUMBER
         deltaZIndex     : NUMBER (optional)
         minZoom         : NUMBER (optional)
@@ -221,6 +227,9 @@
                         request         : "GetMap",
                     }, defaultOptions, options );
 
+
+        url              = options.url || url;
+        LayerConstructor = options.LayerConstructor || LayerConstructor;
 
         //Convert layers: []STRING => STRING,STRING and styles = {ID: VALUE} => ID:VALUE;ID:VALUE
         function convertToStr(id, separator){

@@ -2433,7 +2433,7 @@ that includes current position, and use this other map to get the color
         bbox=-626172.1357121639,8766409.899970293,0,9392582.035682464
 
 
-    https://wms02.fcoo.dk/webmap/v2/data/DMI/HARMONIE/DMI_NEA_MAPS_v005C.nc.wms?
+    https://wms02.fcoo.dk/webmap/v3/data/DMI/HARMONIE/DMI_NEA_MAPS_v005C.nc.wms?
         service=WMS&
         request=GetMap&
         version=1.3.0&
@@ -2478,7 +2478,7 @@ that includes current position, and use this other map to get the color
             staticOptions: {
                 version: '1.1.1'
             },
-            dynamicUrl: "{protocol}//{s}.fcoo.dk/webmap/v2/data/{dataset}.wms",
+            dynamicUrl: "{protocol}//{s}.fcoo.dk/webmap/v3/data/{dataset}.wms",
             dynamicOptions: {
                 updateInterval: 50,
                 transparent   : 'TRUE',
@@ -2556,6 +2556,12 @@ that includes current position, and use this other map to get the color
         service         : STRING ("WMS")
         request         : STRING ("GetMap")
         layers          : STRING,
+
+        dataset     : STRING,
+        styles      : STRING, OBJECT or ARRAY
+        cmap        : STRING,
+
+
         zIndex          : NUMBER
         deltaZIndex     : NUMBER (optional)
         minZoom         : NUMBER (optional)
@@ -2572,6 +2578,9 @@ that includes current position, and use this other map to get the color
                         request         : "GetMap",
                     }, defaultOptions, options );
 
+
+        url              = options.url || url;
+        LayerConstructor = options.LayerConstructor || LayerConstructor;
 
         //Convert layers: []STRING => STRING,STRING and styles = {ID: VALUE} => ID:VALUE;ID:VALUE
         function convertToStr(id, separator){
@@ -4529,19 +4538,29 @@ Classes to creraet static and dynamic WMS-layers
         text,
         static      : BOOLEAN
         creatLayer  : FUNCTION - Create the Leaflet-layer
-        layerOptions: OBJECT
-        layers      : STRING,
+        layerOptions: {
+            service     : STRING ("WMS")            (1)
+            request     : STRING ("GetMap")         (1)
+            dataset     : STRING,                   (1)
+            layers      : STRING, OBJECT or ARRAY   (1)
+            styles      : STRING, OBJECT or ARRAY   (1)
+            cmap        : STRING,                   (1)
+            LayerConstructor                        (1)
+            etc.
+        }
+
         zIndex      : NUMBER
         deltaZIndex : NUMBER (optional)
         minZoom     : NUMBER (optional)
         maxZoom     : NUMBER (optional)
     }
+    (1) Can for convenience also be set direct in options
     ***********************************************************/
     function MapLayer_wms(options) {
         //Move options regarding tileLayer into layerOptions (if any)
         options.layerOptions = options.layerOptions || {};
 
-        ['dataset', 'layers', 'styles', 'cmap', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
+        ['service', 'request', 'dataset', 'layers', 'styles', 'cmap', 'zIndex', 'deltaZIndex', 'minZoom', 'maxZoom', 'LayerConstructor'].forEach( id => {
             if (options[id] !== undefined){
                 options.layerOptions[id] = options.layerOptions[id] || options[id];
                 delete options[id];
@@ -4557,15 +4576,6 @@ Classes to creraet static and dynamic WMS-layers
     /***********************************************************
     MapLayer_wms_static - Creates a MapLayer with static WMS-layer
     Also as MapLayer_static for backward combability
-    options = {
-        icon,
-        text,
-        layers     : STRING,
-        zIndex     : NUMBER
-        deltaZIndex: NUMBER (optional)
-        minZoom    : NUMBER (optional)
-        maxZoom    : NUMBER (optional)
-    }
     ***********************************************************/
     function MapLayer_wms_static(options) {
         nsMap.MapLayer_wms.call(this, options);
