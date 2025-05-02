@@ -248,17 +248,19 @@
 
 
     /***********************************************************
-    layer_static - Creates a L.TileLayer.WMS (layer_wms) with options for static layers
+    layer_wms_static - Creates a L.TileLayer.WMS (layer_wms) with options for static layers
+    Also as layer_static for backward combability
     ***********************************************************/
-    nsMap.layer_static = function(options, map, defaultOptions = nsMap.wmsStatic.options, url = nsMap.wmsStatic.url, LayerConstructor){
+    nsMap.layer_wms_static = nsMap.layer_static = function(options, map, defaultOptions = nsMap.wmsStatic.options, url = nsMap.wmsStatic.url, LayerConstructor){
         return nsMap.layer_wms(options, map, defaultOptions, url, LayerConstructor);
     };
 
 
     /***********************************************************
-    layer_dynamic - Creates a L.TileLayer.WMS (layer_wms) with options for dynamic layers
+    layer_wms_dynamic - Creates a L.TileLayer.WMS (layer_wms) with options for dynamic layers
+    Also as layer_dynamic for backward combability
     ***********************************************************/
-    nsMap.layer_dynamic = function(options, map, defaultOptions = nsMap.wmsDynamic.options, url = nsMap.wmsDynamic.url, LayerConstructor){
+    nsMap.layer_wms_dynamic = nsMap.layer_dynamic = function(options, map, defaultOptions = nsMap.wmsDynamic.options, url = nsMap.wmsDynamic.url, LayerConstructor){
         //Adjust url to include eq. dataset
         url = adjustString(url, options);
 
