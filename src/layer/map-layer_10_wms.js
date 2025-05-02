@@ -41,7 +41,8 @@ Classes to creraet static and dynamic WMS-layers
     MapLayer_wms.prototype.createLayer = nsMap.layer_wms;
 
     /***********************************************************
-    MapLayer_static - Creates a MapLayer with static WMS-layer
+    MapLayer_wms_static - Creates a MapLayer with static WMS-layer
+    Also as MapLayer_static for backward combability
     options = {
         icon,
         text,
@@ -52,13 +53,13 @@ Classes to creraet static and dynamic WMS-layers
         maxZoom    : NUMBER (optional)
     }
     ***********************************************************/
-    function MapLayer_static(options) {
+    function MapLayer_wms_static(options) {
         nsMap.MapLayer_wms.call(this, options);
     }
-    nsMap.MapLayer_static = MapLayer_static;
+    nsMap.MapLayer_wms_static = nsMap.MapLayer_static = MapLayer_wms_static;
 
-    MapLayer_static.prototype = Object.create(nsMap.MapLayer_wms.prototype);
-    MapLayer_static.prototype.createLayer = nsMap.layer_static;
+    MapLayer_wms_static.prototype = Object.create(nsMap.MapLayer_wms.prototype);
+    MapLayer_wms_static.prototype.createLayer = nsMap.layer_static;
 
 
 

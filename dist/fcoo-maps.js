@@ -3358,11 +3358,11 @@ options = {
         useLegendButtonList: BOOLEAN, if true and menuOptions.buttonList is not given => use legendOptions.buttonList as in menu
 
         showAllways        : BOOLOAN. When true the buttons are visible even when the layer is not visible in any maps. Can also be set directly in buttonOptions
-        buttonListMode     : {button-id: MODE} or MODE. When useLegendButtonList = true => 
+        buttonListMode     : {button-id: MODE} or MODE. When useLegendButtonList = true =>
                                 buttonListMode[id]/buttonListMode = "allMaps", "selectedMaps", "mainMap", or "noMaps" (default)
                                 The mode sets witch maps to be called with the onClick-method for the legend-button-list
                                 The mode can also be set direct in the options for the button in buttonList as options.menuButtonMode
-        
+
     },
 
     //Legend
@@ -3760,7 +3760,7 @@ L.Layer.addInitHook(function(){
                     }
 
                     legendOptions = $.extend(true, {}, {
-                        index       : parseInt(indexAsStr), 
+                        index       : parseInt(indexAsStr),
                         icon        : this.options.legendIcon || this.options.icon,
                         iconClass   : this.options.legendIconClass || this.options.iconClass || null,
                         text        : this.options.legendText || this.options.text || null,
@@ -4338,45 +4338,45 @@ L.Layer.addInitHook(function(){
                 let menuButtonList = [];
                 legendOptions.buttonList.forEach( (buttonOptions, index) => {
                     let menuButtonOptions = $.extend(true, {}, buttonOptions );
-                    
+
                     menuButtonOptions.legendOnClick = menuButtonOptions.onClick;
                     menuButtonOptions.onClick = this._menuButton_onClick.bind(this, index);
-                    
+
                     menuButtonList.push(menuButtonOptions);
-                });                    
+                });
                 result.buttonList = menuButtonList;
-            }            
-            
+            }
+
             if (result.buttonList){
                 //Add class to buttons to control if the button is enabled/disabled when the layer is visible in any maps
                 result.buttonList.forEach( buttonOptions => {
                     const showAllways = buttonOptions.showAllways !== undefined ? buttonOptions.showAllways : menuOptions.showAllways;
-                    buttonOptions.class = (buttonOptions.class || '') + (showAllways ? '' : ' disabled-when-no-selected'); 
-                }); 
+                    buttonOptions.class = (buttonOptions.class || '') + (showAllways ? '' : ' disabled-when-no-selected');
+                });
             }
-            
+
             return result;
         },
 
         _menuButton_onClick: function(buttonIndex, id, selected, $button/*, map*/){
-            const buttonOptions = this.options && this.options.legendOptions && this.options.legendOptions.buttonList ? this.options.legendOptions.buttonList[buttonIndex] : null;            
-            
-            if (!buttonOptions) 
+            const buttonOptions = this.options && this.options.legendOptions && this.options.legendOptions.buttonList ? this.options.legendOptions.buttonList[buttonIndex] : null;
+
+            if (!buttonOptions)
                 return this;
-                
+
             /*
             buttonListMode: {button-id: MODE}. When useLegendButtonList = true => buttonListMode[id] = "allMaps", "selectedMaps", "mainMap", or "noMaps" (default)
                                                The mode sets witch maps to be called with the onClick-method for the legend-button-list
                                             The mode can also be set direct in the options for the button in buttonList as options.menuButtonMode
-            */                                            
+            */
             const menuOptions = this.options.menuOptions;
 
             let mode = buttonOptions.menuButtonMode;
-            
+
             if (!mode && menuOptions.buttonListMode);
                 mode = Array.isArray(menuOptions.buttonListMode) ? menuOptions.buttonListMode[buttonIndex] : menuOptions.buttonListMode;
             mode = mode || "noMaps";
-            
+
             let mapList = [];
             switch (mode.toUpperCase()){
                 case "ALLMAPS"      :   nsMap.visitAllVisibleMaps( map => mapList.push(map) ); break;
@@ -4389,7 +4389,7 @@ L.Layer.addInitHook(function(){
             mapList.forEach( map => onClick(id, selected, $button, map) );
 
             return this;
-        },                
+        },
 
 
         /******************************************************************
@@ -4421,12 +4421,12 @@ L.Layer.addInitHook(function(){
                 this.menuItem.setState(!!this.isAddedToMap(0));
                 notAdded = !this.isAddedToMap(0);
             }
-            
+
             this.menuItem.$li.toggleClass('not-shown-in-any-maps', !!notAdded);
             this.menuItem.$li.find('.disabled-when-no-selected').toggleClass('disabled', !!notAdded);
             if (this.menuItem.favoriteItem && this.menuItem.favoriteItem.$li)
                 this.menuItem.favoriteItem.$li.find('.disabled-when-no-selected').toggleClass('disabled', !!notAdded);
-            
+
         },
 
         /******************************************************************
@@ -4551,7 +4551,8 @@ Classes to creraet static and dynamic WMS-layers
     MapLayer_wms.prototype.createLayer = nsMap.layer_wms;
 
     /***********************************************************
-    MapLayer_static - Creates a MapLayer with static WMS-layer
+    MapLayer_wms_static - Creates a MapLayer with static WMS-layer
+    Also as MapLayer_static for backward combability
     options = {
         icon,
         text,
@@ -4562,13 +4563,13 @@ Classes to creraet static and dynamic WMS-layers
         maxZoom    : NUMBER (optional)
     }
     ***********************************************************/
-    function MapLayer_static(options) {
+    function MapLayer_wms_static(options) {
         nsMap.MapLayer_wms.call(this, options);
     }
-    nsMap.MapLayer_static = MapLayer_static;
+    nsMap.MapLayer_wms_static = nsMap.MapLayer_static = MapLayer_wms_static;
 
-    MapLayer_static.prototype = Object.create(nsMap.MapLayer_wms.prototype);
-    MapLayer_static.prototype.createLayer = nsMap.layer_static;
+    MapLayer_wms_static.prototype = Object.create(nsMap.MapLayer_wms.prototype);
+    MapLayer_wms_static.prototype.createLayer = nsMap.layer_static;
 
 
 
