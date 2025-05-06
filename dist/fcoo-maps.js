@@ -4583,7 +4583,23 @@ Classes to creraet static and dynamic WMS-layers
     nsMap.MapLayer_wms_static = nsMap.MapLayer_static = MapLayer_wms_static;
 
     MapLayer_wms_static.prototype = Object.create(nsMap.MapLayer_wms.prototype);
-    MapLayer_wms_static.prototype.createLayer = nsMap.layer_wms_dynamic;
+    MapLayer_wms_static.prototype.createLayer = nsMap.layer_wms_static;
+
+
+    /***********************************************************
+    MapLayer_wms_dynamic - Creates a MapLayer with dynamic WMS-layer
+    Also as MapLayer_dynamic for backward combability
+    ***********************************************************/
+    function MapLayer_wms_dynamic(options) {
+        nsMap.MapLayer_wms.call(this, options);
+    }
+    nsMap.MapLayer_wms_dynamic = nsMap.MapLayer_dynamic = MapLayer_wms_dynamic;
+
+    MapLayer_wms_dynamic.prototype = Object.create(nsMap.MapLayer_wms.prototype);
+    MapLayer_wms_dynamic.prototype.createLayer = nsMap.layer_wms_dynamic;
+
+
+    MapLayer_wms_dynamic.prototype.createLayer = nsMap.layer_wms_dynamic;
 
 
 
