@@ -3903,6 +3903,7 @@ L.Layer.addInitHook(function(){
 
                 info.layer = this.createLayer(newLayerOptions, map);
                 info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
+                info.layer.mapLayer = this;
 
                 //Sets options._popupContainerClass = this.showAndHideClasses to hide open popups when the layer is hidden and visa versa
                 info.layer.options._popupContainerClass = this.showAndHideClasses;
@@ -3911,7 +3912,6 @@ L.Layer.addInitHook(function(){
 
             //Add map to list and layer(s) to map
             layer.addTo(map);
-
             if ( this.hasColorInfo && !info.colorInfoLayer ){
                 this.hasColorInfo = false;
                 //Get the tileLayer used for colorInfo (if any)
