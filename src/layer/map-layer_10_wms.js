@@ -78,11 +78,4 @@ Classes to creraet static and dynamic WMS-layers
     MapLayer_wms_dynamic.prototype = Object.create(nsMap.MapLayer_wms.prototype);
     MapLayer_wms_dynamic.prototype.createLayer = nsMap.layer_wms_dynamic;
 
-
-    MapLayer_wms_dynamic.prototype.createLayer = nsMap.layer_wms_dynamic;
-
-
-
-
-
 }(jQuery, L, this, document));
