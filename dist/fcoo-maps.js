@@ -3901,7 +3901,7 @@ L.Layer.addInitHook(function(){
                         info.dataset ? info.dataset.data || {} : {}
                     );
 
-                info.layer = this.createLayer(newLayerOptions, map);
+                info.layer = this._createLayer(newLayerOptions, map);
                 info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
                 info.layer.mapLayer = this;
 
@@ -4287,6 +4287,15 @@ L.Layer.addInitHook(function(){
 
         },
 
+
+        /*********************************************************
+        _createLayer: function(layerOptions, map)
+        Simple calls createLayer.
+        Can be overwriten by different types of MapLayer
+        *********************************************************/
+        _createLayer: function(/*layerOptions, map*/){
+            return this.createLayer.apply(this, arguments);
+        },
 
         /*********************************************************
         createLayer: function(layerOptions, map)
