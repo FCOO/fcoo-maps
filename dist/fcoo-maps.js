@@ -3613,12 +3613,12 @@ L.Layer.addInitHook(function(){
 
         this.info = []; //[] of {map, layer, legend, infoBox, colorInfoLayer, loading, timeout, updateColorInfoOnWorkingOff, dataset}
 
-        this.showAndHideClasses = '';
-        this.inversShowAndHideClasses = '';
+        this.showAndHideClasses = 'show-for-layer-visible';
+        this.inversShowAndHideClasses = 'hide-for-layer-visible';
         var minZoom = this.options.minZoom || this.options.layerOptions.minZoom || 0;
         if (minZoom){
-            this.showAndHideClasses       = 'show-for-leaflet-zoom-'+minZoom+'-up';
-            this.inversShowAndHideClasses = 'hide-for-leaflet-zoom-'+minZoom+'-up';
+            this.showAndHideClasses       += ' show-for-leaflet-zoom-'+minZoom+'-up';
+            this.inversShowAndHideClasses += ' hide-for-leaflet-zoom-'+minZoom+'-up';
         }
 
         var maxZoom = this.options.maxZoom || this.options.layerOptions.maxZoom || 0;
@@ -3639,6 +3639,64 @@ L.Layer.addInitHook(function(){
     nsMap.MapLayer = MapLayer;
 
     nsMap.MapLayer.prototype = {
+
+        /*********************************************************
+        getInfo: function(mapOrMapIndexOrMapId)
+        Return the info-record for the given map
+        *********************************************************/
+        getInfo: function(mapOrMapIndexOrMapId){
+            let map = nsMap.getMap(mapOrMapIndexOrMapId),
+                index = map ? map.fcooMapIndex : null;
+
+            return index === null ? null : this.info[index];
+        },
+
+
+        /*********************************************************
+        isInvisible: function(mapOrMapIndexOrMapId)
+        Return true if the layer is hidden in the given map
+        *********************************************************/
+        isInvisible: function(mapOrMapIndexOrMapId){
+            let info = this.getInfo(mapOrMapIndexOrMapId);
+            return info && info.isInvisible;
+        },
+
+        /*********************************************************
+        visible, invisible, toggleVisibility: Hide/show the layer in the given map
+        *********************************************************/
+        visible  : function(mapOrMapIndexOrMapId){ return this.toggleVisibility(mapOrMapIndexOrMapId, true);  },
+        invisible: function(mapOrMapIndexOrMapId){ return this.toggleVisibility(mapOrMapIndexOrMapId, false);  },
+        toggleVisibility: function(mapOrMapIndexOrMapId, visible){
+            function set(layer){
+                if (!layer)
+                    return;
+
+                if (layer.setOpacity)
+                    layer.setOpacity(visible ? 1 : 0);
+
+                if (layer.getElement)
+                    $(layer.getElement()).toggle(visible);
+
+                if (layer.eachLayer)
+                    layer.eachLayer( set );
+            }
+
+            let info = this.getInfo(mapOrMapIndexOrMapId);
+            if (info){
+                visible = typeof visible == 'boolean' ? visible : !!info.isInvisible;
+
+                if (!!info.isInvisible == !!visible){
+                    info.isInvisible = !visible;
+
+                    set(info.layer);
+
+                    info.legend.$modalContent.modernizrToggle('layer-visible', visible);
+
+                    this._saveSetting();
+                }
+            }
+        },
+
         /*********************************************************
         isAddedTo(mapOrIndex) - return true if the MapLayer is added to the map
         *********************************************************/
@@ -3672,7 +3730,10 @@ L.Layer.addInitHook(function(){
                 else
                     this.removeFrom(map);
 
-                //colorInfo - TODO
+                if (setting.isInvisible)
+                    this.invisible(mapIndex);
+
+                //colorInfo - @TODO
 
                 //Individual setting
                 this.applySetting(setting, map, this.info[mapIndex], mapIndex);
@@ -3698,8 +3759,9 @@ L.Layer.addInitHook(function(){
             $.each(this.info, function(index, info){
                 data[index] =
                     $.extend({
-                        show: this.isAddedToMap(index)
-                        //colorInfo - TODO
+                        show       : this.isAddedToMap(index),
+                        isInvisible: info ? info.isInvisible : false,
+                        //colorInfo - @TODO
                     },
                         this.saveSetting(info ? info.map : null, info, index) || {}
                     );
@@ -3726,7 +3788,6 @@ L.Layer.addInitHook(function(){
 
             var info = this.info[mapIndex] = {};
             info.map = map;
-
 
             //Create dataset
             if (this.options.dataset && !info.dataset){
@@ -3962,7 +4023,13 @@ L.Layer.addInitHook(function(){
             if (this.options.onAdd)
                 this.options.onAdd(map, layer);
 
+
+            if (info.isInvisible)
+                this.invisible(map);
+
+
             this._saveSetting();
+
 
             return this;
         },
@@ -4160,7 +4227,6 @@ L.Layer.addInitHook(function(){
                 return this;
 
             var info  = this.info[mapIndex];
-
 
             //Remove legned (if any) and use legend.onRemove to do the removing
             if (!this.wasRemovedViaLegend && map.bsLegendControl){

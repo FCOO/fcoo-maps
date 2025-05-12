@@ -189,7 +189,7 @@ EDIT SYNC MAPS SETTINGS
         font-size       :  0.8em;
         margin-left     : -1.125em;
         vertical-align  :  0.05em;
-    }    
+    }
     &.fa-2xzoom {
         font-size       :  0.625em;
         margin-left     : -1.3em;
@@ -246,7 +246,7 @@ STYLE FOR MAPLAYER MENU
 **********************************************************/
 li.not-shown-in-any-maps {
     .btn.disabled-when-no-selected {
-    }        
+    }
 }
 
 
@@ -302,6 +302,24 @@ $lzm-display-value: initial !important;
 );
 
 
+/**********************************************************
+HIDE/SHOW LAYER
+**********************************************************/
+.layer-visible .hide-for-layer-visible {
+    display: none !important;
+}
+
+.no-layer-visible .show-for-layer-visible {
+    display: none !important;
+}
+
+.no-layer-visible .hide-for-layer-visible {
+    display: initial !important;
+}
+
+.no-layer-visible .modal-body.show-for-modal-extended > * {
+    visibility: hidden;
+}
 
 /**********************************************************
 POSITION-CONTROL

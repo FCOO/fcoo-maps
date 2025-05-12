@@ -21,8 +21,8 @@
 }
 
 
-		
-		
+
+
     </style>
 </head>
 
@@ -39,7 +39,7 @@
 
     <script src="../src/map/01_map-sync.js"></script>
 
-    
+
     <script src="../src/10_fcoo-maps_setup.js"></script>
 
     <script src="../src/fcoo-maps.js"></script>
@@ -87,18 +87,18 @@
     <script src="../src/search/search.js"></script>
 
 
-    
+
     <script src="fcoo-maps-navigation-and-safety.js"></script>
 
     <!-- <script src="fcoo-maps-havnelods.js"></script> -->
 
 <!-- <script src="../dist/fcoo-maps.js"></script> -->
- 
+
     <script>
         //window.fcoo.LOCAL_DATA = true;
         window.fcoo.DEMO_VERSION = true;
 
-        //TEMP: No access to data-files on AWS. Read from old location instead 
+        //TEMP: No access to data-files on AWS. Read from old location instead
         //window.fcoo.path.setPath({host: 'bal.fcoo.dk'});
 
 
@@ -106,11 +106,11 @@
         //* Test setupFileVersion
         window.fcoo.setupFileVersion = {
             'name-address-link_owner': {
-                postfix: '-fiin', 
+                postfix: '-fiin',
                 merge: true
             },
             'data/test_menu.json': {
-                postfix: '-fiin', 
+                postfix: '-fiin',
                 merge: true
             }
         }
@@ -131,15 +131,15 @@
         window.fcoo.map.mainMapOptions.bsToggleBottomMenuControl = true;
 
 
-        window.fcoo.map._addMapContextmenu( 
+        window.fcoo.map._addMapContextmenu(
             {icon: 'fa-map', text:'Console latlng 2'},
             function(latLng, map){  console.log('>>>>', latLng, map);  }, 2
-        );                
-        window.fcoo.map._addMapContextmenu( 
+        );
+        window.fcoo.map._addMapContextmenu(
             {icon: 'fas fa-map', text:'Console latlng 1'},
             function(latLng, map){  console.log('>>>>', latLng, map);  }, 1
-        );                
-            
+        );
+
 
 
         window.fcoo.map.createApplication({
@@ -172,10 +172,10 @@
                     reset   : true,
                     setting : true
                 },
-                menuOptions: {keepAll: true}                
+                menuOptions: {keepAll: true}
             },
-                
-            _rightMenu: { 
+
+            _rightMenu: {
                 content: [{icon:'fa-home', text:{da:'Dette er content', en:'This is content'}},{icon:'fa-car', text:{da:'Dette er content2', en:'This is content2'}}],
                 _data: ['item1', 'item2'],
                 _resolve: function(data, $container){}
@@ -194,10 +194,10 @@
             },
 
             _other: [{
-                data:{text:'Davs med dig'}, 
+                data:{text:'Davs med dig'},
                 resolve: function(data){
                     console.log('other:'+data.text);
-                }, 
+                },
                 reload:1
             }],
 
@@ -219,40 +219,26 @@
                                                     //Default: return ""
             },
 
-            finally: function(){ 
-//HER                setTimeout(function(){
-//HER                    fcoo.map.time.setCurrentRelative(300);
-//HER                }, 3000);
+            finally: function(){
+
+
+                let searchML = fcoo.map.getMapLayer('SEARCH-RESULT');
+                setTimeout(function(){
+                    searchML.toggleVisibility(0);
+                }, 3000);
 
 //HER                setTimeout(function(){
 //HER                    fcoo.map.time.setCurrentRelative(-13);
 //HER                }, 10000);
 
-                return;
-                if (!fcoo.map.MapLayer_Time) return;
-
-                fcoo.map._addMapLayer('DETTE_ER_EN_TEST', fcoo.map.MapLayer_Time, {
-                    text:' Dette er en test', icon: 'fa-clock',
-                    layerOptions: {
-                        dataset: 'DMI/HARMONIE/DMI_NEA_MAPS_v005C.nc',
-                        layers : 'windspeed', //'UGRD:VGRD',
-                        styles : {
-                            plot_method: 'contourf',
-                            legend: 'Wind_ms_BGYRP_11colors_1.1'
-                        }
-                    }
-                })
-                .addTo([0,1])
-//HER                .workingOn(0);
-                //.selectMaps();
             }
         },
 
         //Default menu-layer
 
         );  //end of window.fcoo.map.createApplication
-            
-          
+
+
 
     </script>
  </body>
