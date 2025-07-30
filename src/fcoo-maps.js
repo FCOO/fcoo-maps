@@ -16,7 +16,7 @@
     /****************************************************************************
     To create an application call window.fcoo.map.createApplication(options, fileNameOrMenuOptions)
     options                = OPTIONS or FILENAME = filename with OPTIONS
-    fileNameOrMenuOptions  = MENU-OPTIONS or FILENAME with menu-options. Default = FCOO Standard menu (see fcoo-applicaion)
+    fileNameOrMenuOptions  = MENU_ITEM_LIST or FILENAME with menu-item-list. Default = FCOO Standard menu (see fcoo-applicaion)
 
     FILENAME = Path to file. Two versions:
         1: Relative path locally e.q. "data/info.json"
