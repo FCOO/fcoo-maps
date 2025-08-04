@@ -193,7 +193,7 @@ related issues in map sync
                 static    : false,
                 keyboard  : true,
                 content   : content,
-                helpId    : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
+                helpId    : nsMap.setupOptions.topPanel.helpId.multiMapSetting,
                 helpButton: true,
                 buttons: [{
                     icon   : ns.icons.reset,

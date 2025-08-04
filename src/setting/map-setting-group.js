@@ -570,7 +570,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     text: ns.texts.reset,
                     onClick: function() { nsMap.resetMapSetting( map ); }
                 }],
-                helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
+                helpId    : nsMap.setupOptions.topPanel.helpId.mapSetting,
                 helpButton: true
             },
             accordionList: [],
@@ -1061,7 +1061,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     icon: ns.icons.mapSettingSingle,
                     text: ns.texts.mapSettingSingle
                 },
-                helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
+                helpId    : nsMap.setupOptions.topPanel.helpId.mapSetting,
                 helpButton: true,
                 buttons: [{
                     icon   : ns.icons.reset,
@@ -1149,7 +1149,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     text: ns.texts.mapSettingGlobal
                 },
                 closeButton: true,
-                helpId     : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
+                helpId     : nsMap.setupOptions.topPanel.helpId.multiMapSetting,
                 scroll     : false,
                 helpButton : true,
                 buttons: [{

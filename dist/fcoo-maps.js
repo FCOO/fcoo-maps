@@ -608,7 +608,7 @@ The default options are an extended version of the defalut application options f
     Extend ns.defaultApplicationOptions with default options for map-application
     ****************************************************************************/
     ns.defaultApplicationOptions = $.extend(true, ns.defaultApplicationOptions, {
-        topMenu: {
+        topPanel: {
             search   : true,                                    //true if use search
             nominatim: 'https://nominatim.openstreetmap.org',   //Path to OpenStreetMap Nominatin-service
 
@@ -640,7 +640,7 @@ The default options are an extended version of the defalut application options f
             setting: false,
         },
 
-        standardMenuOptions: {
+        standardPanelOptions: {
             inclBar     : true,
             barCloseAll : true,
 
@@ -652,8 +652,8 @@ The default options are an extended version of the defalut application options f
             }
         },
 
-        leftMenu: {
-            width  : 359,   //Width of left-menu. Supports mobil device with screen width = 360+
+        leftPanel: {
+            width  : 359,   //Width of left-panel. Supports mobil device with screen width = 360+
             buttons: {
                 reset  : true,
                 setting: true
@@ -663,7 +663,7 @@ The default options are an extended version of the defalut application options f
                 adjustIcon: adjustMenuItemIcon
             },
         },
-        leftMenuIcon: 'fa-layer-group',
+        leftPanelIcon: 'fa-layer-group',
 
         //Default map
         map: {
@@ -1608,7 +1608,7 @@ dataset.js
     /****************************************************************************
     To create an application call window.fcoo.map.createApplication(options, fileNameOrMenuOptions)
     options                = OPTIONS or FILENAME = filename with OPTIONS
-    fileNameOrMenuOptions  = MENU-OPTIONS or FILENAME with menu-options. Default = FCOO Standard menu (see fcoo-applicaion)
+    fileNameOrMenuOptions  = MENU_ITEM_LIST or FILENAME with menu-item-list. Default = FCOO Standard menu (see fcoo-applicaion)
 
     FILENAME = Path to file. Two versions:
         1: Relative path locally e.q. "data/info.json"
@@ -1754,7 +1754,7 @@ dataset.js
 
 
         //Do not create MapLayer with search-results if search is not pressent AND only include search if MapLayer with is included
-        if (!options.topMenu.search)
+        if (!options.topPanel.search)
             delete nsMap.createMapLayer[nsMap.searchMapLayerId];
     }
 
@@ -1779,21 +1779,21 @@ dataset.js
             link( nsMap.main[nsMap.setupOptions.standardMenuId].mmenu );
 
         //Update search-button
-        if (setupOptions.topMenu.search){
-            var topMenuSearchInput = nsMap.main.topMenuObject.searchInput,
+        if (setupOptions.topPanel.search){
+            var topPanelSearchInput = nsMap.main.topPanelObject.searchInput,
                 submitSearch = function(){
-                    topMenuSearchInput.select().focus();
-                    nsMap.search( topMenuSearchInput.val() );
+                    topPanelSearchInput.select().focus();
+                    nsMap.search( topPanelSearchInput.val() );
                 },
                 clickSearch = function(){
                     //If search-input is hidden => show search-input-modal else click == submit
-                    if (topMenuSearchInput.hasClass('top-menu-element-hide'))
+                    if (topPanelSearchInput.hasClass('top-panel-element-hide'))
                         nsMap.search( null );
                     else
                         submitSearch();
                 };
-            nsMap.main.topMenuObject.search.on('submit', submitSearch );
-            nsMap.main.topMenuObject.searchButton.on('click', clickSearch );
+            nsMap.main.topPanelObject.search.on('submit', submitSearch );
+            nsMap.main.topPanelObject.searchButton.on('click', clickSearch );
         }
 
         //Set min- and max-zoom for main-map
@@ -1970,7 +1970,7 @@ global-events.js
 
 ;
 /****************************************************************************
-L.Control.bsToggleBottomMenu.js
+L.Control.bsToggleBottomPanel.js
 ****************************************************************************/
 (function ($, L, window/*, document, undefined*/) {
     "use strict";
@@ -1978,27 +1978,27 @@ L.Control.bsToggleBottomMenu.js
     var ns = window.fcoo = window.fcoo || {},
         nsMap = ns.map = ns.map || {};
 
-        L.Control.BsToggleBottomMenu = L.Control.BsButton.extend({
+        L.Control.BsToggleBottomPanel = L.Control.BsButton.extend({
             options: {
                 bigIcon     : true,
-                icon        : ['far fa-circle-chevron-up hide-for-bottom-menu-open fa-no-margin', 'far fa-circle-chevron-down show-for-bottom-menu-open'],
+                icon        : ['far fa-circle-chevron-up hide-for-bottom-panel-open fa-no-margin', 'far fa-circle-chevron-down show-for-bottom-panel-open'],
                 position    : 'bottomcenter',
                 transparent : true,
                 //semiTransparent : true,
-                onClick     : function(){ nsMap.main.bottomMenu.toggle(); }
+                onClick     : function(){ nsMap.main.bottomPanel.toggle(); }
             }
         });
 
     //Install L.Control.BsCompass
     L.Map.mergeOptions({
-        bsToggleBottomMenuControl: false,
-        bsToggleBottomMenuOptions: {}
+        bsToggleBottomPanelControl: false,
+        bsToggleBottomPanelOptions: {}
     });
 
     L.Map.addInitHook(function () {
-        if (this.options.bsToggleBottomMenuControl){
-            this.bsToggleBottomMenuControl = new L.Control.BsToggleBottomMenu( this.options.bsToggleBottomMenuOptions );
-            this.addControl(this.bsToggleBottomMenuControl);
+        if (this.options.bsToggleBottomPanelControl){
+            this.bsToggleBottomPanelControl = new L.Control.BsToggleBottomPanel( this.options.bsToggleBottomPanelOptions );
+            this.addControl(this.bsToggleBottomPanelControl);
         }
     });
 
@@ -5705,7 +5705,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     text: ns.texts.reset,
                     onClick: function() { nsMap.resetMapSetting( map ); }
                 }],
-                helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
+                helpId    : nsMap.setupOptions.topPanel.helpId.mapSetting,
                 helpButton: true
             },
             accordionList: [],
@@ -6196,7 +6196,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     icon: ns.icons.mapSettingSingle,
                     text: ns.texts.mapSettingSingle
                 },
-                helpId    : nsMap.setupOptions.topMenu.helpId.mapSetting,
+                helpId    : nsMap.setupOptions.topPanel.helpId.mapSetting,
                 helpButton: true,
                 buttons: [{
                     icon   : ns.icons.reset,
@@ -6284,7 +6284,7 @@ Create mapSettingGroup = setting-group for each maps with settings for the map
                     text: ns.texts.mapSettingGlobal
                 },
                 closeButton: true,
-                helpId     : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
+                helpId     : nsMap.setupOptions.topPanel.helpId.multiMapSetting,
                 scroll     : false,
                 helpButton : true,
                 buttons: [{
@@ -6502,7 +6502,7 @@ related issues in map sync
                 static    : false,
                 keyboard  : true,
                 content   : content,
-                helpId    : nsMap.setupOptions.topMenu.helpId.multiMapSetting,
+                helpId    : nsMap.setupOptions.topPanel.helpId.multiMapSetting,
                 helpButton: true,
                 buttons: [{
                     icon   : ns.icons.reset,
@@ -7829,7 +7829,7 @@ search-result.js
         if (lang != 'en')
             params['accept-language'] = lang + ',en';
 
-        return nsMap.setupOptions.topMenu.nominatim + '/lookup' + L.Util.getParamString(params);
+        return nsMap.setupOptions.topPanel.nominatim + '/lookup' + L.Util.getParamString(params);
     };
 
 	//Extend the prototype
@@ -7871,15 +7871,15 @@ search-result.js
             //Create the dynamic part of the modal-options
             let langList = [lang, 'en', this.localLang],
                 nameList = [];
-            
+
             langList.forEach( lang => {
                 if (lang && this.name[lang])
                     nameList.push(this.name[lang]);
-            }, this);                
+            }, this);
 
             nameList = removeDuplicates(nameList);
             nameList[0] = '<strong>' + nameList[0] + '</strong>';
-            
+
             let content = [{
                     label    : nameList.length == 1 ? {da:'Navn', en:'Name'} : {da:'Navne', en:'Names'},
                     type     : 'text',
@@ -7887,7 +7887,7 @@ search-result.js
                     center   : true,
                     //textStyle: 'fw-bold'
                 }];
-            
+
             //Add position.
             if (this.inclPositionIsDetails)
                 content.push({
@@ -7925,20 +7925,20 @@ search-result.js
                 part.type = null;
                 newPart.content = part;
                 content[index] = newPart;
-            });                
+            });
 
             content = {
                 type        : 'accordion',
                 list        : content,
-                neverClose  : true,                      
-                multiOpen   : true,                     
+                neverClose  : true,
+                multiOpen   : true,
                 allOpen     : true,
             };
 
             this.langDetails = this.langDetails || {};
             this.langDetails[lang] = this.langDetails[lang] || {
                 header : this.header,
-                content: content    
+                content: content
             };
             return this.langDetails[lang];
         },
@@ -7963,11 +7963,11 @@ search-result.js
 
             if (opt.isPosition){
                 this.names = this.name;
-            }                
+            }
             else {
                 if (opt.namedetails){
                     //There are multi-language names for the Search-Result
-                    
+
                     let localName   = opt.namedetails.name || opt.namedetails['name:'+this.localLang] || '',
                         defaultName = opt.namedetails['name:en'] || '';
 
@@ -7980,13 +7980,13 @@ search-result.js
                     if (this.localLang){
                         langList.push(this.localLang);
                         langList = removeDuplicates(langList);
-                    }                        
-                     
+                    }
+
                     //Set name = {lang:STRING}
                     this.name = {};
                     langList.forEach( lang => {
-                        this.name[lang] = opt.namedetails['name:'+lang] || opt.name || defaultName;                         
-                    }, this);                        
+                        this.name[lang] = opt.namedetails['name:'+lang] || opt.name || defaultName;
+                    }, this);
 
                     /*
                     Construct names = {lang:STRING} for all lang in i18next.languages
@@ -7994,7 +7994,7 @@ search-result.js
                     Eq. names = {
                             da: "Danmark",
                             en: "Denmark (Danmark)"
-                        }                            
+                        }
                     */
                     const localNameStr = localName ? ' (' + localName + ')' : '';
                     this.names = {};
@@ -8116,7 +8116,7 @@ search-result.js
                         interactive        : true,
 
                         className: 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-down'
-                            
+
                     });
 
                     poly.bindTooltip(this.header);
@@ -8440,8 +8440,8 @@ search.js
         searchHistoryList.goLast();
         searchHistoryList.add(text);
 
-        //Update input in top-menu with latest search
-        nsMap.main.topMenuObject.searchInput.val(searchText);
+        //Update input in top-panel with latest search
+        nsMap.main.topPanelObject.searchInput.val(searchText);
 
         //First: Search for position
         var latLngList = nsMap.text2LatLng(text);
@@ -8479,7 +8479,7 @@ search.js
             if (lang != 'en')
                 params['accept-language'] = lang + ',en';
             $.workingOn();
-            Promise.getJSON( nsMap.setupOptions.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
+            Promise.getJSON( nsMap.setupOptions.topPanel.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
         }
     };
 

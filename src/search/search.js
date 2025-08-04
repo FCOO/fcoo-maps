@@ -91,8 +91,8 @@ search.js
         searchHistoryList.goLast();
         searchHistoryList.add(text);
 
-        //Update input in top-menu with latest search
-        nsMap.main.topMenuObject.searchInput.val(searchText);
+        //Update input in top-panel with latest search
+        nsMap.main.topPanelObject.searchInput.val(searchText);
 
         //First: Search for position
         var latLngList = nsMap.text2LatLng(text);
@@ -130,7 +130,7 @@ search.js
             if (lang != 'en')
                 params['accept-language'] = lang + ',en';
             $.workingOn();
-            Promise.getJSON( nsMap.setupOptions.topMenu.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
+            Promise.getJSON( nsMap.setupOptions.topPanel.nominatim + '/search' + L.Util.getParamString(params), {}, nominatim_response, nominatim_reject );
         }
     };
 

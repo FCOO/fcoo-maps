@@ -31,6 +31,9 @@
         window.fcoo = window.fcoo || {};
         window.fcoo.DEMO_VERSION = true;
         //OR window.fcoo.LOCAL_DATA = true;
+
+        window.fcoo.DEV_VERSION = true;
+
     </script>
 
     <script src="bower_components.js"></script>
@@ -63,7 +66,7 @@
     <script src="../src/layer/map-layer_background.js"></script>
     <script src="../src/layer/tile-filter.js"></script>
 
-    <script src="../src/leaflet/L.Control.bsToggleBottomMenu.js"></script>
+    <script src="../src/leaflet/L.Control.bsToggleBottomPanel.js"></script>
     <script src="../src/leaflet/leaflet.js"></script>
     <script src="../src/leaflet/offline.js"></script>
     <script src="../src/leaflet/parent-layer.js"></script>
@@ -99,7 +102,7 @@
         window.fcoo.DEMO_VERSION = true;
 
         //TEMP: No access to data-files on AWS. Read from old location instead
-        //window.fcoo.path.setPath({host: 'bal.fcoo.dk'});
+        window.fcoo.path.setPath({host: 'bal.fcoo.dk'});
 
 
 /*
@@ -128,7 +131,7 @@
 
 //        window.fcoo.map.createApplication({subDir:'setup', fileName:'ifm_test.json'});
 
-        window.fcoo.map.mainMapOptions.bsToggleBottomMenuControl = true;
+        window.fcoo.map.mainMapOptions.bsToggleBottomPanelControl = true;
 
 
         window.fcoo.map._addMapContextmenu(
@@ -182,7 +185,7 @@
             },
             _keepRightMenuButton: true,
 
-            bottomMenu: {  //Just DEMO
+            bottomPanel: {  //Just DEMO
                 height : 120,
                 handleWidth: 200,
                 handleHeight: 26,

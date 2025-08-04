@@ -142,7 +142,7 @@ search-result.js
         if (lang != 'en')
             params['accept-language'] = lang + ',en';
 
-        return nsMap.setupOptions.topMenu.nominatim + '/lookup' + L.Util.getParamString(params);
+        return nsMap.setupOptions.topPanel.nominatim + '/lookup' + L.Util.getParamString(params);
     };
 
 	//Extend the prototype
@@ -184,15 +184,15 @@ search-result.js
             //Create the dynamic part of the modal-options
             let langList = [lang, 'en', this.localLang],
                 nameList = [];
-            
+
             langList.forEach( lang => {
                 if (lang && this.name[lang])
                     nameList.push(this.name[lang]);
-            }, this);                
+            }, this);
 
             nameList = removeDuplicates(nameList);
             nameList[0] = '<strong>' + nameList[0] + '</strong>';
-            
+
             let content = [{
                     label    : nameList.length == 1 ? {da:'Navn', en:'Name'} : {da:'Navne', en:'Names'},
                     type     : 'text',
@@ -200,7 +200,7 @@ search-result.js
                     center   : true,
                     //textStyle: 'fw-bold'
                 }];
-            
+
             //Add position.
             if (this.inclPositionIsDetails)
                 content.push({
@@ -238,20 +238,20 @@ search-result.js
                 part.type = null;
                 newPart.content = part;
                 content[index] = newPart;
-            });                
+            });
 
             content = {
                 type        : 'accordion',
                 list        : content,
-                neverClose  : true,                      
-                multiOpen   : true,                     
+                neverClose  : true,
+                multiOpen   : true,
                 allOpen     : true,
             };
 
             this.langDetails = this.langDetails || {};
             this.langDetails[lang] = this.langDetails[lang] || {
                 header : this.header,
-                content: content    
+                content: content
             };
             return this.langDetails[lang];
         },
@@ -276,11 +276,11 @@ search-result.js
 
             if (opt.isPosition){
                 this.names = this.name;
-            }                
+            }
             else {
                 if (opt.namedetails){
                     //There are multi-language names for the Search-Result
-                    
+
                     let localName   = opt.namedetails.name || opt.namedetails['name:'+this.localLang] || '',
                         defaultName = opt.namedetails['name:en'] || '';
 
@@ -293,13 +293,13 @@ search-result.js
                     if (this.localLang){
                         langList.push(this.localLang);
                         langList = removeDuplicates(langList);
-                    }                        
-                     
+                    }
+
                     //Set name = {lang:STRING}
                     this.name = {};
                     langList.forEach( lang => {
-                        this.name[lang] = opt.namedetails['name:'+lang] || opt.name || defaultName;                         
-                    }, this);                        
+                        this.name[lang] = opt.namedetails['name:'+lang] || opt.name || defaultName;
+                    }, this);
 
                     /*
                     Construct names = {lang:STRING} for all lang in i18next.languages
@@ -307,7 +307,7 @@ search-result.js
                     Eq. names = {
                             da: "Danmark",
                             en: "Denmark (Danmark)"
-                        }                            
+                        }
                     */
                     const localNameStr = localName ? ' (' + localName + ')' : '';
                     this.names = {};
@@ -429,7 +429,7 @@ search-result.js
                         interactive        : true,
 
                         className: 'hide-for-leaflet-zoom-'+this.visibleAtZoom+'-down'
-                            
+
                     });
 
                     poly.bindTooltip(this.header);

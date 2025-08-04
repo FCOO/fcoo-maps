@@ -162,7 +162,7 @@
 
 
         //Do not create MapLayer with search-results if search is not pressent AND only include search if MapLayer with is included
-        if (!options.topMenu.search)
+        if (!options.topPanel.search)
             delete nsMap.createMapLayer[nsMap.searchMapLayerId];
     }
 
@@ -187,21 +187,21 @@
             link( nsMap.main[nsMap.setupOptions.standardMenuId].mmenu );
 
         //Update search-button
-        if (setupOptions.topMenu.search){
-            var topMenuSearchInput = nsMap.main.topMenuObject.searchInput,
+        if (setupOptions.topPanel.search){
+            var topPanelSearchInput = nsMap.main.topPanelObject.searchInput,
                 submitSearch = function(){
-                    topMenuSearchInput.select().focus();
-                    nsMap.search( topMenuSearchInput.val() );
+                    topPanelSearchInput.select().focus();
+                    nsMap.search( topPanelSearchInput.val() );
                 },
                 clickSearch = function(){
                     //If search-input is hidden => show search-input-modal else click == submit
-                    if (topMenuSearchInput.hasClass('top-menu-element-hide'))
+                    if (topPanelSearchInput.hasClass('top-panel-element-hide'))
                         nsMap.search( null );
                     else
                         submitSearch();
                 };
-            nsMap.main.topMenuObject.search.on('submit', submitSearch );
-            nsMap.main.topMenuObject.searchButton.on('click', clickSearch );
+            nsMap.main.topPanelObject.search.on('submit', submitSearch );
+            nsMap.main.topPanelObject.searchButton.on('click', clickSearch );
         }
 
         //Set min- and max-zoom for main-map

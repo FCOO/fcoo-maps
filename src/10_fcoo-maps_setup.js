@@ -113,7 +113,7 @@ The default options are an extended version of the defalut application options f
     Extend ns.defaultApplicationOptions with default options for map-application
     ****************************************************************************/
     ns.defaultApplicationOptions = $.extend(true, ns.defaultApplicationOptions, {
-        topMenu: {
+        topPanel: {
             search   : true,                                    //true if use search
             nominatim: 'https://nominatim.openstreetmap.org',   //Path to OpenStreetMap Nominatin-service
 
@@ -145,7 +145,7 @@ The default options are an extended version of the defalut application options f
             setting: false,
         },
 
-        standardMenuOptions: {
+        standardPanelOptions: {
             inclBar     : true,
             barCloseAll : true,
 
@@ -157,8 +157,8 @@ The default options are an extended version of the defalut application options f
             }
         },
 
-        leftMenu: {
-            width  : 359,   //Width of left-menu. Supports mobil device with screen width = 360+
+        leftPanel: {
+            width  : 359,   //Width of left-panel. Supports mobil device with screen width = 360+
             buttons: {
                 reset  : true,
                 setting: true
@@ -168,7 +168,7 @@ The default options are an extended version of the defalut application options f
                 adjustIcon: adjustMenuItemIcon
             },
         },
-        leftMenuIcon: 'fa-layer-group',
+        leftPanelIcon: 'fa-layer-group',
 
         //Default map
         map: {
