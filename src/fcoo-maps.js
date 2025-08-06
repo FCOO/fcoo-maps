@@ -183,8 +183,8 @@
             }
         }
 
-        if (nsMap.setupOptions.standardMenuId)
-            link( nsMap.main[nsMap.setupOptions.standardMenuId].mmenu );
+        if (nsMap.setupOptions.menuPanelId)
+            link( nsMap.main[nsMap.setupOptions.menuPanelId].mmenu );
 
         //Update search-button
         if (setupOptions.topPanel.search){
