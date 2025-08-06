@@ -41316,6 +41316,17 @@ Bootstrap default = normal size
 Accordion
 ***********************************************/
 /***********************************************
+Grid columns
+Set the number of columns and specify the width of the gutters.
+
+$grid-columns:                12 !default;
+$grid-gutter-width:           1.5rem !default;
+$grid-row-columns:            6 !default;
+
+// Container padding
+$container-padding-x: $grid-gutter-width !default;
+***********************************************/
+/***********************************************
 Card
 ***********************************************/
 /***********************************************
@@ -41462,6 +41473,7 @@ COLORS AND STYLE
   --mm-color-background: var(--bs-modal-bg);
   --mm-item-opened-color: null;
   --mm-item-opened-bg: null;
+  --mm-sub-item-left-border: null;
   --mm-item-closed-color: null;
   --mm-item-closed-bg: null;
   --mm-panel-opened-bg: rgba(0,0,0, 0.05);
@@ -42814,7 +42826,13 @@ ADJUST MMENU AND JQUERY-BOOTSTRAP ELEMENTS
 }
 
 .mm-listitem_vertical > .mm-panel {
-  padding: 0 0 0 5px !important;
+  padding: 0 0 0 0 !important;
+  border-left: 1em solid var(--mm-sub-item-left-border);
+  margin-left: 1px;
+}
+
+.mm-panels > .mm-panel > .mm-listview > .mm-listitem_vertical > .mm-panel {
+  margin-left: -1px;
 }
 
 .mm-menu .mm-listitem_opened > .mm-listitem__btn {
@@ -43416,6 +43434,7 @@ Adjust different parts in jquery-bootstrap and fcoo-application
   --mm-item-closed-hover-bg: var(--fcoo-app-darken-bg-color-63);
   --mm-item-opened-color: var(--fcoo-app-text-color-50);
   --mm-item-opened-bg: var(--fcoo-app-bg-color-50);
+  --mm-sub-item-left-border: var(--fcoo-app-bg-color-50);
   --mm-item-opened-hover-color: var(--fcoo-app-active-text-color-50);
   --mm-item-opened-hover-bg: var(--fcoo-app-darken-bg-color-50);
 }
