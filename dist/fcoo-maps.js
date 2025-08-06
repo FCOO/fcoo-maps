@@ -4936,7 +4936,8 @@ Objects and methods to show a modal with select of layer for one map
 
 
     nsMap.selectLayerInModal = function( map ){
-        let bsMenu = nsMap.main[nsMap.setupOptions.standardMenuId].mmenu;
+
+        let bsMenu = nsMap.main[nsMap.setupOptions.menuPanelId].mmenu;
 
         if (!bsMenu) return;
 
