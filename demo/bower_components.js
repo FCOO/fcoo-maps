@@ -117377,17 +117377,28 @@ Method window.fcoo.createFCOOMenu(options: MENU_OPTIONS)
 
     *********************************************/
     function finishMenu(options){
+        //**************************************************
         //If any owner-function was called => Check again since some owner-functions may have just added new menuItems and owner-functions
-        let createMenuAgain = false;
-        options.menuList.forEach(menuItem => {
-            if (menuItem.isOwnerMenu && !menuItem.ownerFuncCalled)
-                createMenuAgain = true;
-        });
+        function checkMenuList( menuList ){
+            let createMenuAgain = false;
+            (menuList || []).forEach(menuItem => {
+                if (menuItem.isOwnerMenu && !menuItem.ownerFuncCalled)
+                    createMenuAgain = true;
+                if (menuItem.list)
+                    checkMenuList( menuItem.list );
+            });
+            if (createMenuAgain)
+                createMenu(menuList, {}, options);
+        }
+        //**************************************************
 
-        if (createMenuAgain)
-            createMenu(options.menuList, {}, options);
+        //1: Update all menu-items
+        updateMenuList(options.menuList, options);
 
-        //Remove any empty menu-items
+        //2: Check if any menu-item need updating/creating
+        checkMenuList(options.menuList);
+
+        //3: Update all menu-items again
         updateMenuList(options.menuList, options);
 
         if (options.finallyFunc)
