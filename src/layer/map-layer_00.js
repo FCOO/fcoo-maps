@@ -621,6 +621,9 @@ L.Layer.addInitHook(function(){
                     );
 
                 info.layer = this._createLayer(newLayerOptions, map);
+
+
+
                 info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
                 info.layer.mapLayer = this;
 
