@@ -1,0 +1,21 @@
+[
+    {"id": "BACKGROUND_LAYER_COASTLINE",    "desc": "Costline and names of cities and places. Must be above all dynamic layers"},
+
+
+    {"id": "STATIC_LAYER_LAND",             "desc": "Default static layer eq. EEZ, VTS-lines, SAR-areas etc."},
+
+    {"id": "STATIC_LAYER",                  "desc": "TODO"},
+
+
+    {"id": "BACKGROUND_LAYER_LAND",         "desc": "Layer with background land and water"},
+
+    {"id": "STATIC_LAYER_WATER",            "desc": "Typical navigational layer (routes, zones etc.) Below BACKGROUND_LAYER_LAND to mask out polygons and line that extend onto land"},
+
+
+    {"id": "BACKGROUND_LAYER_WATER",        "desc": "TODO"},
+
+
+
+
+    {"id": "THE_END"}
+]

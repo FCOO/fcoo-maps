@@ -2638,7 +2638,7 @@ fcoo.map.zIndex contains constants with z-index for different type of panes
 
 ------------------------------------------------------------------------------
 Leaflet has one parent-pane and six different panes for different layers.
-See https://leafletjs.com/reference-1.7.1.html#map-overlaypane
+See https://leafletjs.com/reference.html#map-pane
 
 Pane	    Z-index	Description
 mapPane	      auto	Pane that contains all other map panes
@@ -2662,7 +2662,18 @@ If a Layer contains Marker and/or polylines etc. each layer gets its own pane in
 overlayPane, shadowPane, and/or markerPane with z-index given directly in options or
 via the layers id in fcoo.map.zIndex[id]
 
+
+The following methods are avaiable to get/create new panes with z-index relative to other of the standard Leaflet panes above
+
+L.Map.getPaneBelow(paneId) Create and return a pane named paneId+'below' that gets zIndex just below pane with paneId
+
+L.Map.getPaneAbove(paneId) Create and return a pane named paneId+'above' that gets zIndex just above pane with paneId
+
+L.Map._getPaneDeltaZIndex(paneId, postfix, deltaZIndex) Create and return a pane named paneId+postfix that gets zIndex deltaZIndex (+/-) relative to pane with paneId
+
+
 ****************************************************************************/
+
 (function ($, window/*, document, undefined*/) {
     "use strict";
 
@@ -2671,47 +2682,29 @@ via the layers id in fcoo.map.zIndex[id]
         nsMap = ns.map = ns.map || {};
 
 
-    nsMap.zIndex = {
+    nsMap.zIndex = {};
 
-        //Z-index for layers in overlayPane and markerPane. Typical geoJSON-layer
-        'NAVIGATION_PILOT_BOARDING_POSITIONS': 100,
+    ns.promiseList.append({
+        fileName: {subDir: "layers", fileName: "layer-z-index.json"},
+        resolve : function( list ){
+            let zIndex = 2000 + list.length * 1000;
+            list.forEach( rec => {
+                nsMap.zIndex[rec.id] = zIndex;
+                zIndex = zIndex - 1000;
+            });
+        }
+    });
 
-
-        'NAVIGATION_NIORD'                   : 90,
-
-
-        //Z-index for tile-layer in tilePane
-
-
-        //BACKGROUND_LAYER_COASTLINE: Must be above all dynamic layers
-        "BACKGROUND_LAYER_COASTLINE": 2000,
-
-
-
-
-        //STATIC_LAYER = Default static layer eq. EEZ, VTS-lines, SAR-areas etc.
-        "STATIC_LAYER_LAND"         : 1000,
-
-        "STATIC_LAYER"              : 900,  //TODO
-
-
-
-
-        //BACKGROUND_LAYER_LAND, BACKGROUND_LAYER_WATER = Layer with background land and water
-        "BACKGROUND_LAYER_LAND"     : 500,
-
-        "STATIC_LAYER_WATER"        : 400,
-
-
-
-
-        "BACKGROUND_LAYER_WATER"    : 300   //TODO
-
-
+    //Methods for zIndex
+    nsMap.zIndex.getZIndex = function(id, delta=0){
+        return (nsMap.zIndex[id] || 0) + delta;
     };
 
-//sæt window.L_GEOPOLYLINE_ZINDEX = 100; i relation til de andre ting TODO
-
+    /* Previous const that to seems to be used
+    //Z-index for layers in overlayPane and markerPane. Typical geoJSON-layer
+    nsMap.zIndex.NAVIGATION_PILOT_BOARDING_POSITIONS = 100;
+    nsMap.zIndex.NAVIGATION_NIORD = 90;
+    */
 
 }(jQuery, this, document));
 
@@ -3963,6 +3956,9 @@ L.Layer.addInitHook(function(){
                     );
 
                 info.layer = this._createLayer(newLayerOptions, map);
+
+
+
                 info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
                 info.layer.mapLayer = this;
 
