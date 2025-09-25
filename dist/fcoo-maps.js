@@ -2695,8 +2695,8 @@ L.Map._getPaneDeltaZIndex(paneId, postfix, deltaZIndex) Create and return a pane
         }
     });
 
-    //Methods for zIndex
-    nsMap.zIndex.getZIndex = function(id, delta=0){
+    //Methods for z-index
+    nsMap.getZIndex = function(id, delta=0){
         return (nsMap.zIndex[id] || 0) + delta;
     };
 

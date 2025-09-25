@@ -13097,7 +13097,7 @@ else {
 }(jQuery, this, document));
 ;
 /*!
-  * Bootstrap v5.3.7 (https://getbootstrap.com/)
+  * Bootstrap v5.3.8 (https://getbootstrap.com/)
   * Copyright 2011-2025 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -13745,7 +13745,7 @@ else {
    * Constants
    */
 
-  const VERSION = '5.3.7';
+  const VERSION = '5.3.8';
 
   /**
    * Class definition
@@ -16788,9 +16788,6 @@ else {
       this._element.setAttribute('aria-expanded', 'false');
       Manipulator.removeDataAttribute(this._menu, 'popper');
       EventHandler.trigger(this._element, EVENT_HIDDEN$5, relatedTarget);
-
-      // Explicitly return focus to the trigger element
-      this._element.focus();
     }
     _getConfig(config) {
       config = super._getConfig(config);
@@ -55738,6 +55735,7 @@ window.xmlToJSON = function(xml) {
         this.firstList = [];
         this.list = [];
         this.lastList = [];
+        this.finallyList = [];
 
     }
     window.PromiseList = PromiseList;
@@ -55752,8 +55750,7 @@ window.xmlToJSON = function(xml) {
     window.PromiseList.prototype = {
 
         //append( options )
-        append: function( options, listId ){
-            listId = listId || 'list';
+        append: function( options, listId = 'list'){
             this[listId] = this[listId].concat( asArray(options) );
             return this;
         },
@@ -55762,6 +55759,9 @@ window.xmlToJSON = function(xml) {
         },
         appendLast: function( options ){
             return this.append( options, 'lastList');
+        },
+        appendFinally: function( options ){
+            return this.append( options, 'finallyList');
         },
 
         //prepend( options )
@@ -55776,11 +55776,14 @@ window.xmlToJSON = function(xml) {
         prependLast: function( options ){
             return this.prepend( options, 'lastList');
         },
+        prependFinally: function( options ){
+            return this.prepend( options, 'finallyList');
+        },
 
         _createAllList: function(){
             var _this = this;
             this.allList = [];
-            $.each([this.firstList, this.list, this.lastList], function(index, list){
+            $.each([this.firstList, this.list, this.lastList, this.finallyList], function(index, list){
                 $.each(list, function(index, item){
                     _this.allList.push(item);
                 });
@@ -71904,7 +71907,7 @@ if (typeof define === 'function' && define.amd) {
             *******************************************************************/
             this.cache.$container =
                 $('<div/>')
-                    .addClass('base-slider-container ' + this.options.handle + ' js-base-slider-' + this.pluginCount );
+                    .addClass(['base-slider-container', this.options.handle, 'js-base-slider-' + this.pluginCount ]);
 
 
             this.cache.$input.before(this.cache.$container);
@@ -71915,11 +71918,7 @@ if (typeof define === 'function' && define.amd) {
             //if options.handleFixed: Remove margin for the handle and put inside outer-container
             if (this.options.handleFixed){
                 this.cache.$container
-                    .css({
-                        'width'       : '100%',
-                        'margin-left' : 0,
-                        'margin-right': 0
-                    })
+                    .addClass('handle-is-fixed')
                     .wrap('<div/>');
                 this.cache.$fullWidthContainer = this.cache.$container.parent();
                 this.cache.$fullWidthContainer.addClass('base-slider-container-full-width');
@@ -84414,8 +84413,12 @@ module.exports = g;
             if (insideFormGroup){
                 //Create outer input-group-container
                 insideInputGroup = true;
+                let alertName = options.colorName || options.alert || options.alertName;
                 $parent =
                     $divXXGroup('input-group-container', options)
+
+                        .addClass(alertName ? 'has-alert-background alert-'+alertName : '')
+
                         .toggleClass('small-bottom-padding', !!options.smallBottomPadding)
                         .toggleClass('py-0',                 !!options.noVerticalPadding)
                         .toggleClass('line-before',          !!options.lineBefore)
@@ -84424,6 +84427,9 @@ module.exports = g;
                         .toggleClass('no-validation',        !!(noValidation || options.noValidation))  //HER skal den bruges hvis der bruges tooltips til validation errors?
 
                         .appendTo( $parent );
+
+
+
             }
 
             if (insideInputGroup || hasPreOrPost){
@@ -86491,7 +86497,7 @@ stringLength: {default: "Please enter a value with valid length", less: "Please 
 uri         : {default: "Please enter a valid URI"}
 */
 ;
-/****************************************************************************
+-/****************************************************************************
 	jquery-bootstrap-header.js,
 
 	(c) 2017, FCOO
@@ -86515,6 +86521,7 @@ uri         : {default: "Please enter a valid URI"}
     pin
     unpin
     new
+    error
     warning
     info
     help
@@ -86574,6 +86581,16 @@ uri         : {default: "Please enter a valid URI"}
 
 
             new     : square ? 'fa-window-maximize' : [ $.FONTAWESOME_PREFIX_STANDARD + ' fa-window-maximize fa-inside-circle2', $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle'],
+
+            error : {
+                icon : square ? 'fa-exclamation' : [ 'fas fa-circle back text-danger', $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle', 'fas fa-exclamation fa-inside-circle-xmark'],
+                class: square ? 'header-icon-error' : null
+            },
+
+            alert : {
+                icon : square ? 'fa-exclamation' : [ 'fas fa-circle back text-alert', $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle', 'fas fa-exclamation fa-inside-circle-xmark'],
+                class: square ? 'header-icon-alert' : null
+            },
 
             warning : {
                 icon : square ? 'fa-exclamation' : [ 'fas fa-circle back text-warning', $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle', 'fas fa-exclamation fa-inside-circle-xmark'],
@@ -86644,7 +86661,7 @@ uri         : {default: "Please enter a valid URI"}
 
             //Add icons
             let headerIcons = useSquareIcons ? bsHeaderIconsSquare : bsHeaderIcons;
-            ['back', 'forward', 'pin', 'unpin', 'diminish', 'extend', 'fullScreenOn', 'fullScreenOff', 'new', 'warning', 'info', 'help', 'close'].forEach( (id) => {
+            ['back', 'forward', 'pin', 'unpin', 'diminish', 'extend', 'fullScreenOn', 'fullScreenOff', 'new', 'error', 'alert', 'warning', 'info', 'help', 'close'].forEach( (id) => {
                 let iconOptions = options.icons[id];
                 if (iconOptions && (iconOptions.onClick || (typeof iconOptions == 'function'))){
                     if (typeof iconOptions == 'function')
@@ -86671,6 +86688,26 @@ uri         : {default: "Please enter a valid URI"}
         }
         return this;
     };
+
+}(jQuery, this, document));
+;
+/****************************************************************************
+jquery-bootstrap-icon.js
+****************************************************************************/
+
+(function ($ /*, window, document, undefined*/) {
+	"use strict";
+
+    $.extend({
+        /******************************************************
+        $.bsIcon( icon, colorName )
+        Return a [] with classes for a icon in color = Bootstrap alert colorName ('success', 'warning', 'alert', 'error', 'ingo', 'help'...)
+        ******************************************************/
+        bsIcon: function( icon, colorName ){
+            return [['fas '+icon+' bs-icon-back-color-'+colorName, $.FONTAWESOME_PREFIX +' '+icon+' bs-icon-front-color-'+colorName]];
+        },
+    });
+
 
 }(jQuery, this, document));
 ;
@@ -88521,10 +88558,11 @@ jquery-bootstrap-modal-promise.js
                 new             : {                                     onClick: options.onNew     ? options.onNew.bind(this)     : null                        },
                 info            : {                                     onClick: options.onInfo    ? options.onInfo.bind(this)    : null                        },
                 warning         : {                                     onClick: options.onWarning ? options.onWarning.bind(this) : null                        },
+                alert           : {                                     onClick: options.onAlert   ? options.onAlert.bind(this)   : null                        },
+                error           : {                                     onClick: options.onError   ? options.onError.bind(this)   : null                        },
                 help            : {                                     onClick: options.onHelp    ? options.onHelp.bind(this)    : null                        },
             }
         }, options );
-
 
         //Save parentOptions for dynamic update
         var parentOptions = this.bsModal.parentOptions = {};
@@ -89526,24 +89564,23 @@ jquery-bootstrap-modal-promise.js
     $.bsNotyIcon = {
         info        : 'fa-info-circle',
         information : 'fa-info-circle',
-        alert       : '',
         success     : 'fa-check',
-        error       : 'fa-ban',
-        warning     : 'fa-exclamation-triangle',
+        error       : 'fa-exclamation', //'fa-exclamation-triangle',
+        alert       : 'fa-exclamation', //'fa-exclamation-diamond',
+        warning     : 'fa-exclamation', //'fa-exclamation-circle',
         help        : 'fa-question-circle'
     };
 
     //$.bsNotyName = Name for different noty-type
     $.bsNotyName = {
-        info        : {da:'Information', en:'Information'},
-        information : {da:'Information', en:'Information'},
-        alert       : {da:'Bemærk', en:'Note'},
-        success     : {da:'Succes', en:'Success'},
-        error       : {da:'Fejl', en:'Error'},
-        warning     : {da:'Advarsel', en:'Warning'},
-        help        : {da:'Hjælp', en:'Help'}
+        info        : {da: 'Information', en: 'Information' },
+        information : {da: 'Information', en: 'Information' },
+        success     : {da: 'Succes',      en: 'Success'     },
+        error       : {da: 'Fejl',        en: 'Error'       },
+        alert       : {da: 'Advarsel',    en: 'Alert'       },
+        warning     : {da: 'Advarsel',    en: 'Warning'     },
+        help        : {da: 'Hjælp',       en: 'Help'        }
     };
-
 
 
     /***************************************************************
@@ -114382,8 +114419,8 @@ Methods to create standard FCC-web-applications
         }
 
         //5: Create the main structure and the left and/or right panel. Is excecuded after the layer-menus and before lft/right menu creation
-        ns.promiseList.prependLast({
-            data   : 'none',
+        ns.promiseList.prependFinally({
+            data   : 'createMainStructure',
             resolve: createMainStructure
         });
 
@@ -114394,8 +114431,8 @@ Methods to create standard FCC-web-applications
 
 
         //7: Create savedSettingList and load saved settings
-        ns.promiseList.appendLast({
-            data: 'none',
+        ns.promiseList.appendFinally({
+            data: 'loadApplicationSetting',
             resolve: () => {
                 ns.savedSettingList = new ns.SavedSettingList({}, 'loadApplicationSetting');
             }
@@ -114951,7 +114988,11 @@ if (ns.DEV_VERSION)
         extend          : icon_fa_prefix + 'square-plus',
         diminish        : icon_fa_prefix + 'square-minus',
         new             : icon_fa_prefix + 'window-maximize',
-        warning         : icon_fa_prefix + 'exclamation fa-size-15',
+
+        error           : icon_fa_prefix + 'triangle-exclamation',
+        alert           : icon_fa_prefix + 'diamond-exclamation',
+        warning         : icon_fa_prefix + 'circle-exclamation',
+
         info            : icon_fa_prefix + 'info fa-sm',
         help            : icon_fa_prefix + 'question fa-sm',
         close           : icon_fa_prefix + 'xmark'
@@ -114961,33 +115002,38 @@ if (ns.DEV_VERSION)
     $.bsNotyIcon = {
         info        : 'fa-info-circle',
         information : 'fa-info-circle',
-        alert       : 'fa-exclamation-circle',
         success     : 'fa-check-circle',
-        error       : 'fa-ban',
-        warning     : 'fa-exclamation-square', //'fa-exclamation-triangle',
+        error       : 'fa-triangle-exclamation',
+        alert       : 'fa-diamond-exclamation',
+        warning     : 'fa-circle-exclamation',
         help        : 'fa-question-circle'
     };
 
     $.bsNotyName = {
-        info        : {da:'Besked', en:'Message'},
-        information : {da:'Besked', en:'Message'},
-        alert       : {da:'Bemærkning', en:'Note'},
-        success     : {da:'Succes', en:'Success'},
-        error       : {da:'Fejl', en:'Error'},
-        warning     : {da:'Advarsel', en:'Warning'},
-        help        : {da:'Hjælp', en:'Help'}
+        info        : {da: 'Besked',   en: 'Message'},
+        information : {da: 'Besked',   en: 'Message'},
+        success     : {da: 'Succes',   en: 'Success'},
+        error       : {da: 'Fejl',     en: 'Error'  },
+        alert       : {da: 'Advarsel', en: 'Alert'  },
+        warning     : {da: 'Advarsel', en: 'Warning'},
+        help        : {da: 'Hjælp',    en: 'Help'   }
     };
 
     //Add plural name
     $.bsNotyNames = {
-        info        : {da:'Beskeder', en:'Messages'},
-        information : {da:'Beskeder', en:'Messages'},
-        alert       : {da:'Bemærkninger', en:'Notes'},
-        success     : {da:'Succes', en:'Success'},
-        error       : {da:'Fejl', en:'Errors'},
-        warning     : {da:'Advarsler', en:'Warnings'},
-        help        : {da:'Hjælp', en:'Help'}
+        info        : {da:'Beskeder',   en:'Messages'},
+        information : {da:'Beskeder',   en:'Messages'},
+        success     : {da:'Succes',     en:'Success' },
+        error       : {da:'Fejl',       en:'Errors'  },
+        alert       : {da:'Advarsler',  en:'Alerts'  },
+        warning     : {da:'Advarsler',  en:'Warnings'},
+        help        : {da:'Hjælp',      en:'Help'    }
     };
+
+
+    //ns.bsIcon = colored icons using Bootstrap alert colors
+    ns.bsIcon = {};
+    $.each($.bsNotyIcon, (type, icon) => ns.bsIcon[type] = $.bsIcon(icon, type) );
 
 
     //Icon for external link
@@ -117335,7 +117381,7 @@ Method window.fcoo.createFCOOMenu(options: MENU_OPTIONS)
         createMenu(options.menuList, {}, options);
 
         //Add promise to check and finish the creation of the menu
-        ns.promiseList.append({
+        ns.promiseList.prependFinally({
             data   : options,
             resolve: finishMenu,
             wait   : true
@@ -117417,8 +117463,10 @@ Method window.fcoo.createFCOOMenu(options: MENU_OPTIONS)
         //Replace menu-item from replaceMenuItems
         for (index=menuList.length-1; index>=0; index--){
             menuItem = menuList[index];
-            if (menuItem && menuItem.id && options.replaceMenuItems[menuItem.id])
+            if (menuItem && menuItem.id && options.replaceMenuItems[menuItem.id]){
                 menuList.splice(index, 1, ...options.replaceMenuItems[menuItem.id]);
+                options.replaceMenuItems[menuItem.id] = null; //Clean up to prevent repeating
+            }
         }
 
         for (index=menuList.length-1; index>=0; index--){
@@ -120720,6 +120768,22 @@ Methods for loading and saving settings for the application
                             linkObj.link = link;
                         else
                             linkObj = link;
+
+                    //Check if link exists
+                    let trueLink = linkObj.link;
+                    let include = false;
+
+                    if ((typeof trueLink == 'string') && !!trueLink)
+                        include = true;
+
+                    if (!include && $.isPlainObject(trueLink))
+                        $.each(trueLink, (id, link) => {
+                            if (link)
+                                include = true;
+                        });
+
+                    if (!include)
+                        return;
 
                     let name = [];
                     let favoriteText = [];
@@ -138158,6 +138222,11 @@ leaflet-bootstrap-control-legend.js
         /*******************************************
         addTo
         *******************************************/
+        //Adjust onClick in header-icons to be called with ( id, null, $button, map )
+        _adjustHeaderIconOnClick: function( id, onClick ){
+            return onClick ? function(event){ return onClick(id, null, $(event.target), this.parent._map, this); }.bind(this) : null;
+        },
+
         addTo: function( parent ){
             var _this = this,
                 options = this.options,
@@ -138190,11 +138259,13 @@ leaflet-bootstrap-control-legend.js
                             icon: options.iconArray,
                             text: options.text
                         },
-                        onInfo     : options.onInfo,
-                        onWarning  : options.onWarning,
+                        onInfo     : this._adjustHeaderIconOnClick( 'info',    options.onInfo   ),
+                        onWarning  : this._adjustHeaderIconOnClick( 'warning', options.onWarning),
+                        onAlert    : this._adjustHeaderIconOnClick( 'alert',   options.onAlert  ),
+                        onError    : this._adjustHeaderIconOnClick( 'error',   options.onError  ),
                         icons      : {},
                         content    : '',
-semiTransparent: true,
+                        semiTransparent: true,
                         closeButton: false
                     };
 
@@ -138280,7 +138351,7 @@ semiTransparent: true,
                     $normalIcon.children('.container-stacked-icons').addClass('hide-for-bsl-working');
 
                 this.actionIcons = {};
-                ['warning', 'info', 'help', 'close'].forEach( id => {
+                ['error', 'alert', 'warning', 'info', 'help', 'close'].forEach( id => {
                     _this.actionIcons[id] = _this.$container.find('[data-header-icon-id="'+id+'"]');
                     _this.actionIcons[id].toggle(_this.options.showIcons || (id == 'close'));
                 });
