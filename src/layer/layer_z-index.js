@@ -49,25 +49,32 @@ L.Map._getPaneDeltaZIndex(paneId, postfix, deltaZIndex) Create and return a pane
         nsMap = ns.map = ns.map || {};
 
 
-    nsMap.zIndex = {};
+    nsMap.zIndex     = {};
+    nsMap.zIndexList = [];
 
     ns.promiseList.append({
         fileName: {subDir: "layers", fileName: "layer-z-index.json"},
         resolve : function( list ){
+            //DEMO/TEST in LAYERZINDEX
+            list = window.LAYERZINDEX || list;
+
             let zIndex = 2000 + list.length * 1000;
             list.forEach( rec => {
-                nsMap.zIndex[rec.id] = zIndex;
+                let id = rec.id.toUpperCase();
+                nsMap.zIndex[id] = zIndex;
+                nsMap.zIndexList.push({id: id, zIndex: zIndex, desc: rec.desc});
                 zIndex = zIndex - 1000;
             });
+            nsMap.zIndexList.sort( (rec1, rec2) => {return rec2.zIndex - rec1.zIndex; });
         }
     });
 
     //Methods for z-index
     nsMap.getZIndex = function(id, delta=0){
-        return (nsMap.zIndex[id] || 0) + delta;
+        return (nsMap.zIndex[id.toUpperCase()] || 0) + delta;
     };
 
-    /* Previous const that to seems to be used
+    /* Previous const that seems to be used
     //Z-index for layers in overlayPane and markerPane. Typical geoJSON-layer
     nsMap.zIndex.NAVIGATION_PILOT_BOARDING_POSITIONS = 100;
     nsMap.zIndex.NAVIGATION_NIORD = 90;

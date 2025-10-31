@@ -2682,25 +2682,32 @@ L.Map._getPaneDeltaZIndex(paneId, postfix, deltaZIndex) Create and return a pane
         nsMap = ns.map = ns.map || {};
 
 
-    nsMap.zIndex = {};
+    nsMap.zIndex     = {};
+    nsMap.zIndexList = [];
 
     ns.promiseList.append({
         fileName: {subDir: "layers", fileName: "layer-z-index.json"},
         resolve : function( list ){
+            //DEMO/TEST in LAYERZINDEX
+            list = window.LAYERZINDEX || list;
+
             let zIndex = 2000 + list.length * 1000;
             list.forEach( rec => {
-                nsMap.zIndex[rec.id] = zIndex;
+                let id = rec.id.toUpperCase();
+                nsMap.zIndex[id] = zIndex;
+                nsMap.zIndexList.push({id: id, zIndex: zIndex, desc: rec.desc});
                 zIndex = zIndex - 1000;
             });
+            nsMap.zIndexList.sort( (rec1, rec2) => {return rec2.zIndex - rec1.zIndex; });
         }
     });
 
     //Methods for z-index
     nsMap.getZIndex = function(id, delta=0){
-        return (nsMap.zIndex[id] || 0) + delta;
+        return (nsMap.zIndex[id.toUpperCase()] || 0) + delta;
     };
 
-    /* Previous const that to seems to be used
+    /* Previous const that seems to be used
     //Z-index for layers in overlayPane and markerPane. Typical geoJSON-layer
     nsMap.zIndex.NAVIGATION_PILOT_BOARDING_POSITIONS = 100;
     nsMap.zIndex.NAVIGATION_NIORD = 90;
@@ -3930,7 +3937,7 @@ L.Layer.addInitHook(function(){
                 //Check and create the panes needed
                 if (this.options.createPane || this.options.createMarkerPane){
                     var paneId = this.options.paneId || this.options.id,
-                        zIndex = nsMap.zIndex[paneId.toUpperCase()];
+                        zIndex = nsMap.getZIndex(paneId);
 
                     if (this.options.createPane){
                         //Create pane in overlayPane
@@ -3956,9 +3963,6 @@ L.Layer.addInitHook(function(){
                     );
 
                 info.layer = this._createLayer(newLayerOptions, map);
-
-
-
                 info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
                 info.layer.mapLayer = this;
 
@@ -4765,7 +4769,7 @@ coast-lines, and name of cites and places
                         layers     : 'land-mask_latest',
                         opacity    : 1,
                         colorFilter: colorFilter,
-                        zIndex     : nsMap.zIndex.BACKGROUND_LAYER_LAND
+                        zIndex     : nsMap.getZIndex('BACKGROUND_LAND')
                     },                  //options
                     undefined,          //map
                     undefined,          //defaultOptions
@@ -4797,7 +4801,7 @@ coast-lines, and name of cites and places
             this.backgroundCoastlineLayer = this.backgroundCoastlineLayer ||
                 nsMap.layer_static({
                     layers: 'top-dark_latest',
-                    zIndex: nsMap.zIndex.BACKGROUND_LAYER_COASTLINE
+                    zIndex: nsMap.getZIndex('BACKGROUND_COASTLINE')
                 }).addTo(this);
         },
 

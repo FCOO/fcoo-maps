@@ -34,11 +34,13 @@
                             $.extend({
                                 id    : id,
                                 icon  : 'fas fa-slash fa-navigation',
-                                zIndex: nsMap.zIndex.STATIC_LAYER_WATER,
+                                zIndex: nsMap.getZIndex('STATIC'),
                             },
                             options
                         );
-                    menuList.push( nsMap._addMapLayer(id, nsMap.MapLayer_static, mapLayerOptions ).menuItemOptions() );
+
+                    let mapLayer = nsMap._addMapLayer(id, nsMap.MapLayer_static, mapLayerOptions );
+                    menuList.push( mapLayer.menuItemOptions() );
                 });
                 addMenu(menuList);
             }

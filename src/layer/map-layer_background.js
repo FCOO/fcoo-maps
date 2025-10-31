@@ -91,7 +91,7 @@ coast-lines, and name of cites and places
                         layers     : 'land-mask_latest',
                         opacity    : 1,
                         colorFilter: colorFilter,
-                        zIndex     : nsMap.zIndex.BACKGROUND_LAYER_LAND
+                        zIndex     : nsMap.getZIndex('BACKGROUND_LAND')
                     },                  //options
                     undefined,          //map
                     undefined,          //defaultOptions
@@ -123,7 +123,7 @@ coast-lines, and name of cites and places
             this.backgroundCoastlineLayer = this.backgroundCoastlineLayer ||
                 nsMap.layer_static({
                     layers: 'top-dark_latest',
-                    zIndex: nsMap.zIndex.BACKGROUND_LAYER_COASTLINE
+                    zIndex: nsMap.getZIndex('BACKGROUND_COASTLINE')
                 }).addTo(this);
         },
 

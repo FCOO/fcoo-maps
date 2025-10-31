@@ -595,7 +595,7 @@ L.Layer.addInitHook(function(){
                 //Check and create the panes needed
                 if (this.options.createPane || this.options.createMarkerPane){
                     var paneId = this.options.paneId || this.options.id,
-                        zIndex = nsMap.zIndex[paneId.toUpperCase()];
+                        zIndex = nsMap.getZIndex(paneId);
 
                     if (this.options.createPane){
                         //Create pane in overlayPane
@@ -621,9 +621,6 @@ L.Layer.addInitHook(function(){
                     );
 
                 info.layer = this._createLayer(newLayerOptions, map);
-
-
-
                 info.layer.fcooMapIndex = map.fcooMapIndex; //Prevent the index when the layer is removed => layer._map is set to null
                 info.layer.mapLayer = this;
 
