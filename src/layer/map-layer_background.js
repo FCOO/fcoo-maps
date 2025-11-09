@@ -61,6 +61,13 @@ coast-lines, and name of cites and places
         water: {color: '#B9D3C2', filter: 'invert(90%) sepia(14%) saturate(281%) hue-rotate(88deg) brightness(91%) contrast(88%)'}
     }];
 
+    //Create css-var for all the land and water color
+    backgroundColorList.forEach( bgColor => {
+        ns.setRootVar('map-'+bgColor.id+'-land',  bgColor.land.color );
+        ns.setRootVar('map-'+bgColor.id+'-water', bgColor.water.color);
+    });
+
+
     L.Map.include({
         /***********************************************************
         L.Map.setBackground(landColor, waterColor)

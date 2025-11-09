@@ -71,9 +71,6 @@ DIVERSE
     //text-shadow: 0px 0px 2px $list-group-active-bg;
 }
 
-//HER//Import scss for leaflet-control-legend
-//HER@import "fcoo-maps-control-legend";
-
 
 /**********************************************************
 POPUP
@@ -91,6 +88,15 @@ Style for edit settings for graticule
 ****************************************************************************/
 @include show-and-hide-for-modernizr-test( $modernizr-test: graticule-label, $incl-no-selector: false, $incl-table-display: false);
 
+
+/**********************************************************
+ICON-CLASSES FOR LAND and WATER COLOR FROM map-layer-background
+**********************************************************/
+$map-background-color-ids: 'standard', 'charts', 'gray', 'retro'; //MUST match backgroundColorList in map-layer_background.js
+@each $id in $map-background-color-ids {
+    .fa-map-#{$id}-land  { color: var(--map-#{$id}-land);  }
+    .fa-map-#{$id}-water { color: var(--map-#{$id}-water); }
+}
 
 /**********************************************************
 HIDE/SHOW WHEN SINGLE OR MULTI-MAPS SELECTED
