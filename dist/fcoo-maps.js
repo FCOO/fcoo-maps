@@ -2601,7 +2601,7 @@ that includes current position, and use this other map to get the color
 
         //Remove none-wms-options from options
         options = $.extend(true, {}, options);
-        ['protocol', 'dataset'].forEach( id => delete options[id] );
+        ['protocol', 'dataset', 'url', 'LayerConstructor' ].forEach( id => delete options[id] );
 
         return new LayerConstructor(url, options );
     };
