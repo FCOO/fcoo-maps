@@ -78141,7 +78141,7 @@ jquery-base-slider-public.js
     Loading (key-)phrases from json-file(s) using fcoo/promise-get
     ***********************************************************************/
     i18next._loadJSON = function( jsonFileName, options, resolve ){
-        jsonFileName = $.isArray(jsonFileName) ? jsonFileName : [jsonFileName];
+        jsonFileName =  Array.isArray(jsonFileName) ? jsonFileName : [jsonFileName];
 
         $.each( jsonFileName, function( index, url ){
             Promise.getJSON( url, options, resolve );
@@ -78280,10 +78280,11 @@ jquery-base-slider-public.js
 
     /***********************************************************************
     sentence ( langValues, options )
+    s ( langValues, options )
     - langValues = { [lang: value]xN }
     A single translation of a sentence. No key used or added
     ***********************************************************************/
-    i18next.sentence = function( langValues, options ){
+    i18next.sentence = i18next.s = function( langValues, options ){
         var nsTemp = '__SENTENCE_TEMP__',
             keyTemp = '__SENTENCE_KEY__',
             _this = this,
@@ -78301,11 +78302,13 @@ jquery-base-slider-public.js
     };
 
     /***********************************************************************
-    s ( langValues, options )
-    - langValues = { [lang: value]xN }
+    sentenceArray = function( textArray, separator, options)
     ***********************************************************************/
-    i18next.s = function( langValues, options ){
-        return this.sentence( langValues, options );
+    i18next.sentenceArray = function( textArray = [], separator = '', options){
+        textArray = Array.isArray(textArray) ? textArray : [textArray];
+        let resultArray = [];
+        textArray.forEach( txt => resultArray.push( typeof txt == 'object' ? i18next.sentence(txt, options) : txt) );
+        return resultArray.join( typeof separator == 'object' ? i18next.sentence(separator) : separator );
     };
 
 
@@ -141952,6 +141955,14 @@ leaflet-bootstrap-control-legend.js
         initialize
         *******************************************/
         initialize: function(options) {
+            //Check and set options when innerWidth is set
+            if (options.innerWidth){
+                if (options.innerWidth === true)
+                    options.innerWidth = options.width;
+                options.fitWidth = true;
+                options.width = 'fit-content';
+            }
+
             this.options = $.extend(true, this.options, options);
             L.Control.BsButtonBox.prototype.initialize.call(this);
 
@@ -141973,6 +141984,11 @@ leaflet-bootstrap-control-legend.js
 
             this.bsModal = this.$contentContainer.bsModal;
             this.$modalContent = this.bsModal.$content;
+
+            //Set the inner-width
+            if (this.options.innerWidth)
+                this.$modalContent.css('--legend-inner-width', this.options.innerWidth+(typeof this.options.innerWidth == 'number' ? 'px' : ''));
+
 
             //Manually implement extend and diminish functionality
             var $header = this.bsModal.$header;
@@ -142181,7 +142197,6 @@ leaflet-bootstrap-control-legend.js
                 'fa-fw fas fa-eye-slash ' + (this.options.hiddenIconClass || '')
             ];
 
-
             this.parent = parent;
             if (!this.$container){
                 //Create modal-content
@@ -142202,20 +142217,18 @@ leaflet-bootstrap-control-legend.js
                         closeButton: false
                     };
 
+                if (parent.options.innerWidth)
+                    modalContentOptions.fitWidth = true;
 
                 //The extended content can be 'normal' content and/or buttons/buttonList
                 if (options.content || options.buttons || options.buttonList){
                     var content = [];
 
                     if (options.content){
-
                         this.$contentContainer =
                             $('<div/>')
                                 .addClass('modal-body')
-                                .addClass(options.contentClassName)
-
-                                .toggleClass('no-vertical-padding',   !!options.noVerticalPadding)
-                                .toggleClass('no-horizontal-padding', !!options.noHorizontalPadding);
+                                .addClass(options.contentClassName);
 
                         this.updateContent();
 
@@ -142271,7 +142284,10 @@ leaflet-bootstrap-control-legend.js
                         {onClick: $.proxy(this.remove, this)},
                         options.closeIconOptions
                     );
-                this.$container    = $('<div/>')._bsModalContent(modalContentOptions);
+                this.$container = $('<div/>')
+                                    ._bsModalContent(modalContentOptions)
+                                    .toggleClass('legend-fit-inner-width', !!parent.options.innerWidth);
+
                 this.bsModal = this.$container.bsModal;
                 this.$modalContent = this.bsModal.$modalContent;
 

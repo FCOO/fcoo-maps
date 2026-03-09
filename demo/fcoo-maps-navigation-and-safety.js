@@ -35,6 +35,9 @@
                                 id    : id,
                                 icon  : 'fas fa-slash fa-navigation',
                                 zIndex: nsMap.getZIndex('STATIC'),
+                                legendOptions: {
+                                    content: {da:'Dette er signaturforklaring', en: 'This is legend'}
+                                }
                             },
                             options
                         );

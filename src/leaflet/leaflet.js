@@ -149,7 +149,7 @@ Objects and methods to handle leaflet-maps
         maxZoom: 12,
 
         zoomSnap: 0.25,
-            
+
         //Hide attribution
         attributionControl: false,
 
@@ -270,14 +270,13 @@ Objects and methods to handle leaflet-maps
         bsLegendControl: true,
         bsLegendOptions: {
             position: 'topright',
+            width: '20em',  //<= TODO Adjust
+            innerWidth: true,
             content: {
                 header: {
                     icon: ns.icons.mapLegend,
                     text: ns.texts.mapLegend
                 },
-                noVerticalPadding   : true,
-                noHorizontalPadding : false,
-                width: '20em',  //<= TODO Adjust
             }
         },
 

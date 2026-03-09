@@ -47144,6 +47144,10 @@ leaflet-bootstrap-control-legend.scss
   margin-right: 0.4rem;
 }
 
+.legend-fit-inner-width {
+  width: calc(var(--legend-inner-width) + 4 * var(--bs-modal-padding) + 2px);
+}
+
 /***********************************************
 leaflet-bootstrap-control-compass.scss
 ************************************************/
