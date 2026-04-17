@@ -190,7 +190,7 @@ L.Layer.addInitHook(function(){
     //Adjust default options for legend
     L.BsLegend_close_icon = [
         ['show-for-single-maps-selected far fa-map fa-scale-x-08', 'show-for-single-maps-selected fas fa-slash fa-scale-x-08'],
-        ['show-for-multi-maps-selected fa-square-check']
+        ['show-for-multi-maps-selected far fa-square-check']
     ];
     L.BsLegend_close_title = {da: 'Skjul/Vælg', en: 'Hide/Select'};
 
@@ -359,7 +359,7 @@ L.Layer.addInitHook(function(){
         isAddedTo(mapOrIndex) - return true if the MapLayer is added to the map
         *********************************************************/
         isAddedToMap: function(mapOrIndex){
-            var mapIndex = nsMap.getMap(mapOrIndex).fcooMapIndex;
+            let mapIndex = nsMap.getMap(mapOrIndex).fcooMapIndex;
             return !!this.info[mapIndex] && !!this.info[mapIndex].map;
         },
 
@@ -370,19 +370,31 @@ L.Layer.addInitHook(function(){
         applySetting: function(/*setting, map, mapInfo, mapIndex*/){
 
         },
+
         //applyCommonSetting - apply common setting for the Map_layer
         applyCommonSetting: function(/*setting*/){
 
         },
 
+        /*********************************************************
+        _applySetting
+        *********************************************************/
         _applySetting: function(data){
             //Apply common setting
             this.applyCommonSetting(data.common || null);
+
+            //Apply legend-setting
+            this.legendSetting = this.legendSetting || {};
+            $.each(data, function(mapIndex, setting){
+                if (setting && setting.legendSetting)
+                    this.legendSetting[mapIndex] = setting.legendSetting;
+            }.bind(this) );
 
             //Apply individuel settings
             nsMap.visitAllMaps( function(map){
                 var mapIndex = map.fcooMapIndex,
                     setting = data[mapIndex] || {};
+
                 if (setting.show)
                     this.addTo(map);
                 else
@@ -395,6 +407,7 @@ L.Layer.addInitHook(function(){
 
                 //Individual setting
                 this.applySetting(setting, map, this.info[mapIndex], mapIndex);
+
             }.bind(this));
         },
 
@@ -407,6 +420,9 @@ L.Layer.addInitHook(function(){
             return null;
         },
 
+        /*********************************************************
+        _saveSetting
+        *********************************************************/
         _saveSetting: function(){
             var data = {},
                 commonSetting = this.saveCommonSetting() || null;
@@ -414,19 +430,34 @@ L.Layer.addInitHook(function(){
             if (commonSetting !== null)
                 data.common = commonSetting;
 
-            $.each(this.info, function(index, info){
+            this.info.forEach( (info, index) => {
                 data[index] =
                     $.extend({
-                        show       : this.isAddedToMap(index),
-                        isInvisible: info ? info.isInvisible : false,
+                        show         : this.isAddedToMap(index),
+                        isInvisible  : info ? info.isInvisible : false,
+                        legendSetting: info && info.legend && info.legend.isCreated ? info.legend.getSetting() : null
                         //colorInfo - @TODO
                     },
                         this.saveSetting(info ? info.map : null, info, index) || {}
                     );
-            }.bind(this));
+
+            }, this);
+
             ns.appSetting.set(this.id, data);
+
             return ns.appSetting.save();
         },
+
+
+        /*********************************************************
+        legend
+        *********************************************************/
+        legend_loadSetting: function( mapIndex ){
+            return this.legendSetting && this.legendSetting[mapIndex] ?
+                    $.extend({}, this.legendSetting[mapIndex], {isShown: true}) :
+                    {};
+        },
+
 
         /*********************************************************
         addTo
@@ -461,7 +492,6 @@ L.Layer.addInitHook(function(){
 
             //Create and add legend
             if (map.bsLegendControl && !this.options.noLegend){
-
                 if (!info.legend){
                     var legendOptions = this.options.legendOptions,
                         buttonList = legendOptions.buttonList || legendOptions.buttons || [];
@@ -472,8 +502,7 @@ L.Layer.addInitHook(function(){
                             buttonOptions.class = (buttonOptions.class || '') + ' ' + this.showAndHideClasses + '-visibility';
                     }, this);
 
-
-                    //Find index for legend
+                    //Find index for menu
                     var levelIndex = [],
                         menuItem = this.menuItem;
                     while (menuItem && menuItem._getParentIndex){
@@ -503,17 +532,19 @@ L.Layer.addInitHook(function(){
 
                         //onInfo      : this.options.onInfo,
                         //onWarning   : this.options.onWarning,
-                        onRemove    : $.proxy(this.removeViaLegend, this),
-                        normalIconClass: this.showAndHideClasses,
-                        hiddenIconClass: this.inversShowAndHideClasses,
-                        mapLayer       : this,
+                        onRemove        : $.proxy(this.removeViaLegend, this),
+                        normalIconClass : this.showAndHideClasses,
+                        hiddenIconClass : this.inversShowAndHideClasses,
+                        mapLayer        : this,
+
+                        onChange        : this._saveSetting.bind(this), //this.legend_onChange.bind(this, mapIndex),
+                        loadSetting     : this.legend_loadSetting.bind(this, mapIndex)
 
                     }, legendOptions);
 
 
                     delete legendOptions.buttons;
                     legendOptions.buttonList = buttonList.length ? buttonList : null;
-
                     info.legend = new L.BsLegend( legendOptions );
                 }
 
@@ -685,9 +716,7 @@ L.Layer.addInitHook(function(){
             if (info.isInvisible)
                 this.invisible(map);
 
-
             this._saveSetting();
-
 
             return this;
         },

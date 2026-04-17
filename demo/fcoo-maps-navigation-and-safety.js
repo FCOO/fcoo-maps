@@ -36,7 +36,24 @@
                                 icon  : 'fas fa-slash fa-navigation',
                                 zIndex: nsMap.getZIndex('STATIC'),
                                 legendOptions: {
-                                    content: {da:'Dette er signaturforklaring', en: 'This is legend'}
+                                    content: function( $container ){
+                                        $('<div/>')
+                                            .addClass('w-100')
+                                            ._bsAddHtml({text: {da:'Dette er signaturforklaring', en: 'This is legend'}})
+                                            .appendTo( $container);
+                                        $('<div/>')
+                                            .addClass('w-100 legend-content-2')
+                                            .text('222')
+                                            .appendTo( $container);
+                                        $('<div/>')
+                                            .addClass('w-100 legend-content-7')
+                                            .html('777<br>777<br>777<br>777<br>777<br>777<br>777')
+                                            .appendTo( $container);
+                                        $('<div/>')
+                                            .addClass('w-100 legend-content-3')
+                                            .html('333<br>333333')
+                                            .appendTo( $container);
+                                    }
                                 }
                             },
                             options
