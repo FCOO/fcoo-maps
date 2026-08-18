@@ -498,7 +498,7 @@ Objects and methods to handle map-sync
 
 Default options DEFAULT-OPTIONS for fcoo.maps.createApplication( options: OPTIONS, defaultOptions: DEFAULT-OPTIONS,...}
 
-The default options are an extended version of the defalut application options from fcoo-application: src/fcoo-application-default-options
+The default options are an extended version of the default application options from fcoo-application: src/fcoo-application-default-options
 
 
 ****************************************************************************/

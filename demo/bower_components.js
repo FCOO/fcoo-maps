@@ -10742,7 +10742,7 @@ return jQuery;
 
 ;(function(window, document, undefined){
   var tests = [];
-
+  
 
   /**
    *
@@ -10791,7 +10791,7 @@ return jQuery;
     }
   };
 
-
+  
 
   // Fake some of Object.create so we can force non test results to be non "own" properties.
   var Modernizr = function() {};
@@ -10801,10 +10801,10 @@ return jQuery;
   // Overwrite name so constructor name is nicer :D
   Modernizr = new Modernizr();
 
-
+  
 
   var classes = [];
-
+  
 
   /**
    * is returns a boolean if the typeof an obj is exactly type.
@@ -10900,7 +10900,7 @@ return jQuery;
    */
 
   var docElement = document.documentElement;
-
+  
 
   /**
    * A convenience helper to check if the document we are running in is an SVG document
@@ -10910,7 +10910,7 @@ return jQuery;
    */
 
   var isSVG = docElement.nodeName.toLowerCase() === 'svg';
-
+  
 
   /**
    * setClasses takes an array of class names and adds them to the root element
@@ -10978,7 +10978,7 @@ return jQuery;
     }
   })();
 
-
+  
 
 
    // _l tracks listeners for async tests, as well as tests that execute after the initial run
@@ -11188,7 +11188,7 @@ return jQuery;
     ModernizrProto.addTest = addTest;
   });
 
-
+  
 
 
   /**
@@ -11208,11 +11208,11 @@ return jQuery;
    */
 
   var omPrefixes = 'Moz O ms Webkit';
-
+  
 
   var cssomPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.split(' ') : []);
   ModernizrProto._cssomPrefixes = cssomPrefixes;
-
+  
 
   /**
    * atRule returns a given CSS property at-rule (eg @keyframes), possibly in
@@ -11279,7 +11279,7 @@ return jQuery;
 
   ModernizrProto.atRule = atRule;
 
-
+  
 
   /**
    * createElement is a convenience wrapper around document.createElement. Since we
@@ -11380,7 +11380,7 @@ return jQuery;
 
 
   ModernizrProto.hasEvent = hasEvent;
-
+  
 
   /**
    * getBody returns the body of a document, or an element that can stand in for
@@ -11553,7 +11553,7 @@ return jQuery;
 
   ModernizrProto.mq = mq;
 
-
+  
 
 
   /**
@@ -11587,7 +11587,7 @@ return jQuery;
     delete modElem.elem;
   });
 
-
+  
 
   var mStyle = {
     style: modElem.elem.style
@@ -11599,7 +11599,7 @@ return jQuery;
     delete mStyle.style;
   });
 
-
+  
 
   /**
    * domToCSS takes a camelCase string and converts it to kebab-case
@@ -11789,7 +11789,7 @@ return jQuery;
 
   var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
   ModernizrProto._domPrefixes = domPrefixes;
-
+  
 
   /**
    * fnBind is a super small [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) polyfill.
@@ -11884,7 +11884,7 @@ return jQuery;
   // Modernizr.testAllProps('boxSizing')
   ModernizrProto.testAllProps = testPropsAll;
 
-
+  
 
   /**
    * prefixed returns the prefixed or nonprefixed property name variant of your input
@@ -11968,7 +11968,7 @@ return jQuery;
     }
   };
 
-
+  
 /*!
 {
   "name": "Fullscreen API",
@@ -12027,7 +12027,7 @@ Detects support for the ability to make the current website take over the user's
   // expose these for the plugin API. Look in the source for how to join() them against your input
   ModernizrProto._prefixes = prefixes;
 
-
+  
 
   /**
    * testStyles injects an element with style element and some CSS rules
@@ -12087,7 +12087,7 @@ Detects support for the ability to make the current website take over the user's
    */
 
   var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
-
+  
 /*!
 {
   "name": "Touch Events",
@@ -12207,7 +12207,7 @@ This test will also return `true` for Firefox 4 Multitouch support.
     return testPropsAll(prop, undefined, undefined, value, skipValueTest);
   }
   ModernizrProto.testAllProps = testAllProps;
-
+  
 /*!
 {
   "name": "Flexbox",
@@ -12559,7 +12559,7 @@ else {
 
 ;
 /****************************************************************************
-	modernizr-javascript.js,
+	modernizr-javascript.js, 
 
 	(c) 2016, FCOO
 
@@ -12570,20 +12570,20 @@ else {
 
 (function ($, window, document, undefined) {
 	"use strict";
-
+	
 	var ns = window;
 
     //Extend the jQuery prototype
     $.fn.extend({
-        modernizrOn : function( test ){
-            return this.modernizrToggle( test, true );
+        modernizrOn : function( test ){ 
+            return this.modernizrToggle( test, true ); 
         },
 
-        modernizrOff: function( test ){
-            return this.modernizrToggle( test, false );
+        modernizrOff: function( test ){ 
+            return this.modernizrToggle( test, false ); 
         },
-
-        modernizrToggle: function( test, on ){
+        
+        modernizrToggle: function( test, on ){ 
 		if ( on === undefined )
             return this.modernizrToggle( test, !this.hasClass( test ) );
 
@@ -12624,13 +12624,13 @@ else {
             for (j=0; j<eventNames.length; j++ ){
                 eventName = eventNames[j];
                 if (eventName){
-                    this.events[eventName] = this.events[eventName] || [];
+                    this.events[eventName] = this.events[eventName] || [];         
                     var i, lgd = this.events[eventName].length;
                     if (reverse){
                         for (i=lgd-1; i>=0; i-- )
                             if (func( this.events[eventName][i], i, this.events[eventName] ))
                                 break;
-                    }
+                    } 
                     else {
                         for (i=0; i<lgd; i++ )
                             if (func( this.events[eventName][i], i, this.events[eventName] ))
@@ -12646,11 +12646,11 @@ else {
             for (i=0; i<eventNames.length; i++ ){
                 eventName = eventNames[i];
                 if (eventName){
-                    this.events[eventName] = this.events[eventName] || [];
+                    this.events[eventName] = this.events[eventName] || [];         
                     this.events[eventName].push( {
                         callback: callback,
                         context : context || null,
-                        options : $.extend( {once:false, first:false, last:false}, options )
+                        options : $.extend( {once:false, first:false, last:false}, options ) 
                     });
                 }
             }
@@ -12667,7 +12667,7 @@ else {
             eventNames = ( eventNames || "" ).match( (/\S+/g) ) || [ "" ];
             _loop_func = function( eventObj, index, list ){
                 if ( (callback == eventObj.callback) &&
-                    (!context || (context == eventObj.context)) ){
+                    (!context || (context == eventObj.context)) ){ 
                     list.splice(index, 1);
                     return true;
                 }
@@ -12682,32 +12682,32 @@ else {
         };
 
 
-        this.fire = function( eventName /*, arg1, arg2, .., argN */ ){
+        this.fire = function( eventName /*, arg1, arg2, .., argN */ ){ 
             var newArguments = [];
             for (var i=1; i < arguments.length; i++) {
                 newArguments.push(arguments[i]);
             }
 
             //Fire the functions marked 'first'
-            this._loop( eventName, function( eventObj ){
+            this._loop( eventName, function( eventObj ){ 
                 if (eventObj.options.first)
-                    eventObj.callback.apply( eventObj.context, newArguments );
+                    eventObj.callback.apply( eventObj.context, newArguments );      
             });
 
             //Fire the functions not marked 'first' or 'last'
-            this._loop( eventName, function( eventObj ){
+            this._loop( eventName, function( eventObj ){ 
                 if (!eventObj.options.first && !eventObj.options.last)
-                    eventObj.callback.apply( eventObj.context, newArguments );
+                    eventObj.callback.apply( eventObj.context, newArguments );      
             });
 
             //Fire the functions marked 'last'
-            this._loop( eventName, function( eventObj ){
+            this._loop( eventName, function( eventObj ){ 
                 if (eventObj.options.last)
-                    eventObj.callback.apply( eventObj.context, newArguments );
+                    eventObj.callback.apply( eventObj.context, newArguments );      
             });
-
+            
             //Remove all functions marked 'once'
-            this._loop( eventName, function( eventObj, index, list ){
+            this._loop( eventName, function( eventObj, index, list ){ 
                 if (eventObj.options.once)
                     list.splice(index, 1);
             }, true);
@@ -12718,7 +12718,7 @@ else {
         this.oneFirst = function(){ this.onceFirst( arguments ); };
         this.oneLast  = function(){ this.onceLast( arguments  ); };
     }
-
+  
     // expose access to the constructor
     window.GlobalEvents = GlobalEvents;
 
@@ -34153,7 +34153,7 @@ L.GeometryUtil = L.extend(L.GeometryUtil || {}, {
 
         return new L.LatLng(ty, tx);
     },
-
+    
 
     /**
         Returns the closest latlng on layer.
@@ -34507,7 +34507,7 @@ L.GeometryUtil = L.extend(L.GeometryUtil || {}, {
 			cumulativeDistanceToA = cumulativeDistanceToB;
 			cumulativeDistanceToB += pointA.distanceTo(pointB);
 		}
-
+		
 		if (pointA == undefined && pointB == undefined) { // Happens when line has no length
 			var pointA = pts[0], pointB = pts[1], i = 1;
 		}
@@ -36213,7 +36213,7 @@ module.exports.TinyEmitter = E;
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/
+/******/ 	
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -36226,14 +36226,14 @@ module.exports.TinyEmitter = E;
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/
+/******/ 	
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
+/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	!function() {
@@ -36246,7 +36246,7 @@ module.exports.TinyEmitter = E;
 /******/ 			return getter;
 /******/ 		};
 /******/ 	}();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
@@ -36258,12 +36258,12 @@ module.exports.TinyEmitter = E;
 /******/ 			}
 /******/ 		};
 /******/ 	}();
-/******/
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	!function() {
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
-/******/
+/******/ 	
 /************************************************************************/
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
@@ -39644,7 +39644,7 @@ module.exports.TinyEmitter = E;
         deltaHp = abs(deltaHp) <= 180 ? deltaHp : h2p <= h1p ? deltaHp + 360 : deltaHp - 360;
         deltaHp = 2*sqrt(C1p*C2p)*sin(deg2rad(deltaHp)/2);
         var deltaL = L2 - L1;
-        var deltaCp = C2p - C1p;
+        var deltaCp = C2p - C1p;    
         var sl = 1 + (0.015*pow(avgL - 50, 2))/sqrt(20 + pow(avgL - 50, 2));
         var sc = 1 + 0.045*avgCp;
         var sh = 1 + 0.015*avgCp*T;
@@ -46924,7 +46924,7 @@ Methods for creating <meta> in <head> and adding favicons
 
     var keys = ['Hours', 'Minutes', 'Seconds', 'Milliseconds'];
     var maxValues = [24, 60, 60, 1000];
-
+    
     // Capitalize first letter
     key = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
 
@@ -46971,19 +46971,19 @@ Methods for creating <meta> in <head> and adding favicons
 ;
 /* @preserve
  * The MIT License (MIT)
- *
+ * 
  * Copyright (c) 2013-2018 Petka Antonov
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
@@ -46991,7 +46991,7 @@ Methods for creating <meta> in <head> and adding favicons
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *
+ * 
  */
 /**
  * bluebird build version 3.7.2
@@ -50583,28 +50583,28 @@ _dereq_('./using.js')(Promise, apiRejection, tryConvertToPromise, createContext,
 _dereq_('./any.js')(Promise);
 _dereq_('./each.js')(Promise, INTERNAL);
 _dereq_('./filter.js')(Promise, INTERNAL);
-
-    util.toFastProperties(Promise);
-    util.toFastProperties(Promise.prototype);
-    function fillTypes(value) {
-        var p = new Promise(INTERNAL);
-        p._fulfillmentHandler0 = value;
-        p._rejectionHandler0 = value;
-        p._promise0 = value;
-        p._receiver0 = value;
-    }
-    // Complete slack tracking, opt out of field-type tracking and
-    // stabilize map
-    fillTypes({a: 1});
-    fillTypes({b: 2});
-    fillTypes({c: 3});
-    fillTypes(1);
-    fillTypes(function(){});
-    fillTypes(undefined);
-    fillTypes(false);
-    fillTypes(new Promise(INTERNAL));
-    debug.setBounds(Async.firstLineError, util.lastLineError);
-    return Promise;
+                                                         
+    util.toFastProperties(Promise);                                          
+    util.toFastProperties(Promise.prototype);                                
+    function fillTypes(value) {                                              
+        var p = new Promise(INTERNAL);                                       
+        p._fulfillmentHandler0 = value;                                      
+        p._rejectionHandler0 = value;                                        
+        p._promise0 = value;                                                 
+        p._receiver0 = value;                                                
+    }                                                                        
+    // Complete slack tracking, opt out of field-type tracking and           
+    // stabilize map                                                         
+    fillTypes({a: 1});                                                       
+    fillTypes({b: 2});                                                       
+    fillTypes({c: 3});                                                       
+    fillTypes(1);                                                            
+    fillTypes(function(){});                                                 
+    fillTypes(undefined);                                                    
+    fillTypes(false);                                                        
+    fillTypes(new Promise(INTERNAL));                                        
+    debug.setBounds(Async.firstLineError, util.lastLineError);               
+    return Promise;                                                          
 
 };
 
@@ -59088,7 +59088,7 @@ Adjusted ES5 version by Niel sHolt
         var json;
 
         try{
-            json = window.jsyaml.load(response);
+            json = window.jsyaml.load(response, {schema: window.jsyaml.JSON_SCHEMA});
         }
         catch (e){
             json = undefined;
@@ -59882,11 +59882,11 @@ window.xmlToJSON = function(xml) {
 	var minor = parseInt(splitVersion[1]);
 
 	var JQ_LT_17 = (major < 1) || (major == 1 && minor < 7);
-
+	
 	function eventsData($el) {
 		return JQ_LT_17 ? $el.data('events') : $._data($el[0]).events;
 	}
-
+	
 	function moveHandlerToTop($el, eventName, isDelegated) {
 		var data = eventsData($el);
 		var events = data[eventName];
@@ -59904,7 +59904,7 @@ window.xmlToJSON = function(xml) {
 			events.unshift(events.pop());
 		}
 	}
-
+	
 	function moveEventHandlers($elems, eventsString, isDelegate) {
 		var events = eventsString.split(/\s+/);
 		$elems.each(function() {
@@ -59914,7 +59914,7 @@ window.xmlToJSON = function(xml) {
 			}
 		});
 	}
-
+	
 	function makeMethod(methodName) {
 		$.fn[methodName + 'First'] = function() {
 			var args = $.makeArray(arguments);
@@ -59939,7 +59939,7 @@ window.xmlToJSON = function(xml) {
 	$.fn.delegateFirst = function() {
 		var args = $.makeArray(arguments);
 		var eventsString = args[1];
-
+		
 		if (eventsString) {
 			args.splice(0, 2);
 			$.fn.delegate.apply(this, arguments);
@@ -59959,7 +59959,7 @@ window.xmlToJSON = function(xml) {
 
 		return this;
 	};
-
+	
 	// on (jquery >= 1.7)
 	if (!JQ_LT_17) {
 		$.fn.onFirst = function(types, selector) {
@@ -65776,7 +65776,7 @@ window.xmlToJSON = function(xml) {
   };
   const makeString = object => {
     if (object == null) return '';
-    return '' + object;
+    return String(object);
   };
   const copy = (a, s, t) => {
     a.forEach(m => {
@@ -65784,7 +65784,7 @@ window.xmlToJSON = function(xml) {
     });
   };
   const lastOfPathSeparatorRegExp = /###/g;
-  const cleanKey = key => key && key.indexOf('###') > -1 ? key.replace(lastOfPathSeparatorRegExp, '.') : key;
+  const cleanKey = key => key && key.includes('###') ? key.replace(lastOfPathSeparatorRegExp, '.') : key;
   const canNotTraverseDeeper = object => !object || isString(object);
   const getLastOfPath = (object, path, Empty) => {
     const stack = !isString(path) ? path : path.split('.');
@@ -65822,7 +65822,7 @@ window.xmlToJSON = function(xml) {
       e = `${p[p.length - 1]}.${e}`;
       p = p.slice(0, p.length - 1);
       last = getLastOfPath(object, p, Object);
-      if (last && last.obj && typeof last.obj[`${last.k}.${e}`] !== 'undefined') {
+      if (last?.obj && typeof last.obj[`${last.k}.${e}`] !== 'undefined') {
         last.obj = undefined;
       }
     }
@@ -65842,6 +65842,7 @@ window.xmlToJSON = function(xml) {
       k
     } = getLastOfPath(object, path);
     if (!obj) return undefined;
+    if (!Object.prototype.hasOwnProperty.call(obj, k)) return undefined;
     return obj[k];
   };
   const getPathWithDefaults = (data, defaultData, key) => {
@@ -65854,7 +65855,7 @@ window.xmlToJSON = function(xml) {
   const deepExtend = (target, source, overwrite) => {
     for (const prop in source) {
       if (prop !== '__proto__' && prop !== 'constructor') {
-        if (prop in target) {
+        if (Object.prototype.hasOwnProperty.call(target, prop)) {
           if (isString(target[prop]) || target[prop] instanceof String || isString(source[prop]) || source[prop] instanceof String) {
             if (overwrite) target[prop] = source[prop];
           } else {
@@ -65868,7 +65869,7 @@ window.xmlToJSON = function(xml) {
     return target;
   };
   const regexEscape = str => str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-  var _entityMap = {
+  const _entityMap = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
@@ -65907,7 +65908,7 @@ window.xmlToJSON = function(xml) {
   const looksLikeObjectPath = (key, nsSeparator, keySeparator) => {
     nsSeparator = nsSeparator || '';
     keySeparator = keySeparator || '';
-    const possibleChars = chars.filter(c => nsSeparator.indexOf(c) < 0 && keySeparator.indexOf(c) < 0);
+    const possibleChars = chars.filter(c => !nsSeparator.includes(c) && !keySeparator.includes(c));
     if (possibleChars.length === 0) return true;
     const r = looksLikeObjectPathRegExpCache.getRegExp(`(${possibleChars.map(c => c === '?' ? '\\?' : c).join('|')})`);
     let matched = !r.test(key);
@@ -65919,10 +65920,12 @@ window.xmlToJSON = function(xml) {
     }
     return matched;
   };
-  const deepFind = function (obj, path) {
-    let keySeparator = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '.';
+  const deepFind = (obj, path, keySeparator = '.') => {
     if (!obj) return undefined;
-    if (obj[path]) return obj[path];
+    if (obj[path]) {
+      if (!Object.prototype.hasOwnProperty.call(obj, path)) return undefined;
+      return obj[path];
+    }
     const tokens = path.split(keySeparator);
     let current = obj;
     for (let i = 0; i < tokens.length;) {
@@ -65938,7 +65941,7 @@ window.xmlToJSON = function(xml) {
         nextPath += tokens[j];
         next = current[nextPath];
         if (next !== undefined) {
-          if (['string', 'number', 'boolean'].indexOf(typeof next) > -1 && j < tokens.length - 1) {
+          if (['string', 'number', 'boolean'].includes(typeof next) && j < tokens.length - 1) {
             continue;
           }
           i += j - i + 1;
@@ -65949,7 +65952,7 @@ window.xmlToJSON = function(xml) {
     }
     return current;
   };
-  const getCleanedCode = code => code && code.replace('_', '-');
+  const getCleanedCode = code => code?.replace(/_/g, '-');
 
   const consoleLogger = {
     type: 'logger',
@@ -65963,47 +65966,34 @@ window.xmlToJSON = function(xml) {
       this.output('error', args);
     },
     output(type, args) {
-      if (console && console[type]) console[type].apply(console, args);
+      console?.[type]?.apply?.(console, args);
     }
   };
   class Logger {
-    constructor(concreteLogger) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    constructor(concreteLogger, options = {}) {
       this.init(concreteLogger, options);
     }
-    init(concreteLogger) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    init(concreteLogger, options = {}) {
       this.prefix = options.prefix || 'i18next:';
       this.logger = concreteLogger || consoleLogger;
       this.options = options;
       this.debug = options.debug;
     }
-    log() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
+    log(...args) {
       return this.forward(args, 'log', '', true);
     }
-    warn() {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
+    warn(...args) {
       return this.forward(args, 'warn', '', true);
     }
-    error() {
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
-      }
+    error(...args) {
       return this.forward(args, 'error', '');
     }
-    deprecate() {
-      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        args[_key4] = arguments[_key4];
-      }
+    deprecate(...args) {
       return this.forward(args, 'warn', 'WARNING DEPRECATED: ', true);
     }
     forward(args, lvl, prefix, debugOnly) {
       if (debugOnly && !this.debug) return null;
+      args = args.map(a => isString(a) ? a.replace(/[\r\n\x00-\x1F\x7F]/g, ' ') : a);
       if (isString(args[0])) args[0] = `${prefix}${this.prefix} ${args[0]}`;
       return this.logger[lvl](args);
     }
@@ -66043,14 +66033,18 @@ window.xmlToJSON = function(xml) {
       }
       this.observers[event].delete(listener);
     }
-    emit(event) {
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
+    once(event, listener) {
+      const wrapper = (...args) => {
+        listener(...args);
+        this.off(event, wrapper);
+      };
+      this.on(event, wrapper);
+      return this;
+    }
+    emit(event, ...args) {
       if (this.observers[event]) {
         const cloned = Array.from(this.observers[event].entries());
-        cloned.forEach(_ref => {
-          let [observer, numTimesAdded] = _ref;
+        cloned.forEach(([observer, numTimesAdded]) => {
           for (let i = 0; i < numTimesAdded; i++) {
             observer(...args);
           }
@@ -66058,10 +66052,9 @@ window.xmlToJSON = function(xml) {
       }
       if (this.observers['*']) {
         const cloned = Array.from(this.observers['*'].entries());
-        cloned.forEach(_ref2 => {
-          let [observer, numTimesAdded] = _ref2;
+        cloned.forEach(([observer, numTimesAdded]) => {
           for (let i = 0; i < numTimesAdded; i++) {
-            observer.apply(observer, [event, ...args]);
+            observer(event, ...args);
           }
         });
       }
@@ -66069,11 +66062,10 @@ window.xmlToJSON = function(xml) {
   }
 
   class ResourceStore extends EventEmitter {
-    constructor(data) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-        ns: ['translation'],
-        defaultNS: 'translation'
-      };
+    constructor(data, options = {
+      ns: ['translation'],
+      defaultNS: 'translation'
+    }) {
       super();
       this.data = data || {};
       this.options = options;
@@ -66085,7 +66077,7 @@ window.xmlToJSON = function(xml) {
       }
     }
     addNamespaces(ns) {
-      if (this.options.ns.indexOf(ns) < 0) {
+      if (!this.options.ns.includes(ns)) {
         this.options.ns.push(ns);
       }
     }
@@ -66095,12 +66087,11 @@ window.xmlToJSON = function(xml) {
         this.options.ns.splice(index, 1);
       }
     }
-    getResource(lng, ns, key) {
-      let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+    getResource(lng, ns, key, options = {}) {
       const keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
       const ignoreJSONStructure = options.ignoreJSONStructure !== undefined ? options.ignoreJSONStructure : this.options.ignoreJSONStructure;
       let path;
-      if (lng.indexOf('.') > -1) {
+      if (lng.includes('.')) {
         path = lng.split('.');
       } else {
         path = [lng, ns];
@@ -66115,22 +66106,21 @@ window.xmlToJSON = function(xml) {
         }
       }
       const result = getPath(this.data, path);
-      if (!result && !ns && !key && lng.indexOf('.') > -1) {
+      if (!result && !ns && !key && lng.includes('.')) {
         lng = path[0];
         ns = path[1];
         key = path.slice(2).join('.');
       }
       if (result || !ignoreJSONStructure || !isString(key)) return result;
-      return deepFind(this.data && this.data[lng] && this.data[lng][ns], key, keySeparator);
+      return deepFind(this.data?.[lng]?.[ns], key, keySeparator);
     }
-    addResource(lng, ns, key, value) {
-      let options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {
-        silent: false
-      };
+    addResource(lng, ns, key, value, options = {
+      silent: false
+    }) {
       const keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
       let path = [lng, ns];
       if (key) path = path.concat(keySeparator ? key.split(keySeparator) : key);
-      if (lng.indexOf('.') > -1) {
+      if (lng.includes('.')) {
         path = lng.split('.');
         value = ns;
         ns = path[1];
@@ -66139,10 +66129,9 @@ window.xmlToJSON = function(xml) {
       setPath(this.data, path, value);
       if (!options.silent) this.emit('added', lng, ns, key, value);
     }
-    addResources(lng, ns, resources) {
-      let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
-        silent: false
-      };
+    addResources(lng, ns, resources, options = {
+      silent: false
+    }) {
       for (const m in resources) {
         if (isString(resources[m]) || Array.isArray(resources[m])) this.addResource(lng, ns, m, resources[m], {
           silent: true
@@ -66150,13 +66139,12 @@ window.xmlToJSON = function(xml) {
       }
       if (!options.silent) this.emit('added', lng, ns, resources);
     }
-    addResourceBundle(lng, ns, resources, deep, overwrite) {
-      let options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {
-        silent: false,
-        skipCopy: false
-      };
+    addResourceBundle(lng, ns, resources, deep, overwrite, options = {
+      silent: false,
+      skipCopy: false
+    }) {
       let path = [lng, ns];
-      if (lng.indexOf('.') > -1) {
+      if (lng.includes('.')) {
         path = lng.split('.');
         deep = resources;
         resources = ns;
@@ -66188,10 +66176,6 @@ window.xmlToJSON = function(xml) {
     }
     getResourceBundle(lng, ns) {
       if (!ns) ns = this.options.defaultNS;
-      if (this.options.compatibilityAPI === 'v1') return {
-        ...{},
-        ...this.getResource(lng, ns)
-      };
       return this.getResource(lng, ns);
     }
     getDataByLanguage(lng) {
@@ -66214,16 +66198,49 @@ window.xmlToJSON = function(xml) {
     },
     handle(processors, value, key, options, translator) {
       processors.forEach(processor => {
-        if (this.processors[processor]) value = this.processors[processor].process(value, key, options, translator);
+        value = this.processors[processor]?.process(value, key, options, translator) ?? value;
       });
       return value;
     }
   };
 
-  const checkedLoadedFor = {};
+  const PATH_KEY = Symbol('i18next/PATH_KEY');
+  function createProxy() {
+    const state = [];
+    const handler = Object.create(null);
+    let proxy;
+    handler.get = (target, key) => {
+      proxy?.revoke?.();
+      if (key === PATH_KEY) return state;
+      state.push(key);
+      proxy = Proxy.revocable(target, handler);
+      return proxy.proxy;
+    };
+    return Proxy.revocable(Object.create(null), handler).proxy;
+  }
+  function keysFromSelector(selector, opts) {
+    const {
+      [PATH_KEY]: path
+    } = selector(createProxy());
+    const keySeparator = opts?.keySeparator ?? '.';
+    const nsSeparator = opts?.nsSeparator ?? ':';
+    const strict = opts?.enableSelector === 'strict';
+    if (path.length > 1 && nsSeparator) {
+      const ns = opts?.ns;
+      const nsList = strict ? Array.isArray(ns) ? ns : ns ? [ns] : null : Array.isArray(ns) ? ns : null;
+      if (nsList) {
+        const candidates = strict ? nsList : nsList.length > 1 ? nsList.slice(1) : [];
+        if (candidates.includes(path[0])) {
+          return `${path[0]}${nsSeparator}${path.slice(1).join(keySeparator)}`;
+        }
+      }
+    }
+    return path.join(keySeparator);
+  }
+
+  const shouldHandleAsObject = res => !isString(res) && typeof res !== 'boolean' && typeof res !== 'number';
   class Translator extends EventEmitter {
-    constructor(services) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    constructor(services, options = {}) {
       super();
       copy(['resourceStore', 'languageUtils', 'pluralResolver', 'interpolator', 'backendConnector', 'i18nFormat', 'utils'], services, this);
       this.options = options;
@@ -66231,27 +66248,33 @@ window.xmlToJSON = function(xml) {
         this.options.keySeparator = '.';
       }
       this.logger = baseLogger.create('translator');
+      this.checkedLoadedFor = {};
     }
     changeLanguage(lng) {
       if (lng) this.language = lng;
     }
-    exists(key) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-        interpolation: {}
+    exists(key, o = {
+      interpolation: {}
+    }) {
+      const opt = {
+        ...o
       };
-      if (key === undefined || key === null) {
+      if (key == null) return false;
+      const resolved = this.resolve(key, opt);
+      if (resolved?.res === undefined) return false;
+      const isObject = shouldHandleAsObject(resolved.res);
+      if (opt.returnObjects === false && isObject) {
         return false;
       }
-      const resolved = this.resolve(key, options);
-      return resolved && resolved.res !== undefined;
+      return true;
     }
-    extractFromKey(key, options) {
-      let nsSeparator = options.nsSeparator !== undefined ? options.nsSeparator : this.options.nsSeparator;
+    extractFromKey(key, opt) {
+      let nsSeparator = opt.nsSeparator !== undefined ? opt.nsSeparator : this.options.nsSeparator;
       if (nsSeparator === undefined) nsSeparator = ':';
-      const keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
-      let namespaces = options.ns || this.options.defaultNS || [];
-      const wouldCheckForNsInKey = nsSeparator && key.indexOf(nsSeparator) > -1;
-      const seemsNaturalLanguage = !this.options.userDefinedKeySeparator && !options.keySeparator && !this.options.userDefinedNsSeparator && !options.nsSeparator && !looksLikeObjectPath(key, nsSeparator, keySeparator);
+      const keySeparator = opt.keySeparator !== undefined ? opt.keySeparator : this.options.keySeparator;
+      let namespaces = opt.ns || this.options.defaultNS || [];
+      const wouldCheckForNsInKey = nsSeparator && key.includes(nsSeparator);
+      const seemsNaturalLanguage = !this.options.userDefinedKeySeparator && !opt.keySeparator && !this.options.userDefinedNsSeparator && !opt.nsSeparator && !looksLikeObjectPath(key, nsSeparator, keySeparator);
       if (wouldCheckForNsInKey && !seemsNaturalLanguage) {
         const m = key.match(this.interpolator.nestingRegexp);
         if (m && m.length > 0) {
@@ -66261,7 +66284,7 @@ window.xmlToJSON = function(xml) {
           };
         }
         const parts = key.split(nsSeparator);
-        if (nsSeparator !== keySeparator || nsSeparator === keySeparator && this.options.ns.indexOf(parts[0]) > -1) namespaces = parts.shift();
+        if (nsSeparator !== keySeparator || nsSeparator === keySeparator && this.options.ns.includes(parts[0])) namespaces = parts.shift();
         key = parts.join(keySeparator);
       }
       return {
@@ -66269,28 +66292,40 @@ window.xmlToJSON = function(xml) {
         namespaces: isString(namespaces) ? [namespaces] : namespaces
       };
     }
-    translate(keys, options, lastKey) {
-      if (typeof options !== 'object' && this.options.overloadTranslationOptionHandler) {
-        options = this.options.overloadTranslationOptionHandler(arguments);
+    translate(keys, o, lastKey) {
+      let opt = typeof o === 'object' ? {
+        ...o
+      } : o;
+      if (typeof opt !== 'object' && this.options.overloadTranslationOptionHandler) {
+        opt = this.options.overloadTranslationOptionHandler(arguments);
       }
-      if (typeof options === 'object') options = {
-        ...options
+      if (typeof opt === 'object') opt = {
+        ...opt
       };
-      if (!options) options = {};
-      if (keys === undefined || keys === null) return '';
+      if (!opt) opt = {};
+      if (keys == null) return '';
+      if (typeof keys === 'function') keys = keysFromSelector(keys, {
+        ...this.options,
+        ...opt
+      });
       if (!Array.isArray(keys)) keys = [String(keys)];
-      const returnDetails = options.returnDetails !== undefined ? options.returnDetails : this.options.returnDetails;
-      const keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
+      keys = keys.map(k => typeof k === 'function' ? keysFromSelector(k, {
+        ...this.options,
+        ...opt
+      }) : String(k));
+      const returnDetails = opt.returnDetails !== undefined ? opt.returnDetails : this.options.returnDetails;
+      const keySeparator = opt.keySeparator !== undefined ? opt.keySeparator : this.options.keySeparator;
       const {
         key,
         namespaces
-      } = this.extractFromKey(keys[keys.length - 1], options);
+      } = this.extractFromKey(keys[keys.length - 1], opt);
       const namespace = namespaces[namespaces.length - 1];
-      const lng = options.lng || this.language;
-      const appendNamespaceToCIMode = options.appendNamespaceToCIMode || this.options.appendNamespaceToCIMode;
-      if (lng && lng.toLowerCase() === 'cimode') {
+      let nsSeparator = opt.nsSeparator !== undefined ? opt.nsSeparator : this.options.nsSeparator;
+      if (nsSeparator === undefined) nsSeparator = ':';
+      const lng = opt.lng || this.language;
+      const appendNamespaceToCIMode = opt.appendNamespaceToCIMode || this.options.appendNamespaceToCIMode;
+      if (lng?.toLowerCase() === 'cimode') {
         if (appendNamespaceToCIMode) {
-          const nsSeparator = options.nsSeparator || this.options.nsSeparator;
           if (returnDetails) {
             return {
               res: `${namespace}${nsSeparator}${key}`,
@@ -66298,7 +66333,7 @@ window.xmlToJSON = function(xml) {
               exactUsedKey: key,
               usedLng: lng,
               usedNS: namespace,
-              usedParams: this.getUsedParamsDetails(options)
+              usedParams: this.getUsedParamsDetails(opt)
             };
           }
           return `${namespace}${nsSeparator}${key}`;
@@ -66310,69 +66345,84 @@ window.xmlToJSON = function(xml) {
             exactUsedKey: key,
             usedLng: lng,
             usedNS: namespace,
-            usedParams: this.getUsedParamsDetails(options)
+            usedParams: this.getUsedParamsDetails(opt)
           };
         }
         return key;
       }
-      const resolved = this.resolve(keys, options);
-      let res = resolved && resolved.res;
-      const resUsedKey = resolved && resolved.usedKey || key;
-      const resExactUsedKey = resolved && resolved.exactUsedKey || key;
-      const resType = Object.prototype.toString.apply(res);
+      const resolved = this.resolve(keys, opt);
+      let res = resolved?.res;
+      const resUsedKey = resolved?.usedKey || key;
+      const resExactUsedKey = resolved?.exactUsedKey || key;
       const noObject = ['[object Number]', '[object Function]', '[object RegExp]'];
-      const joinArrays = options.joinArrays !== undefined ? options.joinArrays : this.options.joinArrays;
+      const joinArrays = opt.joinArrays !== undefined ? opt.joinArrays : this.options.joinArrays;
       const handleAsObjectInI18nFormat = !this.i18nFormat || this.i18nFormat.handleAsObject;
-      const handleAsObject = !isString(res) && typeof res !== 'boolean' && typeof res !== 'number';
-      if (handleAsObjectInI18nFormat && res && handleAsObject && noObject.indexOf(resType) < 0 && !(isString(joinArrays) && Array.isArray(res))) {
-        if (!options.returnObjects && !this.options.returnObjects) {
+      const needsPluralHandling = opt.count !== undefined && !isString(opt.count);
+      const hasDefaultValue = Translator.hasDefaultValue(opt);
+      const defaultValueSuffix = needsPluralHandling ? this.pluralResolver.getSuffix(lng, opt.count, opt) : '';
+      const defaultValueSuffixOrdinalFallback = opt.ordinal && needsPluralHandling ? this.pluralResolver.getSuffix(lng, opt.count, {
+        ordinal: false
+      }) : '';
+      const needsZeroSuffixLookup = needsPluralHandling && !opt.ordinal && opt.count === 0;
+      const defaultValue = needsZeroSuffixLookup && opt[`defaultValue${this.options.pluralSeparator}zero`] || opt[`defaultValue${defaultValueSuffix}`] || opt[`defaultValue${defaultValueSuffixOrdinalFallback}`] || opt.defaultValue;
+      let resForObjHndl = res;
+      if (handleAsObjectInI18nFormat && !res && hasDefaultValue) {
+        resForObjHndl = defaultValue;
+      }
+      const handleAsObject = shouldHandleAsObject(resForObjHndl);
+      const resType = Object.prototype.toString.apply(resForObjHndl);
+      if (handleAsObjectInI18nFormat && resForObjHndl && handleAsObject && !noObject.includes(resType) && !(isString(joinArrays) && Array.isArray(resForObjHndl))) {
+        if (!opt.returnObjects && !this.options.returnObjects) {
           if (!this.options.returnedObjectHandler) {
             this.logger.warn('accessing an object - but returnObjects options is not enabled!');
           }
-          const r = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(resUsedKey, res, {
-            ...options,
+          const r = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(resUsedKey, resForObjHndl, {
+            ...opt,
             ns: namespaces
           }) : `key '${key} (${this.language})' returned an object instead of string.`;
           if (returnDetails) {
             resolved.res = r;
-            resolved.usedParams = this.getUsedParamsDetails(options);
+            resolved.usedParams = this.getUsedParamsDetails(opt);
             return resolved;
           }
           return r;
         }
         if (keySeparator) {
-          const resTypeIsArray = Array.isArray(res);
+          const resTypeIsArray = Array.isArray(resForObjHndl);
           const copy = resTypeIsArray ? [] : {};
           const newKeyToUse = resTypeIsArray ? resExactUsedKey : resUsedKey;
-          for (const m in res) {
-            if (Object.prototype.hasOwnProperty.call(res, m)) {
+          for (const m in resForObjHndl) {
+            if (Object.prototype.hasOwnProperty.call(resForObjHndl, m)) {
               const deepKey = `${newKeyToUse}${keySeparator}${m}`;
-              copy[m] = this.translate(deepKey, {
-                ...options,
-                ...{
-                  joinArrays: false,
-                  ns: namespaces
-                }
-              });
-              if (copy[m] === deepKey) copy[m] = res[m];
+              if (hasDefaultValue && !res) {
+                copy[m] = this.translate(deepKey, {
+                  ...opt,
+                  defaultValue: shouldHandleAsObject(defaultValue) ? defaultValue[m] : undefined,
+                  ...{
+                    joinArrays: false,
+                    ns: namespaces
+                  }
+                });
+              } else {
+                copy[m] = this.translate(deepKey, {
+                  ...opt,
+                  ...{
+                    joinArrays: false,
+                    ns: namespaces
+                  }
+                });
+              }
+              if (copy[m] === deepKey) copy[m] = resForObjHndl[m];
             }
           }
           res = copy;
         }
       } else if (handleAsObjectInI18nFormat && isString(joinArrays) && Array.isArray(res)) {
         res = res.join(joinArrays);
-        if (res) res = this.extendTranslation(res, keys, options, lastKey);
+        if (res) res = this.extendTranslation(res, keys, opt, lastKey);
       } else {
         let usedDefault = false;
         let usedKey = false;
-        const needsPluralHandling = options.count !== undefined && !isString(options.count);
-        const hasDefaultValue = Translator.hasDefaultValue(options);
-        const defaultValueSuffix = needsPluralHandling ? this.pluralResolver.getSuffix(lng, options.count, options) : '';
-        const defaultValueSuffixOrdinalFallback = options.ordinal && needsPluralHandling ? this.pluralResolver.getSuffix(lng, options.count, {
-          ordinal: false
-        }) : '';
-        const needsZeroSuffixLookup = needsPluralHandling && !options.ordinal && options.count === 0 && this.pluralResolver.shouldUseIntlApi();
-        const defaultValue = needsZeroSuffixLookup && options[`defaultValue${this.options.pluralSeparator}zero`] || options[`defaultValue${defaultValueSuffix}`] || options[`defaultValue${defaultValueSuffixOrdinalFallback}`] || options.defaultValue;
         if (!this.isValidLookup(res) && hasDefaultValue) {
           usedDefault = true;
           res = defaultValue;
@@ -66381,47 +66431,47 @@ window.xmlToJSON = function(xml) {
           usedKey = true;
           res = key;
         }
-        const missingKeyNoValueFallbackToKey = options.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey;
+        const missingKeyNoValueFallbackToKey = opt.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey;
         const resForMissing = missingKeyNoValueFallbackToKey && usedKey ? undefined : res;
         const updateMissing = hasDefaultValue && defaultValue !== res && this.options.updateMissing;
         if (usedKey || usedDefault || updateMissing) {
-          this.logger.log(updateMissing ? 'updateKey' : 'missingKey', lng, namespace, key, updateMissing ? defaultValue : res);
+          this.logger.log(updateMissing ? 'updateKey' : 'missingKey', lng, namespace, needsPluralHandling && !updateMissing ? `${key}${this.pluralResolver.getSuffix(lng, opt.count, opt)}` : key, updateMissing ? defaultValue : res);
           if (keySeparator) {
             const fk = this.resolve(key, {
-              ...options,
+              ...opt,
               keySeparator: false
             });
             if (fk && fk.res) this.logger.warn('Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.');
           }
           let lngs = [];
-          const fallbackLngs = this.languageUtils.getFallbackCodes(this.options.fallbackLng, options.lng || this.language);
+          const fallbackLngs = this.languageUtils.getFallbackCodes(this.options.fallbackLng, opt.lng || this.language);
           if (this.options.saveMissingTo === 'fallback' && fallbackLngs && fallbackLngs[0]) {
             for (let i = 0; i < fallbackLngs.length; i++) {
               lngs.push(fallbackLngs[i]);
             }
           } else if (this.options.saveMissingTo === 'all') {
-            lngs = this.languageUtils.toResolveHierarchy(options.lng || this.language);
+            lngs = this.languageUtils.toResolveHierarchy(opt.lng || this.language);
           } else {
-            lngs.push(options.lng || this.language);
+            lngs.push(opt.lng || this.language);
           }
           const send = (l, k, specificDefaultValue) => {
             const defaultForMissing = hasDefaultValue && specificDefaultValue !== res ? specificDefaultValue : resForMissing;
             if (this.options.missingKeyHandler) {
-              this.options.missingKeyHandler(l, namespace, k, defaultForMissing, updateMissing, options);
-            } else if (this.backendConnector && this.backendConnector.saveMissing) {
-              this.backendConnector.saveMissing(l, namespace, k, defaultForMissing, updateMissing, options);
+              this.options.missingKeyHandler(l, namespace, k, defaultForMissing, updateMissing, opt);
+            } else if (this.backendConnector?.saveMissing) {
+              this.backendConnector.saveMissing(l, namespace, k, defaultForMissing, updateMissing, opt);
             }
             this.emit('missingKey', l, namespace, k, res);
           };
           if (this.options.saveMissing) {
             if (this.options.saveMissingPlurals && needsPluralHandling) {
               lngs.forEach(language => {
-                const suffixes = this.pluralResolver.getSuffixes(language, options);
-                if (needsZeroSuffixLookup && options[`defaultValue${this.options.pluralSeparator}zero`] && suffixes.indexOf(`${this.options.pluralSeparator}zero`) < 0) {
+                const suffixes = this.pluralResolver.getSuffixes(language, opt);
+                if (needsZeroSuffixLookup && opt[`defaultValue${this.options.pluralSeparator}zero`] && !suffixes.includes(`${this.options.pluralSeparator}zero`)) {
                   suffixes.push(`${this.options.pluralSeparator}zero`);
                 }
                 suffixes.forEach(suffix => {
-                  send([language], key + suffix, options[`defaultValue${suffix}`] || defaultValue);
+                  send([language], key + suffix, opt[`defaultValue${suffix}`] || defaultValue);
                 });
               });
             } else {
@@ -66429,139 +66479,136 @@ window.xmlToJSON = function(xml) {
             }
           }
         }
-        res = this.extendTranslation(res, keys, options, resolved, lastKey);
-        if (usedKey && res === key && this.options.appendNamespaceToMissingKey) res = `${namespace}:${key}`;
+        res = this.extendTranslation(res, keys, opt, resolved, lastKey);
+        if (usedKey && res === key && this.options.appendNamespaceToMissingKey) {
+          res = `${namespace}${nsSeparator}${key}`;
+        }
         if ((usedKey || usedDefault) && this.options.parseMissingKeyHandler) {
-          if (this.options.compatibilityAPI !== 'v1') {
-            res = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? `${namespace}:${key}` : key, usedDefault ? res : undefined);
-          } else {
-            res = this.options.parseMissingKeyHandler(res);
-          }
+          res = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? `${namespace}${nsSeparator}${key}` : key, usedDefault ? res : undefined, opt);
         }
       }
       if (returnDetails) {
         resolved.res = res;
-        resolved.usedParams = this.getUsedParamsDetails(options);
+        resolved.usedParams = this.getUsedParamsDetails(opt);
         return resolved;
       }
       return res;
     }
-    extendTranslation(res, key, options, resolved, lastKey) {
-      var _this = this;
-      if (this.i18nFormat && this.i18nFormat.parse) {
+    extendTranslation(res, key, opt, resolved, lastKey) {
+      if (this.i18nFormat?.parse) {
         res = this.i18nFormat.parse(res, {
           ...this.options.interpolation.defaultVariables,
-          ...options
-        }, options.lng || this.language || resolved.usedLng, resolved.usedNS, resolved.usedKey, {
+          ...opt
+        }, opt.lng || this.language || resolved.usedLng, resolved.usedNS, resolved.usedKey, {
           resolved
         });
-      } else if (!options.skipInterpolation) {
-        if (options.interpolation) this.interpolator.init({
-          ...options,
+      } else if (!opt.skipInterpolation) {
+        if (opt.interpolation) this.interpolator.init({
+          ...opt,
           ...{
             interpolation: {
               ...this.options.interpolation,
-              ...options.interpolation
+              ...opt.interpolation
             }
           }
         });
-        const skipOnVariables = isString(res) && (options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables);
+        const skipOnVariables = isString(res) && (opt?.interpolation?.skipOnVariables !== undefined ? opt.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables);
         let nestBef;
         if (skipOnVariables) {
           const nb = res.match(this.interpolator.nestingRegexp);
           nestBef = nb && nb.length;
         }
-        let data = options.replace && !isString(options.replace) ? options.replace : options;
+        let data = opt.replace && !isString(opt.replace) ? opt.replace : opt;
         if (this.options.interpolation.defaultVariables) data = {
           ...this.options.interpolation.defaultVariables,
           ...data
         };
-        res = this.interpolator.interpolate(res, data, options.lng || this.language || resolved.usedLng, options);
+        res = this.interpolator.interpolate(res, data, opt.lng || this.language || resolved.usedLng, opt);
         if (skipOnVariables) {
           const na = res.match(this.interpolator.nestingRegexp);
           const nestAft = na && na.length;
-          if (nestBef < nestAft) options.nest = false;
+          if (nestBef < nestAft) opt.nest = false;
         }
-        if (!options.lng && this.options.compatibilityAPI !== 'v1' && resolved && resolved.res) options.lng = this.language || resolved.usedLng;
-        if (options.nest !== false) res = this.interpolator.nest(res, function () {
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          if (lastKey && lastKey[0] === args[0] && !options.context) {
-            _this.logger.warn(`It seems you are nesting recursively key: ${args[0]} in key: ${key[0]}`);
+        if (!opt.lng && resolved && resolved.res) opt.lng = this.language || resolved.usedLng;
+        if (opt.nest !== false) res = this.interpolator.nest(res, (...args) => {
+          if (lastKey?.[0] === args[0] && !opt.context) {
+            this.logger.warn(`It seems you are nesting recursively key: ${args[0]} in key: ${key[0]}`);
             return null;
           }
-          return _this.translate(...args, key);
-        }, options);
-        if (options.interpolation) this.interpolator.reset();
+          return this.translate(...args, key);
+        }, opt);
+        if (opt.interpolation) this.interpolator.reset();
       }
-      const postProcess = options.postProcess || this.options.postProcess;
+      const postProcess = opt.postProcess || this.options.postProcess;
       const postProcessorNames = isString(postProcess) ? [postProcess] : postProcess;
-      if (res !== undefined && res !== null && postProcessorNames && postProcessorNames.length && options.applyPostProcessor !== false) {
+      if (res != null && postProcessorNames?.length && opt.applyPostProcessor !== false) {
         res = postProcessor.handle(postProcessorNames, res, key, this.options && this.options.postProcessPassResolved ? {
           i18nResolved: {
             ...resolved,
-            usedParams: this.getUsedParamsDetails(options)
+            usedParams: this.getUsedParamsDetails(opt)
           },
-          ...options
-        } : options, this);
+          ...opt
+        } : opt, this);
       }
       return res;
     }
-    resolve(keys) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    resolve(keys, opt = {}) {
       let found;
       let usedKey;
       let exactUsedKey;
       let usedLng;
       let usedNS;
       if (isString(keys)) keys = [keys];
+      if (Array.isArray(keys)) keys = keys.map(k => typeof k === 'function' ? keysFromSelector(k, {
+        ...this.options,
+        ...opt
+      }) : k);
       keys.forEach(k => {
         if (this.isValidLookup(found)) return;
-        const extracted = this.extractFromKey(k, options);
+        const extracted = this.extractFromKey(k, opt);
         const key = extracted.key;
         usedKey = key;
         let namespaces = extracted.namespaces;
         if (this.options.fallbackNS) namespaces = namespaces.concat(this.options.fallbackNS);
-        const needsPluralHandling = options.count !== undefined && !isString(options.count);
-        const needsZeroSuffixLookup = needsPluralHandling && !options.ordinal && options.count === 0 && this.pluralResolver.shouldUseIntlApi();
-        const needsContextHandling = options.context !== undefined && (isString(options.context) || typeof options.context === 'number') && options.context !== '';
-        const codes = options.lngs ? options.lngs : this.languageUtils.toResolveHierarchy(options.lng || this.language, options.fallbackLng);
+        const needsPluralHandling = opt.count !== undefined && !isString(opt.count);
+        const needsZeroSuffixLookup = needsPluralHandling && !opt.ordinal && opt.count === 0;
+        const needsContextHandling = opt.context !== undefined && (isString(opt.context) || typeof opt.context === 'number') && opt.context !== '';
+        const codes = opt.lngs ? opt.lngs : this.languageUtils.toResolveHierarchy(opt.lng || this.language, opt.fallbackLng);
         namespaces.forEach(ns => {
           if (this.isValidLookup(found)) return;
           usedNS = ns;
-          if (!checkedLoadedFor[`${codes[0]}-${ns}`] && this.utils && this.utils.hasLoadedNamespace && !this.utils.hasLoadedNamespace(usedNS)) {
-            checkedLoadedFor[`${codes[0]}-${ns}`] = true;
+          if (!this.checkedLoadedFor[`${codes[0]}-${ns}`] && this.utils?.hasLoadedNamespace && !this.utils?.hasLoadedNamespace(usedNS)) {
+            this.checkedLoadedFor[`${codes[0]}-${ns}`] = true;
             this.logger.warn(`key "${usedKey}" for languages "${codes.join(', ')}" won't get resolved as namespace "${usedNS}" was not yet loaded`, 'This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
           }
           codes.forEach(code => {
             if (this.isValidLookup(found)) return;
             usedLng = code;
             const finalKeys = [key];
-            if (this.i18nFormat && this.i18nFormat.addLookupKeys) {
-              this.i18nFormat.addLookupKeys(finalKeys, key, code, ns, options);
+            if (this.i18nFormat?.addLookupKeys) {
+              this.i18nFormat.addLookupKeys(finalKeys, key, code, ns, opt);
             } else {
               let pluralSuffix;
-              if (needsPluralHandling) pluralSuffix = this.pluralResolver.getSuffix(code, options.count, options);
+              if (needsPluralHandling) pluralSuffix = this.pluralResolver.getSuffix(code, opt.count, opt);
               const zeroSuffix = `${this.options.pluralSeparator}zero`;
               const ordinalPrefix = `${this.options.pluralSeparator}ordinal${this.options.pluralSeparator}`;
               if (needsPluralHandling) {
-                finalKeys.push(key + pluralSuffix);
-                if (options.ordinal && pluralSuffix.indexOf(ordinalPrefix) === 0) {
+                if (opt.ordinal && pluralSuffix.startsWith(ordinalPrefix)) {
                   finalKeys.push(key + pluralSuffix.replace(ordinalPrefix, this.options.pluralSeparator));
                 }
+                finalKeys.push(key + pluralSuffix);
                 if (needsZeroSuffixLookup) {
                   finalKeys.push(key + zeroSuffix);
                 }
               }
               if (needsContextHandling) {
-                const contextKey = `${key}${this.options.contextSeparator}${options.context}`;
+                const contextKey = `${key}${this.options.contextSeparator || '_'}${opt.context}`;
                 finalKeys.push(contextKey);
                 if (needsPluralHandling) {
-                  finalKeys.push(contextKey + pluralSuffix);
-                  if (options.ordinal && pluralSuffix.indexOf(ordinalPrefix) === 0) {
+                  if (opt.ordinal && pluralSuffix.startsWith(ordinalPrefix)) {
                     finalKeys.push(contextKey + pluralSuffix.replace(ordinalPrefix, this.options.pluralSeparator));
                   }
+                  finalKeys.push(contextKey + pluralSuffix);
                   if (needsZeroSuffixLookup) {
                     finalKeys.push(contextKey + zeroSuffix);
                   }
@@ -66572,7 +66619,7 @@ window.xmlToJSON = function(xml) {
             while (possibleKey = finalKeys.pop()) {
               if (!this.isValidLookup(found)) {
                 exactUsedKey = possibleKey;
-                found = this.getResource(code, ns, possibleKey, options);
+                found = this.getResource(code, ns, possibleKey, opt);
               }
             }
           });
@@ -66589,18 +66636,19 @@ window.xmlToJSON = function(xml) {
     isValidLookup(res) {
       return res !== undefined && !(!this.options.returnNull && res === null) && !(!this.options.returnEmptyString && res === '');
     }
-    getResource(code, ns, key) {
-      let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-      if (this.i18nFormat && this.i18nFormat.getResource) return this.i18nFormat.getResource(code, ns, key, options);
+    getResource(code, ns, key, options = {}) {
+      if (this.i18nFormat?.getResource) return this.i18nFormat.getResource(code, ns, key, options);
       return this.resourceStore.getResource(code, ns, key, options);
     }
-    getUsedParamsDetails() {
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    getUsedParamsDetails(options = {}) {
       const optionsKeys = ['defaultValue', 'ordinal', 'context', 'replace', 'lng', 'lngs', 'fallbackLng', 'ns', 'keySeparator', 'nsSeparator', 'returnObjects', 'returnDetails', 'joinArrays', 'postProcess', 'interpolation'];
       const useOptionsReplaceForData = options.replace && !isString(options.replace);
       let data = useOptionsReplaceForData ? options.replace : options;
       if (useOptionsReplaceForData && typeof options.count !== 'undefined') {
-        data.count = options.count;
+        data = {
+          ...data,
+          count: options.count
+        };
       }
       if (this.options.interpolation.defaultVariables) {
         data = {
@@ -66621,7 +66669,7 @@ window.xmlToJSON = function(xml) {
     static hasDefaultValue(options) {
       const prefix = 'defaultValue';
       for (const option in options) {
-        if (Object.prototype.hasOwnProperty.call(options, option) && prefix === option.substring(0, prefix.length) && undefined !== options[option]) {
+        if (Object.prototype.hasOwnProperty.call(options, option) && option.startsWith(prefix) && undefined !== options[option]) {
           return true;
         }
       }
@@ -66629,7 +66677,6 @@ window.xmlToJSON = function(xml) {
     }
   }
 
-  const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
   class LanguageUtil {
     constructor(options) {
       this.options = options;
@@ -66638,7 +66685,7 @@ window.xmlToJSON = function(xml) {
     }
     getScriptPartFromCode(code) {
       code = getCleanedCode(code);
-      if (!code || code.indexOf('-') < 0) return null;
+      if (!code || !code.includes('-')) return null;
       const p = code.split('-');
       if (p.length === 2) return null;
       p.pop();
@@ -66647,37 +66694,24 @@ window.xmlToJSON = function(xml) {
     }
     getLanguagePartFromCode(code) {
       code = getCleanedCode(code);
-      if (!code || code.indexOf('-') < 0) return code;
+      if (!code || !code.includes('-')) return code;
       const p = code.split('-');
       return this.formatLanguageCode(p[0]);
     }
     formatLanguageCode(code) {
-      if (isString(code) && code.indexOf('-') > -1) {
-        if (typeof Intl !== 'undefined' && typeof Intl.getCanonicalLocales !== 'undefined') {
-          try {
-            let formattedCode = Intl.getCanonicalLocales(code)[0];
-            if (formattedCode && this.options.lowerCaseLng) {
-              formattedCode = formattedCode.toLowerCase();
-            }
-            if (formattedCode) return formattedCode;
-          } catch (e) {}
+      if (isString(code) && code.includes('-')) {
+        let formattedCode;
+        try {
+          formattedCode = Intl.getCanonicalLocales(code)[0];
+        } catch (e) {}
+        if (formattedCode && this.options.lowerCaseLng) {
+          formattedCode = formattedCode.toLowerCase();
         }
-        const specialCases = ['hans', 'hant', 'latn', 'cyrl', 'cans', 'mong', 'arab'];
-        let p = code.split('-');
+        if (formattedCode) return formattedCode;
         if (this.options.lowerCaseLng) {
-          p = p.map(part => part.toLowerCase());
-        } else if (p.length === 2) {
-          p[0] = p[0].toLowerCase();
-          p[1] = p[1].toUpperCase();
-          if (specialCases.indexOf(p[1].toLowerCase()) > -1) p[1] = capitalize(p[1].toLowerCase());
-        } else if (p.length === 3) {
-          p[0] = p[0].toLowerCase();
-          if (p[1].length === 2) p[1] = p[1].toUpperCase();
-          if (p[0] !== 'sgn' && p[2].length === 2) p[2] = p[2].toUpperCase();
-          if (specialCases.indexOf(p[1].toLowerCase()) > -1) p[1] = capitalize(p[1].toLowerCase());
-          if (specialCases.indexOf(p[2].toLowerCase()) > -1) p[2] = capitalize(p[2].toLowerCase());
+          return code.toLowerCase();
         }
-        return p.join('-');
+        return code;
       }
       return this.options.cleanCode || this.options.lowerCaseLng ? code.toLowerCase() : code;
     }
@@ -66685,7 +66719,7 @@ window.xmlToJSON = function(xml) {
       if (this.options.load === 'languageOnly' || this.options.nonExplicitSupportedLngs) {
         code = this.getLanguagePartFromCode(code);
       }
-      return !this.supportedLngs || !this.supportedLngs.length || this.supportedLngs.indexOf(code) > -1;
+      return !this.supportedLngs || !this.supportedLngs.length || this.supportedLngs.includes(code);
     }
     getBestMatchFromCodes(codes) {
       if (!codes) return null;
@@ -66698,13 +66732,16 @@ window.xmlToJSON = function(xml) {
       if (!found && this.options.supportedLngs) {
         codes.forEach(code => {
           if (found) return;
+          const lngScOnly = this.getScriptPartFromCode(code);
+          if (this.isSupportedCode(lngScOnly)) return found = lngScOnly;
           const lngOnly = this.getLanguagePartFromCode(code);
           if (this.isSupportedCode(lngOnly)) return found = lngOnly;
           found = this.options.supportedLngs.find(supportedLng => {
-            if (supportedLng === lngOnly) return supportedLng;
-            if (supportedLng.indexOf('-') < 0 && lngOnly.indexOf('-') < 0) return;
-            if (supportedLng.indexOf('-') > 0 && lngOnly.indexOf('-') < 0 && supportedLng.substring(0, supportedLng.indexOf('-')) === lngOnly) return supportedLng;
-            if (supportedLng.indexOf(lngOnly) === 0 && lngOnly.length > 1) return supportedLng;
+            if (supportedLng === lngOnly) return true;
+            if (!supportedLng.includes('-') && !lngOnly.includes('-')) return false;
+            if (supportedLng.includes('-') && !lngOnly.includes('-') && supportedLng.slice(0, supportedLng.indexOf('-')) === lngOnly) return true;
+            if (supportedLng.startsWith(lngOnly) && lngOnly.length > 1) return true;
+            return false;
           });
         });
       }
@@ -66725,7 +66762,7 @@ window.xmlToJSON = function(xml) {
       return found || [];
     }
     toResolveHierarchy(code, fallbackCode) {
-      const fallbackCodes = this.getFallbackCodes(fallbackCode || this.options.fallbackLng || [], code);
+      const fallbackCodes = this.getFallbackCodes((fallbackCode === false ? [] : fallbackCode) || this.options.fallbackLng || [], code);
       const codes = [];
       const addCode = c => {
         if (!c) return;
@@ -66735,7 +66772,7 @@ window.xmlToJSON = function(xml) {
           this.logger.warn(`rejecting language code not found in supportedLngs: ${c}`);
         }
       };
-      if (isString(code) && (code.indexOf('-') > -1 || code.indexOf('_') > -1)) {
+      if (isString(code) && (code.includes('-') || code.includes('_'))) {
         if (this.options.load !== 'languageOnly') addCode(this.formatLanguageCode(code));
         if (this.options.load !== 'languageOnly' && this.options.load !== 'currentOnly') addCode(this.getScriptPartFromCode(code));
         if (this.options.load !== 'currentOnly') addCode(this.getLanguagePartFromCode(code));
@@ -66743,131 +66780,12 @@ window.xmlToJSON = function(xml) {
         addCode(this.formatLanguageCode(code));
       }
       fallbackCodes.forEach(fc => {
-        if (codes.indexOf(fc) < 0) addCode(this.formatLanguageCode(fc));
+        if (!codes.includes(fc)) addCode(this.formatLanguageCode(fc));
       });
       return codes;
     }
   }
 
-  let sets = [{
-    lngs: ['ach', 'ak', 'am', 'arn', 'br', 'fil', 'gun', 'ln', 'mfe', 'mg', 'mi', 'oc', 'pt', 'pt-BR', 'tg', 'tl', 'ti', 'tr', 'uz', 'wa'],
-    nr: [1, 2],
-    fc: 1
-  }, {
-    lngs: ['af', 'an', 'ast', 'az', 'bg', 'bn', 'ca', 'da', 'de', 'dev', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fi', 'fo', 'fur', 'fy', 'gl', 'gu', 'ha', 'hi', 'hu', 'hy', 'ia', 'it', 'kk', 'kn', 'ku', 'lb', 'mai', 'ml', 'mn', 'mr', 'nah', 'nap', 'nb', 'ne', 'nl', 'nn', 'no', 'nso', 'pa', 'pap', 'pms', 'ps', 'pt-PT', 'rm', 'sco', 'se', 'si', 'so', 'son', 'sq', 'sv', 'sw', 'ta', 'te', 'tk', 'ur', 'yo'],
-    nr: [1, 2],
-    fc: 2
-  }, {
-    lngs: ['ay', 'bo', 'cgg', 'fa', 'ht', 'id', 'ja', 'jbo', 'ka', 'km', 'ko', 'ky', 'lo', 'ms', 'sah', 'su', 'th', 'tt', 'ug', 'vi', 'wo', 'zh'],
-    nr: [1],
-    fc: 3
-  }, {
-    lngs: ['be', 'bs', 'cnr', 'dz', 'hr', 'ru', 'sr', 'uk'],
-    nr: [1, 2, 5],
-    fc: 4
-  }, {
-    lngs: ['ar'],
-    nr: [0, 1, 2, 3, 11, 100],
-    fc: 5
-  }, {
-    lngs: ['cs', 'sk'],
-    nr: [1, 2, 5],
-    fc: 6
-  }, {
-    lngs: ['csb', 'pl'],
-    nr: [1, 2, 5],
-    fc: 7
-  }, {
-    lngs: ['cy'],
-    nr: [1, 2, 3, 8],
-    fc: 8
-  }, {
-    lngs: ['fr'],
-    nr: [1, 2],
-    fc: 9
-  }, {
-    lngs: ['ga'],
-    nr: [1, 2, 3, 7, 11],
-    fc: 10
-  }, {
-    lngs: ['gd'],
-    nr: [1, 2, 3, 20],
-    fc: 11
-  }, {
-    lngs: ['is'],
-    nr: [1, 2],
-    fc: 12
-  }, {
-    lngs: ['jv'],
-    nr: [0, 1],
-    fc: 13
-  }, {
-    lngs: ['kw'],
-    nr: [1, 2, 3, 4],
-    fc: 14
-  }, {
-    lngs: ['lt'],
-    nr: [1, 2, 10],
-    fc: 15
-  }, {
-    lngs: ['lv'],
-    nr: [1, 2, 0],
-    fc: 16
-  }, {
-    lngs: ['mk'],
-    nr: [1, 2],
-    fc: 17
-  }, {
-    lngs: ['mnk'],
-    nr: [0, 1, 2],
-    fc: 18
-  }, {
-    lngs: ['mt'],
-    nr: [1, 2, 11, 20],
-    fc: 19
-  }, {
-    lngs: ['or'],
-    nr: [2, 1],
-    fc: 2
-  }, {
-    lngs: ['ro'],
-    nr: [1, 2, 20],
-    fc: 20
-  }, {
-    lngs: ['sl'],
-    nr: [5, 1, 2, 3],
-    fc: 21
-  }, {
-    lngs: ['he', 'iw'],
-    nr: [1, 2, 20, 21],
-    fc: 22
-  }];
-  let _rulesPluralsTypes = {
-    1: n => Number(n > 1),
-    2: n => Number(n != 1),
-    3: n => 0,
-    4: n => Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2),
-    5: n => Number(n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5),
-    6: n => Number(n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2),
-    7: n => Number(n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2),
-    8: n => Number(n == 1 ? 0 : n == 2 ? 1 : n != 8 && n != 11 ? 2 : 3),
-    9: n => Number(n >= 2),
-    10: n => Number(n == 1 ? 0 : n == 2 ? 1 : n < 7 ? 2 : n < 11 ? 3 : 4),
-    11: n => Number(n == 1 || n == 11 ? 0 : n == 2 || n == 12 ? 1 : n > 2 && n < 20 ? 2 : 3),
-    12: n => Number(n % 10 != 1 || n % 100 == 11),
-    13: n => Number(n !== 0),
-    14: n => Number(n == 1 ? 0 : n == 2 ? 1 : n == 3 ? 2 : 3),
-    15: n => Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2),
-    16: n => Number(n % 10 == 1 && n % 100 != 11 ? 0 : n !== 0 ? 1 : 2),
-    17: n => Number(n == 1 || n % 10 == 1 && n % 100 != 11 ? 0 : 1),
-    18: n => Number(n == 0 ? 0 : n == 1 ? 1 : 2),
-    19: n => Number(n == 1 ? 0 : n == 0 || n % 100 > 1 && n % 100 < 11 ? 1 : n % 100 > 10 && n % 100 < 20 ? 2 : 3),
-    20: n => Number(n == 1 ? 0 : n == 0 || n % 100 > 0 && n % 100 < 20 ? 1 : 2),
-    21: n => Number(n % 100 == 1 ? 1 : n % 100 == 2 ? 2 : n % 100 == 3 || n % 100 == 4 ? 3 : 0),
-    22: n => Number(n == 1 ? 0 : n == 2 ? 1 : (n < 0 || n > 10) && n % 10 == 0 ? 2 : 3)
-  };
-  const nonIntlVersions = ['v1', 'v2', 'v3'];
-  const intlVersions = ['v4'];
   const suffixesOrder = {
     zero: 0,
     one: 1,
@@ -66876,129 +66794,74 @@ window.xmlToJSON = function(xml) {
     many: 4,
     other: 5
   };
-  const createRules = () => {
-    const rules = {};
-    sets.forEach(set => {
-      set.lngs.forEach(l => {
-        rules[l] = {
-          numbers: set.nr,
-          plurals: _rulesPluralsTypes[set.fc]
-        };
-      });
-    });
-    return rules;
+  const dummyRule = {
+    select: count => count === 1 ? 'one' : 'other',
+    resolvedOptions: () => ({
+      pluralCategories: ['one', 'other']
+    })
   };
   class PluralResolver {
-    constructor(languageUtils) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    constructor(languageUtils, options = {}) {
       this.languageUtils = languageUtils;
       this.options = options;
       this.logger = baseLogger.create('pluralResolver');
-      if ((!this.options.compatibilityJSON || intlVersions.includes(this.options.compatibilityJSON)) && (typeof Intl === 'undefined' || !Intl.PluralRules)) {
-        this.options.compatibilityJSON = 'v3';
-        this.logger.error('Your environment seems not to be Intl API compatible, use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling.');
-      }
-      this.rules = createRules();
       this.pluralRulesCache = {};
-    }
-    addRule(lng, obj) {
-      this.rules[lng] = obj;
     }
     clearCache() {
       this.pluralRulesCache = {};
     }
-    getRule(code) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      if (this.shouldUseIntlApi()) {
-        const cleanedCode = getCleanedCode(code === 'dev' ? 'en' : code);
-        const type = options.ordinal ? 'ordinal' : 'cardinal';
-        const cacheKey = JSON.stringify({
-          cleanedCode,
+    getRule(code, options = {}) {
+      const cleanedCode = getCleanedCode(code === 'dev' ? 'en' : code);
+      const type = options.ordinal ? 'ordinal' : 'cardinal';
+      const cacheKey = JSON.stringify({
+        cleanedCode,
+        type
+      });
+      if (cacheKey in this.pluralRulesCache) {
+        return this.pluralRulesCache[cacheKey];
+      }
+      let rule;
+      try {
+        rule = new Intl.PluralRules(cleanedCode, {
           type
         });
-        if (cacheKey in this.pluralRulesCache) {
-          return this.pluralRulesCache[cacheKey];
+      } catch (err) {
+        if (typeof Intl === 'undefined') {
+          this.logger.error('No Intl support, please use an Intl polyfill!');
+          return dummyRule;
         }
-        let rule;
-        try {
-          rule = new Intl.PluralRules(cleanedCode, {
-            type
-          });
-        } catch (err) {
-          if (!code.match(/-|_/)) return;
-          const lngPart = this.languageUtils.getLanguagePartFromCode(code);
-          rule = this.getRule(lngPart, options);
-        }
-        this.pluralRulesCache[cacheKey] = rule;
-        return rule;
+        if (!code.match(/-|_/)) return dummyRule;
+        const lngPart = this.languageUtils.getLanguagePartFromCode(code);
+        rule = this.getRule(lngPart, options);
       }
-      return this.rules[code] || this.rules[this.languageUtils.getLanguagePartFromCode(code)];
+      this.pluralRulesCache[cacheKey] = rule;
+      return rule;
     }
-    needsPlural(code) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      const rule = this.getRule(code, options);
-      if (this.shouldUseIntlApi()) {
-        return rule && rule.resolvedOptions().pluralCategories.length > 1;
-      }
-      return rule && rule.numbers.length > 1;
+    needsPlural(code, options = {}) {
+      let rule = this.getRule(code, options);
+      if (!rule) rule = this.getRule('dev', options);
+      return rule?.resolvedOptions().pluralCategories.length > 1;
     }
-    getPluralFormsOfKey(code, key) {
-      let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    getPluralFormsOfKey(code, key, options = {}) {
       return this.getSuffixes(code, options).map(suffix => `${key}${suffix}`);
     }
-    getSuffixes(code) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      const rule = this.getRule(code, options);
-      if (!rule) {
-        return [];
-      }
-      if (this.shouldUseIntlApi()) {
-        return rule.resolvedOptions().pluralCategories.sort((pluralCategory1, pluralCategory2) => suffixesOrder[pluralCategory1] - suffixesOrder[pluralCategory2]).map(pluralCategory => `${this.options.prepend}${options.ordinal ? `ordinal${this.options.prepend}` : ''}${pluralCategory}`);
-      }
-      return rule.numbers.map(number => this.getSuffix(code, number, options));
+    getSuffixes(code, options = {}) {
+      let rule = this.getRule(code, options);
+      if (!rule) rule = this.getRule('dev', options);
+      if (!rule) return [];
+      return rule.resolvedOptions().pluralCategories.sort((pluralCategory1, pluralCategory2) => suffixesOrder[pluralCategory1] - suffixesOrder[pluralCategory2]).map(pluralCategory => `${this.options.prepend}${options.ordinal ? `ordinal${this.options.prepend}` : ''}${pluralCategory}`);
     }
-    getSuffix(code, count) {
-      let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    getSuffix(code, count, options = {}) {
       const rule = this.getRule(code, options);
       if (rule) {
-        if (this.shouldUseIntlApi()) {
-          return `${this.options.prepend}${options.ordinal ? `ordinal${this.options.prepend}` : ''}${rule.select(count)}`;
-        }
-        return this.getSuffixRetroCompatible(rule, count);
+        return `${this.options.prepend}${options.ordinal ? `ordinal${this.options.prepend}` : ''}${rule.select(count)}`;
       }
       this.logger.warn(`no plural rule found for: ${code}`);
-      return '';
-    }
-    getSuffixRetroCompatible(rule, count) {
-      const idx = rule.noAbs ? rule.plurals(count) : rule.plurals(Math.abs(count));
-      let suffix = rule.numbers[idx];
-      if (this.options.simplifyPluralSuffix && rule.numbers.length === 2 && rule.numbers[0] === 1) {
-        if (suffix === 2) {
-          suffix = 'plural';
-        } else if (suffix === 1) {
-          suffix = '';
-        }
-      }
-      const returnSuffix = () => this.options.prepend && suffix.toString() ? this.options.prepend + suffix.toString() : suffix.toString();
-      if (this.options.compatibilityJSON === 'v1') {
-        if (suffix === 1) return '';
-        if (typeof suffix === 'number') return `_plural_${suffix.toString()}`;
-        return returnSuffix();
-      } else if (this.options.compatibilityJSON === 'v2') {
-        return returnSuffix();
-      } else if (this.options.simplifyPluralSuffix && rule.numbers.length === 2 && rule.numbers[0] === 1) {
-        return returnSuffix();
-      }
-      return this.options.prepend && idx.toString() ? this.options.prepend + idx.toString() : idx.toString();
-    }
-    shouldUseIntlApi() {
-      return !nonIntlVersions.includes(this.options.compatibilityJSON);
+      return this.getSuffix('dev', count, options);
     }
   }
 
-  const deepFindWithDefaults = function (data, defaultData, key) {
-    let keySeparator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '.';
-    let ignoreJSONStructure = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+  const deepFindWithDefaults = (data, defaultData, key, keySeparator = '.', ignoreJSONStructure = true) => {
     let path = getPathWithDefaults(data, defaultData, key);
     if (!path && ignoreJSONStructure && isString(key)) {
       path = deepFind(data, key, keySeparator);
@@ -67008,15 +66871,13 @@ window.xmlToJSON = function(xml) {
   };
   const regexSafe = val => val.replace(/\$/g, '$$$$');
   class Interpolator {
-    constructor() {
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    constructor(options = {}) {
       this.logger = baseLogger.create('interpolator');
       this.options = options;
-      this.format = options.interpolation && options.interpolation.format || (value => value);
+      this.format = options?.interpolation?.format || (value => value);
       this.init(options);
     }
-    init() {
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    init(options = {}) {
       if (!options.interpolation) options.interpolation = {
         escapeValue: true
       };
@@ -67045,8 +66906,8 @@ window.xmlToJSON = function(xml) {
       this.prefix = prefix ? regexEscape(prefix) : prefixEscaped || '{{';
       this.suffix = suffix ? regexEscape(suffix) : suffixEscaped || '}}';
       this.formatSeparator = formatSeparator || ',';
-      this.unescapePrefix = unescapeSuffix ? '' : unescapePrefix || '-';
-      this.unescapeSuffix = this.unescapePrefix ? '' : unescapeSuffix || '';
+      this.unescapePrefix = unescapeSuffix ? '' : unescapePrefix ? regexEscape(unescapePrefix) : '-';
+      this.unescapeSuffix = this.unescapePrefix ? '' : unescapeSuffix ? regexEscape(unescapeSuffix) : '';
       this.nestingPrefix = nestingPrefix ? regexEscape(nestingPrefix) : nestingPrefixEscaped || regexEscape('$t(');
       this.nestingSuffix = nestingSuffix ? regexEscape(nestingSuffix) : nestingSuffixEscaped || regexEscape(')');
       this.nestingOptionsSeparator = nestingOptionsSeparator || ',';
@@ -67059,7 +66920,7 @@ window.xmlToJSON = function(xml) {
     }
     resetRegExp() {
       const getOrResetRegExp = (existingRegExp, pattern) => {
-        if (existingRegExp && existingRegExp.source === pattern) {
+        if (existingRegExp?.source === pattern) {
           existingRegExp.lastIndex = 0;
           return existingRegExp;
         }
@@ -67067,7 +66928,7 @@ window.xmlToJSON = function(xml) {
       };
       this.regexp = getOrResetRegExp(this.regexp, `${this.prefix}(.+?)${this.suffix}`);
       this.regexpUnescape = getOrResetRegExp(this.regexpUnescape, `${this.prefix}${this.unescapePrefix}(.+?)${this.unescapeSuffix}${this.suffix}`);
-      this.nestingRegexp = getOrResetRegExp(this.nestingRegexp, `${this.nestingPrefix}(.+?)${this.nestingSuffix}`);
+      this.nestingRegexp = getOrResetRegExp(this.nestingRegexp, `${this.nestingPrefix}((?:[^()"']+|"[^"]*"|'[^']*'|\\((?:[^()]|"[^"]*"|'[^']*')*\\))*?)${this.nestingSuffix}`);
     }
     interpolate(str, data, lng, options) {
       let match;
@@ -67075,7 +66936,7 @@ window.xmlToJSON = function(xml) {
       let replaces;
       const defaultData = this.options && this.options.interpolation && this.options.interpolation.defaultVariables || {};
       const handleFormat = key => {
-        if (key.indexOf(this.formatSeparator) < 0) {
+        if (!key.includes(this.formatSeparator)) {
           const path = deepFindWithDefaults(data, defaultData, key, this.options.keySeparator, this.options.ignoreJSONStructure);
           return this.alwaysFormat ? this.format(path, undefined, lng, {
             ...options,
@@ -67093,14 +66954,17 @@ window.xmlToJSON = function(xml) {
         });
       };
       this.resetRegExp();
-      const missingInterpolationHandler = options && options.missingInterpolationHandler || this.options.missingInterpolationHandler;
-      const skipOnVariables = options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables;
+      if (!this.escapeValue && typeof str === 'string' && /\$t\([^)]*\{[^}]*\{\{/.test(str)) {
+        this.logger.warn('nesting options string contains interpolated variables with escapeValue: false — ' + 'if any of those values are attacker-controlled they can inject additional ' + 'nesting options (e.g. redirect lng/ns). Sanitise untrusted input before passing ' + 'it to t(), or keep escapeValue: true.');
+      }
+      const missingInterpolationHandler = options?.missingInterpolationHandler || this.options.missingInterpolationHandler;
+      const skipOnVariables = options?.interpolation?.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables;
       const todos = [{
         regex: this.regexpUnescape,
-        safeValue: val => regexSafe(val)
+        safeValue: val => val
       }, {
         regex: this.regexp,
-        safeValue: val => this.escapeValue ? regexSafe(this.escape(val)) : regexSafe(val)
+        safeValue: val => this.escapeValue ? this.escape(val) : val
       }];
       todos.forEach(todo => {
         replaces = 0;
@@ -67124,9 +66988,9 @@ window.xmlToJSON = function(xml) {
             value = makeString(value);
           }
           const safeValue = todo.safeValue(value);
-          str = str.replace(match[0], safeValue);
+          str = str.replace(match[0], regexSafe(safeValue));
           if (skipOnVariables) {
-            todo.regex.lastIndex += value.length;
+            todo.regex.lastIndex += safeValue.length;
             todo.regex.lastIndex -= match[0].length;
           } else {
             todo.regex.lastIndex = 0;
@@ -67139,21 +67003,20 @@ window.xmlToJSON = function(xml) {
       });
       return str;
     }
-    nest(str, fc) {
-      let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    nest(str, fc, options = {}) {
       let match;
       let value;
       let clonedOptions;
       const handleHasOptions = (key, inheritedOptions) => {
         const sep = this.nestingOptionsSeparator;
-        if (key.indexOf(sep) < 0) return key;
-        const c = key.split(new RegExp(`${sep}[ ]*{`));
+        if (!key.includes(sep)) return key;
+        const c = key.split(new RegExp(`${regexEscape(sep)}[ ]*{`));
         let optionsString = `{${c[1]}`;
         key = c[0];
         optionsString = this.interpolate(optionsString, clonedOptions);
         const matchedSingleQuotes = optionsString.match(/'/g);
         const matchedDoubleQuotes = optionsString.match(/"/g);
-        if (matchedSingleQuotes && matchedSingleQuotes.length % 2 === 0 && !matchedDoubleQuotes || matchedDoubleQuotes.length % 2 !== 0) {
+        if ((matchedSingleQuotes?.length ?? 0) % 2 === 0 && !matchedDoubleQuotes || (matchedDoubleQuotes?.length ?? 0) % 2 !== 0) {
           optionsString = optionsString.replace(/'/g, '"');
         }
         try {
@@ -67166,7 +67029,7 @@ window.xmlToJSON = function(xml) {
           this.logger.warn(`failed parsing options string in nesting for key ${key}`, e);
           return `${key}${sep}${optionsString}`;
         }
-        if (clonedOptions.defaultValue && clonedOptions.defaultValue.indexOf(this.prefix) > -1) delete clonedOptions.defaultValue;
+        if (clonedOptions.defaultValue && clonedOptions.defaultValue.includes(this.prefix)) delete clonedOptions.defaultValue;
         return key;
       };
       while (match = this.nestingRegexp.exec(str)) {
@@ -67177,12 +67040,10 @@ window.xmlToJSON = function(xml) {
         clonedOptions = clonedOptions.replace && !isString(clonedOptions.replace) ? clonedOptions.replace : clonedOptions;
         clonedOptions.applyPostProcessor = false;
         delete clonedOptions.defaultValue;
-        let doReduce = false;
-        if (match[0].indexOf(this.formatSeparator) !== -1 && !/{.*}/.test(match[1])) {
-          const r = match[1].split(this.formatSeparator).map(elem => elem.trim());
-          match[1] = r.shift();
-          formatters = r;
-          doReduce = true;
+        const keyEndIndex = /{.*}/s.test(match[1]) ? match[1].lastIndexOf('}') + 1 : match[1].indexOf(this.formatSeparator);
+        if (keyEndIndex !== -1) {
+          formatters = match[1].slice(keyEndIndex).split(this.formatSeparator).map(elem => elem.trim()).filter(Boolean);
+          match[1] = match[1].slice(0, keyEndIndex);
         }
         value = fc(handleHasOptions.call(this, match[1].trim(), clonedOptions), clonedOptions);
         if (value && match[0] === str && !isString(value)) return value;
@@ -67191,7 +67052,7 @@ window.xmlToJSON = function(xml) {
           this.logger.warn(`missed to resolve ${match[1]} for nesting ${str}`);
           value = '';
         }
-        if (doReduce) {
+        if (formatters.length) {
           value = formatters.reduce((v, f) => this.format(v, f, options.lng, {
             ...options,
             interpolationkey: match[1].trim()
@@ -67207,13 +67068,13 @@ window.xmlToJSON = function(xml) {
   const parseFormatStr = formatStr => {
     let formatName = formatStr.toLowerCase().trim();
     const formatOptions = {};
-    if (formatStr.indexOf('(') > -1) {
+    if (formatStr.includes('(')) {
       const p = formatStr.split('(');
       formatName = p[0].toLowerCase().trim();
-      const optStr = p[1].substring(0, p[1].length - 1);
-      if (formatName === 'currency' && optStr.indexOf(':') < 0) {
+      const optStr = p[1].slice(0, -1);
+      if (formatName === 'currency' && !optStr.includes(':')) {
         if (!formatOptions.currency) formatOptions.currency = optStr.trim();
-      } else if (formatName === 'relativetime' && optStr.indexOf(':') < 0) {
+      } else if (formatName === 'relativetime' && !optStr.includes(':')) {
         if (!formatOptions.range) formatOptions.range = optStr.trim();
       } else {
         const opts = optStr.split(';');
@@ -67237,68 +67098,68 @@ window.xmlToJSON = function(xml) {
   };
   const createCachedFormatter = fn => {
     const cache = {};
-    return (val, lng, options) => {
-      let optForCache = options;
-      if (options && options.interpolationkey && options.formatParams && options.formatParams[options.interpolationkey] && options[options.interpolationkey]) {
+    return (v, l, o) => {
+      let optForCache = o;
+      if (o && o.interpolationkey && o.formatParams && o.formatParams[o.interpolationkey] && o[o.interpolationkey]) {
         optForCache = {
           ...optForCache,
-          [options.interpolationkey]: undefined
+          [o.interpolationkey]: undefined
         };
       }
-      const key = lng + JSON.stringify(optForCache);
-      let formatter = cache[key];
-      if (!formatter) {
-        formatter = fn(getCleanedCode(lng), options);
-        cache[key] = formatter;
+      const key = l + JSON.stringify(optForCache);
+      let frm = cache[key];
+      if (!frm) {
+        frm = fn(getCleanedCode(l), o);
+        cache[key] = frm;
       }
-      return formatter(val);
+      return frm(v);
     };
   };
+  const createNonCachedFormatter = fn => (v, l, o) => fn(getCleanedCode(l), o)(v);
   class Formatter {
-    constructor() {
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    constructor(options = {}) {
       this.logger = baseLogger.create('formatter');
       this.options = options;
+      this.init(options);
+    }
+    init(services, options = {
+      interpolation: {}
+    }) {
+      this.formatSeparator = options.interpolation.formatSeparator || ',';
+      const cf = options.cacheInBuiltFormats ? createCachedFormatter : createNonCachedFormatter;
       this.formats = {
-        number: createCachedFormatter((lng, opt) => {
+        number: cf((lng, opt) => {
           const formatter = new Intl.NumberFormat(lng, {
             ...opt
           });
           return val => formatter.format(val);
         }),
-        currency: createCachedFormatter((lng, opt) => {
+        currency: cf((lng, opt) => {
           const formatter = new Intl.NumberFormat(lng, {
             ...opt,
             style: 'currency'
           });
           return val => formatter.format(val);
         }),
-        datetime: createCachedFormatter((lng, opt) => {
+        datetime: cf((lng, opt) => {
           const formatter = new Intl.DateTimeFormat(lng, {
             ...opt
           });
           return val => formatter.format(val);
         }),
-        relativetime: createCachedFormatter((lng, opt) => {
+        relativetime: cf((lng, opt) => {
           const formatter = new Intl.RelativeTimeFormat(lng, {
             ...opt
           });
           return val => formatter.format(val, opt.range || 'day');
         }),
-        list: createCachedFormatter((lng, opt) => {
+        list: cf((lng, opt) => {
           const formatter = new Intl.ListFormat(lng, {
             ...opt
           });
           return val => formatter.format(val);
         })
       };
-      this.init(options);
-    }
-    init(services) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-        interpolation: {}
-      };
-      this.formatSeparator = options.interpolation.formatSeparator || ',';
     }
     add(name, fc) {
       this.formats[name.toLowerCase().trim()] = fc;
@@ -67306,12 +67167,17 @@ window.xmlToJSON = function(xml) {
     addCached(name, fc) {
       this.formats[name.toLowerCase().trim()] = createCachedFormatter(fc);
     }
-    format(value, format, lng) {
-      let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-      const formats = format.split(this.formatSeparator);
-      if (formats.length > 1 && formats[0].indexOf('(') > 1 && formats[0].indexOf(')') < 0 && formats.find(f => f.indexOf(')') > -1)) {
-        const lastIndex = formats.findIndex(f => f.indexOf(')') > -1);
-        formats[0] = [formats[0], ...formats.splice(1, lastIndex)].join(this.formatSeparator);
+    format(value, format, lng, options = {}) {
+      if (!format) return value;
+      if (value == null) return value;
+      const rawFormats = format.split(this.formatSeparator);
+      const formats = [];
+      for (let i = 0; i < rawFormats.length; i++) {
+        let f = rawFormats[i];
+        while (f.indexOf('(') > -1 && !f.includes(')') && i + 1 < rawFormats.length) {
+          f = `${f}${this.formatSeparator}${rawFormats[++i]}`;
+        }
+        formats.push(f);
       }
       const result = formats.reduce((mem, f) => {
         const {
@@ -67321,7 +67187,7 @@ window.xmlToJSON = function(xml) {
         if (this.formats[formatName]) {
           let formatted = mem;
           try {
-            const valOptions = options && options.formatParams && options.formatParams[options.interpolationkey] || {};
+            const valOptions = options?.formatParams?.[options.interpolationkey] || {};
             const l = valOptions.locale || valOptions.lng || options.locale || options.lng || lng;
             formatted = this.formats[formatName](mem, l, {
               ...formatOptions,
@@ -67348,8 +67214,7 @@ window.xmlToJSON = function(xml) {
     }
   };
   class Connector extends EventEmitter {
-    constructor(backend, store, services) {
-      let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+    constructor(backend, store, services, options = {}) {
       super();
       this.backend = backend;
       this.store = store;
@@ -67364,9 +67229,7 @@ window.xmlToJSON = function(xml) {
       this.retryTimeout = options.retryTimeout >= 1 ? options.retryTimeout : 350;
       this.state = {};
       this.queue = [];
-      if (this.backend && this.backend.init) {
-        this.backend.init(services, options.backend, options);
-      }
+      this.backend?.init?.(services, options.backend, options);
     }
     queueLoad(languages, namespaces, options, callback) {
       const toLoad = {};
@@ -67445,10 +67308,7 @@ window.xmlToJSON = function(xml) {
       this.emit('loaded', loaded);
       this.queue = this.queue.filter(q => !q.done);
     }
-    read(lng, ns, fcName) {
-      let tried = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-      let wait = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : this.retryTimeout;
-      let callback = arguments.length > 5 ? arguments[5] : undefined;
+    read(lng, ns, fcName, tried = 0, wait = this.retryTimeout, callback) {
       if (!lng.length) return callback(null, {});
       if (this.readingCalls >= this.maxParallelReads) {
         this.waitingReads.push({
@@ -67470,7 +67330,7 @@ window.xmlToJSON = function(xml) {
         }
         if (err && data && tried < this.maxRetries) {
           setTimeout(() => {
-            this.read.call(this, lng, ns, fcName, tried + 1, wait * 2, callback);
+            this.read(lng, ns, fcName, tried + 1, wait * 2, callback);
           }, wait);
           return;
         }
@@ -67492,9 +67352,7 @@ window.xmlToJSON = function(xml) {
       }
       return fc(lng, ns, resolver);
     }
-    prepareLoading(languages, namespaces) {
-      let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-      let callback = arguments.length > 3 ? arguments[3] : undefined;
+    prepareLoading(languages, namespaces, options = {}, callback) {
       if (!this.backend) {
         this.logger.warn('No backend was added via i18next.use. Will not load resources.');
         return callback && callback();
@@ -67518,8 +67376,7 @@ window.xmlToJSON = function(xml) {
         reload: true
       }, callback);
     }
-    loadOne(name) {
-      let prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+    loadOne(name, prefix = '') {
       const s = name.split('|');
       const lng = s[0];
       const ns = s[1];
@@ -67529,15 +67386,13 @@ window.xmlToJSON = function(xml) {
         this.loaded(name, err, data);
       });
     }
-    saveMissing(languages, namespace, key, fallbackValue, isUpdate) {
-      let options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {};
-      let clb = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : () => {};
-      if (this.services.utils && this.services.utils.hasLoadedNamespace && !this.services.utils.hasLoadedNamespace(namespace)) {
+    saveMissing(languages, namespace, key, fallbackValue, isUpdate, options = {}, clb = () => {}) {
+      if (this.services?.utils?.hasLoadedNamespace && !this.services?.utils?.hasLoadedNamespace(namespace)) {
         this.logger.warn(`did not save key "${key}" as the namespace "${namespace}" was not yet loaded`, 'This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
         return;
       }
       if (key === undefined || key === null || key === '') return;
-      if (this.backend && this.backend.create) {
+      if (this.backend?.create) {
         const opts = {
           ...options,
           isUpdate
@@ -67570,7 +67425,7 @@ window.xmlToJSON = function(xml) {
 
   const get = () => ({
     debug: false,
-    initImmediate: true,
+    initAsync: true,
     ns: ['translation'],
     defaultNS: ['translation'],
     fallbackLng: ['dev'],
@@ -67579,11 +67434,11 @@ window.xmlToJSON = function(xml) {
     nonExplicitSupportedLngs: false,
     load: 'all',
     preload: false,
-    simplifyPluralSuffix: true,
     keySeparator: '.',
     nsSeparator: ':',
     pluralSeparator: '_',
     contextSeparator: '_',
+    enableSelector: false,
     partialBundledLanguages: false,
     saveMissing: false,
     updateMissing: false,
@@ -67616,7 +67471,6 @@ window.xmlToJSON = function(xml) {
     },
     interpolation: {
       escapeValue: true,
-      format: value => value,
       prefix: '{{',
       suffix: '}}',
       formatSeparator: ',',
@@ -67626,13 +67480,14 @@ window.xmlToJSON = function(xml) {
       nestingOptionsSeparator: ',',
       maxReplaces: 1000,
       skipOnVariables: true
-    }
+    },
+    cacheInBuiltFormats: true
   });
   const transformOptions = options => {
     if (isString(options.ns)) options.ns = [options.ns];
     if (isString(options.fallbackLng)) options.fallbackLng = [options.fallbackLng];
     if (isString(options.fallbackNS)) options.fallbackNS = [options.fallbackNS];
-    if (options.supportedLngs && options.supportedLngs.indexOf('cimode') < 0) {
+    if (options.supportedLngs && !options.supportedLngs.includes('cimode')) {
       options.supportedLngs = options.supportedLngs.concat(['cimode']);
     }
     return options;
@@ -67648,9 +67503,7 @@ window.xmlToJSON = function(xml) {
     });
   };
   class I18n extends EventEmitter {
-    constructor() {
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      let callback = arguments.length > 1 ? arguments[1] : undefined;
+    constructor(options = {}, callback) {
       super();
       this.options = transformOptions(options);
       this.services = {};
@@ -67660,7 +67513,7 @@ window.xmlToJSON = function(xml) {
       };
       bindMemberFunctions(this);
       if (callback && !this.isInitialized && !options.isClone) {
-        if (!this.options.initImmediate) {
+        if (!this.options.initAsync) {
           this.init(options, callback);
           return this;
         }
@@ -67669,19 +67522,16 @@ window.xmlToJSON = function(xml) {
         }, 0);
       }
     }
-    init() {
-      var _this = this;
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      let callback = arguments.length > 1 ? arguments[1] : undefined;
+    init(options = {}, callback) {
       this.isInitializing = true;
       if (typeof options === 'function') {
         callback = options;
         options = {};
       }
-      if (!options.defaultNS && options.defaultNS !== false && options.ns) {
+      if (options.defaultNS == null && options.ns) {
         if (isString(options.ns)) {
           options.defaultNS = options.ns;
-        } else if (options.ns.indexOf('translation') < 0) {
+        } else if (!options.ns.includes('translation')) {
           options.defaultNS = options.ns[0];
         }
       }
@@ -67691,17 +67541,18 @@ window.xmlToJSON = function(xml) {
         ...this.options,
         ...transformOptions(options)
       };
-      if (this.options.compatibilityAPI !== 'v1') {
-        this.options.interpolation = {
-          ...defOpts.interpolation,
-          ...this.options.interpolation
-        };
-      }
+      this.options.interpolation = {
+        ...defOpts.interpolation,
+        ...this.options.interpolation
+      };
       if (options.keySeparator !== undefined) {
         this.options.userDefinedKeySeparator = options.keySeparator;
       }
       if (options.nsSeparator !== undefined) {
         this.options.userDefinedNsSeparator = options.nsSeparator;
+      }
+      if (typeof this.options.overloadTranslationOptionHandler !== 'function') {
+        this.options.overloadTranslationOptionHandler = defOpts.overloadTranslationOptionHandler;
       }
       const createClassOnDemand = ClassOrObject => {
         if (!ClassOrObject) return null;
@@ -67717,7 +67568,7 @@ window.xmlToJSON = function(xml) {
         let formatter;
         if (this.modules.formatter) {
           formatter = this.modules.formatter;
-        } else if (typeof Intl !== 'undefined') {
+        } else {
           formatter = Formatter;
         }
         const lu = new LanguageUtil(this.options);
@@ -67727,13 +67578,11 @@ window.xmlToJSON = function(xml) {
         s.resourceStore = this.store;
         s.languageUtils = lu;
         s.pluralResolver = new PluralResolver(lu, {
-          prepend: this.options.pluralSeparator,
-          compatibilityJSON: this.options.compatibilityJSON,
-          simplifyPluralSuffix: this.options.simplifyPluralSuffix
+          prepend: this.options.pluralSeparator
         });
-        if (formatter && (!this.options.interpolation.format || this.options.interpolation.format === defOpts.interpolation.format)) {
+        if (formatter) {
           s.formatter = createClassOnDemand(formatter);
-          s.formatter.init(s, this.options);
+          if (s.formatter.init) s.formatter.init(s, this.options);
           this.options.interpolation.format = s.formatter.format.bind(s.formatter);
         }
         s.interpolator = new Interpolator(this.options);
@@ -67741,11 +67590,8 @@ window.xmlToJSON = function(xml) {
           hasLoadedNamespace: this.hasLoadedNamespace.bind(this)
         };
         s.backendConnector = new Connector(createClassOnDemand(this.modules.backend), s.resourceStore, s, this.options);
-        s.backendConnector.on('*', function (event) {
-          for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            args[_key - 1] = arguments[_key];
-          }
-          _this.emit(event, ...args);
+        s.backendConnector.on('*', (event, ...args) => {
+          this.emit(event, ...args);
         });
         if (this.modules.languageDetector) {
           s.languageDetector = createClassOnDemand(this.modules.languageDetector);
@@ -67756,11 +67602,8 @@ window.xmlToJSON = function(xml) {
           if (s.i18nFormat.init) s.i18nFormat.init(this);
         }
         this.translator = new Translator(this.services, this.options);
-        this.translator.on('*', function (event) {
-          for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-            args[_key2 - 1] = arguments[_key2];
-          }
-          _this.emit(event, ...args);
+        this.translator.on('*', (event, ...args) => {
+          this.emit(event, ...args);
         });
         this.modules.external.forEach(m => {
           if (m.init) m.init(this);
@@ -67777,15 +67620,13 @@ window.xmlToJSON = function(xml) {
       }
       const storeApi = ['getResource', 'hasResourceBundle', 'getResourceBundle', 'getDataByLanguage'];
       storeApi.forEach(fcName => {
-        this[fcName] = function () {
-          return _this.store[fcName](...arguments);
-        };
+        this[fcName] = (...args) => this.store[fcName](...args);
       });
       const storeApiChained = ['addResource', 'addResources', 'addResourceBundle', 'removeResourceBundle'];
       storeApiChained.forEach(fcName => {
-        this[fcName] = function () {
-          _this.store[fcName](...arguments);
-          return _this;
+        this[fcName] = (...args) => {
+          this.store[fcName](...args);
+          return this;
         };
       });
       const deferred = defer();
@@ -67799,23 +67640,22 @@ window.xmlToJSON = function(xml) {
           deferred.resolve(t);
           callback(err, t);
         };
-        if (this.languages && this.options.compatibilityAPI !== 'v1' && !this.isInitialized) return finish(null, this.t.bind(this));
+        if ((this.languages || this.isLanguageChangingTo) && !this.isInitialized) return finish(null, this.t.bind(this));
         this.changeLanguage(this.options.lng, finish);
       };
-      if (this.options.resources || !this.options.initImmediate) {
+      if (this.options.resources || !this.options.initAsync) {
         load();
       } else {
         setTimeout(load, 0);
       }
       return deferred;
     }
-    loadResources(language) {
-      let callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+    loadResources(language, callback = noop) {
       let usedCallback = callback;
       const usedLng = isString(language) ? language : this.language;
       if (typeof language === 'function') usedCallback = language;
       if (!this.options.resources || this.options.partialBundledLanguages) {
-        if (usedLng && usedLng.toLowerCase() === 'cimode' && (!this.options.preload || this.options.preload.length === 0)) return usedCallback();
+        if (usedLng?.toLowerCase() === 'cimode' && (!this.options.preload || this.options.preload.length === 0)) return usedCallback();
         const toLoad = [];
         const append = lng => {
           if (!lng) return;
@@ -67823,7 +67663,7 @@ window.xmlToJSON = function(xml) {
           const lngs = this.services.languageUtils.toResolveHierarchy(lng);
           lngs.forEach(l => {
             if (l === 'cimode') return;
-            if (toLoad.indexOf(l) < 0) toLoad.push(l);
+            if (!toLoad.includes(l)) toLoad.push(l);
           });
         };
         if (!usedLng) {
@@ -67832,9 +67672,7 @@ window.xmlToJSON = function(xml) {
         } else {
           append(usedLng);
         }
-        if (this.options.preload) {
-          this.options.preload.forEach(l => append(l));
-        }
+        this.options.preload?.forEach?.(l => append(l));
         this.services.backendConnector.load(toLoad, this.options.ns, e => {
           if (!e && !this.resolvedLanguage && this.language) this.setResolvedLanguage(this.language);
           usedCallback(e);
@@ -67890,18 +67728,21 @@ window.xmlToJSON = function(xml) {
     }
     setResolvedLanguage(l) {
       if (!l || !this.languages) return;
-      if (['cimode', 'dev'].indexOf(l) > -1) return;
+      if (['cimode', 'dev'].includes(l)) return;
       for (let li = 0; li < this.languages.length; li++) {
         const lngInLngs = this.languages[li];
-        if (['cimode', 'dev'].indexOf(lngInLngs) > -1) continue;
+        if (['cimode', 'dev'].includes(lngInLngs)) continue;
         if (this.store.hasLanguageSomeTranslations(lngInLngs)) {
           this.resolvedLanguage = lngInLngs;
           break;
         }
       }
+      if (!this.resolvedLanguage && !this.languages.includes(l) && this.store.hasLanguageSomeTranslations(l)) {
+        this.resolvedLanguage = l;
+        this.languages.unshift(l);
+      }
     }
     changeLanguage(lng, callback) {
-      var _this2 = this;
       this.isLanguageChangingTo = lng;
       const deferred = defer();
       this.emit('languageChanging', lng);
@@ -67913,30 +67754,29 @@ window.xmlToJSON = function(xml) {
       };
       const done = (err, l) => {
         if (l) {
-          setLngProps(l);
-          this.translator.changeLanguage(l);
-          this.isLanguageChangingTo = undefined;
-          this.emit('languageChanged', l);
-          this.logger.log('languageChanged', l);
+          if (this.isLanguageChangingTo === lng) {
+            setLngProps(l);
+            this.translator.changeLanguage(l);
+            this.isLanguageChangingTo = undefined;
+            this.emit('languageChanged', l);
+            this.logger.log('languageChanged', l);
+          }
         } else {
           this.isLanguageChangingTo = undefined;
         }
-        deferred.resolve(function () {
-          return _this2.t(...arguments);
-        });
-        if (callback) callback(err, function () {
-          return _this2.t(...arguments);
-        });
+        deferred.resolve((...args) => this.t(...args));
+        if (callback) callback(err, (...args) => this.t(...args));
       };
       const setLng = lngs => {
         if (!lng && !lngs && this.services.languageDetector) lngs = [];
-        const l = isString(lngs) ? lngs : this.services.languageUtils.getBestMatchFromCodes(lngs);
+        const fl = isString(lngs) ? lngs : lngs && lngs[0];
+        const l = this.store.hasLanguageSomeTranslations(fl) ? fl : this.services.languageUtils.getBestMatchFromCodes(isString(lngs) ? [lngs] : lngs);
         if (l) {
           if (!this.language) {
             setLngProps(l);
           }
           if (!this.translator.language) this.translator.changeLanguage(l);
-          if (this.services.languageDetector && this.services.languageDetector.cacheUserLanguage) this.services.languageDetector.cacheUserLanguage(l);
+          this.services.languageDetector?.cacheUserLanguage?.(l);
         }
         this.loadResources(l, err => {
           done(err, l);
@@ -67955,32 +67795,40 @@ window.xmlToJSON = function(xml) {
       }
       return deferred;
     }
-    getFixedT(lng, ns, keyPrefix) {
-      var _this3 = this;
-      const fixedT = function (key, opts) {
-        let options;
+    getFixedT(lng, ns, keyPrefix, fixedOpts) {
+      const scopeNs = fixedOpts?.scopeNs;
+      const fixedT = (key, opts, ...rest) => {
+        let o;
         if (typeof opts !== 'object') {
-          for (var _len3 = arguments.length, rest = new Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
-            rest[_key3 - 2] = arguments[_key3];
-          }
-          options = _this3.options.overloadTranslationOptionHandler([key, opts].concat(rest));
+          o = this.options.overloadTranslationOptionHandler([key, opts].concat(rest));
         } else {
-          options = {
+          o = {
             ...opts
           };
         }
-        options.lng = options.lng || fixedT.lng;
-        options.lngs = options.lngs || fixedT.lngs;
-        options.ns = options.ns || fixedT.ns;
-        if (options.keyPrefix !== '') options.keyPrefix = options.keyPrefix || keyPrefix || fixedT.keyPrefix;
-        const keySeparator = _this3.options.keySeparator || '.';
+        o.lng = o.lng || fixedT.lng;
+        o.lngs = o.lngs || fixedT.lngs;
+        const explicitCallNs = o.ns !== undefined && o.ns !== null;
+        o.ns = o.ns || fixedT.ns;
+        if (o.keyPrefix !== '') o.keyPrefix = o.keyPrefix || keyPrefix || fixedT.keyPrefix;
+        const selectorOpts = {
+          ...this.options,
+          ...o
+        };
+        if (Array.isArray(scopeNs) && !explicitCallNs) selectorOpts.ns = scopeNs;
+        if (typeof o.keyPrefix === 'function') o.keyPrefix = keysFromSelector(o.keyPrefix, selectorOpts);
+        const keySeparator = this.options.keySeparator || '.';
         let resultKey;
-        if (options.keyPrefix && Array.isArray(key)) {
-          resultKey = key.map(k => `${options.keyPrefix}${keySeparator}${k}`);
+        if (o.keyPrefix && Array.isArray(key)) {
+          resultKey = key.map(k => {
+            if (typeof k === 'function') k = keysFromSelector(k, selectorOpts);
+            return `${o.keyPrefix}${keySeparator}${k}`;
+          });
         } else {
-          resultKey = options.keyPrefix ? `${options.keyPrefix}${keySeparator}${key}` : key;
+          if (typeof key === 'function') key = keysFromSelector(key, selectorOpts);
+          resultKey = o.keyPrefix ? `${o.keyPrefix}${keySeparator}${key}` : key;
         }
-        return _this3.t(resultKey, options);
+        return this.t(resultKey, o);
       };
       if (isString(lng)) {
         fixedT.lng = lng;
@@ -67991,17 +67839,16 @@ window.xmlToJSON = function(xml) {
       fixedT.keyPrefix = keyPrefix;
       return fixedT;
     }
-    t() {
-      return this.translator && this.translator.translate(...arguments);
+    t(...args) {
+      return this.translator?.translate(...args);
     }
-    exists() {
-      return this.translator && this.translator.exists(...arguments);
+    exists(...args) {
+      return this.translator?.exists(...args);
     }
     setDefaultNamespace(ns) {
       this.options.defaultNS = ns;
     }
-    hasLoadedNamespace(ns) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    hasLoadedNamespace(ns, options = {}) {
       if (!this.isInitialized) {
         this.logger.warn('hasLoadedNamespace: i18next was not initialized', this.languages);
         return false;
@@ -68035,7 +67882,7 @@ window.xmlToJSON = function(xml) {
       }
       if (isString(ns)) ns = [ns];
       ns.forEach(n => {
-        if (this.options.ns.indexOf(n) < 0) this.options.ns.push(n);
+        if (!this.options.ns.includes(n)) this.options.ns.push(n);
       });
       this.loadResources(err => {
         deferred.resolve();
@@ -68047,7 +67894,7 @@ window.xmlToJSON = function(xml) {
       const deferred = defer();
       if (isString(lngs)) lngs = [lngs];
       const preloaded = this.options.preload || [];
-      const newLngs = lngs.filter(lng => preloaded.indexOf(lng) < 0 && this.services.languageUtils.isSupportedCode(lng));
+      const newLngs = lngs.filter(lng => !preloaded.includes(lng) && this.services.languageUtils.isSupportedCode(lng));
       if (!newLngs.length) {
         if (callback) callback();
         return Promise.resolve();
@@ -68060,20 +67907,26 @@ window.xmlToJSON = function(xml) {
       return deferred;
     }
     dir(lng) {
-      if (!lng) lng = this.resolvedLanguage || (this.languages && this.languages.length > 0 ? this.languages[0] : this.language);
+      if (!lng) lng = this.resolvedLanguage || (this.languages?.length > 0 ? this.languages[0] : this.language);
       if (!lng) return 'rtl';
+      try {
+        const l = new Intl.Locale(lng);
+        if (l && l.getTextInfo) {
+          const ti = l.getTextInfo();
+          if (ti && ti.direction) return ti.direction;
+        }
+      } catch (e) {}
       const rtlLngs = ['ar', 'shu', 'sqr', 'ssh', 'xaa', 'yhd', 'yud', 'aao', 'abh', 'abv', 'acm', 'acq', 'acw', 'acx', 'acy', 'adf', 'ads', 'aeb', 'aec', 'afb', 'ajp', 'apc', 'apd', 'arb', 'arq', 'ars', 'ary', 'arz', 'auz', 'avl', 'ayh', 'ayl', 'ayn', 'ayp', 'bbz', 'pga', 'he', 'iw', 'ps', 'pbt', 'pbu', 'pst', 'prp', 'prd', 'ug', 'ur', 'ydd', 'yds', 'yih', 'ji', 'yi', 'hbo', 'men', 'xmn', 'fa', 'jpr', 'peo', 'pes', 'prs', 'dv', 'sam', 'ckb'];
-      const languageUtils = this.services && this.services.languageUtils || new LanguageUtil(get());
-      return rtlLngs.indexOf(languageUtils.getLanguagePartFromCode(lng)) > -1 || lng.toLowerCase().indexOf('-arab') > 1 ? 'rtl' : 'ltr';
+      const languageUtils = this.services?.languageUtils || new LanguageUtil(get());
+      if (lng.toLowerCase().indexOf('-latn') > 1) return 'ltr';
+      return rtlLngs.includes(languageUtils.getLanguagePartFromCode(lng)) || lng.toLowerCase().indexOf('-arab') > 1 ? 'rtl' : 'ltr';
     }
-    static createInstance() {
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      let callback = arguments.length > 1 ? arguments[1] : undefined;
-      return new I18n(options, callback);
+    static createInstance(options = {}, callback) {
+      const instance = new I18n(options, callback);
+      instance.createInstance = I18n.createInstance;
+      return instance;
     }
-    cloneInstance() {
-      let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      let callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+    cloneInstance(options = {}, callback = noop) {
       const forkResourceStore = options.forkResourceStore;
       if (forkResourceStore) delete options.forkResourceStore;
       const mergedOptions = {
@@ -68098,14 +67951,36 @@ window.xmlToJSON = function(xml) {
         hasLoadedNamespace: clone.hasLoadedNamespace.bind(clone)
       };
       if (forkResourceStore) {
-        clone.store = new ResourceStore(this.store.data, mergedOptions);
+        const clonedData = Object.keys(this.store.data).reduce((prev, l) => {
+          prev[l] = {
+            ...this.store.data[l]
+          };
+          prev[l] = Object.keys(prev[l]).reduce((acc, n) => {
+            acc[n] = {
+              ...prev[l][n]
+            };
+            return acc;
+          }, prev[l]);
+          return prev;
+        }, {});
+        clone.store = new ResourceStore(clonedData, mergedOptions);
         clone.services.resourceStore = clone.store;
       }
+      if (options.interpolation) {
+        const defOpts = get();
+        const mergedInterpolation = {
+          ...defOpts.interpolation,
+          ...this.options.interpolation,
+          ...options.interpolation
+        };
+        const mergedForInterpolator = {
+          ...mergedOptions,
+          interpolation: mergedInterpolation
+        };
+        clone.services.interpolator = new Interpolator(mergedForInterpolator);
+      }
       clone.translator = new Translator(clone.services, mergedOptions);
-      clone.translator.on('*', function (event) {
-        for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-          args[_key4 - 1] = arguments[_key4];
-        }
+      clone.translator.on('*', (event, ...args) => {
         clone.emit(event, ...args);
       });
       clone.init(mergedOptions, callback);
@@ -68126,7 +68001,8 @@ window.xmlToJSON = function(xml) {
     }
   }
   const instance = I18n.createInstance();
-  instance.createInstance = I18n.createInstance;
+
+  instance.keyFromSelector = keysFromSelector;
 
   return instance;
 
@@ -68235,8 +68111,8 @@ window.xmlToJSON = function(xml) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function(Inputmask) {
@@ -68330,8 +68206,8 @@ window.xmlToJSON = function(xml) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(3), __webpack_require__(5) ],
-            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(3), __webpack_require__(5) ], 
+            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function($, window, undefined) {
@@ -69844,7 +69720,7 @@ window.xmlToJSON = function(xml) {
             function seekPrevious(pos, newBlock) {
                 var position = pos, tests;
                 if (position <= 0) return 0;
-                while (--position > 0 && (newBlock === true && getTest(position).match.newBlockMarker !== true || newBlock !== true && !isMask(position) && (tests = getTests(position),
+                while (--position > 0 && (newBlock === true && getTest(position).match.newBlockMarker !== true || newBlock !== true && !isMask(position) && (tests = getTests(position), 
                 tests.length < 2 || tests.length === 2 && tests[1].match.def === ""))) {}
                 return position;
             }
@@ -71081,8 +70957,8 @@ window.xmlToJSON = function(xml) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function($) {
@@ -71111,8 +70987,8 @@ window.xmlToJSON = function(xml) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function(Inputmask) {
@@ -71363,8 +71239,8 @@ window.xmlToJSON = function(xml) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory,
-            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(2) ], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, 
+            __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function(Inputmask) {
@@ -71914,8 +71790,8 @@ window.xmlToJSON = function(xml) {
     };
     (function(factory) {
         if (true) {
-            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4), __webpack_require__(2) ],
-            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__,
+            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(4), __webpack_require__(2) ], 
+            __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === "function" ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, 
             __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
         } else {}
     })(function($, Inputmask) {
@@ -83947,12 +83823,12 @@ options:
 /*! @websanova/url - v2.6.3 - 2020-01-25 */
 !function(){function t(t,r){var a,o={};if("tld?"!==t){if(r=r||window.location.toString(),!t)return r;if(t=t.toString(),a=r.match(/^mailto:([^\/].+)/))o.protocol="mailto",o.email=a[1];else{if((a=r.match(/(.*?)\/#\!(.*)/))&&(r=a[1]+a[2]),(a=r.match(/(.*?)#(.*)/))&&(o.hash=a[2],r=a[1]),o.hash&&t.match(/^#/))return h(t,o.hash);if((a=r.match(/(.*?)\?(.*)/))&&(o.query=a[2],r=a[1]),o.query&&t.match(/^\?/))return h(t,o.query);if((a=r.match(/(.*?)\:?\/\/(.*)/))&&(o.protocol=a[1].toLowerCase(),r=a[2]),(a=r.match(/(.*?)(\/.*)/))&&(o.path=a[2],r=a[1]),o.path=(o.path||"").replace(/^([^\/])/,"/$1"),t.match(/^[\-0-9]+$/)&&(t=t.replace(/^([^\/])/,"/$1")),t.match(/^\//))return e(t,o.path.substring(1));if((a=(a=e("/-1",o.path.substring(1)))&&a.match(/(.*?)\.([^.]+)$/))&&(o.file=a[0],o.filename=a[1],o.fileext=a[2]),(a=r.match(/(.*)\:([0-9]+)$/))&&(o.port=a[2],r=a[1]),(a=r.match(/(.*?)@(.*)/))&&(o.auth=a[1],r=a[2]),o.auth&&(a=o.auth.match(/(.*)\:(.*)/),o.user=a?a[1]:o.auth,o.pass=a?a[2]:void 0),o.hostname=r.toLowerCase(),"."===t.charAt(0))return e(t,o.hostname);o.port=o.port||("https"===o.protocol?"443":"80"),o.protocol=o.protocol||("443"===o.port?"https":"http")}return t in o?o[t]:"{}"===t?o:void 0}}function e(t,r){var a=t.charAt(0),o=r.split(a);return a===t?o:o[(t=parseInt(t.substring(1),10))<0?o.length+t:t-1]}function h(t,r){for(var a,o=t.charAt(0),e=r.split("&"),h=[],n={},c=[],i=t.substring(1),p=0,u=e.length;p<u;p++)if(""!==(h=(h=e[p].match(/(.*?)=(.*)/))||[e[p],e[p],""])[1].replace(/\s/g,"")){if(h[2]=(a=h[2]||"",decodeURIComponent(a.replace(/\+/g," "))),i===h[1])return h[2];(c=h[1].match(/(.*)\[([0-9]+)\]/))?(n[c[1]]=n[c[1]]||[],n[c[1]][c[2]]=h[2]):n[h[1]]=h[2]}return o===t?n:n[i]}window.url=t}();
 ;
-/*
-  @package NOTY - Dependency-free notification library
-  @version version: 3.2.0-beta
-  @contributors https://github.com/needim/noty/graphs/contributors
-  @documentation Examples and Documentation - https://ned.im/noty
-  @license Licensed under the MIT licenses: http://www.opensource.org/licenses/mit-license.php
+/* 
+  @package NOTY - Dependency-free notification library 
+  @version version: 3.2.0-beta 
+  @contributors https://github.com/needim/noty/graphs/contributors 
+  @documentation Examples and Documentation - https://ned.im/noty 
+  @license Licensed under the MIT licenses: http://www.opensource.org/licenses/mit-license.php 
 */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -85985,7 +85861,7 @@ Promise$2.prototype = {
     The primary way of interacting with a promise is through its `then` method,
     which registers callbacks to receive either a promise's eventual value or the
     reason why the promise cannot be fulfilled.
-
+  
     ```js
     findUser().then(function(user){
       // user is available
@@ -85993,14 +85869,14 @@ Promise$2.prototype = {
       // user is unavailable, and you are given the reason why
     });
     ```
-
+  
     Chaining
     --------
-
+  
     The return value of `then` is itself a promise.  This second, 'downstream'
     promise is resolved with the return value of the first promise's fulfillment
     or rejection handler, or rejected if the handler throws an exception.
-
+  
     ```js
     findUser().then(function (user) {
       return user.name;
@@ -86010,7 +85886,7 @@ Promise$2.prototype = {
       // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
       // will be `'default name'`
     });
-
+  
     findUser().then(function (user) {
       throw new Error('Found user, but still unhappy');
     }, function (reason) {
@@ -86023,7 +85899,7 @@ Promise$2.prototype = {
     });
     ```
     If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
-
+  
     ```js
     findUser().then(function (user) {
       throw new PedagogicalException('Upstream error');
@@ -86035,15 +85911,15 @@ Promise$2.prototype = {
       // The `PedgagocialException` is propagated all the way down to here
     });
     ```
-
+  
     Assimilation
     ------------
-
+  
     Sometimes the value you want to propagate to a downstream promise can only be
     retrieved asynchronously. This can be achieved by returning a promise in the
     fulfillment or rejection handler. The downstream promise will then be pending
     until the returned promise is settled. This is called *assimilation*.
-
+  
     ```js
     findUser().then(function (user) {
       return findCommentsByAuthor(user);
@@ -86051,9 +85927,9 @@ Promise$2.prototype = {
       // The user's comments are now available
     });
     ```
-
+  
     If the assimliated promise rejects, then the downstream promise will also reject.
-
+  
     ```js
     findUser().then(function (user) {
       return findCommentsByAuthor(user);
@@ -86063,15 +85939,15 @@ Promise$2.prototype = {
       // If `findCommentsByAuthor` rejects, we'll have the reason here
     });
     ```
-
+  
     Simple Example
     --------------
-
+  
     Synchronous Example
-
+  
     ```javascript
     let result;
-
+  
     try {
       result = findResult();
       // success
@@ -86079,9 +85955,9 @@ Promise$2.prototype = {
       // failure
     }
     ```
-
+  
     Errback Example
-
+  
     ```js
     findResult(function(result, err){
       if (err) {
@@ -86091,9 +85967,9 @@ Promise$2.prototype = {
       }
     });
     ```
-
+  
     Promise Example;
-
+  
     ```javascript
     findResult().then(function(result){
       // success
@@ -86101,15 +85977,15 @@ Promise$2.prototype = {
       // failure
     });
     ```
-
+  
     Advanced Example
     --------------
-
+  
     Synchronous Example
-
+  
     ```javascript
     let author, books;
-
+  
     try {
       author = findAuthor();
       books  = findBooksByAuthor(author);
@@ -86118,19 +85994,19 @@ Promise$2.prototype = {
       // failure
     }
     ```
-
+  
     Errback Example
-
+  
     ```js
-
+  
     function foundBooks(books) {
-
+  
     }
-
+  
     function failure(reason) {
-
+  
     }
-
+  
     findAuthor(function(author, err){
       if (err) {
         failure(err);
@@ -86155,9 +86031,9 @@ Promise$2.prototype = {
       }
     });
     ```
-
+  
     Promise Example;
-
+  
     ```javascript
     findAuthor().
       then(findBooksByAuthor).
@@ -86167,7 +86043,7 @@ Promise$2.prototype = {
       // something went wrong
     });
     ```
-
+  
     @method then
     @param {Function} onFulfilled
     @param {Function} onRejected
@@ -86179,25 +86055,25 @@ Promise$2.prototype = {
   /**
     `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
     as the catch block of a try/catch statement.
-
+  
     ```js
     function findAuthor(){
       throw new Error('couldn't find that author');
     }
-
+  
     // synchronous
     try {
       findAuthor();
     } catch(reason) {
       // something went wrong
     }
-
+  
     // async with promises
     findAuthor().catch(function(reason){
       // something went wrong
     });
     ```
-
+  
     @method catch
     @param {Function} onRejection
     Useful for tooling.
@@ -95047,7 +94923,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         sortId     = 0;
 
     $.bsTable = function( options ){
-
+        
         options = $._bsAdjustOptions( options, defaultOptions );
 
         //Fixed first column only needed when horizontal scrolling ( = full width)
@@ -95197,7 +95073,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             if (columnOptions.sortable){
                 multiSortList.push( {columnId: columnOptions.id, columnIndex: ''+index, sortIndex: columnOptions.sortIndex });
                 anyColumnSortable = true;
-            }
+            }                
         });
         multiSortList.sort(function( c1, c2){ return c1.sortIndex - c2.sortIndex; });
 
@@ -102257,7 +102133,7 @@ return index;
     ***********************************************************/
     ns.ajdustLangName = function(name){
         var result = typeof name == 'string' ? {en: name} : name,
-            defaultName = result['en'] || result['da'];
+            defaultName = result['en'] || result['da'] || '';
 
         languages.forEach( lang => result[lang] = result[lang] || defaultName );
         return result;
@@ -103421,7 +103297,7 @@ ID:name, ID:abbr, ID:link, ID:email
         }
     });
 
-
+    
 
 (function() {
         numeral.register('format', 'bps', {
@@ -103768,18 +103644,26 @@ latlng-format-base, a class to validate, format, and transform positions (eq. le
     };
 
     //Options for the posible formats. Placed in seperate namespace
+
+
     latLngFormat.LATLNGFORMAT_DMSS = 0; //Degrees Minutes Seconds Decimal Seconds: N65d30'15.3"  d='degree sign'
     latLngFormat.LATLNGFORMAT_DMM  = 1; //Degrees Decimal minutes                : N65d30.258'
     latLngFormat.LATLNGFORMAT_DD   = 2; //Decimal degrees                        : N41.1234d
+    latLngFormat.LATLNGFORMAT_MAPS = 3; //Degrees degrees with sign              : -41.1234
 
-    latLngFormat.LATLNGFORMAT_UTM  = 3; //UTM                                    : 29Q 286657 2492164
-    latLngFormat.LATLNGFORMAT_MGRS = 4; //MGRS                                   : 02U PG 03727 09686
-    latLngFormat.LATLNGFORMAT_NAC  = 5; //NAC                                    : HBV6R RG77T.
+    latLngFormat.LATLNGFORMAT_UTM  = 4; //UTM                                    : 29Q 286657 2492164
+    latLngFormat.LATLNGFORMAT_MGRS = 5; //MGRS                                   : 02U PG 03727 09686
+    latLngFormat.LATLNGFORMAT_NAC  = 6; //NAC                                    : HBV6R RG77T.
 
 
     latLngFormat.LATLNGFORMAT_FIRST = latLngFormat.LATLNGFORMAT_DMSS;
     latLngFormat.LATLNGFORMAT_LAST  = latLngFormat.LATLNGFORMAT_NAC;
 
+//HER
+/*
+latLngFormat.LATLNGFORMAT_FIRST = latLngFormat.LATLNGFORMAT_MAPS;
+latLngFormat.LATLNGFORMAT_LAST  = latLngFormat.LATLNGFORMAT_MAPS;
+//*/
 
     //Default options
     var defaultOptions = {
@@ -103790,6 +103674,9 @@ latlng-format-base, a class to validate, format, and transform positions (eq. le
         preText     : '',
         separator   : ' ',
         postText    : '',
+
+        forceDDAsDot  : false,  //If true delimiters decimal is always "."
+        hemisphereSign: false,  //If true the format uses "-" sign for S and W hemisphere
 
              //lat, lng
         min: [-90, -180],
@@ -103883,7 +103770,7 @@ latlng-format-base, a class to validate, format, and transform positions (eq. le
                     newOptions[id] = newOptions[id] || '';
                 });
                 $.each(['convertMask', 'regexp', 'placeholder'], function(index, id){
-                    if (!$.isArray(newOptions[id]))
+                    if (!Array.isArray(newOptions[id]))
                         newOptions[id] = [newOptions[id], newOptions[id]];
                 });
                 $.extend( this.options, newOptions );
@@ -103965,7 +103852,7 @@ latlng-format-base, a class to validate, format, and transform positions (eq. le
         var inputs = null,
             inputValid = true;
         if (arg1 === undefined){
-            if ($.isArray(arg0))
+            if (Array.isArray(arg0))
                 inputs = arg0;
             else
                 inputs = [ arg0 ];
@@ -104023,7 +103910,7 @@ latlng-format-base, a class to validate, format, and transform positions (eq. le
             else
                 result = method.call( this, this._inputs, options, latLngFormat );
 
-            if (options.joinAsString && $.isArray(result))
+            if (options.joinAsString && Array.isArray(result))
                 result = options.preText + result.join(options.separator) + options.postText;
 
             return result;
@@ -104093,11 +103980,11 @@ latlng-format-base, a class to validate, format, and transform positions (eq. le
             var result = this._valueMethod( this._value );
 
             //Check if both lat and lng are not false
-            if ( $.isArray(result) && ((result[0] === false) || (result[1] === false)) )
+            if ( Array.isArray(result) && ((result[0] === false) || (result[1] === false)) )
                 result = false;
 
             //Round or truncate
-            if (result && options && $.isNumeric(options.precision)) {
+            if (result && options && (typeof options.precision == 'number')) {
                 result[0] = window.precision(result[0], options.precision);
                 result[1] = window.precision(result[1], options.precision);
             }
@@ -104147,16 +104034,17 @@ Set methodes and options for format degrees, minutes, seconds
 
 
 ****************************************************************************/
-
 (function ($, window/*, document, undefined*/) {
     "use strict";
     var LATLNGFORMAT_DMSS = window.latLngFormat.LATLNGFORMAT_DMSS, //Degrees Minutes Seconds Decimal Seconds: N65d30'15.3"  d='degree sign'
         LATLNGFORMAT_DMM  = window.latLngFormat.LATLNGFORMAT_DMM,  //Degrees Decimal minutes                : N65d30.258'
-        LATLNGFORMAT_DD   = window.latLngFormat.LATLNGFORMAT_DD;   //Decimal degrees                        : N41.1234d
+        LATLNGFORMAT_DD   = window.latLngFormat.LATLNGFORMAT_DD,   //Decimal degrees                        : N41.1234d
+        LATLNGFORMAT_MAPS = window.latLngFormat.LATLNGFORMAT_MAPS; //Decimal degrees with "." and without N/S/E/W
 
     window.latLngFormat.formatList[LATLNGFORMAT_DMSS] =
     window.latLngFormat.formatList[LATLNGFORMAT_DMM] =
-    window.latLngFormat.formatList[LATLNGFORMAT_DD] = {
+    window.latLngFormat.formatList[LATLNGFORMAT_DD] =
+    window.latLngFormat.formatList[LATLNGFORMAT_MAPS] = {
 
         /************************************
         getOptions
@@ -104174,13 +104062,21 @@ Set methodes and options for format degrees, minutes, seconds
                 .=seperator         : blank, "." or ","
                 mmm=decimal min     : 0-999
             */
+
+
             var _regexp = {
                     anySpace      : '\\s*',
                     hemisphereLat : '([nNsS])?',    //H=Hemisphere  : [n,N,s,S] (optional,
                     hemisphereLong: '([eEwW])?',    //H=Hemisphere : [e,E,w,W] (optional,
 
+                    sign          : '\\-?',
+
                     DD            : '0*((0?[0-9])|[1-8][0-9])',  //DD=Degrees 0-89      :    0-9, 00-09 or 10-89
                     DDD           : '0*((\\d?\\d)|1[0-7][0-9])', //DDD=Degrees 0-179    :    0-9, 00-99 or 100-179
+
+                    _DD           : '\\-?0*((0?[0-9])|[1-8][0-9])',  //_DD=Degrees  [-]0-89 :    [-]0-9, [-]00-09 or [-]10-89
+                    _DDD          : '\\-?0*((\\d?\\d)|1[0-7][0-9])', //_DDD=Degrees [-]0-179:    [-]0-9, [-]00-99 or [-]100-179
+
 
                     MM            : '\\s' + '((0?[0-9])|[1-5][0-9])', //MM=Minutes: 0-9, 00-09 or 10-59 (allways with a seperator in front)
                 };
@@ -104204,7 +104100,7 @@ Set methodes and options for format degrees, minutes, seconds
             switch (formatId){
                 case LATLNGFORMAT_DMSS:
                     $.extend(result, { //Degrees Minutes Seconds (N41d25'01")
-                        displayMask: "DDD"+dC+"MM'SS"+dS+"s\"H",
+                        displayMask: "DDD"+dC+"MM'SSs\"H",
                         editMask   : "DDD MM SS"+dS+"sH",
                         convertMask: ['DDD', 'MM', 'SS', 's'],
                         regexp     : [ _regexp.anySpace + '(90|'  + _regexp.DD  + _regexp.anySpace + _regexp.MMSSs + ')' + _regexp.anySpace + _regexp.hemisphereLat  + _regexp.anySpace,
@@ -104215,7 +104111,7 @@ Set methodes and options for format degrees, minutes, seconds
 
                 case LATLNGFORMAT_DMM:
                     $.extend(result, { //Degrees Decimal minutes (N41d25.123')
-                        displayMask: "DDD"+dC+"MM"+dS+"mmm'H",
+                        displayMask: "DDD"+dC+"MMmmm'H",
                         editMask   : "DDD MM"+dS+"mmmH",
                         convertMask: ['DDD', 'MM', 'mmm'],
                         regexp     : [ _regexp.anySpace + '(90|'  + _regexp.DD  + _regexp.anySpace + _regexp.MMmmm + ')' + _regexp.anySpace + _regexp.hemisphereLat  + _regexp.anySpace,
@@ -104226,7 +104122,7 @@ Set methodes and options for format degrees, minutes, seconds
 
                 case LATLNGFORMAT_DD:
                     $.extend(result, { //Decimal degrees (N41.1234d)
-                        displayMask: "DDD"+dS+"dddd"+dC+"H",
+                        displayMask: "DDDdddd"+dC+"H",
                         editMask   : "DDD"+dS+"ddddH",
                         convertMask: ['DDD', 'dddd'],
                         regexp     : [ _regexp.anySpace + '(90|'  + _regexp.DD  + _regexp.anySpace + _regexp.dddd + ')' + _regexp.anySpace + _regexp.hemisphereLat  + _regexp.anySpace,
@@ -104234,7 +104130,21 @@ Set methodes and options for format degrees, minutes, seconds
                         placeholder: ["89.9999N", "179.9999E"],
                     });
                     break;
+
+                case LATLNGFORMAT_MAPS:
+                    $.extend(result, { //Decimal degrees (-41.1234)
+                        displayMask : "hDDDdddd",
+                        editMask    : "signDDD"+dS+"dddd",
+                        forceDDAsDot: true,    //Delimiters decimal is always "."
+                        hemisphereSign: true, //Using "-" for hemisphere S and W
+                        convertMask : ['DDD', 'dddd'],
+                        regexp      : [_regexp.anySpace +  _regexp.sign + '(90|'  + _regexp.DD  + _regexp.anySpace + _regexp.dddd + ')',
+                                       _regexp.anySpace +  _regexp.sign + '(180|' + _regexp.DDD + _regexp.anySpace + _regexp.dddd + ')'],
+                        placeholder: ["89.9999", "179.9999"],
+                    });
+                    break;
             }
+
             return result;
         },
 
@@ -104242,7 +104152,7 @@ Set methodes and options for format degrees, minutes, seconds
         format
         ************************************/
         format: function(value, options, latLngFormat){
-
+            //**************************************
             function trim(value, lgd, inclZero){
                 var result = ''+value;
                 if (options.truncate){
@@ -104254,6 +104164,7 @@ Set methodes and options for format degrees, minutes, seconds
                         result = '0'+result;
                 return result;
             }
+            //**************************************
             function appendDecimals(value, lgd){
                 var result = ''+value;
                 //Convert from "100" to "0100" (length: 4)
@@ -104267,6 +104178,7 @@ Set methodes and options for format degrees, minutes, seconds
                 //Prepend decimal delimiters
                 return result ? options.delimitersDecimal+result : result;
             }
+            //**************************************
 
             var parts = latLngFormat.split(value),
                 result = (options.useEditMask ? options.editMask : options.displayMask)
@@ -104274,7 +104186,7 @@ Set methodes and options for format degrees, minutes, seconds
                                             (parts.hemisphere == 1 ? 'E' : 'W') :
                                             (parts.hemisphere == 1 ? 'N' : 'S')
                             )
-                            .replace( options.delimitersDecimal, ''); //delimitersDecimal is added in appendDecimals if not truncate and decimal > 0
+                            .replace('h', parts.hemisphere == 1 ? '' : '-');
 
             result = result.replace(/DDD/ , parts.degrees                   );
             result = result.replace(/dddd/, appendDecimals(parts.degreesDecimal, 4) );
@@ -104283,6 +104195,8 @@ Set methodes and options for format degrees, minutes, seconds
             result = result.replace(/SS/  , trim(parts.seconds, 2, parts.secondsDecimal) );
             result = result.replace(/s/   , appendDecimals(parts.secondsDecimal,   1) );
 
+            if (options.forceDDAsDot)
+                result = result.replace(',', '.');
 
             if (options.truncate){
                 /*
@@ -104291,13 +104205,12 @@ Set methodes and options for format degrees, minutes, seconds
                 a workaround is used
                 */
                 var i = 1;
-                while (i < result.length)
-                    if ( ((result.charAt(i) == '"') || (result.charAt(i) == "'")) &&
-                         !$.isNumeric(result.charAt(i-1))
-                       )
+                while (i < result.length){
+                    if ( ( (result.charAt(i) == '"') || (result.charAt(i) == "'") ) && ('1234567890'.indexOf( result.charAt(i-1) ) == -1) )
                         result = result.slice(0,i) + result.slice(i+1);
                     else
                         i++;
+                }
             }
             return result;
         },
@@ -104351,7 +104264,6 @@ Set methodes and options for format degrees, minutes, seconds
             value = value.split('.');
             $.each(value, function(index, str){ value[index] = str.replace(/\D+/g, ' '); });
             value = value.join('.');
-
             if ((value === '') || !this._valid(value, options))
                 return false;
 
@@ -104378,14 +104290,22 @@ Set methodes and options for format degrees, minutes, seconds
                         break;
                 }
             }
-
             return sign*result;
         },
 
         /**********************************************************
         outputs - return a list of possible output-formats to be used in other applications etc.
         **********************************************************/
-        outputs: function( latLng ){
+        outputs: function( latLng, options ){
+            //***************************************
+            function trimPos(str){
+                str = str.replace(/\D/g, function(char){
+                    return (char=='-') || (char==',') || (char=='.') ? char : ' ';
+                });
+                str = str.trim();
+                return str;
+            }
+            //***************************************
             var result = [];
 
             if (!this.inputIsValid)
@@ -104394,19 +104314,13 @@ Set methodes and options for format degrees, minutes, seconds
             //Create two outputs: 1: As format 2: Without hemisphere, degree, minutes and second chars and with +/-
             result.push( this.format() );
 
-            var format = this.format({asArray: true});
-            if (latLng[0] < 0) format[0] = '-'+format[0];
-            if (latLng[1] < 0) format[1] = '-'+format[1];
+            if (!options.hemisphereSign){
+                var format = this.format({asArray: true});
+                if (latLng[0] < 0) format[0] = '-'+format[0];
+                if (latLng[1] < 0) format[1] = '-'+format[1];
 
-            function trimPos(str){
-                str = str.replace(/\D/g, function(char){
-                    return (char=='-') || (char==',') || (char=='.') ? char : ' ';
-                });
-                str = str.trim();
-                return str;
+                result.push( trimPos(format[0])+' '+trimPos(format[1]) );
             }
-
-            result.push( trimPos(format[0])+' '+trimPos(format[1]) );
 
             return result;
         }
@@ -105522,7 +105436,7 @@ Set methodes and options for format utm
 
     //Set first and last id for longitude-latitude-formats
     window.latLngFormat.LATLNGFORMAT_FIRST_LATLNG = window.latLngFormat.LATLNGFORMAT_DMSS;
-    window.latLngFormat.LATLNGFORMAT_LAST_LATLNG = window.latLngFormat.LATLNGFORMAT_DD;
+    window.latLngFormat.LATLNGFORMAT_LAST_LATLNG = window.latLngFormat.LATLNGFORMAT_MAPS;
 
     /***********************************************************
     Set up and load latlng-format via fcoo.settings and add options.text to latlngFormat
@@ -105571,6 +105485,17 @@ Set methodes and options for format utm
                 en:'Latitude/Longitude: <span class="font-monospace">D.dddd'+dC+'</span>'
             }
         },
+        //Maps apps: signed decimal degrees     : -41.1234
+        {
+            id  : window.latLngFormat.LATLNGFORMAT_MAPS,
+            text: {
+                da:'Kort-apps (Google, Bing, OSM mf.): <span class="font-monospace">±G.gggg</span>',
+                en:'Maps Apps (Google, Bing, OSM etc.): <span class="font-monospace">±D.dddd</span>'
+            }
+        },
+
+
+
         //UTM                                    : 29Q 286657 2492164
         {
             id  : window.latLngFormat.LATLNGFORMAT_UTM,
@@ -105929,7 +105854,7 @@ Greenland
 }(jQuery, window.moment, window.i18next, this, document));
 ;
 /****************************************************************************
-    kl.js,
+    kl.js, 
 
     Translation of Moment text to Kalaallisut/Greenlandic (language code = kl)
 
@@ -105937,7 +105862,7 @@ Greenland
 
 moment.defineLocale('kl', {
     parentLocale: 'da',
-
+  
     /* TODO */
 
 
@@ -114999,7 +114924,7 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
       _error;
     }
     return results;
-  }, Offline = {}, Offline.options = window.Offline ? window.Offline.options || {} :{},
+  }, Offline = {}, Offline.options = window.Offline ? window.Offline.options || {} :{}, 
   defaultOptions = {
     checks:{
       xhr:{
@@ -115022,22 +114947,22 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
     deDupBody:!1
   }, grab = function(obj, key) {
     var cur, i, j, len, part, parts;
-    for (cur = obj, parts = key.split("."), i = j = 0, len = parts.length; j < len && (part = parts[i],
+    for (cur = obj, parts = key.split("."), i = j = 0, len = parts.length; j < len && (part = parts[i], 
     "object" == typeof (cur = cur[part])); i = ++j) ;
     return i === parts.length - 1 ? cur :void 0;
   }, Offline.getOption = function(key) {
     var ref, val;
-    return val = null != (ref = grab(Offline.options, key)) ? ref :grab(defaultOptions, key),
+    return val = null != (ref = grab(Offline.options, key)) ? ref :grab(defaultOptions, key), 
     "function" == typeof val ? val() :val;
   }, "function" == typeof window.addEventListener && window.addEventListener("online", function() {
     return setTimeout(Offline.confirmUp, 100);
   }, !1), "function" == typeof window.addEventListener && window.addEventListener("offline", function() {
     return Offline.confirmDown();
   }, !1), Offline.state = "up", Offline.markUp = function() {
-    if (Offline.trigger("confirmed-up"), "up" !== Offline.state) return Offline.state = "up",
+    if (Offline.trigger("confirmed-up"), "up" !== Offline.state) return Offline.state = "up", 
     Offline.trigger("up");
   }, Offline.markDown = function() {
-    if (Offline.trigger("confirmed-down"), "down" !== Offline.state) return Offline.state = "down",
+    if (Offline.trigger("confirmed-down"), "down" !== Offline.state) return Offline.state = "down", 
     Offline.trigger("down");
   }, handlers = {}, Offline.on = function(event, handler, ctx) {
     var e, events, j, len, results;
@@ -115050,7 +114975,7 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
     var _handler, i, ref, results;
     if (null != handlers[event]) {
       if (handler) {
-        for (i = 0, results = []; i < handlers[event].length; ) ref = handlers[event][i],
+        for (i = 0, results = []; i < handlers[event].length; ) ref = handlers[event][i], 
         ref[0], _handler = ref[1], _handler === handler ? results.push(handlers[event].splice(i, 1)) :results.push(i++);
         return results;
       }
@@ -115059,7 +114984,7 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
   }, Offline.trigger = function(event) {
     var ctx, handler, j, len, ref, ref1, results;
     if (null != handlers[event]) {
-      for (ref = handlers[event].slice(0), results = [], j = 0, len = ref.length; j < len; j++) ref1 = ref[j],
+      for (ref = handlers[event].slice(0), results = [], j = 0, len = ref.length; j < len; j++) ref1 = ref[j], 
       ctx = ref1[0], handler = ref1[1], results.push(handler.call(ctx));
       return results;
     }
@@ -115078,8 +115003,8 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
     });
   }, Offline.checks = {}, Offline.checks.xhr = function() {
     var xhr;
-    xhr = new XMLHttpRequest(), xhr.offline = !1, xhr.open(Offline.getOption("checks.xhr.type"), Offline.getOption("checks.xhr.url"), !0),
-    null != xhr.timeout && (xhr.timeout = Offline.getOption("checks.xhr.timeout")),
+    xhr = new XMLHttpRequest(), xhr.offline = !1, xhr.open(Offline.getOption("checks.xhr.type"), Offline.getOption("checks.xhr.url"), !0), 
+    null != xhr.timeout && (xhr.timeout = Offline.getOption("checks.xhr.timeout")), 
     checkXHR(xhr, Offline.markUp, Offline.markDown);
     try {
       xhr.send();
@@ -115089,7 +115014,7 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
     return xhr;
   }, Offline.checks.image = function() {
     var img;
-    img = document.createElement("img"), img.onerror = Offline.markDown, img.onload = Offline.markUp,
+    img = document.createElement("img"), img.onerror = Offline.markDown, img.onload = Offline.markUp, 
     img.src = Offline.getOption("checks.image.url");
   }, Offline.checks.down = Offline.markDown, Offline.checks.up = Offline.markUp, Offline.check = function() {
     return Offline.trigger("checking"), Offline.checks[Offline.getOption("checks.active")]();
@@ -115110,13 +115035,13 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
       };
     }, _XMLHttpRequest = window.XMLHttpRequest, window.XMLHttpRequest = function(flags) {
       var _overrideMimeType, _setRequestHeader, req;
-      return req = new _XMLHttpRequest(flags), monitorXHR(req, flags), _setRequestHeader = req.setRequestHeader,
+      return req = new _XMLHttpRequest(flags), monitorXHR(req, flags), _setRequestHeader = req.setRequestHeader, 
       req.headers = {}, req.setRequestHeader = function(name, value) {
         return req.headers[name] = value, _setRequestHeader.call(req, name, value);
       }, _overrideMimeType = req.overrideMimeType, req.overrideMimeType = function(type) {
         return req.mimeType = type, _overrideMimeType.call(req, type);
       }, req;
-    }, extendNative(window.XMLHttpRequest, _XMLHttpRequest), null != window.XDomainRequest) return _XDomainRequest = window.XDomainRequest,
+    }, extendNative(window.XMLHttpRequest, _XMLHttpRequest), null != window.XDomainRequest) return _XDomainRequest = window.XDomainRequest, 
     window.XDomainRequest = function() {
       var req;
       return req = new _XDomainRequest(), monitorXHR(req), req;
@@ -115132,37 +115057,37 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
   if (!window.Offline) throw new Error("Offline Reconnect brought in without offline.js");
   rc = Offline.reconnect = {}, retryIntv = null, reset = function() {
     var ref;
-    return null != rc.state && "inactive" !== rc.state && Offline.trigger("reconnect:stopped"),
+    return null != rc.state && "inactive" !== rc.state && Offline.trigger("reconnect:stopped"), 
     rc.state = "inactive", rc.remaining = rc.delay = null != (ref = Offline.getOption("reconnect.initialDelay")) ? ref :3;
   }, next = function() {
     var delay, ref;
-    return delay = null != (ref = Offline.getOption("reconnect.delay")) ? ref :Math.min(Math.ceil(1.5 * rc.delay), 3600),
+    return delay = null != (ref = Offline.getOption("reconnect.delay")) ? ref :Math.min(Math.ceil(1.5 * rc.delay), 3600), 
     rc.remaining = rc.delay = delay;
   }, tick = function() {
-    if ("connecting" !== rc.state) return rc.remaining -= 1, Offline.trigger("reconnect:tick"),
+    if ("connecting" !== rc.state) return rc.remaining -= 1, Offline.trigger("reconnect:tick"), 
     0 === rc.remaining ? tryNow() :void 0;
   }, tryNow = function() {
-    if ("waiting" === rc.state) return Offline.trigger("reconnect:connecting"), rc.state = "connecting",
+    if ("waiting" === rc.state) return Offline.trigger("reconnect:connecting"), rc.state = "connecting", 
     Offline.check();
   }, down = function() {
-    if (Offline.getOption("reconnect")) return reset(), rc.state = "waiting", Offline.trigger("reconnect:started"),
+    if (Offline.getOption("reconnect")) return reset(), rc.state = "waiting", Offline.trigger("reconnect:started"), 
     retryIntv = setInterval(tick, 1e3);
   }, up = function() {
     return null != retryIntv && clearInterval(retryIntv), reset();
   }, nope = function() {
-    if (Offline.getOption("reconnect")) return "connecting" === rc.state ? (Offline.trigger("reconnect:failure"),
+    if (Offline.getOption("reconnect")) return "connecting" === rc.state ? (Offline.trigger("reconnect:failure"), 
     rc.state = "waiting", next()) :void 0;
-  }, rc.tryNow = tryNow, reset(), Offline.on("down", down), Offline.on("confirmed-down", nope),
+  }, rc.tryNow = tryNow, reset(), Offline.on("down", down), Offline.on("confirmed-down", nope), 
   Offline.on("up", up);
 }.call(this), function() {
   var clear, flush, held, holdRequest, makeRequest, waitingOnConfirm;
   if (!window.Offline) throw new Error("Requests module brought in without offline.js");
   held = [], waitingOnConfirm = !1, holdRequest = function(req) {
-    if (!1 !== Offline.getOption("requests")) return Offline.trigger("requests:capture"),
+    if (!1 !== Offline.getOption("requests")) return Offline.trigger("requests:capture"), 
     "down" !== Offline.state && (waitingOnConfirm = !0), held.push(req);
   }, makeRequest = function(arg) {
     var body, name, password, ref, type, url, user, val, xhr;
-    if (xhr = arg.xhr, url = arg.url, type = arg.type, user = arg.user, password = arg.password,
+    if (xhr = arg.xhr, url = arg.url, type = arg.type, user = arg.user, password = arg.password, 
     body = arg.body, !1 !== Offline.getOption("requests")) {
       xhr.abort(), xhr.open(type, url, !0, user, password), ref = xhr.headers;
       for (name in ref) val = ref[name], xhr.setRequestHeader(name, val);
@@ -115173,10 +115098,10 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
   }, flush = function() {
     var body, i, key, len, request, requests, url;
     if (!1 !== Offline.getOption("requests")) {
-      for (Offline.trigger("requests:flush"), requests = {}, i = 0, len = held.length; i < len; i++) request = held[i],
+      for (Offline.trigger("requests:flush"), requests = {}, i = 0, len = held.length; i < len; i++) request = held[i], 
       url = request.url.replace(/(\?|&)_=[0-9]+/, function(match, chr) {
         return "?" === chr ? chr :"";
-      }), Offline.getOption("deDupBody") ? (body = request.body, body = "[object Object]" === body.toString() ? JSON.stringify(body) :body.toString(),
+      }), Offline.getOption("deDupBody") ? (body = request.body, body = "[object Object]" === body.toString() ? JSON.stringify(body) :body.toString(), 
       requests[request.type.toUpperCase() + " - " + url + " - " + body] = request) :requests[request.type.toUpperCase() + " - " + url] = request;
       for (key in requests) request = requests[key], makeRequest(request);
       return clear();
@@ -115192,10 +115117,10 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
         return holdRequest(request);
       }, _send = xhr.send, xhr.send = function(body) {
         return request.body = body, _send.apply(xhr, arguments);
-      }, async)) return null === xhr.onprogress ? (xhr.addEventListener("error", hold, !1),
-      xhr.addEventListener("timeout", hold, !1)) :(_onreadystatechange = xhr.onreadystatechange,
+      }, async)) return null === xhr.onprogress ? (xhr.addEventListener("error", hold, !1), 
+      xhr.addEventListener("timeout", hold, !1)) :(_onreadystatechange = xhr.onreadystatechange, 
       xhr.onreadystatechange = function() {
-        return 0 === xhr.readyState ? hold() :4 === xhr.readyState && (0 === xhr.status || xhr.status >= 12e3) && hold(),
+        return 0 === xhr.readyState ? hold() :4 === xhr.readyState && (0 === xhr.status || xhr.status >= 12e3) && hold(), 
         "function" == typeof _onreadystatechange ? _onreadystatechange.apply(null, arguments) :void 0;
       });
     }), Offline.requests = {
@@ -115214,12 +115139,12 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
       _error, simulate = !1;
     }
   }
-  simulate && (null == Offline.options && (Offline.options = {}), null == (base = Offline.options).checks && (base.checks = {}),
+  simulate && (null == Offline.options && (Offline.options = {}), null == (base = Offline.options).checks && (base.checks = {}), 
   Offline.options.checks.active = state);
 }.call(this), function() {
   var RETRY_TEMPLATE, TEMPLATE, _onreadystatechange, addClass, content, createFromHTML, el, flashClass, flashTimeouts, init, removeClass, render, roundTime;
   if (!window.Offline) throw new Error("Offline UI brought in without offline.js");
-  TEMPLATE = '<div class="offline-ui"><div class="offline-ui-content"></div></div>',
+  TEMPLATE = '<div class="offline-ui"><div class="offline-ui-content"></div></div>', 
   RETRY_TEMPLATE = '<a href class="offline-ui-retry"></a>', createFromHTML = function(html) {
     var el;
     return el = document.createElement("div"), el.innerHTML = html, el.children[0];
@@ -115228,7 +115153,7 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
   }, removeClass = function(name) {
     return el.className = el.className.replace(new RegExp("(^| )" + name.split(" ").join("|") + "( |$)", "gi"), " ");
   }, flashTimeouts = {}, flashClass = function(name, time) {
-    return addClass(name), null != flashTimeouts[name] && clearTimeout(flashTimeouts[name]),
+    return addClass(name), null != flashTimeouts[name] && clearTimeout(flashTimeouts[name]), 
     flashTimeouts[name] = setTimeout(function() {
       return removeClass(name), delete flashTimeouts[name];
     }, 1e3 * time);
@@ -115240,39 +115165,39 @@ S.addons={offcanvas:function(){var e=this;if(this.opts.offCanvas){var t=function
       minute:60,
       second:1
     };
-    for (unit in units) if (mult = units[unit], sec >= mult) return val = Math.floor(sec / mult),
+    for (unit in units) if (mult = units[unit], sec >= mult) return val = Math.floor(sec / mult), 
     [ val, unit ];
     return [ "now", "" ];
   }, render = function() {
     var button, handler;
-    return el = createFromHTML(TEMPLATE), document.body.appendChild(el), null != Offline.reconnect && Offline.getOption("reconnect") && (el.appendChild(createFromHTML(RETRY_TEMPLATE)),
+    return el = createFromHTML(TEMPLATE), document.body.appendChild(el), null != Offline.reconnect && Offline.getOption("reconnect") && (el.appendChild(createFromHTML(RETRY_TEMPLATE)), 
     button = el.querySelector(".offline-ui-retry"), handler = function(e) {
       return e.preventDefault(), Offline.reconnect.tryNow();
-    }, null != button.addEventListener ? button.addEventListener("click", handler, !1) :button.attachEvent("click", handler)),
+    }, null != button.addEventListener ? button.addEventListener("click", handler, !1) :button.attachEvent("click", handler)), 
     addClass("offline-ui-" + Offline.state), content = el.querySelector(".offline-ui-content");
   }, init = function() {
     return render(), Offline.on("up", function() {
-      return removeClass("offline-ui-down"), addClass("offline-ui-up"), flashClass("offline-ui-up-2s", 2),
+      return removeClass("offline-ui-down"), addClass("offline-ui-up"), flashClass("offline-ui-up-2s", 2), 
       flashClass("offline-ui-up-5s", 5);
     }), Offline.on("down", function() {
-      return removeClass("offline-ui-up"), addClass("offline-ui-down"), flashClass("offline-ui-down-2s", 2),
+      return removeClass("offline-ui-up"), addClass("offline-ui-down"), flashClass("offline-ui-down-2s", 2), 
       flashClass("offline-ui-down-5s", 5);
     }), Offline.on("reconnect:connecting", function() {
       return addClass("offline-ui-connecting"), removeClass("offline-ui-waiting");
     }), Offline.on("reconnect:tick", function() {
       var ref, time, unit;
-      return addClass("offline-ui-waiting"), removeClass("offline-ui-connecting"), ref = roundTime(Offline.reconnect.remaining),
-      time = ref[0], unit = ref[1], content.setAttribute("data-retry-in-value", time),
+      return addClass("offline-ui-waiting"), removeClass("offline-ui-connecting"), ref = roundTime(Offline.reconnect.remaining), 
+      time = ref[0], unit = ref[1], content.setAttribute("data-retry-in-value", time), 
       content.setAttribute("data-retry-in-unit", unit);
     }), Offline.on("reconnect:stopped", function() {
-      return removeClass("offline-ui-connecting offline-ui-waiting"), content.setAttribute("data-retry-in-value", null),
+      return removeClass("offline-ui-connecting offline-ui-waiting"), content.setAttribute("data-retry-in-value", null), 
       content.setAttribute("data-retry-in-unit", null);
     }), Offline.on("reconnect:failure", function() {
       return flashClass("offline-ui-reconnect-failed-2s", 2), flashClass("offline-ui-reconnect-failed-5s", 5);
     }), Offline.on("reconnect:success", function() {
       return flashClass("offline-ui-reconnect-succeeded-2s", 2), flashClass("offline-ui-reconnect-succeeded-5s", 5);
     });
-  }, "complete" === document.readyState ? init() :null != document.addEventListener ? document.addEventListener("DOMContentLoaded", init, !1) :(_onreadystatechange = document.onreadystatechange,
+  }, "complete" === document.readyState ? init() :null != document.addEventListener ? document.addEventListener("DOMContentLoaded", init, !1) :(_onreadystatechange = document.onreadystatechange, 
   document.onreadystatechange = function() {
     return "complete" === document.readyState && init(), "function" == typeof _onreadystatechange ? _onreadystatechange.apply(null, arguments) :void 0;
   });
@@ -118428,6 +118353,8 @@ Methods to create standard FCC-web-applications
         nsApp.main = ns.createMain({
             mainContainerAsHandleContainer: true,
 
+            bodyScroll          : setupOptions.bodyScroll,
+
             applicationName     : setupOptions.applicationName,
             applicationHeader   : setupOptions.applicationHeader,
             header              : setupOptions.header,
@@ -119315,6 +119242,8 @@ Create and manage the main structure for FCOO web applications
             header
             */
 
+            bodyScroll          : false, //If true the main-contebnts get vertical scroll
+
             topPanel            : null,  //Options for top-panel. See src/fcoo-application-top-panel.js
 
             leftPanel           : null,      //Options for left-panel. See src/fcoo-application-touch.js. Includes optional buttons: {preButtons,...}
@@ -119413,7 +119342,9 @@ Create and manage the main structure for FCOO web applications
 
         $.extend(result, main_prototype );
 
-        $mainContainer.addClass("main-container");
+        $mainContainer
+            .addClass("main-container")
+            .toggleClass('scroll', !!options.bodyScroll);
 
         //Append left-panel (if any)
         if (result.options.leftPanel){
@@ -135478,7 +135409,7 @@ var SVG = (function () {
             //bottomcenter need an extra container to be placed at the bottom
             this._controlCorners['bottomcenter'] =
                 L.DomUtil.create(
-                    'div',
+                    'div', 
                     'leaflet-bottom leaflet-center',
                     L.DomUtil.create('div', 'leaflet-control-bottomcenter',    this._controlContainer)
                 );
@@ -136218,7 +136149,7 @@ if (Number.prototype.toDegrees === undefined) {
 
 ;
 /*! =======================================================
-                      VERSION  11.0.2
+                      VERSION  11.0.2              
 ========================================================= */
 "use strict";
 
@@ -141179,7 +141110,7 @@ Options for selectiong position-format and to activate context-menu
             this.latLngFormatId = newFormatId;
 
             this.latLngFormatSeparator =
-                [window.latLngFormat.LATLNGFORMAT_DMSS, window.latLngFormat.LATLNGFORMAT_DMM, window.latLngFormat.LATLNGFORMAT_DD].indexOf(newFormatId) >= 0 ?
+                [window.latLngFormat.LATLNGFORMAT_DMSS, window.latLngFormat.LATLNGFORMAT_DMM, window.latLngFormat.LATLNGFORMAT_DD, window.latLngFormat.LATLNGFORMAT_MAPS].indexOf(newFormatId) >= 0 ?
                 '<br>' : '&nbsp;';
 
             //Reste min-width
@@ -142564,11 +142495,11 @@ leaflet-bootstrap-control-legend.js
                     this.contentSizeList.push(i);
             }
 
-            this.$container.toggleClass('legend-content-is-sizeable', !!this.contentSizeList.length);
+            this.$container.toggleClass('legend-content-is-sizeable', this.contentSizeList.length > 1);
             if (this.$contentContainer)
                 this.$contentContainer.off('click.legend-content');
 
-            if (this.contentSizeList.length){
+            if (this.contentSizeList.length > 1){
                 this.$contentContainer.on('click.legend-content', this.extendContent.bind(this) );
                 this.setContentSize( this.currentContentSizeIndex || 0 );
             }
@@ -144422,6 +144353,7 @@ ctx.fillRect(0, 0, shapeDim, shapeDim);
             extraTransparent: false,  //True to make the line and fill almost full -transparent
             hover           : false,  //True to show big-shadow and 0.9 opacuity for lpl-transparent when hover
             onlyShowOnHover : false,  //When true the polyline/polygon is only visible on hover and popup-open. Need {shadow: false, hover: true}
+            hoverWeight     : null,   //The width of the line when hover. Need hover: true
 
             shadow               : false,  //true to add big shadow to the line
             shadowWhenInteractive: false,  //When true a shadow is shown when the polyline is interactive
@@ -144506,10 +144438,30 @@ ctx.fillRect(0, 0, shapeDim, shapeDim);
 
 
         /*****************************************************
+        setWeight
+        *****************************************************/
+        setWeight: function(weight){
+            const options = this.options;
+            const optionsWeight = options.weight;
+            const currentOptions = this.currentOptions;
+            const currentOptionsWeight = currentOptions.weight;
+
+            ///Set line-width of the differnet polyline
+            this.polylineList[thisIndex].setStyle(       {weight: weight },                             true );
+            this.polylineList[borderIndex].setStyle(     {weight: weight + 2*options.borderWidth     }, true  );
+            this.polylineList[shadowIndex].setStyle(     {weight: weight + 2*options.shadowWidth     }, true );
+            this.polylineList[interactiveIndex].setStyle({weight: weight + 2*options.interactiveWidth}, true );
+
+            this.options.weight = optionsWeight;
+            this.currentOptions.weight = currentOptionsWeight;
+            return this;
+        },
+
+        /*****************************************************
         setStyle
         *****************************************************/
         setStyle: function(setStyle){
-            return function( style ){
+            return function( style, isSimple ){
                 function adjust(options){
                     options = $.extend({}, options || {});
                     options.weight = options.width || options.weight;
@@ -144518,7 +144470,7 @@ ctx.fillRect(0, 0, shapeDim, shapeDim);
                     return options;
                 }
 
-                if (!this.options.addInteractive)
+                if (!this.options.addInteractive || isSimple)
                     return setStyle.call(this, style );
 
                 this.options = $.extend(true,  adjust(defaultOptions), adjust(this.options), adjust(style) );
@@ -144539,10 +144491,7 @@ ctx.fillRect(0, 0, shapeDim, shapeDim);
                 this.currentOptions = options;
 
                 ///Set line-width of the differnet polyline
-                this.polylineList[thisIndex].setStyle(       {weight: options.weight });
-                this.polylineList[borderIndex].setStyle(     {weight: options.weight + 2*options.borderWidth     });
-                this.polylineList[shadowIndex].setStyle(     {weight: options.weight + 2*options.shadowWidth     });
-                this.polylineList[interactiveIndex].setStyle({weight: options.weight + 2*options.interactiveWidth});
+                this.setWeight( this.mouseover && options.hoverWeight ? options.hoverWeight :  options.weight );
 
                 //Add class and colors to this and shadow
                 this._addClass(thisIndex, (options.baseClassName || '') + ' ' + (options.className || ''));
@@ -144657,7 +144606,8 @@ ctx.fillRect(0, 0, shapeDim, shapeDim);
         *****************************************************/
         _eachPolyline: function( onlyPolyline, methodName, arg ){
             if (onlyPolyline != null){
-                if ($.isNumeric(onlyPolyline))
+//                if ($.isNumeric(onlyPolyline))
+                if (typeof onlyPolyline == 'number')
                     onlyPolyline = this.polylineList[onlyPolyline];
                 if (onlyPolyline){
                     var $path = $(onlyPolyline._path);
@@ -144685,6 +144635,10 @@ ctx.fillRect(0, 0, shapeDim, shapeDim);
         _mouseover and _mouseout: Highlight polyline
         *****************************************************/
         _mouseover: function(/* mouseEvent */){
+            this.mouseover = true;
+            if (this.currentOptions.hoverWeight)
+                this.setWeight( this.currentOptions.hoverWeight );
+
              if (this.currentOptions.hover)
                  this._addClass(null, 'lpl-hover');
              if (this.currentOptions.onlyShowOnHover)
@@ -144692,6 +144646,9 @@ ctx.fillRect(0, 0, shapeDim, shapeDim);
         },
 
         _mouseout: function(/* mouseEvent */){
+            this.mouseover = false;
+            if (this.currentOptions.hoverWeight)
+                this.setWeight( this.currentOptions.weight );
             if (this.currentOptions.hover)
                  this._removeClass(null, 'lpl-hover');
              if (this.currentOptions.onlyShowOnHover)
@@ -148074,7 +148031,7 @@ L.Route - Extend L.GeoPolyline with vessels (L.VesselMarker)
 }(jQuery, L, this, document));
 ;
 /****************************************************************************
-	jquery-screen-ratio.js,
+	jquery-screen-ratio.js, 
 
 	(c) 2017, FCOO
 
@@ -148085,11 +148042,11 @@ L.Route - Extend L.GeoPolyline with vessels (L.VesselMarker)
 
 (function ($, window/*, document, undefined*/) {
 	"use strict";
-
+	
     /********************************************
     Screen Ratio
     *********************************************/
-	$.fn.screenRatio = function ( minDimension ) {
+	$.fn.screenRatio = function ( minDimension ) { 
 		return this.each(function() {
             var $this = $(this);
             $this.data("screenRatio_minDimension", minDimension);
@@ -148098,24 +148055,24 @@ L.Route - Extend L.GeoPolyline with vessels (L.VesselMarker)
 		});
 	};
 
-    $.fn._setScreenRatio = function () {
-        var w = screen.availWidth,
-            h = screen.availHeight,
+    $.fn._setScreenRatio = function () { 
+        var w = screen.availWidth, 
+            h = screen.availHeight, 
             r = h/w,
             p = r > 1,
             minD = parseFloat( this.data('screenRatio_minDimension') ),
-            maxD = minD*(p ? r : 1/r );
+            maxD = minD*(p ? r : 1/r ); 
 
         this
             .height( p ? maxD : minD )
             .width( p ? minD : maxD );
     };
-
+    
 
     /********************************************
     Window Ratio
     *********************************************/
-	$.fn.windowRatio = function ( minDimension, maxDimension ) {
+	$.fn.windowRatio = function ( minDimension, maxDimension ) { 
 		return this.each(function() {
             var $this = $(this);
             $this.data("windowRatio_minDimension", minDimension);
@@ -148126,8 +148083,8 @@ L.Route - Extend L.GeoPolyline with vessels (L.VesselMarker)
 	};
 
 
-    $.fn._setWindowRatio = function () {
-        var w = window.innerWidth,
+    $.fn._setWindowRatio = function () { 
+        var w = window.innerWidth, 
             h = window.innerHeight,
             r = h/w,
             p = r > 1,
@@ -148136,7 +148093,7 @@ L.Route - Extend L.GeoPolyline with vessels (L.VesselMarker)
             maxmaxD = parseFloat( this.data('windowRatio_maxDimension') );
 
             maxD = maxmaxD ? Math.min( maxD, maxmaxD ) : maxD;
-
+        
         this
             .height( p ? maxD : minD )
             .width( p ? minD : maxD );
